@@ -1,0 +1,367 @@
+:root {
+  /* Font Families */
+  --font-family-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
+    "Liberation Mono", Menlo, monospace;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Font Sizes */
+  --font-size-xs: 0.625rem; /* 10px - image caption */
+  --font-size-sm: 0.875rem; /* 14px - subheading, input helpers */
+  --font-size-base: 1rem; /* 16px - body text, buttons, labels */
+  --font-size-lg: 1.125rem; /* 18px - large body, module text */
+  --font-size-xl: 1.75rem; /* 28px - H3 */
+  --font-size-2xl: 2.375rem; /* 38px - H2 */
+  --font-size-3xl: 2.875rem; /* 46px - H1 */
+
+  /* Line Heights */
+  --line-height-none: 1;
+  --line-height-tight: 1.15; /* 16/14 for subheading */
+  --line-height-snug: 1.375; /* 22/16 for small text */
+  --line-height-normal: 1.5; /* 24/16 for base text */
+  --line-height-relaxed: 1.625; /* 26/16 for H4 */
+  --line-height-loose: 1.75; /* 28/16 for body, 34/18 for P4 */
+  --line-height-xl: 2.125; /* 34/16 for P4 */
+  --line-height-2xl: 2.3; /* 46/38 for H2, 36/28 for H3 */
+  --line-height-3xl: 3.25; /* 52/46 for H1 */
+
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.02em;
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em; /* 0.4px at 16px */
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.25em; /* 3.5px at 14px for subheading */
+
+  /* Text Case */
+  --text-transform-none: none;
+  --text-transform-uppercase: uppercase;
+  --text-transform-lowercase: lowercase;
+  --text-transform-capitalize: capitalize;
+}
+
+/* Typography Color Mappings */
+:root {
+  /* Text Colors - Semantic mappings */
+  --color-text-heading: var(--color-navy-500); /* primary-navy */
+  --color-text-body: var(--color-charcoal-500); /* secondary-charcoal */
+  --color-text-link: var(--color-red-500); /* primary-maroon */
+  --color-text-link-hover: var(--color-red-600); /* primary-maroon hover */
+  --color-text-error: var(--color-error-500); /* error */
+  --color-text-success: var(--color-success-500); /* success */
+  --color-text-muted: var(--color-gray-500); /* For helper text */
+  --color-text-disabled: var(--color-gray-400); /* For disabled states */
+
+  /* Component Text Colors */
+  --color-button-primary-text: var(--color-white);
+  --color-input-label: var(--color-navy-500); /* primary-navy */
+  --color-input-text: var(--color-charcoal-500); /* secondary-charcoal */
+  --color-input-placeholder: var(--color-gray-400); /* secondary-navytint */
+  --color-input-helper: var(--color-charcoal-500); /* secondary-charcoal */
+
+  /* State-specific text colors */
+  --color-input-label-required: var(
+    --color-red-500
+  ); /* primary-maroon for required */
+  --color-input-label-optional: var(
+    --color-gray-400
+  ); /* lighter for optional */
+  --color-input-text-error: var(--color-red-500); /* error state */
+  --color-input-text-success: var(--color-success-500); /* success state */
+  --color-input-text-disabled: var(--color-gray-400); /* disabled state */
+}
+
+/* Semantic Typography Tokens */
+:root {
+  /* Heading Typography */
+  --typography-h1-font-family: var(--font-family-sans);
+  --typography-h1-font-weight: var(--font-weight-bold);
+  --typography-h1-font-size: var(--font-size-3xl);
+  --typography-h1-line-height: var(--line-height-3xl);
+  --typography-h1-letter-spacing: var(--letter-spacing-normal);
+  --typography-h1-text-transform: var(--text-transform-none);
+  --typography-h1-color: var(--color-text-heading);
+
+  --typography-h2-font-family: var(--font-family-sans);
+  --typography-h2-font-weight: var(--font-weight-bold);
+  --typography-h2-font-size: var(--font-size-2xl);
+  --typography-h2-line-height: var(--line-height-2xl);
+  --typography-h2-letter-spacing: var(--letter-spacing-normal);
+  --typography-h2-text-transform: var(--text-transform-none);
+  --typography-h2-color: var(--color-text-heading);
+
+  --typography-h3-font-family: var(--font-family-sans);
+  --typography-h3-font-weight: var(--font-weight-bold);
+  --typography-h3-font-size: var(--font-size-xl);
+  --typography-h3-line-height: var(--line-height-2xl);
+  --typography-h3-letter-spacing: var(--letter-spacing-normal);
+  --typography-h3-text-transform: var(--text-transform-none);
+  --typography-h3-color: var(--color-text-heading);
+
+  --typography-h4-font-family: var(--font-family-sans);
+  --typography-h4-font-weight: var(--font-weight-bold);
+  --typography-h4-font-size: var(--font-size-base);
+  --typography-h4-line-height: var(--line-height-relaxed);
+  --typography-h4-letter-spacing: var(--letter-spacing-normal);
+  --typography-h4-text-transform: var(--text-transform-none);
+  --typography-h4-color: var(--color-text-heading);
+
+  /* Body Typography */
+  --typography-body-large-font-family: var(--font-family-sans);
+  --typography-body-large-font-weight: var(--font-weight-bold);
+  --typography-body-large-font-size: var(--font-size-lg);
+  --typography-body-large-line-height: var(--line-height-xl);
+  --typography-body-large-letter-spacing: var(--letter-spacing-wide);
+  --typography-body-large-text-transform: var(--text-transform-none);
+  --typography-body-large-color: var(--color-text-body);
+
+  --typography-body-font-family: var(--font-family-sans);
+  --typography-body-font-weight: var(--font-weight-regular);
+  --typography-body-font-size: var(--font-size-base);
+  --typography-body-line-height: var(--line-height-loose);
+  --typography-body-letter-spacing: var(--letter-spacing-wide);
+  --typography-body-text-transform: var(--text-transform-none);
+  --typography-body-color: var(--color-text-body);
+
+  --typography-body-module-font-family: var(--font-family-sans);
+  --typography-body-module-font-weight: var(--font-weight-light);
+  --typography-body-module-font-size: var(--font-size-lg);
+  --typography-body-module-line-height: var(--line-height-loose);
+  --typography-body-module-letter-spacing: var(--letter-spacing-normal);
+  --typography-body-module-text-transform: var(--text-transform-none);
+  --typography-body-module-color: var(--color-text-body);
+
+  /* Subheading */
+  --typography-subheading-font-family: var(--font-family-sans);
+  --typography-subheading-font-weight: var(--font-weight-bold);
+  --typography-subheading-font-size: var(--font-size-sm);
+  --typography-subheading-line-height: var(--line-height-tight);
+  --typography-subheading-letter-spacing: var(--letter-spacing-widest);
+  --typography-subheading-text-transform: var(--text-transform-uppercase);
+  --typography-subheading-color: var(--color-text-heading);
+
+  /* Link Typography */
+  --typography-link-font-family: var(--font-family-sans);
+  --typography-link-font-weight: var(--font-weight-semibold);
+  --typography-link-font-size: var(--font-size-base);
+  --typography-link-line-height: var(--line-height-loose);
+  --typography-link-letter-spacing: var(--letter-spacing-wide);
+  --typography-link-text-transform: var(--text-transform-none);
+  --typography-link-color: var(--color-text-link);
+  --typography-link-color-hover: var(--color-text-link-hover);
+
+  /* Caption */
+  --typography-caption-font-family: var(--font-family-sans);
+  --typography-caption-font-weight: var(--font-weight-light);
+  --typography-caption-font-size: var(--font-size-xs);
+  --typography-caption-line-height: var(--line-height-normal);
+  --typography-caption-letter-spacing: var(--letter-spacing-normal);
+  --typography-caption-text-transform: var(--text-transform-none);
+  --typography-caption-color: var(--color-text-muted);
+
+  /* Component Typography */
+  --typography-button-font-family: var(--font-family-sans);
+  --typography-button-font-weight: var(--font-weight-semibold);
+  --typography-button-font-size: var(--font-size-base);
+  --typography-button-line-height: var(--line-height-normal);
+  --typography-button-letter-spacing: var(--letter-spacing-wide);
+  --typography-button-text-transform: var(--text-transform-none);
+  --typography-button-color: var(--color-button-primary-text);
+
+  --typography-label-font-family: var(--font-family-sans);
+  --typography-label-font-weight: var(--font-weight-semibold);
+  --typography-label-font-size: var(--font-size-base);
+  --typography-label-line-height: var(--line-height-normal);
+  --typography-label-letter-spacing: var(--letter-spacing-wide);
+  --typography-label-text-transform: var(--text-transform-none);
+  --typography-label-color: var(--color-input-label);
+
+  --typography-helper-font-family: var(--font-family-sans);
+  --typography-helper-font-weight: var(--font-weight-regular);
+  --typography-helper-font-size: var(--font-size-sm);
+  --typography-helper-line-height: var(--line-height-normal);
+  --typography-helper-letter-spacing: var(--letter-spacing-wide);
+  --typography-helper-text-transform: var(--text-transform-none);
+  --typography-helper-color: var(--color-input-helper);
+}
+
+/* Utility Classes for Typography */
+.typography-h1 {
+  font-family: var(--typography-h1-font-family);
+  font-weight: var(--typography-h1-font-weight);
+  font-size: var(--typography-h1-font-size);
+  line-height: var(--typography-h1-line-height);
+  letter-spacing: var(--typography-h1-letter-spacing);
+  text-transform: var(--typography-h1-text-transform);
+  color: var(--typography-h1-color);
+}
+
+.typography-h2 {
+  font-family: var(--typography-h2-font-family);
+  font-weight: var(--typography-h2-font-weight);
+  font-size: var(--typography-h2-font-size);
+  line-height: var(--typography-h2-line-height);
+  letter-spacing: var(--typography-h2-letter-spacing);
+  text-transform: var(--typography-h2-text-transform);
+  color: var(--typography-h2-color);
+}
+
+.typography-h3 {
+  font-family: var(--typography-h3-font-family);
+  font-weight: var(--typography-h3-font-weight);
+  font-size: var(--typography-h3-font-size);
+  line-height: var(--typography-h3-line-height);
+  letter-spacing: var(--typography-h3-letter-spacing);
+  text-transform: var(--typography-h3-text-transform);
+  color: var(--typography-h3-color);
+}
+
+.typography-h4 {
+  font-family: var(--typography-h4-font-family);
+  font-weight: var(--typography-h4-font-weight);
+  font-size: var(--typography-h4-font-size);
+  line-height: var(--typography-h4-line-height);
+  letter-spacing: var(--typography-h4-letter-spacing);
+  text-transform: var(--typography-h4-text-transform);
+  color: var(--typography-h4-color);
+}
+
+.typography-body-large {
+  font-family: var(--typography-body-large-font-family);
+  font-weight: var(--typography-body-large-font-weight);
+  font-size: var(--typography-body-large-font-size);
+  line-height: var(--typography-body-large-line-height);
+  letter-spacing: var(--typography-body-large-letter-spacing);
+  text-transform: var(--typography-body-large-text-transform);
+  color: var(--typography-body-large-color);
+}
+
+.typography-body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-font-weight);
+  font-size: var(--typography-body-font-size);
+  line-height: var(--typography-body-line-height);
+  letter-spacing: var(--typography-body-letter-spacing);
+  text-transform: var(--typography-body-text-transform);
+  color: var(--typography-body-color);
+}
+
+.typography-body-module {
+  font-family: var(--typography-body-module-font-family);
+  font-weight: var(--typography-body-module-font-weight);
+  font-size: var(--typography-body-module-font-size);
+  line-height: var(--typography-body-module-line-height);
+  letter-spacing: var(--typography-body-module-letter-spacing);
+  text-transform: var(--typography-body-module-text-transform);
+  color: var(--typography-body-module-color);
+}
+
+.typography-subheading {
+  font-family: var(--typography-subheading-font-family);
+  font-weight: var(--typography-subheading-font-weight);
+  font-size: var(--typography-subheading-font-size);
+  line-height: var(--typography-subheading-line-height);
+  letter-spacing: var(--typography-subheading-letter-spacing);
+  text-transform: var(--typography-subheading-text-transform);
+  color: var(--typography-subheading-color);
+}
+
+.typography-link {
+  font-family: var(--typography-link-font-family);
+  font-weight: var(--typography-link-font-weight);
+  font-size: var(--typography-link-font-size);
+  line-height: var(--typography-link-line-height);
+  letter-spacing: var(--typography-link-letter-spacing);
+  text-transform: var(--typography-link-text-transform);
+  color: var(--typography-link-color);
+  text-decoration: none;
+}
+
+.typography-link:hover {
+  color: var(--typography-link-color-hover);
+}
+
+.typography-caption {
+  font-family: var(--typography-caption-font-family);
+  font-weight: var(--typography-caption-font-weight);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  text-transform: var(--typography-caption-text-transform);
+  color: var(--typography-caption-color);
+}
+
+.typography-button {
+  font-family: var(--typography-button-font-family);
+  font-weight: var(--typography-button-font-weight);
+  font-size: var(--typography-button-font-size);
+  line-height: var(--typography-button-line-height);
+  letter-spacing: var(--typography-button-letter-spacing);
+  text-transform: var(--typography-button-text-transform);
+  color: var(--typography-button-color);
+}
+
+.typography-label {
+  font-family: var(--typography-label-font-family);
+  font-weight: var(--typography-label-font-weight);
+  font-size: var(--typography-label-font-size);
+  line-height: var(--typography-label-line-height);
+  letter-spacing: var(--typography-label-letter-spacing);
+  text-transform: var(--typography-label-text-transform);
+  color: var(--typography-label-color);
+}
+
+.typography-helper {
+  font-family: var(--typography-helper-font-family);
+  font-weight: var(--typography-helper-font-weight);
+  font-size: var(--typography-helper-font-size);
+  line-height: var(--typography-helper-line-height);
+  letter-spacing: var(--typography-helper-letter-spacing);
+  text-transform: var(--typography-helper-text-transform);
+  color: var(--typography-helper-color);
+}
+
+/* State-specific typography variants */
+.typography-error {
+  color: var(--color-text-error);
+}
+
+.typography-success {
+  color: var(--color-text-success);
+}
+
+.typography-muted {
+  color: var(--color-text-muted);
+}
+
+.typography-disabled {
+  color: var(--color-text-disabled);
+}
+
+.typography-label-required {
+  color: var(--color-input-label-required);
+}
+
+.typography-label-optional {
+  color: var(--color-input-label-optional);
+}
+
+/* Input state text variants */
+.typography-input-error {
+  color: var(--color-input-text-error);
+}
+
+.typography-input-success {
+  color: var(--color-input-text-success);
+}
+
+.typography-input-disabled {
+  color: var(--color-input-text-disabled);
+}
