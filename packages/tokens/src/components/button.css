@@ -1,0 +1,86 @@
+:root {
+  /* Button Sizing */
+  --button-height-sm: 32px;
+  --button-height-md: 40px;
+  --button-height-lg: 48px;
+  --button-height-xl: 56px;
+
+  --button-padding-x-sm: var(--space-22);
+  --button-padding-x-md: var(--space-24);
+  --button-padding-x-lg: var(--space-32);
+  --button-padding-x-xl: var(--space-48);
+
+  --button-padding-y-sm: var(--space-6);
+  --button-padding-y-md: var(--space-8);
+  --button-padding-y-lg: var(--space-16);
+  --button-padding-y-xl: var(--space-20);
+
+  /* Button Styling */
+  --button-border-radius: var(--radius-sm);
+  --button-border-width: var(--border-sm);
+  --button-icon-size-sm: var(--icon-xs);
+  --button-icon-size-md: var(--icon-sm);
+  --button-icon-size-lg: var(--icon-md);
+  --button-icon-size-xl: var(--icon-lg);
+  --button-icon-gap: var(--space-8);
+
+  /* Primary Button (Filled) */
+  --button-primary-bg: var(--color-primary);
+  --button-primary-bg-hover: var(--color-primary-hover);
+  --button-primary-bg-focus: var(--color-primary-focus);
+  --button-primary-bg-disabled: var(--color-disabled);
+
+  --button-primary-text: var(--color-text-inverse);
+  --button-primary-text-disabled: var(--color-disabled-text);
+  --button-primary-text-focus: var(--color-primary);
+
+  --button-primary-border: var(--color-transparent);
+  --button-primary-border-focus: var(--color-primary-focus);
+
+  /* Outline Button */
+  --button-outline-bg: var(--color-surface);
+  --button-outline-bg-hover: var(--color-surface);
+  --button-outline-bg-focus: var(--color-primary-focus);
+  --button-outline-bg-disabled: var(--color-disabled);
+
+  --button-outline-text: var(--color-primary);
+  --button-outline-text-hover: var(--color-primary-hover);
+  --button-outline-text-focus: var(--color-primary);
+  --button-outline-text-disabled: var(--color-disabled-text);
+
+  --button-outline-border: var(--color-primary);
+  --button-outline-border-hover: var(--color-primary-hover);
+  --button-outline-border-focus: var(--color-primary-focus);
+  --button-outline-border-disabled: var(--color-disabled);
+
+  /* CTA Button */
+  --button-cta-bg: var(--color-cta);
+  --button-cta-bg-hover: var(--color-cta-hover);
+  --button-cta-bg-focus: var(--color-warning);
+  --button-cta-bg-disabled: var(--color-disabled);
+
+  --button-cta-text: var(--color-text-inverse);
+  --button-cta-text-disabled: var(--color-disabled-text);
+  --button-cta-text-focus: var(--color-primary);
+
+  --button-cta-border: var(--color-transparent);
+  --button-cta-border-focus: var(--color-primary-focus);
+
+  /* Destructive Button */
+  --button-destructive-bg: var(--color-destructive);
+  --button-destructive-bg-hover: var(--color-destructive-hover);
+  --button-destructive-bg-focus: var(--color-warning);
+  --button-destructive-bg-disabled: var(--color-disabled);
+
+  --button-destructive-text: var(--color-text-inverse);
+  --button-destructive-text-disabled: var(--color-disabled-text);
+  --button-destructive-text-focus: var(--color-primary);
+
+  --button-destructive-border: var(--color-transparent);
+  --button-destructive-border-focus: var(--color-primary-focus);
+
+  /* Focus Ring */
+  --button-focus-ring: var(--shadow-focus);
+  --button-focus-ring-primary: var(--shadow-focus-primary);
+  --button-focus-ring-destructive: var(--shadow-focus-destructive);
+}

@@ -1,0 +1,45 @@
+:root {
+  /* Base Colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* Gray Scale */
+  --color-gray-50: #f7f8f9;
+  --color-gray-100: #f3f4f5;
+  --color-gray-200: #ebebeb;
+  --color-gray-300: #e4e4e4;
+  --color-gray-400: #b3b9bf;
+  --color-gray-500: #8f949a;
+  --color-gray-600: #6f757d;
+  --color-gray-700: #4c5258;
+  --color-gray-800: #2f2f2f;
+
+  /* Navy Scale */
+  --color-navy-200: #e3e9ef;
+  --color-navy-300: #b6c3d2;
+  --color-navy-400: #164b8f;
+  --color-navy-500: #0e3a6c;
+
+  /* Red Scale */
+  --color-red-500: #a30134;
+  --color-red-600: #7a0125;
+
+  /* Destructive Scale */
+  --color-destructive-500: #d92b2b;
+  --color-destructive-600: #b12222;
+
+  /* Error Scale */
+  --color-error-500: #eb0000;
+
+  /* Success Scale */
+  --color-success-500: #31bb00;
+
+  /* Focus Scale */
+  --color-focus-500: #ff9900;
+
+  /* Pink Scale */
+  --color-pink-500: #ffe3ea;
+
+  /* Charcoal Scale */
+  --color-charcoal-500: #39444f;
+}

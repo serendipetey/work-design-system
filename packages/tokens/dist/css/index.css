@@ -1,0 +1,4 @@
+/* Import in dependency order: primitives → semantic → components */
+@import "./primitives/index.css";
+@import "./semantic/index.css";
+@import "./components/index.css";

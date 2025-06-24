@@ -1,0 +1,40 @@
+:root {
+  /* Brand Colors */
+  --color-primary: var(--color-navy-500);
+  --color-primary-hover: var(--color-navy-400);
+  --color-primary-focus: var(--color-navy-400);
+
+  /* CTA Colors */
+  --color-cta: var(--color-red-500);
+  --color-cta-hover: var(--color-red-600);
+
+  /* Text Colors */
+  --color-text: var(--color-gray-800);
+  --color-text-subtle: var(--color-gray-600);
+  --color-text-muted: var(--color-gray-500);
+  --color-text-inverse: var(--color-white);
+
+  /* Surface Colors */
+  --color-surface: var(--color-white);
+  --color-surface-subtle: var(--color-gray-50);
+  --color-surface-pressed: var(--color-white);
+
+  /* Border Colors */
+  --color-border: var(--color-gray-300);
+  --color-border-subtle: var(--color-gray-200);
+  --color-border-focus: var(--color-navy-500);
+
+  /* Status Colors */
+  --color-success: var(--color-success-500);
+  --color-error: var(--color-error-500);
+  --color-warning: var(--color-focus-500);
+  --color-destructive: var(--color-destructive-500);
+  --color-destructive-hover: var(--color-destructive-600);
+
+  /* Interactive States */
+  --color-disabled: var(--color-gray-300);
+  --color-disabled-text: var(--color-gray-500);
+
+  /* Transparent Colors */
+  --color-transparent: rgba(255, 255, 255, 0);
+}
