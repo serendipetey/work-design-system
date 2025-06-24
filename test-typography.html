@@ -1,485 +1,464 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Typography System Test</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Import Design Tokens -->
+    <link rel="stylesheet" href="packages/tokens/dist/css/index.css" />
+
     <style>
-        /* Import your typography tokens */
-        :root {
-          /* Base Colors */
-          --color-white: #ffffff;
-          --color-navy-500: #0e3a6c;
-          --color-red-500: #a30134;
-          --color-red-600: #7a0125;
-          --color-charcoal-500: #39444f;
-          --color-gray-400: #b3b9bf;
-          --color-gray-500: #8f949a;
-          --color-error-500: #eb0000;
-          --color-success-500: #31bb00;
-          /* Font Families */
-          --font-family-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          --font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+      /* Only page layout styles - no token overrides */
+      body {
+        font-family: var(--font-family-sans);
+        padding: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--color-gray-50);
+        line-height: 1.5;
+      }
 
-          /* Font Weights */
-          --font-weight-light: 300;
-          --font-weight-regular: 400;
-          --font-weight-medium: 500;
-          --font-weight-semibold: 600;
-          --font-weight-bold: 700;
+      .section {
+        background: var(--color-white);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+      }
 
-          /* Font Sizes */
-          --font-size-xs: 0.625rem;    /* 10px */
-          --font-size-sm: 0.875rem;    /* 14px */
-          --font-size-base: 1rem;      /* 16px */
-          --font-size-lg: 1.125rem;    /* 18px */
-          --font-size-xl: 1.75rem;     /* 28px */
-          --font-size-2xl: 2.375rem;   /* 38px */
-          --font-size-3xl: 2.875rem;   /* 46px */
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+      }
 
-          /* Line Heights */
-          --line-height-none: 1;
-          --line-height-tight: 1.15;
-          --line-height-snug: 1.375;
-          --line-height-normal: 1.5;
-          --line-height-relaxed: 1.625;
-          --line-height-loose: 1.75;
-          --line-height-xl: 2.125;
-          --line-height-2xl: 2.3;
-          --line-height-3xl: 3.25;
+      .sample {
+        padding: 1.5rem;
+        border: var(--border-sm) solid var(--color-border-subtle);
+        border-radius: var(--radius-sm);
+        background: var(--color-surface-subtle);
+      }
 
-          /* Letter Spacing */
-          --letter-spacing-tighter: -0.02em;
-          --letter-spacing-tight: -0.01em;
-          --letter-spacing-normal: 0em;
-          --letter-spacing-wide: 0.025em;
-          --letter-spacing-wider: 0.05em;
-          --letter-spacing-widest: 0.25em;
+      .spec {
+        font-size: 12px;
+        color: var(--color-text-muted);
+        margin-top: 0.75rem;
+        font-family: var(--font-family-mono);
+        background: rgba(255, 255, 255, 0.7);
+        padding: 0.5rem;
+        border-radius: var(--radius-xs);
+        border-left: 3px solid var(--color-border);
+      }
 
-          /* Semantic Typography */
-          --typography-h1-font-family: var(--font-family-sans);
-          --typography-h1-font-weight: var(--font-weight-bold);
-          --typography-h1-font-size: var(--font-size-3xl);
-          --typography-h1-line-height: var(--line-height-3xl);
-          --typography-h1-letter-spacing: var(--letter-spacing-normal);
+      .usage-note {
+        background: var(--color-warning);
+        color: var(--color-text-inverse);
+        padding: 1rem;
+        border-radius: var(--radius-sm);
+        margin-bottom: 2rem;
+        font-weight: var(--font-weight-medium);
+      }
 
-          --typography-h2-font-family: var(--font-family-sans);
-          --typography-h2-font-weight: var(--font-weight-bold);
-          --typography-h2-font-size: var(--font-size-2xl);
-          --typography-h2-line-height: var(--line-height-2xl);
-          --typography-h2-letter-spacing: var(--letter-spacing-normal);
+      .usage-note code {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-xs);
+        font-family: var(--font-family-mono);
+      }
 
-          --typography-h3-font-family: var(--font-family-sans);
-          --typography-h3-font-weight: var(--font-weight-bold);
-          --typography-h3-font-size: var(--font-size-xl);
-          --typography-h3-line-height: var(--line-height-2xl);
-          --typography-h3-letter-spacing: var(--letter-spacing-normal);
+      /* Component styling for demo */
+      .demo-button {
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: var(--space-8) var(--space-24);
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        display: inline-block;
+      }
 
-          --typography-h4-font-family: var(--font-family-sans);
-          --typography-h4-font-weight: var(--font-weight-bold);
-          --typography-h4-font-size: var(--font-size-base);
-          --typography-h4-line-height: var(--line-height-relaxed);
-          --typography-h4-letter-spacing: var(--letter-spacing-normal);
+      .demo-button:hover {
+        background: var(--color-primary-hover);
+      }
 
-          --typography-body-font-family: var(--font-family-sans);
-          --typography-body-font-weight: var(--font-weight-regular);
-          --typography-body-font-size: var(--font-size-base);
-          --typography-body-line-height: var(--line-height-loose);
-          --typography-body-letter-spacing: var(--letter-spacing-wide);
+      /* Typography showcase grid */
+      .type-showcase {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+        align-items: center;
+      }
 
-          --typography-body-large-font-family: var(--font-family-sans);
-          --typography-body-large-font-weight: var(--font-weight-bold);
-          --typography-body-large-font-size: var(--font-size-lg);
-          --typography-body-large-line-height: var(--line-height-xl);
-          --typography-body-large-letter-spacing: var(--letter-spacing-wide);
+      .color-swatch {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid var(--color-border);
+      }
 
-          --typography-subheading-font-family: var(--font-family-sans);
-          --typography-subheading-font-weight: var(--font-weight-bold);
-          --typography-subheading-font-size: var(--font-size-sm);
-          --typography-subheading-line-height: var(--line-height-tight);
-          --typography-subheading-letter-spacing: var(--letter-spacing-widest);
-
-          --typography-link-font-family: var(--font-family-sans);
-          --typography-link-font-weight: var(--font-weight-semibold);
-          --typography-link-font-size: var(--font-size-base);
-          --typography-link-line-height: var(--line-height-loose);
-          --typography-link-letter-spacing: var(--letter-spacing-wide);
-
-          --typography-caption-font-family: var(--font-family-sans);
-          --typography-caption-font-weight: var(--font-weight-light);
-          --typography-caption-font-size: var(--font-size-xs);
-          --typography-caption-line-height: var(--line-height-normal);
-          --typography-caption-letter-spacing: var(--letter-spacing-normal);
-
-          --typography-button-font-family: var(--font-family-sans);
-          --typography-button-font-weight: var(--font-weight-semibold);
-          --typography-button-font-size: var(--font-size-base);
-          --typography-button-line-height: var(--line-height-normal);
-          --typography-button-letter-spacing: var(--letter-spacing-wide);
-
-          --typography-label-font-family: var(--font-family-sans);
-          --typography-label-font-weight: var(--font-weight-semibold);
-          --typography-label-font-size: var(--font-size-base);
-          --typography-label-line-height: var(--line-height-normal);
-          --typography-label-letter-spacing: var(--letter-spacing-wide);
-
-          --typography-helper-font-family: var(--font-family-sans);
-          --typography-helper-font-weight: var(--font-weight-regular);
-          --typography-helper-font-size: var(--font-size-sm);
-          --typography-helper-line-height: var(--line-height-normal);
-          --typography-helper-letter-spacing: var(--letter-spacing-wide);
-        }
-
-        /* Typography Utility Classes */
-        .typography-h1 {
-          font-family: var(--typography-h1-font-family);
-          font-weight: var(--typography-h1-font-weight);
-          font-size: var(--typography-h1-font-size);
-          line-height: var(--typography-h1-line-height);
-          letter-spacing: var(--typography-h1-letter-spacing);
-          color: var(--color-text-heading);
-        }
-
-        .typography-h2 {
-          font-family: var(--typography-h2-font-family);
-          font-weight: var(--typography-h2-font-weight);
-          font-size: var(--typography-h2-font-size);
-          line-height: var(--typography-h2-line-height);
-          letter-spacing: var(--typography-h2-letter-spacing);
-          color: var(--color-text-heading);
-        }
-
-        .typography-h3 {
-          font-family: var(--typography-h3-font-family);
-          font-weight: var(--typography-h3-font-weight);
-          font-size: var(--typography-h3-font-size);
-          line-height: var(--typography-h3-line-height);
-          letter-spacing: var(--typography-h3-letter-spacing);
-          color: var(--color-text-heading);
-        }
-
-        .typography-h4 {
-          font-family: var(--typography-h4-font-family);
-          font-weight: var(--typography-h4-font-weight);
-          font-size: var(--typography-h4-font-size);
-          line-height: var(--typography-h4-line-height);
-          letter-spacing: var(--typography-h4-letter-spacing);
-          color: var(--color-text-heading);
-        }
-
-        .typography-body {
-          font-family: var(--typography-body-font-family);
-          font-weight: var(--typography-body-font-weight);
-          font-size: var(--typography-body-font-size);
-          line-height: var(--typography-body-line-height);
-          letter-spacing: var(--typography-body-letter-spacing);
-          color: var(--color-text-body);
-        }
-
-        .typography-body-large {
-          font-family: var(--typography-body-large-font-family);
-          font-weight: var(--typography-body-large-font-weight);
-          font-size: var(--typography-body-large-font-size);
-          line-height: var(--typography-body-large-line-height);
-          letter-spacing: var(--typography-body-large-letter-spacing);
-          color: var(--color-text-body);
-        }
-
-        .typography-subheading {
-          font-family: var(--typography-subheading-font-family);
-          font-weight: var(--typography-subheading-font-weight);
-          font-size: var(--typography-subheading-font-size);
-          line-height: var(--typography-subheading-line-height);
-          letter-spacing: var(--typography-subheading-letter-spacing);
-          text-transform: uppercase;
-          color: var(--color-text-heading);
-        }
-
-        .typography-link {
-          font-family: var(--typography-link-font-family);
-          font-weight: var(--typography-link-font-weight);
-          font-size: var(--typography-link-font-size);
-          line-height: var(--typography-link-line-height);
-          letter-spacing: var(--typography-link-letter-spacing);
-          color: var(--color-red-500);
-          text-decoration: none;
-        }
-
-        .typography-link:hover {
-          color: var(--color-red-600);
-        }
-
-        .typography-caption {
-          font-family: var(--typography-caption-font-family);
-          font-weight: var(--typography-caption-font-weight);
-          font-size: var(--typography-caption-font-size);
-          line-height: var(--typography-caption-line-height);
-          letter-spacing: var(--typography-caption-letter-spacing);
-          color: var(--color-text-muted);
-        }
-
-        .typography-button {
-          font-family: var(--typography-button-font-family);
-          font-weight: var(--typography-button-font-weight);
-          font-size: var(--typography-button-font-size);
-          line-height: var(--typography-button-line-height);
-          letter-spacing: var(--typography-button-letter-spacing);
-          color: var(--color-button-primary-text);
-        }
-
-        .typography-label {
-          font-family: var(--typography-label-font-family);
-          font-weight: var(--typography-label-font-weight);
-          font-size: var(--typography-label-font-size);
-          line-height: var(--typography-label-line-height);
-          letter-spacing: var(--typography-label-letter-spacing);
-          color: var(--color-input-label);
-        }
-
-        .typography-helper {
-          font-family: var(--typography-helper-font-family);
-          font-weight: var(--typography-helper-font-weight);
-          font-size: var(--typography-helper-font-size);
-          line-height: var(--typography-helper-line-height);
-          letter-spacing: var(--typography-helper-letter-spacing);
-          color: var(--color-input-helper);
-        }
-
-        /* State-specific typography variants */
-        .typography-error {
-          color: var(--color-text-error);
-        }
-
-        .typography-success {
-          color: var(--color-text-success);
-        }
-
-        .typography-muted {
-          color: var(--color-text-muted);
-        }
-
-        .typography-disabled {
-          color: var(--color-text-disabled);
-        }
-
-        .typography-label-required {
-          color: var(--color-input-label-required);
-        }
-
-        .typography-label-optional {
-          color: var(--color-input-label-optional);
-        }
-
-        .typography-input-error {
-          color: var(--color-input-text-error);
-        }
-
-        .typography-input-success {
-          color: var(--color-input-text-success);
-        }
-
-        .typography-input-disabled {
-          color: var(--color-input-text-disabled);
-        }
-
-        /* Page styling */
-        body {
-          font-family: var(--font-family-sans);
-          padding: 2rem;
-          max-width: 800px;
-          margin: 0 auto;
-          background: #f7f8f9;
-        }
-
-        .section {
-          background: white;
-          padding: 2rem;
-          margin-bottom: 2rem;
-          border-radius: 8px;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .grid {
-          display: grid;
-          gap: 1rem;
-          margin-top: 1rem;
-        }
-
-        .sample {
-          padding: 1rem;
-          border: 1px solid #e4e4e4;
-          border-radius: 4px;
-          background: #fafafa;
-        }
-
-        .spec {
-          font-size: 12px;
-          color: #6f757d;
-          margin-top: 0.5rem;
-          font-family: monospace;
-        }
+      .navy-swatch {
+        background: var(--color-navy-500);
+      }
+      .charcoal-swatch {
+        background: var(--color-charcoal-500);
+      }
+      .red-swatch {
+        background: var(--color-red-500);
+      }
+      .gray-swatch {
+        background: var(--color-gray-500);
+      }
     </style>
-</head>
-<body>
-    <div class="usage-note">
-        <strong>⚠️ Test File Notice:</strong> This is a standalone test file with minimal tokens embedded for preview. 
-        In production, import the actual token files with: 
-        <code>&lt;link rel="stylesheet" href="packages/tokens/dist/css/index.css"&gt;</code>
+  </head>
+  <body>
+    <div class="section">
+      <h1 class="typography-h1">Typography System</h1>
+      <p class="typography-body">
+        Complete typography tokens based on your Figma design system using the
+        Poppins font family with correct color mappings.
+      </p>
     </div>
 
     <div class="section">
-        <h1 class="typography-h1">Typography System</h1>
-        <p class="typography-body">Complete typography tokens based on your Figma design system using Poppins font family.</p>
-    </div>
-
-    <div class="section">
-        <h2 class="typography-h2">Headings</h2>
-        <div class="grid">
-            <div class="sample">
-                <h1 class="typography-h1">Heading 1</h1>
-                <div class="spec">46px / Bold / 52px line height</div>
-            </div>
-            <div class="sample">
-                <h2 class="typography-h2">Heading 2</h2>
-                <div class="spec">38px / Bold / 46px line height</div>
-            </div>
-            <div class="sample">
-                <h3 class="typography-h3">Heading 3</h3>
-                <div class="spec">28px / Bold / 36px line height</div>
-            </div>
-            <div class="sample">
-                <h4 class="typography-h4">Heading 4</h4>
-                <div class="spec">16px / Bold / 26px line height</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2 class="typography-h2">Body Text</h2>
-        <div class="grid">
-            <div class="sample">
-                <p class="typography-body-large">P4 - Large Body Text</p>
-                <div class="spec">18px / Bold / 34px line height / 0.4px letter spacing</div>
-            </div>
-            <div class="sample">
-                <p class="typography-body">Regular paragraph text that flows naturally and provides good readability for extended reading.</p>
-                <div class="spec">16px / Regular / 28px line height / 0.36px letter spacing</div>
-            </div>
-            <div class="sample">
-                <p class="typography-subheading">Subheading Text</p>
-                <div class="spec">14px / Bold / 16px line height / 3.5px letter spacing / UPPERCASE</div>
-            </div>
-            <div class="sample">
-                <a href="#" class="typography-link">Hyperlink text example</a>
-                <div class="spec">16px / SemiBold / 28px line height / 0.36px letter spacing</div>
-            </div>
-            <div class="sample">
-                <p class="typography-caption">Image caption or small text</p>
-                <div class="spec">10px / Light / Auto line height</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2 class="typography-h2">Component Typography</h2>
-        <div class="grid">
-            <div class="sample">
-                <button class="typography-button" style="background: #0e3a6c; color: white; padding: 12px 24px; border: none; border-radius: 4px;">Button Text</button>
-                <div class="spec">16px / SemiBold / Auto line height / 0.4px letter spacing</div>
-            </div>
-            <div class="sample">
-                <label class="typography-label">Input Label</label>
-                <div class="spec">16px / SemiBold / Auto line height / 0.4px letter spacing</div>
-            </div>
-            <div class="sample">
-                <p class="typography-helper">Helper text for forms</p>
-                <div class="spec">14px / Regular / Auto line height / 0.4px letter spacing</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2 class="typography-h2">Color-Mapped Typography</h2>
-        <div class="grid">
-            <div class="sample">
-                <h3 class="typography-h3">All headings use Navy</h3>
-                <div class="spec">color: var(--color-navy-500) - #0e3a6c</div>
-            </div>
-            <div class="sample">
-                <p class="typography-body">Body text uses charcoal color for excellent readability and hierarchy.</p>
-                <div class="spec">color: var(--color-charcoal-500) - #39444f</div>
-            </div>
-            <div class="sample">
-                <a href="#" class="typography-link">Links use the CTA red color</a>
-                <div class="spec">color: var(--color-red-500) - #a30134</div>
-            </div>
-            <div class="sample">
-                <p class="typography-helper typography-error">Error message text</p>
-                <div class="spec">color: var(--color-error-500) - #eb0000</div>
-            </div>
-            <div class="sample">
-                <p class="typography-helper typography-success">Success message text</p>
-                <div class="spec">color: var(--color-success-500) - #31bb00</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2 class="typography-h2">Form Typography States</h2>
-        <div class="grid">
-            <div class="sample">
-                <label class="typography-label">Default Label</label>
-                <div class="spec">color: var(--color-navy-500) - Navy</div>
-            </div>
-            <div class="sample">
-                <label class="typography-label typography-label-required">Required Label *</label>
-                <div class="spec">color: var(--color-red-500) - Red for required fields</div>
-            </div>
-            <div class="sample">
-                <label class="typography-label typography-label-optional">Optional Label</label>
-                <div class="spec">color: var(--color-gray-400) - Muted for optional</div>
-            </div>
-            <div class="sample">
-                <p class="typography-helper typography-input-error">This field has an error</p>
-                <div class="spec">color: var(--color-red-500) - Error state</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2 class="typography-h2">Usage Examples</h2>
+      <h2 class="typography-h2">Headings</h2>
+      <div class="grid">
         <div class="sample">
-            <h3 class="typography-subheading">News Article</h3>
-            <h1 class="typography-h1">Breaking: New Design System Released</h1>
-            <h2 class="typography-h2">Revolutionary typography tokens now available</h2>
-            
-            <p class="typography-body-large">This is a lead paragraph that introduces the main topic with emphasis and draws the reader into the content.</p>
-            
-            <h3 class="typography-h3">Key Features</h3>
-            <p class="typography-body">The new typography system includes comprehensive tokens for all text styles, ensuring consistency across your design system. Each token is carefully crafted to match your Figma specifications.</p>
-            
-            <p class="typography-body">You can easily apply these styles using CSS custom properties or utility classes. The system supports all the typography variants you've defined in Figma.</p>
-            
-            <p class="typography-caption">Published on January 31, 2025</p>
+          <div class="type-showcase">
+            <h1 class="typography-h1">Heading 1</h1>
+            <div class="navy-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            46px / Bold / 52px line height / Navy (#0e3a6c)
+          </div>
         </div>
-    </div>
+
         <div class="sample">
-            <h3 class="typography-subheading">News Article</h3>
-            <h1 class="typography-h1">Breaking: New Design System Released</h1>
-            <h2 class="typography-h2">Revolutionary typography tokens now available</h2>
-            
-            <p class="typography-body-large">This is a lead paragraph that introduces the main topic with emphasis and draws the reader into the content.</p>
-            
-            <h3 class="typography-h3">Key Features</h3>
-            <p class="typography-body">The new typography system includes comprehensive tokens for all text styles, ensuring consistency across your design system. Each token is carefully crafted to match your Figma specifications.</p>
-            
-            <p class="typography-body">You can easily apply these styles using CSS custom properties or utility classes. The system supports all the typography variants you've defined in Figma.</p>
-            
-            <p class="typography-caption">Published on January 31, 2025</p>
+          <div class="type-showcase">
+            <h2 class="typography-h2">Heading 2</h2>
+            <div class="navy-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            38px / Bold / 46px line height / Navy (#0e3a6c)
+          </div>
         </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <h3 class="typography-h3">Heading 3</h3>
+            <div class="navy-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            28px / Bold / 36px line height / Navy (#0e3a6c)
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <h4 class="typography-h4">Heading 4</h4>
+            <div class="navy-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            16px / Bold / 26px line height / Navy (#0e3a6c)
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+
+    <div class="section">
+      <h2 class="typography-h2">Body Text & Paragraph Styles</h2>
+      <div class="grid">
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-body-large">
+              P4 - Large Body Text (Bold emphasis)
+            </p>
+            <div class="charcoal-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            18px / Bold / 34px line height / 0.4px letter spacing / Charcoal
+            (#39444f)
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-body">
+              Paragraph - Normal: Regular body text that flows naturally and
+              provides excellent readability for extended reading across
+              multiple lines and paragraphs.
+            </p>
+            <div class="charcoal-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            16px / Regular / 28px line height / 0.36px letter spacing / Charcoal
+            (#39444f)
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-body-module">
+              Paragraph - Module: Light weight body text used in module contexts
+              with slightly different styling for content hierarchy.
+            </p>
+            <div class="charcoal-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            18px / Light / 28px line height / 0px letter spacing / Charcoal
+            (#39444f)
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-subheading">Subheading Text</p>
+            <div class="navy-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            14px / Bold / 16px line height / 3.5px letter spacing / UPPERCASE /
+            Navy (#0e3a6c)
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <a href="#" class="typography-link"
+              >Hyperlink - Paragraph text example</a
+            >
+            <div class="red-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            16px / SemiBold / 28px line height / 0.36px letter spacing / Red
+            (#a30134)
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-caption">Image caption or text image</p>
+            <div class="gray-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            10px / Light / Auto line height / Gray (#8f949a)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="typography-h2">Component Typography</h2>
+      <div class="grid">
+        <div class="sample">
+          <div class="type-showcase">
+            <button class="demo-button typography-button">
+              Button - Primary
+            </button>
+            <span style="font-size: 12px; color: var(--color-text-muted)"
+              >White text</span
+            >
+          </div>
+          <div class="spec">
+            16px / SemiBold / Auto line height / 0.4px letter spacing / White on
+            Navy background
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <label class="typography-label">Input - Label</label>
+            <div class="navy-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            16px / SemiBold / Auto line height / 0.4px letter spacing / Navy
+            (#0e3a6c)
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-helper">Input - (Required) helper text</p>
+            <div class="charcoal-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            14px / Regular / Auto line height / 0.4px letter spacing / Charcoal
+            (#39444f)
+          </div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-helper typography-muted">
+              Input - (Optional) helper text
+            </p>
+            <div class="gray-swatch color-swatch"></div>
+          </div>
+          <div class="spec">
+            14px / Regular / Auto line height / 0.4px letter spacing / Gray
+            (#8f949a)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="typography-h2">Typography States & Variants</h2>
+      <div class="grid">
+        <div class="sample">
+          <div class="type-showcase">
+            <label class="typography-label typography-label-required"
+              >Required Field Label *</label
+            >
+            <div class="red-swatch color-swatch"></div>
+          </div>
+          <div class="spec">Required field styling - Red (#a30134)</div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-helper typography-error">Error message text</p>
+            <div class="red-swatch color-swatch"></div>
+          </div>
+          <div class="spec">Error state - Red (#a30134)</div>
+        </div>
+
+        <div class="sample">
+          <div class="type-showcase">
+            <p class="typography-helper typography-success">
+              Success message text
+            </p>
+            <span
+              style="
+                width: 20px;
+                height: 20px;
+                background: var(--color-success-500);
+                border-radius: 50%;
+                border: 1px solid var(--color-border);
+              "
+            ></span>
+          </div>
+          <div class="spec">Success state - Green (#31bb00)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="typography-h2">Complete Usage Example</h2>
+      <div class="sample">
+        <article>
+          <p class="typography-subheading">News Article</p>
+          <h1 class="typography-h1">
+            Revolutionary Design System Now Available
+          </h1>
+          <h2 class="typography-h2">
+            Typography tokens bring consistency to digital products
+          </h2>
+
+          <p class="typography-body-large">
+            This is a lead paragraph (P4) that introduces the main topic with
+            bold emphasis and draws the reader into the content with larger,
+            more prominent text.
+          </p>
+
+          <h3 class="typography-h3">Key Features of the Typography System</h3>
+          <p class="typography-body">
+            The new typography system includes comprehensive tokens for all text
+            styles, ensuring consistency across your entire design system. Each
+            token is carefully crafted to match your Figma specifications with
+            pixel-perfect accuracy.
+          </p>
+
+          <p class="typography-body">
+            You can easily apply these styles using CSS custom properties or
+            utility classes. The system supports all the typography variants
+            you've defined in Figma, including proper color mappings for
+            different semantic contexts.
+          </p>
+
+          <p class="typography-body">
+            For more information, visit our
+            <a href="#" class="typography-link">documentation website</a> or
+            check out the
+            <a href="#" class="typography-link">implementation guide</a>.
+          </p>
+
+          <p class="typography-body-module">
+            This paragraph uses the module styling with lighter font weight,
+            perfect for sidebar content or supplementary information that needs
+            to be distinct from main body text.
+          </p>
+
+          <p class="typography-caption">
+            Published on January 31, 2025 by the Design Systems Team
+          </p>
+        </article>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="typography-h2">Color Reference</h2>
+      <div class="grid">
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+          "
+        >
+          <div
+            style="
+              padding: 1rem;
+              background: var(--color-navy-500);
+              color: white;
+              border-radius: var(--radius-sm);
+            "
+          >
+            <strong>Navy #0e3a6c</strong><br />
+            Headings, labels, subheadings
+          </div>
+          <div
+            style="
+              padding: 1rem;
+              background: var(--color-charcoal-500);
+              color: white;
+              border-radius: var(--radius-sm);
+            "
+          >
+            <strong>Charcoal #39444f</strong><br />
+            Body text, helper text
+          </div>
+          <div
+            style="
+              padding: 1rem;
+              background: var(--color-red-500);
+              color: white;
+              border-radius: var(--radius-sm);
+            "
+          >
+            <strong>Red #a30134</strong><br />
+            Links, required fields, errors
+          </div>
+          <div
+            style="
+              padding: 1rem;
+              background: var(--color-gray-500);
+              color: white;
+              border-radius: var(--radius-sm);
+            "
+          >
+            <strong>Gray #8f949a</strong><br />
+            Captions, muted text, optional
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

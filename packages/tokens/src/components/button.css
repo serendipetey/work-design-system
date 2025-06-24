@@ -56,7 +56,7 @@
   /* CTA Button */
   --button-cta-bg: var(--color-cta);
   --button-cta-bg-hover: var(--color-cta-hover);
-  --button-cta-bg-focus: var(--color-warning);
+  --button-cta-bg-focus: var(--color-warning-500);
   --button-cta-bg-disabled: var(--color-disabled);
 
   --button-cta-text: var(--color-text-inverse);
@@ -66,10 +66,36 @@
   --button-cta-border: var(--color-transparent);
   --button-cta-border-focus: var(--color-primary-focus);
 
+  /* Success Button - NEW */
+  --button-success-bg: var(--color-success);
+  --button-success-bg-hover: var(--color-success-hover);
+  --button-success-bg-focus: var(--color-warning-500);
+  --button-success-bg-disabled: var(--color-disabled);
+
+  --button-success-text: var(--color-button-success-text);
+  --button-success-text-disabled: var(--color-disabled-text);
+  --button-success-text-focus: var(--color-primary);
+
+  --button-success-border: var(--color-transparent);
+  --button-success-border-focus: var(--color-primary-focus);
+
+  /* Warning Button - NEW */
+  --button-warning-bg: var(--color-warning);
+  --button-warning-bg-hover: var(--color-warning-hover);
+  --button-warning-bg-focus: var(--color-warning-500);
+  --button-warning-bg-disabled: var(--color-disabled);
+
+  --button-warning-text: var(--color-button-warning-text);
+  --button-warning-text-disabled: var(--color-disabled-text);
+  --button-warning-text-focus: var(--color-primary);
+
+  --button-warning-border: var(--color-transparent);
+  --button-warning-border-focus: var(--color-primary-focus);
+
   /* Destructive Button */
   --button-destructive-bg: var(--color-destructive);
   --button-destructive-bg-hover: var(--color-destructive-hover);
-  --button-destructive-bg-focus: var(--color-warning);
+  --button-destructive-bg-focus: var(--color-warning-500);
   --button-destructive-bg-disabled: var(--color-disabled);
 
   --button-destructive-text: var(--color-text-inverse);
@@ -79,8 +105,10 @@
   --button-destructive-border: var(--color-transparent);
   --button-destructive-border-focus: var(--color-primary-focus);
 
-  /* Focus Ring */
+  /* Focus Ring - UPDATED */
   --button-focus-ring: var(--shadow-focus);
   --button-focus-ring-primary: var(--shadow-focus-primary);
+  --button-focus-ring-success: var(--shadow-focus-success);
+  --button-focus-ring-warning: var(--shadow-focus-warning);
   --button-focus-ring-destructive: var(--shadow-focus-destructive);
 }

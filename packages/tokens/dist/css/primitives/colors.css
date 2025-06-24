@@ -31,8 +31,15 @@
   /* Error Scale */
   --color-error-500: #eb0000;
 
-  /* Success Scale */
-  --color-success-500: #31bb00;
+  /* Success Scale - NEW TEAL-BASED COLORS */
+  --color-success-200: #e6f2f3; /* Light success background */
+  --color-success-500: #007d85; /* Primary success color */
+  --color-success-600: #00646a; /* Darker success for hover states */
+
+  /* Warning Scale - NEW ORANGE-BASED COLORS */
+  --color-warning-200: #f8efe6; /* Light warning background */
+  --color-warning-500: #b75b00; /* Primary warning color */
+  --color-warning-600: #924900; /* Darker warning for hover states */
 
   /* Focus Scale */
   --color-focus-500: #ff9900;
