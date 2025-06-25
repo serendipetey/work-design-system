@@ -42,7 +42,7 @@
   --color-surface-warning: var(
     --color-warning-200
   ); /* Light orange background */
-  --color-surface-error: var(--color-pink-500); /* Light pink for errors */
+  --color-surface-error: var(--color-error-200); /* Light error background */
 
   /* Border Colors */
   --color-border: var(--color-gray-300);
@@ -100,6 +100,15 @@
     --color-gray-400
   ); /* Gray for disabled state */
 
+  /* Focus Colors - Global focus indicator */
+  --color-focus: var(--color-focus-500); /* #ff9900 - Global focus indicator */
+  --color-focus-hover: var(--color-focus-600);
+
+  /* Brand Accent Colors */
+  --color-accent-pink: var(
+    --color-pink-500
+  ); /* #ffe3ea - Occasional brand accent */
+
   /* Alert/Notification Colors */
   --color-alert-success-bg: var(--color-success-200);
   --color-alert-success-border: var(--color-success-500);
@@ -109,9 +118,9 @@
   --color-alert-warning-border: var(--color-warning-500);
   --color-alert-warning-text: var(--color-warning-600);
 
-  --color-alert-error-bg: var(--color-pink-500);
+  --color-alert-error-bg: var(--color-error-200);
   --color-alert-error-border: var(--color-error-500);
-  --color-alert-error-text: var(--color-error-500);
+  --color-alert-error-text: var(--color-error-600);
 
   /* Transparent Colors */
   --color-transparent: rgba(255, 255, 255, 0);
