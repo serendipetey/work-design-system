@@ -32,6 +32,5 @@
     }
   },
   "include": ["src", "lib", "scripts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "dist", "build", ".next"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["node_modules", "dist", "build", ".next"]
 }
