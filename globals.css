@@ -1,0 +1,311 @@
+/* Import your existing design token CSS files */
+@import "./packages/tokens/dist/css/index.css";
+
+/* Tailwind base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme semantic colors for shadcn compatibility */
+    /* These map to your existing design tokens */
+    --background: 0 0% 100%; /* white */
+    --foreground: 213 27% 28%; /* charcoal-500 #39444f */
+
+    --card: 0 0% 100%; /* white */
+    --card-foreground: 213 27% 28%; /* charcoal-500 */
+
+    --popover: 0 0% 100%; /* white */
+    --popover-foreground: 213 27% 28%; /* charcoal-500 */
+
+    --primary: 209 70% 23%; /* navy-500 #0e3a6c */
+    --primary-foreground: 0 0% 100%; /* white */
+
+    --secondary: 210 9% 96%; /* gray-100 #f3f4f5 */
+    --secondary-foreground: 209 70% 23%; /* navy-500 */
+
+    --muted: 210 9% 96%; /* gray-100 #f3f4f5 */
+    --muted-foreground: 212 9% 59%; /* gray-500 #8f949a */
+
+    --accent: 210 9% 96%; /* gray-100 #f3f4f5 */
+    --accent-foreground: 209 70% 23%; /* navy-500 */
+
+    --destructive: 348 79% 50%; /* destructive-500 #d92b2b */
+    --destructive-foreground: 0 0% 100%; /* white */
+
+    --border: 0 0% 89%; /* gray-300 #e4e4e4 */
+    --input: 0 0% 89%; /* gray-300 #e4e4e4 */
+    --ring: 209 70% 23%; /* navy-500 for focus ring */
+
+    --radius: 0.5rem; /* 8px - md radius */
+
+    /* Custom semantic mappings for your specific use cases */
+    --color-text-heading: var(--color-navy-500);
+    --color-text-body: var(--color-charcoal-500);
+    --color-text-link: var(--color-red-500);
+    --color-text-error: var(--color-error-500);
+    --color-text-success: var(--color-success-500);
+    --color-text-warning: var(--color-warning-500);
+  }
+
+  .dark {
+    /* Dark theme variants (future-proofing) */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 0 0% 95%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 83%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-family-sans);
+  }
+
+  /* Typography utility classes using your existing design tokens */
+  .typography-h1 {
+    font-family: var(--typography-h1-font-family);
+    font-weight: var(--typography-h1-font-weight);
+    font-size: var(--typography-h1-font-size);
+    line-height: var(--typography-h1-line-height);
+    letter-spacing: var(--typography-h1-letter-spacing);
+    color: var(--color-text-heading);
+    margin-top: var(--typography-h1-margin-top);
+    margin-bottom: var(--typography-h1-margin-bottom);
+  }
+
+  .typography-h1:first-child {
+    margin-top: 0;
+  }
+
+  .typography-h2 {
+    font-family: var(--typography-h2-font-family);
+    font-weight: var(--typography-h2-font-weight);
+    font-size: var(--typography-h2-font-size);
+    line-height: var(--typography-h2-line-height);
+    letter-spacing: var(--typography-h2-letter-spacing);
+    color: var(--color-text-heading);
+    margin-top: var(--typography-h2-margin-top);
+    margin-bottom: var(--typography-h2-margin-bottom);
+  }
+
+  .typography-h2:first-child {
+    margin-top: 0;
+  }
+
+  .typography-h3 {
+    font-family: var(--typography-h3-font-family);
+    font-weight: var(--typography-h3-font-weight);
+    font-size: var(--typography-h3-font-size);
+    line-height: var(--typography-h3-line-height);
+    letter-spacing: var(--typography-h3-letter-spacing);
+    color: var(--color-text-heading);
+    margin-top: var(--typography-h3-margin-top);
+    margin-bottom: var(--typography-h3-margin-bottom);
+  }
+
+  .typography-h3:first-child {
+    margin-top: 0;
+  }
+
+  .typography-body {
+    font-family: var(--typography-body-font-family);
+    font-weight: var(--typography-body-font-weight);
+    font-size: var(--typography-body-font-size);
+    line-height: var(--typography-body-line-height);
+    letter-spacing: var(--typography-body-letter-spacing);
+    color: var(--color-text-body);
+    margin-bottom: var(--typography-body-margin-bottom);
+  }
+
+  .typography-body:last-child {
+    margin-bottom: 0;
+  }
+
+  .typography-link {
+    font-family: var(--typography-link-font-family);
+    font-weight: var(--typography-link-font-weight);
+    font-size: var(--typography-link-font-size);
+    line-height: var(--typography-link-line-height);
+    letter-spacing: var(--typography-link-letter-spacing);
+    color: var(--color-text-link);
+    text-decoration: none;
+  }
+
+  .typography-link:hover {
+    color: var(--color-text-link-hover);
+  }
+}
+
+@layer components {
+  /* Component-specific classes that bridge your tokens with Tailwind */
+  .btn {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    background: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border: var(--button-border-width) solid var(--button-primary-border);
+  }
+
+  .btn-primary:hover {
+    background: var(--button-primary-bg-hover);
+  }
+
+  .btn-primary:focus {
+    box-shadow: var(--button-focus-ring-primary);
+  }
+
+  .btn-outline {
+    background: var(--button-outline-bg);
+    color: var(--button-outline-text);
+    border: var(--button-border-width) solid var(--button-outline-border);
+  }
+
+  .btn-outline:hover {
+    color: var(--button-outline-text-hover);
+    border-color: var(--button-outline-border-hover);
+  }
+
+  .btn-cta {
+    background: var(--button-cta-bg);
+    color: var(--button-cta-text);
+    border: var(--button-border-width) solid var(--button-cta-border);
+  }
+
+  .btn-cta:hover {
+    background: var(--button-cta-bg-hover);
+  }
+
+  .btn-success {
+    background: var(--button-success-bg);
+    color: var(--button-success-text);
+    border: var(--button-border-width) solid var(--button-success-border);
+  }
+
+  .btn-success:hover {
+    background: var(--button-success-bg-hover);
+  }
+
+  .btn-warning {
+    background: var(--button-warning-bg);
+    color: var(--button-warning-text);
+    border: var(--button-border-width) solid var(--button-warning-border);
+  }
+
+  .btn-warning:hover {
+    background: var(--button-warning-bg-hover);
+  }
+
+  .btn-destructive {
+    background: var(--button-destructive-bg);
+    color: var(--button-destructive-text);
+    border: var(--button-border-width) solid var(--button-destructive-border);
+  }
+
+  .btn-destructive:hover {
+    background: var(--button-destructive-bg-hover);
+  }
+
+  /* Size variants */
+  .btn-sm {
+    height: var(--button-height-sm);
+    padding: 0 var(--button-padding-x-sm);
+    @apply text-sm;
+  }
+
+  .btn-md {
+    height: var(--button-height-md);
+    padding: 0 var(--button-padding-x-md);
+  }
+
+  .btn-lg {
+    height: var(--button-height-lg);
+    padding: 0 var(--button-padding-x-lg);
+    @apply text-base;
+  }
+}
+
+@layer utilities {
+  /* Utility classes for your design system */
+  .text-heading {
+    color: var(--color-text-heading);
+  }
+
+  .text-body {
+    color: var(--color-text-body);
+  }
+
+  .text-link {
+    color: var(--color-text-link);
+  }
+
+  .text-success {
+    color: var(--color-text-success);
+  }
+
+  .text-warning {
+    color: var(--color-text-warning);
+  }
+
+  .text-error {
+    color: var(--color-text-error);
+  }
+
+  .bg-surface {
+    background: var(--color-surface);
+  }
+
+  .bg-surface-subtle {
+    background: var(--color-surface-subtle);
+  }
+
+  .shadow-focus {
+    box-shadow: var(--shadow-focus);
+  }
+
+  .shadow-focus-primary {
+    box-shadow: var(--shadow-focus-primary);
+  }
+
+  .shadow-focus-success {
+    box-shadow: var(--shadow-focus-success);
+  }
+
+  .shadow-focus-warning {
+    box-shadow: var(--shadow-focus-warning);
+  }
+
+  .shadow-focus-error {
+    box-shadow: var(--shadow-focus-error);
+  }
+}
