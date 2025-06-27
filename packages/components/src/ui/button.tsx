@@ -30,79 +30,77 @@ const Spinner = () => (
 );
 
 const buttonVariants = cva(
-  // Base button styles
+  // Base button styles with UNIFIED focus states
   [
     "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium",
     "transition-all duration-150 ease-in-out cursor-pointer",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
     "active:translate-y-[1px]",
+    // UNIFIED FOCUS STYLES - Override all variants with !important and fix border-radius
+    "focus-visible:outline-none",
+    "focus-visible:!bg-[#ff9900]", // Direct hex value for orange background
+    "focus-visible:!text-[#0e3a6c]", // Direct hex value for navy text
+    "focus-visible:!border-t-0 focus-visible:!border-l-0 focus-visible:!border-r-0", // Remove top, left, right borders
+    "focus-visible:!border-b-[3px] focus-visible:!border-b-[#0e3a6c]", // Thick navy bottom border
+    "focus-visible:!rounded-t-md focus-visible:!rounded-b-none", // Keep top radius, remove bottom radius
+    "focus-visible:!shadow-none", // Remove any box shadows
   ].join(" "),
   {
     variants: {
       variant: {
-        // Primary Button - using Tailwind classes that map to our custom properties
+        // Primary Button - removed focus-visible classes since they're now in base
         primary: [
           "bg-primary text-primary-foreground",
           "border border-primary",
           "hover:bg-primary/90",
-          "focus-visible:ring-primary/20",
         ].join(" "),
 
-        // Outline Button
+        // Outline Button - removed focus-visible classes
         outline: [
           "bg-transparent text-primary",
           "border border-primary",
           "hover:bg-primary hover:text-primary-foreground",
-          "focus-visible:ring-primary/20",
         ].join(" "),
 
-        // CTA Button
+        // CTA Button - removed focus-visible classes
         cta: [
           "bg-cta text-cta-foreground",
           "border border-cta",
           "hover:bg-cta/90",
-          "focus-visible:ring-cta/20",
         ].join(" "),
 
-        // Success Button
+        // Success Button - removed focus-visible classes
         success: [
           "bg-success text-success-foreground",
           "border border-success",
           "hover:bg-success/90",
-          "focus-visible:ring-success/20",
         ].join(" "),
 
-        // Warning Button
+        // Warning Button - removed focus-visible classes
         warning: [
           "bg-warning text-warning-foreground",
           "border border-warning",
           "hover:bg-warning/90",
-          "focus-visible:ring-warning/20",
         ].join(" "),
 
-        // Destructive Button
+        // Destructive Button - removed focus-visible classes
         destructive: [
           "bg-destructive text-destructive-foreground",
           "border border-destructive",
           "hover:bg-destructive/90",
-          "focus-visible:ring-destructive/20",
         ].join(" "),
 
-        // Ghost Button - minimal styling
+        // Ghost Button - removed focus-visible classes
         ghost: [
-          "bg-transparent text-foreground",
-          "border border-transparent",
+          "text-primary",
           "hover:bg-accent hover:text-accent-foreground",
-          "focus-visible:ring-accent/20",
         ].join(" "),
       },
       size: {
-        // Using your exact design token sizes
-        sm: "h-[var(--button-height-sm)] px-[var(--button-padding-x-sm)] text-sm",
-        md: "h-[var(--button-height-md)] px-[var(--button-padding-x-md)] text-sm", // default
-        lg: "h-[var(--button-height-lg)] px-[var(--button-padding-x-lg)] text-base",
-        xl: "h-[var(--button-height-xl)] px-[var(--button-padding-x-xl)] text-lg",
+        sm: "h-8 px-3 text-xs",
+        md: "h-10 px-4 py-2",
+        lg: "h-11 px-8",
+        xl: "h-12 px-8 text-base",
       },
     },
     defaultVariants: {
@@ -140,59 +138,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     const isDisabled = disabled || loading;
 
-    // Detect if this should be an icon-only button
-    const isIconOnly = !children && (leftIcon || rightIcon);
-
-    // Direct inline styles for icon-only buttons (for debugging)
-    const iconOnlyStyles = isIconOnly
-      ? {
-          padding:
-            size === "sm"
-              ? "8px"
-              : size === "lg"
-              ? "16px"
-              : size === "xl"
-              ? "20px"
-              : "12px", // default md
-          width: "auto",
-          height: "auto",
-          aspectRatio: "1",
-        }
-      : {};
-
     return (
       <Comp
-        className={cn(
-          buttonVariants({
-            variant,
-            size: isIconOnly ? undefined : size,
-          }),
-          className
-        )}
-        style={iconOnlyStyles} // Direct styles for debugging
+        className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         disabled={isDisabled}
         {...props}
       >
         {loading && <Spinner />}
         {!loading && leftIcon && (
-          <span
-            className={cn(
-              "inline-flex shrink-0",
-              !isIconOnly && children && "mr-2"
-            )}
-          >
+          <span className="inline-flex items-center justify-center">
             {leftIcon}
           </span>
         )}
         {children}
         {!loading && rightIcon && (
-          <span
-            className={cn(
-              "inline-flex shrink-0",
-              !isIconOnly && children && "ml-2"
-            )}
-          >
+          <span className="inline-flex items-center justify-center">
             {rightIcon}
           </span>
         )}
@@ -200,7 +161,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-
 Button.displayName = "Button";
 
 export { Button, buttonVariants };

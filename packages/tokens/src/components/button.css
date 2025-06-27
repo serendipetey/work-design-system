@@ -105,10 +105,20 @@
   --button-destructive-border: var(--color-transparent);
   --button-destructive-border-focus: var(--color-primary-focus);
 
-  /* Focus Ring - UPDATED */
-  --button-focus-ring: var(--shadow-focus);
-  --button-focus-ring-primary: var(--shadow-focus-primary);
-  --button-focus-ring-success: var(--shadow-focus-success);
-  --button-focus-ring-warning: var(--shadow-focus-warning);
-  --button-focus-ring-destructive: var(--shadow-focus-destructive);
+  /* UNIFIED FOCUS STATES - All buttons use these when focused */
+  --button-unified-focus-bg: var(
+    --color-focus-500
+  ); /* #ff9900 - Orange background */
+  --button-unified-focus-text: var(--color-navy-500); /* #0e3a6c - Navy text */
+  --button-unified-focus-border: var(
+    --color-navy-500
+  ); /* #0e3a6c - Navy border */
+  --button-unified-focus-border-width: 3px; /* Thick bottom border */
+
+  /* Focus Ring - UPDATED - Remove all focus rings */
+  --button-focus-ring: none;
+  --button-focus-ring-primary: none;
+  --button-focus-ring-success: none;
+  --button-focus-ring-warning: none;
+  --button-focus-ring-destructive: none;
 }

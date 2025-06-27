@@ -41,6 +41,10 @@
     --cta: 350 80% 32%; /* red-500 #a30134 */
     --cta-foreground: 0 0% 100%; /* white */
 
+    /* UNIFIED FOCUS COLORS - Add these for the focus states */
+    --color-focus-500: #ff9900; /* Orange focus background */
+    --color-navy-500: #0e3a6c; /* Navy focus text/border */
+
     /* Button specific tokens using your design system */
     --button-primary-bg: var(--primary);
     --button-primary-text: var(--primary-foreground);
@@ -92,11 +96,11 @@
     --button-border-width: 1px;
     --button-border-radius: 0.5rem; /* 8px from your tokens */
 
-    /* Focus ring styles */
-    --button-focus-ring-primary: 0 0 0 3px hsla(207, 73%, 24%, 0.2);
-    --button-focus-ring-destructive: 0 0 0 3px hsla(0, 84%, 60%, 0.2);
-    --button-focus-ring-success: 0 0 0 3px hsla(184, 90%, 26%, 0.2);
-    --button-focus-ring-warning: 0 0 0 3px hsla(32, 95%, 44%, 0.2);
+    /* Focus ring styles - disable these since we're using unified focus */
+    --button-focus-ring-primary: none;
+    --button-focus-ring-destructive: none;
+    --button-focus-ring-success: none;
+    --button-focus-ring-warning: none;
   }
 
   .dark {
@@ -108,83 +112,115 @@
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
     --primary: 217 92% 60%;
-    --primary-foreground: 222 84% 5%;
-    --secondary: 217 33% 18%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 18%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 33% 18%;
-    --accent-foreground: 210 40% 98%;
-    --border: 217 33% 18%;
-    --input: 217 33% 18%;
-    --ring: 224 76% 94%;
+    --primary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 83%;
   }
 }
 
 @layer base {
   * {
-    border-color: hsl(var(--border));
+    @apply border-border;
   }
-
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    @apply bg-background text-foreground;
+    font-family: var(--font-family-sans);
   }
 }
 
 @layer components {
-  /* Component classes that bridge your tokens with Tailwind */
+  /* Component-specific classes that bridge your tokens with Tailwind */
   .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    border-radius: calc(var(--radius) - 2px);
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 150ms ease-in-out;
-    cursor: pointer;
-    text-decoration: none;
-  }
-
-  .btn:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px hsl(var(--ring));
-  }
-
-  .btn:disabled {
-    pointer-events: none;
-    opacity: 0.5;
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50;
   }
 
   .btn-primary {
-    background: hsl(var(--button-primary-bg));
-    color: hsl(var(--button-primary-text));
-    border: var(--button-border-width) solid hsl(var(--button-primary-border));
+    background: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border: var(--button-border-width) solid var(--button-primary-border);
   }
 
   .btn-primary:hover {
-    background: hsl(var(--button-primary-bg-hover));
+    background: var(--button-primary-bg-hover);
   }
 
   .btn-outline {
     background: var(--button-outline-bg);
-    color: hsl(var(--button-outline-text));
-    border: var(--button-border-width) solid hsl(var(--button-outline-border));
+    color: var(--button-outline-text);
+    border: var(--button-border-width) solid var(--button-outline-border);
   }
 
   .btn-outline:hover {
-    background: hsl(var(--button-outline-bg-hover));
-    color: hsl(var(--button-outline-text-hover));
+    color: var(--button-outline-text-hover);
+    border-color: var(--button-outline-border-hover);
   }
 
   .btn-cta {
-    background: hsl(var(--button-cta-bg));
-    color: hsl(var(--button-cta-text));
-    border: var(--button-border-width) solid hsl(var(--button-cta-border));
+    background: var(--button-cta-bg);
+    color: var(--button-cta-text);
+    border: var(--button-border-width) solid var(--button-cta-border);
   }
 
   .btn-cta:hover {
-    background: hsl(var(--button-cta-bg-hover));
+    background: var(--button-cta-bg-hover);
+  }
+
+  .btn-success {
+    background: var(--button-success-bg);
+    color: var(--button-success-text);
+    border: var(--button-border-width) solid var(--button-success-border);
+  }
+
+  .btn-success:hover {
+    background: var(--button-success-bg-hover);
+  }
+
+  .btn-warning {
+    background: var(--button-warning-bg);
+    color: var(--button-warning-text);
+    border: var(--button-border-width) solid var(--button-warning-border);
+  }
+
+  .btn-warning:hover {
+    background: var(--button-warning-bg-hover);
+  }
+
+  .btn-destructive {
+    background: var(--button-destructive-bg);
+    color: var(--button-destructive-text);
+    border: var(--button-border-width) solid var(--button-destructive-border);
+  }
+
+  .btn-destructive:hover {
+    background: var(--button-destructive-bg-hover);
+  }
+
+  /* Size variants */
+  .btn-sm {
+    height: var(--button-height-sm);
+    padding: 0 var(--button-padding-x-sm);
+    @apply text-sm;
+  }
+
+  .btn-md {
+    height: var(--button-height-md);
+    padding: 0 var(--button-padding-x-md);
+  }
+
+  .btn-lg {
+    height: var(--button-height-lg);
+    padding: 0 var(--button-padding-x-lg);
+    @apply text-base;
   }
 }
