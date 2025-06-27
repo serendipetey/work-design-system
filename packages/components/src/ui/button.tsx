@@ -2,6 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import "../Button/button.css";
 
 // Spinner component for loading state
 const Spinner = () => (
@@ -139,20 +140,61 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     const isDisabled = disabled || loading;
 
+    // Detect if this should be an icon-only button
+    const isIconOnly = !children && (leftIcon || rightIcon);
+
+    // Direct inline styles for icon-only buttons (for debugging)
+    const iconOnlyStyles = isIconOnly
+      ? {
+          padding:
+            size === "sm"
+              ? "8px"
+              : size === "lg"
+              ? "16px"
+              : size === "xl"
+              ? "20px"
+              : "12px", // default md
+          width: "auto",
+          height: "auto",
+          aspectRatio: "1",
+        }
+      : {};
+
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({
+            variant,
+            size: isIconOnly ? undefined : size,
+          }),
+          className
+        )}
+        style={iconOnlyStyles} // Direct styles for debugging
         ref={ref}
         disabled={isDisabled}
         {...props}
       >
         {loading && <Spinner />}
         {!loading && leftIcon && (
-          <span className="mr-2 inline-flex shrink-0">{leftIcon}</span>
+          <span
+            className={cn(
+              "inline-flex shrink-0",
+              !isIconOnly && children && "mr-2"
+            )}
+          >
+            {leftIcon}
+          </span>
         )}
         {children}
         {!loading && rightIcon && (
-          <span className="ml-2 inline-flex shrink-0">{rightIcon}</span>
+          <span
+            className={cn(
+              "inline-flex shrink-0",
+              !isIconOnly && children && "ml-2"
+            )}
+          >
+            {rightIcon}
+          </span>
         )}
       </Comp>
     );

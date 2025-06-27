@@ -200,25 +200,94 @@ export const WithIcons: Story = {
 // Icon-only validation
 export const IconOnly: Story = {
   render: () => (
-    <div className="flex flex-wrap gap-4">
-      <Button leftIcon={<PlusIcon />} aria-label="Add item" />
-      <Button
-        leftIcon={<DownloadIcon />}
-        variant="outline"
-        aria-label="Download"
-      />
-      <Button
-        leftIcon={<PlusIcon />}
-        variant="ghost"
-        size="sm"
-        aria-label="Add small"
-      />
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Icon-Only Button Sizes</h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button
+            leftIcon={<PlusIcon />}
+            size="sm"
+            aria-label="Add item (small)"
+          />
+          <Button
+            leftIcon={<PlusIcon />}
+            size="md"
+            aria-label="Add item (medium)"
+          />
+          <Button
+            leftIcon={<PlusIcon />}
+            size="lg"
+            aria-label="Add item (large)"
+          />
+          <Button
+            leftIcon={<PlusIcon />}
+            size="xl"
+            aria-label="Add item (extra large)"
+          />
+        </div>
+        <div className="mt-2 text-sm text-gray-600">
+          <p>
+            Figma Design System Padding: Small (8px), Medium (12px), Large
+            (16px), XL (20px)
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">
+          Icon-Only Button Variants
+        </h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button
+            leftIcon={<PlusIcon />}
+            variant="primary"
+            aria-label="Add item"
+          />
+          <Button
+            leftIcon={<DownloadIcon />}
+            variant="outline"
+            aria-label="Download"
+          />
+          <Button
+            leftIcon={<PlusIcon />}
+            variant="ghost"
+            aria-label="Add ghost"
+          />
+          <Button
+            leftIcon={<DownloadIcon />}
+            variant="cta"
+            aria-label="CTA download"
+          />
+          <Button
+            leftIcon={<PlusIcon />}
+            variant="destructive"
+            aria-label="Delete item"
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">
+          Comparison: Regular vs Icon-Only
+        </h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Button leftIcon={<PlusIcon />}>Regular Button</Button>
+          <Button leftIcon={<PlusIcon />} aria-label="Icon-only button" />
+        </div>
+        <div className="mt-2 text-sm text-gray-600">
+          <p>
+            Notice the difference: regular button has horizontal padding + icon
+            spacing, icon-only has uniform padding
+          </p>
+        </div>
+      </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: "Icon-only buttons with proper ARIA labels for accessibility.",
+        story:
+          "Icon-only buttons automatically detected when no children are provided. Uses Figma design system padding (8px, 12px, 16px, 20px) for perfect square aspect ratios.",
       },
     },
   },

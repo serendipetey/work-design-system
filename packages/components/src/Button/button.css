@@ -1,5 +1,6 @@
 /* Button Component CSS - packages/components/src/button/button.css */
 /* Imports design tokens from @your-company/design-tokens */
+
 .btn {
   /* Reset */
   margin: 0;
@@ -259,22 +260,27 @@
 }
 
 /* Icon-only buttons */
-.btn--icon-only {
-  padding: 0;
-  gap: 0;
-  aspect-ratio: 1;
+[data-icon-only="true"] {
+  width: auto !important;
+  height: auto !important;
+  aspect-ratio: 1 !important;
 }
-.btn--icon-only.btn--sm {
-  width: var(--button-height-sm);
+
+/* Icon-only button sizes using data attributes */
+[data-icon-only="true"][data-size="sm"] {
+  padding: var(--space-8) !important;
 }
-.btn--icon-only.btn--md {
-  width: var(--button-height-md);
+
+[data-icon-only="true"][data-size="md"] {
+  padding: var(--space-12) !important;
 }
-.btn--icon-only.btn--lg {
-  width: var(--button-height-lg);
+
+[data-icon-only="true"][data-size="lg"] {
+  padding: var(--space-16) !important;
 }
-.btn--icon-only.btn--xl {
-  width: var(--button-height-xl);
+
+[data-icon-only="true"][data-size="xl"] {
+  padding: var(--space-20) !important;
 }
 
 /* Full width modifier */
