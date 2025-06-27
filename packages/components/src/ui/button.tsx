@@ -138,22 +138,59 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     const isDisabled = disabled || loading;
 
+    // Detect if this should be an icon-only button
+    const isIconOnly = !children && (leftIcon || rightIcon);
+
+    // Figma design system padding for icon-only buttons
+    const iconOnlyStyles = isIconOnly
+      ? {
+          padding:
+            size === "sm"
+              ? "8px"
+              : size === "lg"
+              ? "16px"
+              : size === "xl"
+              ? "20px"
+              : "12px", // default md = 12px
+          width: "auto",
+          height: "auto",
+          aspectRatio: "1",
+        }
+      : {};
+
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({
+            variant,
+            size: isIconOnly ? undefined : size,
+          }),
+          className
+        )}
+        style={iconOnlyStyles}
         ref={ref}
         disabled={isDisabled}
         {...props}
       >
         {loading && <Spinner />}
         {!loading && leftIcon && (
-          <span className="inline-flex items-center justify-center">
+          <span
+            className={cn(
+              "inline-flex shrink-0",
+              !isIconOnly && children && "mr-2"
+            )}
+          >
             {leftIcon}
           </span>
         )}
         {children}
         {!loading && rightIcon && (
-          <span className="inline-flex items-center justify-center">
+          <span
+            className={cn(
+              "inline-flex shrink-0",
+              !isIconOnly && children && "ml-2"
+            )}
+          >
             {rightIcon}
           </span>
         )}
@@ -161,6 +198,5 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-Button.displayName = "Button";
 
 export { Button, buttonVariants };
