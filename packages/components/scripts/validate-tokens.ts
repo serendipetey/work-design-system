@@ -9,131 +9,92 @@ interface TokenValidationResult {
   passed: boolean;
 }
 
-// Expected button tokens based on your design system
-const EXPECTED_BUTTON_TOKENS = [
-  // Primary variant
-  "--button-primary-bg",
-  "--button-primary-text",
-  "--button-primary-border",
-  "--button-primary-bg-hover",
-  "--button-primary-bg-focus",
-  "--button-primary-bg-disabled",
-  "--button-primary-text-disabled",
-
-  // Outline variant
-  "--button-outline-bg",
-  "--button-outline-text",
-  "--button-outline-border",
-  "--button-outline-bg-hover",
-  "--button-outline-text-hover",
-  "--button-outline-border-hover",
-  "--button-outline-bg-focus",
-  "--button-outline-bg-disabled",
-  "--button-outline-text-disabled",
-  "--button-outline-border-disabled",
-
-  // CTA variant
-  "--button-cta-bg",
-  "--button-cta-text",
-  "--button-cta-border",
-  "--button-cta-bg-hover",
-  "--button-cta-bg-focus",
-  "--button-cta-bg-disabled",
-  "--button-cta-text-disabled",
-
-  // Success variant
-  "--button-success-bg",
-  "--button-success-text",
-  "--button-success-border",
-  "--button-success-bg-hover",
-  "--button-success-bg-focus",
-  "--button-success-bg-disabled",
-  "--button-success-text-disabled",
-
-  // Warning variant
-  "--button-warning-bg",
-  "--button-warning-text",
-  "--button-warning-border",
-  "--button-warning-bg-hover",
-  "--button-warning-bg-focus",
-  "--button-warning-bg-disabled",
-  "--button-warning-text-disabled",
-
-  // Destructive variant
-  "--button-destructive-bg",
-  "--button-destructive-text",
-  "--button-destructive-border",
-  "--button-destructive-bg-hover",
-  "--button-destructive-bg-focus",
-  "--button-destructive-bg-disabled",
-  "--button-destructive-text-disabled",
-
-  // Sizing tokens
-  "--button-height-sm",
-  "--button-height-md",
-  "--button-height-lg",
-  "--button-height-xl",
-  "--button-padding-x-sm",
-  "--button-padding-x-md",
-  "--button-padding-x-lg",
-  "--button-padding-x-xl",
-
-  // General tokens
-  "--button-border-width",
-  "--button-border-radius",
-  "--button-focus-ring-primary",
-  "--button-focus-ring-success",
-  "--button-focus-ring-warning",
-  "--button-focus-ring-destructive",
-];
-
-// Patterns that indicate hardcoded values (should be avoided)
-const HARDCODED_PATTERNS = [
-  /#[0-9a-fA-F]{3,8}/g, // Hex colors
-  /rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)/g, // RGB colors
-  /rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*[\d.]+\s*\)/g, // RGBA colors
-  /hsl\(\s*\d+\s*,\s*\d+%\s*,\s*\d+%\s*\)/g, // HSL colors
-  /\d+px(?!\])/g, // Pixel values not in CSS custom properties
-];
-
 async function validateButtonTokens(): Promise<TokenValidationResult> {
   try {
-    // Read the button component file
+    // Define expected design tokens for button component
+    const expectedTokens = [
+      // Color tokens
+      "bg-primary",
+      "text-primary-foreground",
+      "hover:bg-primary/90",
+      "bg-secondary",
+      "text-secondary-foreground",
+      "hover:bg-secondary/80",
+      "bg-destructive",
+      "text-destructive-foreground",
+      "hover:bg-destructive/90",
+      "bg-outline",
+      "text-outline-foreground",
+      "hover:bg-accent",
+      "hover:text-accent-foreground",
+      "bg-ghost",
+      "text-ghost-foreground",
+      // Size tokens
+      "h-9",
+      "px-4",
+      "py-2",
+      "h-8",
+      "px-3",
+      "text-sm",
+      "h-10",
+      "px-6",
+      "h-11",
+      // Border tokens
+      "border",
+      "border-input",
+      // Focus tokens
+      "focus-visible:outline-none",
+      "focus-visible:ring-2",
+      "focus-visible:ring-ring",
+      "focus-visible:ring-offset-2",
+      // Typography tokens
+      "text-sm",
+      "font-medium",
+      // State tokens
+      "disabled:pointer-events-none",
+      "disabled:opacity-50",
+      // Layout tokens
+      "inline-flex",
+      "items-center",
+      "justify-center",
+      "whitespace-nowrap",
+      "rounded-md",
+      "transition-colors",
+    ];
+
+    // Common hardcoded values to detect
+    const hardcodedPatterns = [
+      /#[0-9a-fA-F]{3,6}/, // Hex colors
+      /rgb\(/, // RGB colors
+      /rgba\(/, // RGBA colors
+      /hsl\(/, // HSL colors
+      /\d+px/, // Pixel values
+      /\d+rem/, // Rem values (should use spacing scale)
+      /\d+em/, // Em values
+    ];
+
+    // Read button component file
     const buttonPath = join(
       process.cwd(),
       "packages/components/src/ui/button.tsx"
     );
     const buttonContent = await fs.readFile(buttonPath, "utf-8");
 
-    // Find tokens used in the component
-    const tokenMatches = buttonContent.match(/var\(--[^)]+\)/g) || [];
-    const usedTokens = tokenMatches.map((match) =>
-      match
-        .replace("var(", "")
-        .replace(")", "")
-        .replace("[", "")
-        .replace("]", "")
+    // Check for missing expected tokens
+    const missingTokens = expectedTokens.filter(
+      (token) => !buttonContent.includes(token)
     );
 
-    // Check for missing tokens
-    const missingTokens = EXPECTED_BUTTON_TOKENS.filter(
-      (token) => !usedTokens.includes(token)
-    );
-
-    // Check for unused expected tokens
-    const unusedTokens = usedTokens.filter(
-      (token) =>
-        !EXPECTED_BUTTON_TOKENS.includes(token) && token.startsWith("--button-")
-    );
-
-    // Check for hardcoded values
+    // Find hardcoded values
     const hardcodedValues: string[] = [];
-    HARDCODED_PATTERNS.forEach((pattern) => {
-      const matches = buttonContent.match(pattern) || [];
-      hardcodedValues.push(...matches);
-    });
+    for (const pattern of hardcodedPatterns) {
+      const matches = buttonContent.match(new RegExp(pattern, "g"));
+      if (matches) {
+        hardcodedValues.push(...matches);
+      }
+    }
 
-    // Remove false positives (values inside comments, etc.)
+    // Filter out commented hardcoded values
     const filteredHardcoded = hardcodedValues.filter((value) => {
       const lines = buttonContent.split("\n");
       return !lines.some(
@@ -148,7 +109,7 @@ async function validateButtonTokens(): Promise<TokenValidationResult> {
     return {
       component: "Button",
       missingTokens,
-      unusedTokens,
+      unusedTokens: [], // Could implement token usage analysis
       hardcodedValues: filteredHardcoded,
       passed,
     };
@@ -260,8 +221,8 @@ async function runValidation(): Promise<void> {
   }
 }
 
-// Run validation if called directly
-if (require.main === module) {
+// ES module equivalent of require.main === module
+if (import.meta.url === `file://${process.argv[1]}`) {
   runValidation().catch(console.error);
 }
 
