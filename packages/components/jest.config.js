@@ -1,8 +1,10 @@
+// File: packages/components/jest.config.js
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/test-setup.ts"],
-  moduleNameMapping: {
+  moduleNameMapper: {
+    // ← Fixed: was "moduleNameMapping"
     "^@/(.*)$": "<rootDir>/src/$1",
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
@@ -15,4 +17,8 @@ module.exports = {
     "!src/**/*.d.ts",
     "!src/**/*.stories.{ts,tsx}",
   ],
+  transform: {
+    "^.+\\.(ts|tsx)$": "ts-jest",
+  },
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
 };

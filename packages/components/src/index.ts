@@ -1,7 +1,9 @@
 // Main entry point for the component library
+// File: packages/components/src/index.ts
 
 // Export all components
 export * from "./ui/button";
+export * from "./ui/input";
 
 // Export utility functions from src/lib/utils.ts
 export * from "./lib/utils";
