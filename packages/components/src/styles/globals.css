@@ -6,107 +6,38 @@
 
 @layer base {
   :root {
-    /* Base system colors */
+    /* MINIMAL shadcn compatibility mappings only */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --border: 214 32% 91%; /* gray-200 from your tokens */
+    --border: 214 32% 91%;
     --input: 214 32% 91%;
     --ring: 215 20% 65%;
     --radius: 0.5rem;
 
-    /* Your design system colors mapped to HSL values */
-    --primary: 207 73% 24%; /* navy-500 #0e3a6c */
-    --primary-foreground: 0 0% 100%; /* white */
-
-    --secondary: 214 32% 91%; /* gray-200 */
-    --secondary-foreground: 0 0% 9%; /* gray-800 */
-
-    --accent: 214 32% 91%; /* gray-200 */
-    --accent-foreground: 0 0% 9%; /* gray-800 */
-
-    --muted: 220 14% 96%; /* gray-50 */
-    --muted-foreground: 215 16% 47%; /* gray-600 */
-
-    --destructive: 0 84% 60%; /* destructive-500 */
-    --destructive-foreground: 0 0% 100%; /* white */
-
-    --success: 184 90% 26%; /* success-500 */
-    --success-foreground: 0 0% 100%; /* white */
-
-    --warning: 32 95% 44%; /* warning-500 */
-    --warning-foreground: 0 0% 0%; /* black */
-
-    --cta: 350 80% 32%; /* red-500 #a30134 */
-    --cta-foreground: 0 0% 100%; /* white */
-
-    /* UNIFIED FOCUS COLORS - Add these for the focus states */
-    --color-focus-500: #ff9900; /* Orange focus background */
-    --color-navy-500: #0e3a6c; /* Navy focus text/border */
-
-    /* Button specific tokens using your design system */
-    --button-primary-bg: var(--primary);
-    --button-primary-text: var(--primary-foreground);
-    --button-primary-border: var(--primary);
-    --button-primary-bg-hover: 207 73% 20%; /* navy-600 */
-
-    --button-outline-bg: transparent;
-    --button-outline-text: var(--primary);
-    --button-outline-border: var(--primary);
-    --button-outline-bg-hover: var(--primary);
-    --button-outline-text-hover: var(--primary-foreground);
-
-    --button-cta-bg: var(--cta);
-    --button-cta-text: var(--cta-foreground);
-    --button-cta-border: var(--cta);
-    --button-cta-bg-hover: 350 80% 28%; /* red-600 */
-
-    --button-success-bg: var(--success);
-    --button-success-text: var(--success-foreground);
-    --button-success-border: var(--success);
-    --button-success-bg-hover: 184 90% 22%;
-
-    --button-warning-bg: var(--warning);
-    --button-warning-text: var(--warning-foreground);
-    --button-warning-border: var(--warning);
-    --button-warning-bg-hover: 32 95% 40%;
-
-    --button-destructive-bg: var(--destructive);
-    --button-destructive-text: var(--destructive-foreground);
-    --button-destructive-border: var(--destructive);
-    --button-destructive-bg-hover: 0 84% 56%;
-
-    --button-ghost-bg: transparent;
-    --button-ghost-text: var(--foreground);
-    --button-ghost-border: transparent;
-    --button-ghost-bg-hover: var(--accent);
-
-    /* Button sizing from your tokens */
-    --button-height-sm: 2rem; /* 32px */
-    --button-height-md: 2.5rem; /* 40px */
-    --button-height-lg: 3rem; /* 48px */
-    --button-height-xl: 3.5rem; /* 56px */
-
-    --button-padding-x-sm: 0.75rem; /* 12px */
-    --button-padding-x-md: 1rem; /* 16px */
-    --button-padding-x-lg: 1.5rem; /* 24px */
-    --button-padding-x-xl: 2rem; /* 32px */
-
-    --button-border-width: 1px;
-    --button-border-radius: 0.5rem; /* 8px from your tokens */
-
-    /* Focus ring styles - disable these since we're using unified focus */
-    --button-focus-ring-primary: none;
-    --button-focus-ring-destructive: none;
-    --button-focus-ring-success: none;
-    --button-focus-ring-warning: none;
+    /* Map to your existing design tokens */
+    --primary: 207 73% 24%; /* maps to your navy-500 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 0 0% 9%;
+    --accent: 214 32% 91%;
+    --accent-foreground: 0 0% 9%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
+    --destructive: 0 84% 60%; /* maps to your destructive-500 */
+    --destructive-foreground: 0 0% 100%;
+    --success: 184 90% 26%; /* maps to your success-500 */
+    --success-foreground: 0 0% 100%;
+    --warning: 32 95% 44%; /* maps to your warning-500 */
+    --warning-foreground: 0 0% 0%;
+    --cta: 350 80% 32%; /* maps to your red-500 */
+    --cta-foreground: 0 0% 100%;
   }
 
   .dark {
-    /* Dark mode variants */
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
@@ -115,16 +46,12 @@
     --popover-foreground: 0 0% 98%;
     --primary: 217 92% 60%;
     --primary-foreground: 0 0% 95%;
-
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 65%;
-
     --accent: 0 0% 15%;
     --accent-foreground: 0 0% 95%;
-
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 95%;
-
     --border: 0 0% 15%;
     --input: 0 0% 15%;
     --ring: 0 0% 83%;
@@ -135,94 +62,16 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-family-sans);
-  }
-}
-
-@layer components {
-  /* Component-specific classes that bridge your tokens with Tailwind */
-  .btn {
-    @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50;
-  }
-
-  .btn-primary {
-    background: var(--button-primary-bg);
-    color: var(--button-primary-text);
-    border: var(--button-border-width) solid var(--button-primary-border);
-  }
-
-  .btn-primary:hover {
-    background: var(--button-primary-bg-hover);
-  }
-
-  .btn-outline {
-    background: var(--button-outline-bg);
-    color: var(--button-outline-text);
-    border: var(--button-border-width) solid var(--button-outline-border);
-  }
-
-  .btn-outline:hover {
-    color: var(--button-outline-text-hover);
-    border-color: var(--button-outline-border-hover);
-  }
-
-  .btn-cta {
-    background: var(--button-cta-bg);
-    color: var(--button-cta-text);
-    border: var(--button-border-width) solid var(--button-cta-border);
-  }
-
-  .btn-cta:hover {
-    background: var(--button-cta-bg-hover);
-  }
-
-  .btn-success {
-    background: var(--button-success-bg);
-    color: var(--button-success-text);
-    border: var(--button-border-width) solid var(--button-success-border);
-  }
-
-  .btn-success:hover {
-    background: var(--button-success-bg-hover);
-  }
-
-  .btn-warning {
-    background: var(--button-warning-bg);
-    color: var(--button-warning-text);
-    border: var(--button-border-width) solid var(--button-warning-border);
-  }
-
-  .btn-warning:hover {
-    background: var(--button-warning-bg-hover);
-  }
-
-  .btn-destructive {
-    background: var(--button-destructive-bg);
-    color: var(--button-destructive-text);
-    border: var(--button-border-width) solid var(--button-destructive-border);
-  }
-
-  .btn-destructive:hover {
-    background: var(--button-destructive-bg-hover);
-  }
-
-  /* Size variants */
-  .btn-sm {
-    height: var(--button-height-sm);
-    padding: 0 var(--button-padding-x-sm);
-    @apply text-sm;
-  }
-
-  .btn-md {
-    height: var(--button-height-md);
-    padding: 0 var(--button-padding-x-md);
-  }
-
-  .btn-lg {
-    height: var(--button-height-lg);
-    padding: 0 var(--button-padding-x-lg);
-    @apply text-base;
+    font-family: var(
+      --font-family-sans,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif
+    );
   }
 }
