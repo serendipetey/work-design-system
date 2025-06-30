@@ -1,3 +1,4 @@
+// packages/components/src/ui/input.tsx
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -6,40 +7,45 @@ import { cn } from "@/lib/utils";
 const inputVariants = cva(
   [
     // Base styles using design tokens
-    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2",
-    "text-sm ring-offset-background",
+    "flex h-10 w-full rounded-md border bg-background px-3 py-2",
+    "text-sm transition-all duration-200",
     "file:border-0 file:bg-transparent file:text-sm file:font-medium",
     "placeholder:text-muted-foreground",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
     "disabled:cursor-not-allowed disabled:opacity-50",
-    "transition-colors duration-200",
+    // Focus styles - 3px darker orange outline, keep original border
+    "focus-visible:outline-none",
+    "focus-visible:ring-0",
+    "focus-visible:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]", // 3px darker orange outline
+    "focus:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]", // Same for :focus
   ],
   {
     variants: {
       variant: {
         default: [
-          "border-input",
+          "border-[var(--color-border)]",
           "text-[var(--color-input-text)]",
           "placeholder:text-[var(--color-input-placeholder)]",
-          "focus:border-[var(--color-border-focus)]",
         ],
         error: [
           "border-[var(--color-border-error)]",
           "text-[var(--color-input-text-error)]",
-          "focus:border-[var(--color-border-error)]",
-          "focus:ring-[var(--color-border-error)]",
+          // Override with darker error focus shadow
+          "focus-visible:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
+          "focus:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
         ],
         success: [
           "border-[var(--color-border-success)]",
           "text-[var(--color-input-text-success)]",
-          "focus:border-[var(--color-border-success)]",
-          "focus:ring-[var(--color-border-success)]",
+          // Override with darker success focus shadow
+          "focus-visible:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
+          "focus:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
         ],
         warning: [
           "border-[var(--color-border-warning)]",
           "text-[var(--color-input-text-warning)]",
-          "focus:border-[var(--color-border-warning)]",
-          "focus:ring-[var(--color-border-warning)]",
+          // Override with darker warning focus shadow
+          "focus-visible:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
+          "focus:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
         ],
       },
       size: {
@@ -67,8 +73,8 @@ const labelVariants = cva(
     variants: {
       state: {
         default: "text-[var(--color-input-label)]",
-        required: "text-[var(--color-input-label-required)]",
-        optional: "text-[var(--color-input-label-optional)]",
+        required: "text-[var(--color-input-label)]",
+        optional: "text-[var(--color-input-label)]",
         disabled: "text-[var(--color-input-text-disabled)]",
       },
     },
@@ -107,9 +113,11 @@ export interface InputProps
   showHintText?: boolean;
   helperText?: string;
 
-  // Icon system
+  // Icon and text system
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  leftText?: string;
+  rightText?: string;
 
   // State management
   error?: string | boolean;
@@ -149,6 +157,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       helperText,
       leftIcon,
       rightIcon,
+      leftText,
+      rightText,
       error,
       success,
       warning,
@@ -190,6 +200,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     // Show clear button logic
     const showClear = clearable && value && !disabled && !loading;
+
+    // Left and right content logic
+    const hasLeftContent = leftIcon || leftText;
+    const hasRightContent = rightIcon || rightText || showClear || loading;
 
     // Clear icon component
     const ClearIcon = () => (
@@ -234,7 +248,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div className={cn("space-y-2", containerClassName)}>
         {/* Label */}
         {showLabel && label && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <label
               htmlFor={inputId}
               className={cn(
@@ -245,17 +259,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               )}
             >
               {label}
-              {labelState === "required" && (
-                <span className="text-[var(--color-input-label-required)] ml-1">
-                  *
-                </span>
-              )}
-              {labelState === "optional" && (
-                <span className="text-[var(--color-input-label-optional)] ml-1">
-                  (Optional)
-                </span>
-              )}
             </label>
+            {/* Required text in red parentheses */}
+            {labelState === "required" && (
+              <span className="text-[var(--color-input-label-required)] text-sm">
+                (Required)
+              </span>
+            )}
+            {labelState === "optional" && (
+              <span className="text-[var(--color-input-label-optional)] text-sm">
+                (Optional)
+              </span>
+            )}
           </div>
         )}
 
@@ -266,10 +281,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         {/* Input Container */}
         <div className="relative">
-          {/* Left Icon */}
-          {leftIcon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]">
-              {leftIcon}
+          {/* Left Content (Icon or Text) */}
+          {hasLeftContent && (
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-navy-500)] text-sm font-medium">
+              {leftIcon || leftText}
             </div>
           )}
 
@@ -284,29 +299,34 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             aria-describedby={helperContent ? helperTextId : undefined}
             className={cn(
               inputVariants({ variant: currentVariant, size }),
-              leftIcon && "pl-10",
-              (rightIcon || showClear || loading) && "pr-10",
+              hasLeftContent && "pl-10",
+              hasRightContent && "pr-10",
               className,
               inputClassName
             )}
             {...props}
           />
 
-          {/* Right Side Icons */}
+          {/* Right Content (Icons, Text, Clear, Loading) */}
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
             {loading && <LoadingSpinner />}
             {showClear && (
               <button
                 type="button"
                 onClick={onClear}
-                className="text-[var(--color-text-muted)] hover:text-[var(--color-text-body)] transition-colors"
+                className="text-[var(--color-navy-500)] hover:text-[var(--color-navy-600)] transition-colors"
                 aria-label="Clear input"
               >
                 <ClearIcon />
               </button>
             )}
-            {rightIcon && !loading && !showClear && (
-              <div className="text-[var(--color-text-muted)]">{rightIcon}</div>
+            {rightText && !loading && !showClear && (
+              <span className="text-[var(--color-navy-500)] text-sm font-medium">
+                {rightText}
+              </span>
+            )}
+            {rightIcon && !loading && !showClear && !rightText && (
+              <div className="text-[var(--color-navy-500)]">{rightIcon}</div>
             )}
           </div>
         </div>
