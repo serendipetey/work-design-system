@@ -1,6 +1,6 @@
-// packages/components/src/ui/table.stories.tsx
+// File: packages/components/src/ui/table.stories.tsx
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import {
   Table,
   TableHeader,
@@ -9,130 +9,128 @@ import {
   TableHead,
   TableCell,
 } from "./table";
+import { Button } from "./button";
 
-// Mock data for stories
-const mockTableData = [
-  {
-    id: 1,
-    createdOn: "15/01/2024",
-    name: "John Smith",
-    contactNo: "+1 (555) 123-4567",
-    email: "john.smith@example.com",
-    label: "Customer",
-  },
-  {
-    id: 2,
-    createdOn: "14/01/2024",
-    name: "Sarah Johnson",
-    contactNo: "+1 (555) 987-6543",
-    email: "sarah.johnson@example.com",
-    label: "Lead",
-  },
-  {
-    id: 3,
-    createdOn: "13/01/2024",
-    name: "Michael Chen",
-    contactNo: "+1 (555) 456-7890",
-    email: "michael.chen@example.com",
-    label: "Prospect",
-  },
-  {
-    id: 4,
-    createdOn: "12/01/2024",
-    name: "Emily Davis",
-    contactNo: "+1 (555) 234-5678",
-    email: "emily.davis@example.com",
-    label: "Customer",
-  },
-  {
-    id: 5,
-    createdOn: "11/01/2024",
-    name: "David Wilson",
-    contactNo: "+1 (555) 345-6789",
-    email: "david.wilson@example.com",
-    label: "Lead",
-  },
-];
-
-// Icons for action buttons
+// Sample icons for demo
 const EditIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path
+      d="M7.333 2.667H2.667A1.333 1.333 0 0 0 1.333 4v9.333A1.333 1.333 0 0 0 2.667 14.667H12a1.333 1.333 0 0 0 1.333-1.334V8"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12.333 1.667a1.414 1.414 0 1 1 2 2L8 10l-2.667.667L6 8l6.333-6.333Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
 const DeleteIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c-1 0 2 1 2 2v2" />
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path
+      d="M2 4h12M5.333 4V2.667a1.333 1.333 0 0 1 1.334-1.334h2.666a1.333 1.333 0 0 1 1.334 1.334V4m2 0v9.333a1.333 1.333 0 0 1-1.334 1.334H4.667a1.333 1.333 0 0 1-1.334-1.334V4h8.667Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
+
+// Sample data
+const sampleData = [
+  {
+    id: "1",
+    createdOn: "15/01/2024",
+    name: "John Doe",
+    contactNo: "+61 404 123 456",
+    email: "john.doe@example.com",
+    label: "Customer",
+  },
+  {
+    id: "2",
+    createdOn: "16/01/2024",
+    name: "Jane Smith",
+    contactNo: "+61 404 789 012",
+    email: "jane.smith@example.com",
+    label: "Prospect",
+  },
+  {
+    id: "3",
+    createdOn: "17/01/2024",
+    name: "Bob Johnson",
+    contactNo: "+61 404 345 678",
+    email: "bob.johnson@example.com",
+    label: "Partner",
+  },
+  {
+    id: "4",
+    createdOn: "18/01/2024",
+    name: "Alice Wilson",
+    contactNo: "+61 404 901 234",
+    email: "alice.wilson@example.com",
+    label: "Customer",
+  },
+  {
+    id: "5",
+    createdOn: "19/01/2024",
+    name: "Charlie Brown",
+    contactNo: "+61 404 567 890",
+    email: "charlie.brown@example.com",
+    label: "Lead",
+  },
+];
 
 const meta: Meta<typeof Table> = {
   title: "UI/Table",
   component: Table,
   parameters: {
-    layout: "centered",
+    layout: "padded",
     docs: {
       description: {
-        component:
-          "A table component that inherits sizing from Input components and follows the same design system patterns. Headers use --color-text-heading (navy-500), body text uses --color-text-primary, with unified focus states and semantic colors. Fully integrates with your design token system.",
+        component: `
+A flexible table component system built with composable primitives. Includes support for:
+
+- Sortable columns with visual indicators
+- Row hover states and striping
+- Responsive design with horizontal scroll
+- Full accessibility with ARIA labels
+- Action buttons integration
+
+Built using design tokens and follows the established component patterns.
+        `,
       },
     },
   },
   tags: ["autodocs"],
-  argTypes: {
-    variant: {
-      control: "select",
-      options: ["default", "striped", "bordered"],
-      description: "Table visual variant using design system tokens",
-    },
-    size: {
-      control: "select",
-      options: ["sm", "md", "lg", "xl"],
-      description: "Table size inherited from Input component sizing system",
-    },
-  },
-  args: { onClick: fn() },
-} satisfies Meta<typeof Table>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Default story
+// Basic table with all features
 export const Default: Story = {
-  args: {
-    variant: "default",
-    size: "md",
-  },
-  render: (args) => (
-    <div className="w-full max-w-4xl">
-      <Table {...args}>
+  render: () => (
+    <div className="w-full">
+      <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Created On</TableHead>
-            <TableHead>Name</TableHead>
+            <TableHead sortable>Created On</TableHead>
+            <TableHead sortable>Name</TableHead>
             <TableHead>Contact No</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Label</TableHead>
-            <TableHead>Action</TableHead>
+            <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockTableData.map((item) => (
+          {sampleData.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.createdOn}</TableCell>
               <TableCell>{item.name}</TableCell>
@@ -140,13 +138,21 @@ export const Default: Story = {
               <TableCell>{item.email}</TableCell>
               <TableCell>{item.label}</TableCell>
               <TableCell>
-                <div className="flex items-center gap-2">
-                  <button className="p-1 hover:bg-gray-100 rounded">
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label={`Edit ${item.name}`}
+                  >
                     <EditIcon />
-                  </button>
-                  <button className="p-1 hover:bg-gray-100 rounded text-red-600">
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label={`Delete ${item.name}`}
+                  >
                     <DeleteIcon />
-                  </button>
+                  </Button>
                 </div>
               </TableCell>
             </TableRow>
@@ -155,234 +161,103 @@ export const Default: Story = {
       </Table>
     </div>
   ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Basic table using your design system tokens. Inherits sizing from Input component and uses --color-border, --color-surface, and --color-text-primary tokens.",
-      },
-    },
-  },
 };
 
-// All Size Variants
-export const AllSizes: Story = {
-  render: () => (
-    <div className="space-y-8 w-full max-w-6xl">
-      {(["sm", "md", "lg", "xl"] as const).map((size) => (
-        <div key={size}>
-          <h3 className="mb-2 text-lg font-medium capitalize">Size: {size}</h3>
-          <Table size={size}>
-            <TableHeader>
-              <TableRow>
-                <TableHead size={size}>Created On</TableHead>
-                <TableHead size={size}>Name</TableHead>
-                <TableHead size={size}>Email</TableHead>
-                <TableHead size={size}>Label</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mockTableData.slice(0, 3).map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell size={size}>{item.createdOn}</TableCell>
-                  <TableCell size={size}>{item.name}</TableCell>
-                  <TableCell size={size}>{item.email}</TableCell>
-                  <TableCell size={size}>{item.label}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ))}
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "All table sizes (sm/md/lg/xl) inheriting from Input component sizing system. Each size adjusts padding and typography consistently.",
-      },
-    },
-  },
-};
+// Sortable columns demo
+export const SortableColumns: Story = {
+  render: () => {
+    const [sortField, setSortField] = useState<string | null>("name");
+    const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-// Table Variants
-export const AllVariants: Story = {
-  render: () => (
-    <div className="space-y-8 w-full max-w-4xl">
-      {(["default", "striped", "bordered"] as const).map((variant) => (
-        <div key={variant}>
-          <h3 className="mb-2 text-lg font-medium capitalize">
-            Variant: {variant}
-          </h3>
-          <Table variant={variant}>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Created On</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Label</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mockTableData.slice(0, 4).map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.createdOn}</TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.email}</TableCell>
-                  <TableCell>{item.label}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ))}
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "All table variants using design system tokens. Striped uses --color-surface-subtle, bordered adds --color-border to cells.",
-      },
-    },
-  },
-};
+    const handleSort = (field: string) => {
+      if (sortField === field) {
+        setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+      } else {
+        setSortField(field);
+        setSortDirection("asc");
+      }
+    };
 
-// Sortable Headers
-export const SortableHeaders: Story = {
-  render: () => (
-    <div className="w-full max-w-4xl">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead
-              sortable
-              onSort={() => console.log("Sort by Created On")}
-            >
-              Created On
-            </TableHead>
-            <TableHead sortable onSort={() => console.log("Sort by Name")}>
-              Name
-            </TableHead>
-            <TableHead>Contact No</TableHead>
-            <TableHead sortable onSort={() => console.log("Sort by Email")}>
-              Email
-            </TableHead>
-            <TableHead sortable onSort={() => console.log("Sort by Label")}>
-              Label
-            </TableHead>
-            <TableHead>Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {mockTableData.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.createdOn}</TableCell>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.contactNo}</TableCell>
-              <TableCell>{item.email}</TableCell>
-              <TableCell>{item.label}</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <button className="p-1 hover:bg-gray-100 rounded">
-                    <EditIcon />
-                  </button>
-                  <button className="p-1 hover:bg-gray-100 rounded text-red-600">
-                    <DeleteIcon />
-                  </button>
-                </div>
-              </TableCell>
+    const sortedData = [...sampleData].sort((a, b) => {
+      if (!sortField) return 0;
+      const aValue = (a as any)[sortField];
+      const bValue = (b as any)[sortField];
+      const multiplier = sortDirection === "asc" ? 1 : -1;
+      return aValue.localeCompare(bValue) * multiplier;
+    });
+
+    return (
+      <div className="w-full">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead
+                sortable
+                sortDirection={
+                  sortField === "createdOn" ? sortDirection : false
+                }
+                onSort={() => handleSort("createdOn")}
+              >
+                Created On
+              </TableHead>
+              <TableHead
+                sortable
+                sortDirection={sortField === "name" ? sortDirection : false}
+                onSort={() => handleSort("name")}
+              >
+                Name
+              </TableHead>
+              <TableHead>Contact No</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead
+                sortable
+                sortDirection={sortField === "label" ? sortDirection : false}
+                onSort={() => handleSort("label")}
+              >
+                Label
+              </TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Sortable table headers with hover states. Click headers to sort. Uses --color-accent for hover effects.",
-      },
-    },
+          </TableHeader>
+          <TableBody>
+            {sortedData.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.createdOn}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.contactNo}</TableCell>
+                <TableCell>{item.email}</TableCell>
+                <TableCell>{item.label}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    );
   },
 };
 
-// Row States (Error/Success/Warning)
-export const RowStates: Story = {
+// Striped rows variant
+export const StripedRows: Story = {
   render: () => (
-    <div className="w-full max-w-4xl">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Status</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Label</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow variant="default">
-            <TableCell>Default</TableCell>
-            <TableCell>John Smith</TableCell>
-            <TableCell>john.smith@example.com</TableCell>
-            <TableCell>Customer</TableCell>
-          </TableRow>
-          <TableRow variant="success">
-            <TableCell>Success</TableCell>
-            <TableCell>Sarah Johnson</TableCell>
-            <TableCell>sarah.johnson@example.com</TableCell>
-            <TableCell>Verified</TableCell>
-          </TableRow>
-          <TableRow variant="warning">
-            <TableCell>Warning</TableCell>
-            <TableCell>Michael Chen</TableCell>
-            <TableCell>michael.chen@example.com</TableCell>
-            <TableCell>Pending</TableCell>
-          </TableRow>
-          <TableRow variant="error">
-            <TableCell>Error</TableCell>
-            <TableCell>Emily Davis</TableCell>
-            <TableCell>emily.davis@example.com</TableCell>
-            <TableCell>Failed</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Table rows with semantic states inherited from Input component. Uses design token references like var(--table-row-focus-shadow-error) which inherits from var(--input-focus-shadow-error) for consistent focus behavior across components.",
-      },
-    },
-  },
-};
-
-// Clickable Rows
-export const ClickableRows: Story = {
-  render: () => (
-    <div className="w-full max-w-4xl">
+    <div className="w-full">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Created On</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead>Contact No</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Label</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockTableData.slice(0, 4).map((item) => (
+          {sampleData.map((item, index) => (
             <TableRow
               key={item.id}
-              clickable
-              onClick={() => alert(`Clicked on ${item.name}`)}
+              variant={index % 2 === 0 ? "default" : "striped"}
             >
               <TableCell>{item.createdOn}</TableCell>
               <TableCell>{item.name}</TableCell>
+              <TableCell>{item.contactNo}</TableCell>
               <TableCell>{item.email}</TableCell>
               <TableCell>{item.label}</TableCell>
             </TableRow>
@@ -391,48 +266,202 @@ export const ClickableRows: Story = {
       </Table>
     </div>
   ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Clickable table rows with proper focus states inherited from Input component design tokens. Features keyboard navigation (Enter/Space) and uses var(--table-row-focus-shadow-default) which inherits from var(--input-focus-shadow-default).",
-      },
-    },
-  },
 };
 
-// Cell Alignment
-export const CellAlignment: Story = {
+// Minimal table without actions
+export const Minimal: Story = {
   render: () => (
-    <div className="w-full max-w-4xl">
-      <Table>
+    <div className="w-full">
+      <Table variant="minimal">
         <TableHeader>
           <TableRow>
-            <TableHead>Left (Default)</TableHead>
-            <TableHead>Center</TableHead>
-            <TableHead>Right</TableHead>
-            <TableHead>Number</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockTableData.slice(0, 3).map((item, index) => (
-            <TableRow key={item.id}>
-              <TableCell textAlign="left">{item.name}</TableCell>
-              <TableCell textAlign="center">{item.label}</TableCell>
-              <TableCell textAlign="right">{item.email}</TableCell>
-              <TableCell textAlign="right">${(index + 1) * 1250.0}</TableCell>
-            </TableRow>
-          ))}
+          <TableRow>
+            <TableCell>John Doe</TableCell>
+            <TableCell>john@example.com</TableCell>
+            <TableCell>Active</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Jane Smith</TableCell>
+            <TableCell>jane@example.com</TableCell>
+            <TableCell>Pending</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Bob Johnson</TableCell>
+            <TableCell>bob@example.com</TableCell>
+            <TableCell>Inactive</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>
   ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Table cells with different text alignment options (left/center/right). Useful for proper data presentation.",
-      },
-    },
-  },
+};
+
+// Different sizes
+export const SmallTable: Story = {
+  render: () => (
+    <div className="w-full">
+      <Table size="sm">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell size="sm">John Doe</TableCell>
+            <TableCell size="sm">john@example.com</TableCell>
+            <TableCell size="sm">Active</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell size="sm">Jane Smith</TableCell>
+            <TableCell size="sm">jane@example.com</TableCell>
+            <TableCell size="sm">Pending</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  ),
+};
+
+// Large table
+export const LargeTable: Story = {
+  render: () => (
+    <div className="w-full">
+      <Table size="lg">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell size="lg">John Doe</TableCell>
+            <TableCell size="lg">john@example.com</TableCell>
+            <TableCell size="lg">Active</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell size="lg">Jane Smith</TableCell>
+            <TableCell size="lg">jane@example.com</TableCell>
+            <TableCell size="lg">Pending</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  ),
+};
+
+// Empty state
+export const EmptyState: Story = {
+  render: () => (
+    <div className="w-full">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell
+              colSpan={3}
+              className="text-center py-8 text-[var(--color-charcoal-400)]"
+            >
+              No data available
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  ),
+};
+
+// With custom content in cells
+export const CustomCellContent: Story = {
+  render: () => (
+    <div className="w-full">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>User</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-[var(--color-primary)] rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  JD
+                </div>
+                <div>
+                  <div className="font-medium">John Doe</div>
+                  <div className="text-sm text-[var(--color-charcoal-400)]">
+                    john@example.com
+                  </div>
+                </div>
+              </div>
+            </TableCell>
+            <TableCell>
+              <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                Active
+              </span>
+            </TableCell>
+            <TableCell>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  Edit
+                </Button>
+                <Button variant="ghost" size="sm">
+                  Delete
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-[var(--color-warning)] rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  JS
+                </div>
+                <div>
+                  <div className="font-medium">Jane Smith</div>
+                  <div className="text-sm text-[var(--color-charcoal-400)]">
+                    jane@example.com
+                  </div>
+                </div>
+              </div>
+            </TableCell>
+            <TableCell>
+              <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                Pending
+              </span>
+            </TableCell>
+            <TableCell>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  Edit
+                </Button>
+                <Button variant="ghost" size="sm">
+                  Delete
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+  ),
 };

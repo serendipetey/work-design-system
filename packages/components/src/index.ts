@@ -5,6 +5,9 @@
 export * from "./ui/button";
 export * from "./ui/input";
 export * from "./ui/select";
+export * from "./ui/table";
+export * from "./ui/pagination";
+export * from "./ui/data-table";
 
 // Export utility functions from src/lib/utils.ts
 export * from "./lib/utils";

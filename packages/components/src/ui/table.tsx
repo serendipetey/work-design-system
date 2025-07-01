@@ -1,210 +1,141 @@
-// packages/components/src/ui/table.tsx
-"use client";
-
+// File: packages/components/src/ui/table.tsx
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// INHERIT FROM INPUT! - DRY Principle
-// Table sizing inherits from Input sizing system (sm/md/lg/xl)
-const tableSizeVariants = {
-  sm: "text-xs",
-  md: "text-sm",
-  lg: "text-base",
-  xl: "text-lg",
-} as const;
-
-const tableCellPadding = {
-  sm: "px-2 py-1",
-  md: "px-3 py-2",
-  lg: "px-4 py-3",
-  xl: "px-5 py-4",
-} as const;
-
-// Table container - uses existing design tokens
+// Table variants following existing design token patterns
 const tableVariants = cva(
-  [
-    "w-full border-collapse",
-    "border border-[var(--color-border)]",
-    "bg-[var(--color-surface)]",
-    "rounded-md overflow-hidden",
-  ],
+  ["w-full caption-bottom text-sm", "border-collapse border-spacing-0"].join(
+    " "
+  ),
   {
     variants: {
-      size: tableSizeVariants,
       variant: {
-        default: "",
-        striped:
-          "[&_tbody_tr:nth-child(even)]:bg-[var(--color-surface-subtle)]",
-        bordered: "[&_td]:border-b [&_td]:border-[var(--color-border)]",
+        default: "border border-[var(--color-border)]",
+        minimal: "border-0",
+      },
+      size: {
+        sm: "text-xs",
+        md: "text-sm",
+        lg: "text-base",
       },
     },
     defaultVariants: {
+      variant: "default",
       size: "md",
+    },
+  }
+);
+
+const tableHeaderVariants = cva(
+  ["border-b border-[var(--color-border)]", "bg-[var(--color-gray-50)]"].join(
+    " "
+  )
+);
+
+const tableBodyVariants = cva("");
+
+const tableRowVariants = cva(
+  [
+    "transition-colors duration-150",
+    "border-b border-[var(--color-border)] last:border-0",
+  ].join(" "),
+  {
+    variants: {
+      variant: {
+        default: [
+          "hover:bg-[var(--color-gray-25)]",
+          "data-[state=selected]:bg-[var(--color-primary-50)]",
+        ].join(" "),
+        striped: [
+          "even:bg-[var(--color-gray-25)]",
+          "hover:bg-[var(--color-gray-50)]",
+          "data-[state=selected]:bg-[var(--color-primary-50)]",
+        ].join(" "),
+      },
+    },
+    defaultVariants: {
       variant: "default",
     },
   }
 );
 
-// Table header - inherits focus system and typography tokens
-const tableHeaderVariants = cva(
-  [
-    "border-b border-[var(--color-border)]",
-    "bg-[var(--color-surface)]",
-    "text-[var(--color-text-heading)]", // Uses navy-500 for headers
-    "font-medium",
-    "[&_th]:text-left",
-  ],
-  {
-    variants: {
-      size: tableSizeVariants,
-    },
-    defaultVariants: {
-      size: "md",
-    },
-  }
-);
-
-// Table head cell - follows Input sizing system
 const tableHeadVariants = cva(
   [
-    "font-medium text-left",
-    "text-[var(--color-text-heading)]", // Uses navy-500 for headers
-    "border-b border-[var(--color-border)]",
-    // Sortable headers get hover state
-    "group-hover/sortable:bg-[var(--color-accent)]",
-    "group-hover/sortable:text-[var(--color-accent-foreground)]",
-  ],
+    "h-12 px-4 text-left align-middle",
+    "font-medium text-[var(--color-navy-500)]",
+    "text-sm font-semibold",
+    "[&:has([role=checkbox])]:pr-0",
+  ].join(" "),
   {
     variants: {
-      size: tableCellPadding,
       sortable: {
-        true: "cursor-pointer transition-colors duration-200",
+        true: [
+          "cursor-pointer select-none",
+          "hover:text-[var(--color-navy-600)]",
+          "transition-colors duration-150",
+        ].join(" "),
         false: "",
       },
     },
     defaultVariants: {
-      size: "md",
       sortable: false,
     },
   }
 );
 
-// Table body - uses existing surface tokens
-const tableBodyVariants = cva([
-  "bg-[var(--color-surface)]",
-  "[&_tr:hover]:bg-[var(--color-accent)]",
-  "[&_tr:hover]:text-[var(--color-accent-foreground)]",
-]);
-
-// Table row - inherits Input's focus states
-const tableRowVariants = cva(
-  [
-    "transition-colors duration-200",
-    "border-b border-[var(--color-border)]",
-    // Focus states inherit from Input's design token system
-    "focus-visible:outline-none",
-    "focus-visible:ring-0",
-    "focus-visible:shadow-[var(--table-row-focus-shadow-default)]",
-    "focus:shadow-[var(--table-row-focus-shadow-default)]",
-  ],
-  {
-    variants: {
-      variant: {
-        default: "",
-        selected:
-          "bg-[var(--color-accent)] text-[var(--color-accent-foreground)]",
-        error: [
-          "bg-[var(--color-surface-error)]",
-          "border-[var(--color-border-error)]",
-          "focus-visible:shadow-[var(--table-row-focus-shadow-error)]",
-          "focus:shadow-[var(--table-row-focus-shadow-error)]",
-        ],
-        success: [
-          "bg-[var(--color-surface-success)]",
-          "border-[var(--color-border-success)]",
-          "focus-visible:shadow-[var(--table-row-focus-shadow-success)]",
-          "focus:shadow-[var(--table-row-focus-shadow-success)]",
-        ],
-        warning: [
-          "bg-[var(--color-surface-warning)]",
-          "border-[var(--color-border-warning)]",
-          "focus-visible:shadow-[var(--table-row-focus-shadow-warning)]",
-          "focus:shadow-[var(--table-row-focus-shadow-warning)]",
-        ],
-      },
-      clickable: {
-        true: "cursor-pointer hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)]",
-        false: "",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      clickable: false,
-    },
-  }
-);
-
-// Table cell - inherits Input sizing exactly
 const tableCellVariants = cva(
   [
-    "text-[var(--color-text-primary)]",
-    "border-b border-[var(--color-border)]",
-    "align-middle",
-  ],
+    "px-4 py-3 align-middle",
+    "text-[var(--color-charcoal-500)]",
+    "[&:has([role=checkbox])]:pr-0",
+  ].join(" "),
   {
     variants: {
-      size: tableCellPadding,
-      textAlign: {
-        left: "text-left",
-        center: "text-center",
-        right: "text-right",
+      size: {
+        sm: "px-3 py-2 text-xs",
+        md: "px-4 py-3 text-sm",
+        lg: "px-6 py-4 text-base",
       },
     },
     defaultVariants: {
       size: "md",
-      textAlign: "left",
     },
   }
 );
 
-// TypeScript Interfaces - following Input component pattern
+// Table Component Interfaces
 export interface TableProps
-  extends React.TableHTMLAttributes<HTMLTableElement>,
-    VariantProps<typeof tableVariants> {
-  containerClassName?: string;
-}
+  extends React.HTMLAttributes<HTMLTableElement>,
+    VariantProps<typeof tableVariants> {}
 
 export interface TableHeaderProps
   extends React.HTMLAttributes<HTMLTableSectionElement>,
     VariantProps<typeof tableHeaderVariants> {}
 
 export interface TableBodyProps
-  extends React.HTMLAttributes<HTMLTableSectionElement> {}
+  extends React.HTMLAttributes<HTMLTableSectionElement>,
+    VariantProps<typeof tableBodyVariants> {}
 
 export interface TableRowProps
   extends React.HTMLAttributes<HTMLTableRowElement>,
-    VariantProps<typeof tableRowVariants> {
-  onClick?: () => void;
-}
+    VariantProps<typeof tableRowVariants> {}
 
 export interface TableHeadProps
   extends React.ThHTMLAttributes<HTMLTableCellElement>,
     VariantProps<typeof tableHeadVariants> {
-  sortable?: boolean;
+  sortDirection?: "asc" | "desc" | false;
   onSort?: () => void;
 }
 
 export interface TableCellProps
-  extends Omit<React.TdHTMLAttributes<HTMLTableCellElement>, "align">,
-    VariantProps<typeof tableCellVariants> {
-  textAlign?: "left" | "center" | "right";
-}
+  extends React.TdHTMLAttributes<HTMLTableCellElement>,
+    VariantProps<typeof tableCellVariants> {}
 
-// Table Container - Primary component
+// Table Components
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
-  ({ className, containerClassName, variant, size, ...props }, ref) => (
-    <div className={cn("relative w-full overflow-auto", containerClassName)}>
+  ({ className, variant, size, ...props }, ref) => (
+    <div className="relative w-full overflow-auto">
       <table
         ref={ref}
         className={cn(tableVariants({ variant, size }), className)}
@@ -215,19 +146,17 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
 );
 Table.displayName = "Table";
 
-// Table Header
 const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(
-  ({ className, size, ...props }, ref) => (
+  ({ className, ...props }, ref) => (
     <thead
       ref={ref}
-      className={cn(tableHeaderVariants({ size }), className)}
+      className={cn(tableHeaderVariants(), className)}
       {...props}
     />
   )
 );
 TableHeader.displayName = "TableHeader";
 
-// Table Body
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
   ({ className, ...props }, ref) => (
     <tbody
@@ -239,72 +168,72 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
 );
 TableBody.displayName = "TableBody";
 
-// Table Row - with Input-inherited focus states
 const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
-  ({ className, variant, clickable, onClick, ...props }, ref) => (
+  ({ className, variant, ...props }, ref) => (
     <tr
       ref={ref}
-      className={cn(
-        tableRowVariants({
-          variant,
-          clickable: clickable || !!onClick,
-        }),
-        className
-      )}
-      onClick={onClick}
-      tabIndex={clickable || onClick ? 0 : undefined}
-      onKeyDown={(e) => {
-        if ((e.key === "Enter" || e.key === " ") && onClick) {
-          e.preventDefault();
-          onClick();
-        }
-      }}
+      className={cn(tableRowVariants({ variant }), className)}
       {...props}
     />
   )
 );
 TableRow.displayName = "TableRow";
 
-// Table Head - with sortable functionality
 const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
-  ({ className, size, sortable, onSort, children, ...props }, ref) => (
-    <th
-      ref={ref}
-      className={cn(
-        tableHeadVariants({ size, sortable }),
-        sortable && "group/sortable",
-        className
-      )}
-      onClick={sortable ? onSort : undefined}
-      {...props}
-    >
-      {children}
-      {sortable && (
-        <span className="ml-2 inline-flex items-center justify-center">
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="opacity-50 group-hover/sortable:opacity-100"
-          >
-            <path d="M7 10l5-5 5 5M7 14l5 5 5-5" />
-          </svg>
-        </span>
-      )}
-    </th>
-  )
+  ({ className, sortable, sortDirection, onSort, children, ...props }, ref) => {
+    const handleSort = () => {
+      if (sortable && onSort) {
+        onSort();
+      }
+    };
+
+    return (
+      <th
+        ref={ref}
+        className={cn(tableHeadVariants({ sortable }), className)}
+        onClick={handleSort}
+        {...props}
+      >
+        <div className="flex items-center space-x-2">
+          <span>{children}</span>
+          {sortable && (
+            <span className="ml-2 flex flex-col">
+              <svg
+                width="8"
+                height="4"
+                viewBox="0 0 8 4"
+                className={cn(
+                  "fill-current transition-opacity",
+                  sortDirection === "asc" ? "opacity-100" : "opacity-30"
+                )}
+              >
+                <path d="M0 4L4 0L8 4H0Z" />
+              </svg>
+              <svg
+                width="8"
+                height="4"
+                viewBox="0 0 8 4"
+                className={cn(
+                  "fill-current transition-opacity",
+                  sortDirection === "desc" ? "opacity-100" : "opacity-30"
+                )}
+              >
+                <path d="M0 0L4 4L8 0H0Z" />
+              </svg>
+            </span>
+          )}
+        </div>
+      </th>
+    );
+  }
 );
 TableHead.displayName = "TableHead";
 
-// Table Cell - inherits Input sizing system
 const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
-  ({ className, size, textAlign, ...props }, ref) => (
+  ({ className, size, ...props }, ref) => (
     <td
       ref={ref}
-      className={cn(tableCellVariants({ size, textAlign }), className)}
+      className={cn(tableCellVariants({ size }), className)}
       {...props}
     />
   )
@@ -319,7 +248,9 @@ export {
   TableHead,
   TableCell,
   tableVariants,
+  tableHeaderVariants,
+  tableBodyVariants,
   tableRowVariants,
-  tableCellVariants,
   tableHeadVariants,
+  tableCellVariants,
 };
