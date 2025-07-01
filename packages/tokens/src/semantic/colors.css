@@ -24,12 +24,8 @@
   --color-text-error: var(
     --color-error-500
   ); /* DISTINCT ERROR RED (#eb0000) for errors */
-  --color-text-success: var(
-    --color-success-500
-  ); /* NEW TEAL SUCCESS (#007d85) */
-  --color-text-warning: var(
-    --color-warning-500
-  ); /* NEW ORANGE WARNING (#b75b00) */
+  --color-text-success: var(--color-success-500); /* TEAL SUCCESS (#007d85) */
+  --color-text-warning: var(--color-warning-500); /* ORANGE WARNING (#b75b00) */
   --color-text-disabled: var(--color-gray-400); /* For disabled states */
 
   /* Surface Colors */
@@ -52,7 +48,7 @@
   --color-border-warning: var(--color-warning-500);
   --color-border-error: var(--color-error-500);
 
-  /* Status Colors - UPDATED WITH NEW COLORS */
+  /* Status Colors */
   --color-success: var(--color-success-500); /* #007d85 - New teal success */
   --color-success-hover: var(--color-success-600); /* #00646a - Darker teal */
   --color-warning: var(--color-warning-500); /* #b75b00 - New orange warning */
@@ -66,6 +62,10 @@
   /* Interactive States */
   --color-disabled: var(--color-gray-300);
   --color-disabled-text: var(--color-gray-500);
+  --color-accent: var(--color-gray-100); /* Light grey for hover states */
+  --color-accent-foreground: var(
+    --color-charcoal-500
+  ); /* Text on accent background */
 
   /* Component Text Colors */
   --color-button-primary-text: var(--color-white);
@@ -92,10 +92,10 @@
   ); /* DISTINCT ERROR RED (#eb0000) for validation errors */
   --color-input-text-success: var(
     --color-success-500
-  ); /* NEW TEAL SUCCESS for validation success */
+  ); /* TEAL SUCCESS for validation success */
   --color-input-text-warning: var(
     --color-warning-500
-  ); /* NEW ORANGE WARNING for warnings */
+  ); /* ORANGE WARNING for warnings */
   --color-input-text-disabled: var(
     --color-gray-400
   ); /* Gray for disabled state */
