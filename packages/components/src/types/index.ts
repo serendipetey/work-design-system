@@ -10,3 +10,10 @@ export interface BaseComponentProps {
 
 // Re-export VariantProps for components that use CVA
 export type { VariantProps };
+
+// Export checkbox/radio types for external use
+export type {
+  CheckboxProps,
+  RadioGroupProps,
+  RadioItemProps,
+} from "../ui/checkbox";
