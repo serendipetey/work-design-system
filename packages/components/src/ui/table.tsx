@@ -51,7 +51,7 @@ const tableHeaderVariants = cva(
   [
     "border-b border-[var(--color-border)]",
     "bg-[var(--color-surface)]",
-    "text-[var(--color-text-primary)]",
+    "text-[var(--color-text-heading)]", // Uses navy-500 for headers
     "font-medium",
     "[&_th]:text-left",
   ],
@@ -69,7 +69,7 @@ const tableHeaderVariants = cva(
 const tableHeadVariants = cva(
   [
     "font-medium text-left",
-    "text-[var(--color-text-primary)]",
+    "text-[var(--color-text-heading)]", // Uses navy-500 for headers
     "border-b border-[var(--color-border)]",
     // Sortable headers get hover state
     "group-hover/sortable:bg-[var(--color-accent)]",
@@ -102,11 +102,11 @@ const tableRowVariants = cva(
   [
     "transition-colors duration-200",
     "border-b border-[var(--color-border)]",
-    // Focus states inherit from Input's --color-focus-500 system
+    // Focus states inherit from Input's design token system
     "focus-visible:outline-none",
     "focus-visible:ring-0",
-    "focus-visible:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]",
-    "focus:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]",
+    "focus-visible:shadow-[var(--table-row-focus-shadow-default)]",
+    "focus:shadow-[var(--table-row-focus-shadow-default)]",
   ],
   {
     variants: {
@@ -117,20 +117,20 @@ const tableRowVariants = cva(
         error: [
           "bg-[var(--color-surface-error)]",
           "border-[var(--color-border-error)]",
-          "focus-visible:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-          "focus:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
+          "focus-visible:shadow-[var(--table-row-focus-shadow-error)]",
+          "focus:shadow-[var(--table-row-focus-shadow-error)]",
         ],
         success: [
           "bg-[var(--color-surface-success)]",
           "border-[var(--color-border-success)]",
-          "focus-visible:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-          "focus:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
+          "focus-visible:shadow-[var(--table-row-focus-shadow-success)]",
+          "focus:shadow-[var(--table-row-focus-shadow-success)]",
         ],
         warning: [
           "bg-[var(--color-surface-warning)]",
           "border-[var(--color-border-warning)]",
-          "focus-visible:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-          "focus:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
+          "focus-visible:shadow-[var(--table-row-focus-shadow-warning)]",
+          "focus:shadow-[var(--table-row-focus-shadow-warning)]",
         ],
       },
       clickable: {

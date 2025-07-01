@@ -89,7 +89,7 @@ const meta: Meta<typeof Table> = {
     docs: {
       description: {
         component:
-          "A table component that inherits sizing from Input components and follows the same design system patterns. Features unified focus states (--color-focus-500), semantic colors, sortable headers, and proper accessibility. Fully integrates with your design token system.",
+          "A table component that inherits sizing from Input components and follows the same design system patterns. Headers use --color-text-heading (navy-500), body text uses --color-text-primary, with unified focus states and semantic colors. Fully integrates with your design token system.",
       },
     },
   },
@@ -355,7 +355,7 @@ export const RowStates: Story = {
     docs: {
       description: {
         story:
-          "Table rows with semantic states inherited from Input component. Uses --color-border-error, --color-border-success, and --color-border-warning tokens with matching focus states.",
+          "Table rows with semantic states inherited from Input component. Uses design token references like var(--table-row-focus-shadow-error) which inherits from var(--input-focus-shadow-error) for consistent focus behavior across components.",
       },
     },
   },
@@ -395,7 +395,7 @@ export const ClickableRows: Story = {
     docs: {
       description: {
         story:
-          "Clickable table rows with proper focus states inherited from Input component. Features keyboard navigation (Enter/Space) and --color-focus-500 focus rings.",
+          "Clickable table rows with proper focus states inherited from Input component design tokens. Features keyboard navigation (Enter/Space) and uses var(--table-row-focus-shadow-default) which inherits from var(--input-focus-shadow-default).",
       },
     },
   },
