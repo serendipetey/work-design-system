@@ -17,3 +17,13 @@ export type {
   RadioGroupProps,
   RadioItemProps,
 } from "../ui/checkbox";
+
+// packages/components/src/types/index.ts
+export type {
+  TableProps,
+  TableHeaderProps,
+  TableBodyProps,
+  TableRowProps,
+  TableHeadProps,
+  TableCellProps,
+} from "../ui/table";
