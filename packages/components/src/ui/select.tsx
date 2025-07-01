@@ -141,7 +141,7 @@ interface SelectFieldProps {
   disabled?: boolean;
   placeholder?: string;
   className?: string;
-  children: React.ReactNode;
+  children: React.ReactNode; // Keep required for proper usage
   value?: string;
   onValueChange?: (value: string) => void;
   defaultValue?: string;
@@ -181,6 +181,9 @@ const SelectField = React.forwardRef<
     const helperContent = error || helperText;
     const helperVariant = error ? "error" : "muted";
 
+    // Check if component has valid options
+    const hasOptions = React.Children.count(children) > 0;
+
     return (
       <div className={cn("space-y-2", className)}>
         {/* Label - SAME AS INPUT */}
@@ -219,9 +222,21 @@ const SelectField = React.forwardRef<
             size={size}
             {...props}
           >
-            <SelectValue placeholder={placeholder} />
+            <SelectValue
+              placeholder={hasOptions ? placeholder : "No options available"}
+            />
           </SelectTrigger>
-          <SelectContent>{children}</SelectContent>
+
+          {/* Enhanced SelectContent with empty state handling */}
+          <SelectContent>
+            {hasOptions ? (
+              children
+            ) : (
+              <div className="py-2 px-3 text-sm text-[var(--color-text-muted)]">
+                No options available
+              </div>
+            )}
+          </SelectContent>
         </Select>
 
         {/* Helper Text - SAME AS INPUT */}

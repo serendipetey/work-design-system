@@ -1,12 +1,10 @@
 // Main entry point for the component library
 // File: packages/components/src/index.ts
 
-// Existing exports
+// Export all components
 export * from "./ui/button";
 export * from "./ui/input";
-export * from "./ui/select"; // Add this line
-export * from "./lib/utils";
-export type { BaseComponentProps, VariantProps } from "./types";
+export * from "./ui/select";
 
 // Export utility functions from src/lib/utils.ts
 export * from "./lib/utils";
