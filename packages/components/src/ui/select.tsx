@@ -15,6 +15,8 @@ const selectTriggerVariants = cva(
     "flex items-center justify-between cursor-pointer",
     // Only override what's different for select
     "[&>span]:line-clamp-1 [&>span]:text-left",
+    // MINIMAL FIX: Keep focus ring visible when dropdown opens
+    "data-[state=open]:ring-2 data-[state=open]:ring-[var(--color-border-focus)]",
   ],
   {
     variants: {
@@ -42,7 +44,7 @@ const selectTriggerVariants = cva(
 const selectContentVariants = cva([
   "relative z-50 max-h-96 min-w-[8rem] overflow-hidden",
   "rounded-md border border-[var(--color-border)]",
-  "bg-[var(--select-content-bg)] text-[var(--color-text-primary)]",
+  "bg-[var(--color-surface)] text-[var(--color-text-primary)]", // FIXED: Solid white background
   "shadow-[var(--select-content-shadow)]",
   // Standard Radix animations
   "data-[state=open]:animate-in data-[state=closed]:animate-out",
@@ -77,6 +79,7 @@ const SelectTrigger = React.forwardRef<
     className={cn(
       // Use input variants as base!
       inputVariants({ variant, size }),
+      // Add select-specific overrides
       selectTriggerVariants({ variant, size }),
       className
     )}
@@ -90,7 +93,7 @@ const SelectTrigger = React.forwardRef<
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
-// Simple Content
+// Select Content with proper background
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
@@ -102,15 +105,27 @@ const SelectContent = React.forwardRef<
       position={position}
       {...props}
     >
-      <SelectPrimitive.Viewport className="p-1">
+      <SelectPrimitive.ScrollUpButton className="flex cursor-default items-center justify-center py-1">
+        <ChevronUp className="h-4 w-4" />
+      </SelectPrimitive.ScrollUpButton>
+      <SelectPrimitive.Viewport
+        className={cn(
+          "p-1",
+          position === "popper" &&
+            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
+        )}
+      >
         {children}
       </SelectPrimitive.Viewport>
+      <SelectPrimitive.ScrollDownButton className="flex cursor-default items-center justify-center py-1">
+        <ChevronDown className="h-4 w-4" />
+      </SelectPrimitive.ScrollDownButton>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-// Simple Item
+// Select Item with proper check icon
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
@@ -125,57 +140,81 @@ const SelectItem = React.forwardRef<
         <Check className="h-4 w-4" />
       </SelectPrimitive.ItemIndicator>
     </span>
+
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-// Enhanced wrapper - INHERITS INPUT FIELD PATTERN
-interface SelectFieldProps {
+// Enhanced SelectField with proper label colors and hint text support
+interface SelectFieldProps
+  extends Omit<
+      React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>,
+      "value" | "onValueChange"
+    >,
+    VariantProps<typeof inputVariants> {
   label?: string;
   labelState?: "default" | "required" | "optional";
+  showLabel?: boolean;
+
+  // ADDED: Hint text support like Input component
+  hintText?: string;
+  showHintText?: boolean;
+
   helperText?: string;
-  error?: string;
-  variant?: "default" | "error" | "success" | "warning";
-  size?: "sm" | "md" | "lg" | "xl";
-  disabled?: boolean;
+  error?: string | boolean;
+  success?: string | boolean;
+  warning?: string | boolean;
+
   placeholder?: string;
-  className?: string;
-  children: React.ReactNode; // Keep required for proper usage
   value?: string;
   onValueChange?: (value: string) => void;
   defaultValue?: string;
-  name?: string;
-  required?: boolean;
+  children: React.ReactNode;
+
+  className?: string;
+  id?: string;
 }
 
 const SelectField = React.forwardRef<
-  React.ElementRef<typeof SelectTrigger>,
+  React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectFieldProps
 >(
   (
     {
+      className,
+      variant,
+      size,
       label,
       labelState = "default",
+      showLabel = true,
+      hintText, // ADDED: Hint text support
+      showHintText = true, // ADDED: Hint text control
       helperText,
       error,
-      variant = "default",
-      size = "md",
-      disabled = false,
+      success,
+      warning,
       placeholder,
-      className,
-      children,
       value,
       onValueChange,
       defaultValue,
-      name,
+      children,
       required,
+      disabled,
+      id,
+      name,
       ...props
     },
     ref
   ) => {
-    const id = React.useId();
-    const effectiveVariant = error ? "error" : variant;
+    // Determine effective variant based on state
+    const effectiveVariant = error
+      ? "error"
+      : success
+      ? "success"
+      : warning
+      ? "warning"
+      : variant;
     const effectiveLabelState =
       required && labelState === "default" ? "required" : labelState;
     const helperContent = error || helperText;
@@ -186,24 +225,32 @@ const SelectField = React.forwardRef<
 
     return (
       <div className={cn("space-y-2", className)}>
-        {/* Label - SAME AS INPUT */}
-        {label && (
+        {/* FIXED: Label with proper color and required asterisk */}
+        {showLabel && label && (
           <div className="flex items-center gap-1">
             <label
               htmlFor={id}
-              className="text-sm font-medium text-[var(--color-text-secondary)]"
+              className="text-sm font-medium text-[var(--color-input-label)]" // FIXED: Use proper navy-500 color
             >
               {label}
             </label>
+            {/* FIXED: Red "(Required)" text to match Input component */}
             {effectiveLabelState === "required" && (
-              <span className="text-[var(--color-error)] text-sm">*</span>
+              <span className="text-[var(--color-input-label-required)] text-sm">
+                (Required)
+              </span>
             )}
             {effectiveLabelState === "optional" && (
-              <span className="text-[var(--color-text-muted)] text-sm">
+              <span className="text-[var(--color-input-label-optional)] text-sm">
                 (Optional)
               </span>
             )}
           </div>
+        )}
+
+        {/* ADDED: Hint Text support */}
+        {showHintText && hintText && (
+          <p className={cn(helperVariants({ variant: "muted" }))}>{hintText}</p>
         )}
 
         {/* Select */}
@@ -214,20 +261,20 @@ const SelectField = React.forwardRef<
           name={name}
           required={required}
           disabled={disabled}
+          {...props}
         >
           <SelectTrigger
             ref={ref}
             id={id}
             variant={effectiveVariant}
             size={size}
-            {...props}
           >
             <SelectValue
               placeholder={hasOptions ? placeholder : "No options available"}
             />
           </SelectTrigger>
 
-          {/* Enhanced SelectContent with empty state handling */}
+          {/* Enhanced SelectContent with proper background */}
           <SelectContent>
             {hasOptions ? (
               children
@@ -239,7 +286,7 @@ const SelectField = React.forwardRef<
           </SelectContent>
         </Select>
 
-        {/* Helper Text - SAME AS INPUT */}
+        {/* Helper Text - Same as Input */}
         {helperContent && (
           <p className={cn(helperVariants({ variant: helperVariant }))}>
             {helperContent}

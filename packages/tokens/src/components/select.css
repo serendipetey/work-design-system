@@ -5,8 +5,8 @@
   /* Select inherits ALL input styling - no duplication */
   /* Only add dropdown-specific tokens that don't exist */
 
-  /* Dropdown Content (only new thing) */
-  --select-content-bg: var(--color-surface);
+  /* Dropdown Content - FIXED: Ensure solid background */
+  --select-content-bg: var(--color-surface); /* Solid white background */
   --select-content-border: var(--color-border);
   --select-content-shadow: var(--shadow-lg);
 
@@ -14,6 +14,4 @@
   --select-item-bg-hover: var(--color-accent);
   --select-item-bg-selected: var(--color-primary);
   --select-item-text-selected: var(--color-primary-foreground);
-
-  /* That's it! Everything else inherited from input/existing tokens */
 }

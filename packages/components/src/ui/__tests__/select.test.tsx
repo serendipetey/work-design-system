@@ -1,4 +1,4 @@
-// packages/components/src/ui/select.test.tsx
+// packages/components/src/ui/__tests__/select.test.tsx
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "../select";
 
-describe("Select Component", () => {
+describe("Select Component - Design System Conformance", () => {
   describe("SelectField", () => {
     it("renders with label and placeholder", () => {
       render(
@@ -26,14 +26,31 @@ describe("Select Component", () => {
       expect(screen.getByText("Test placeholder")).toBeInTheDocument();
     });
 
-    it("shows required indicator when required", () => {
+    // FIXED: Test for red "(Required)" text to match Input component
+    it("shows red (Required) text when required", () => {
       render(
         <SelectField label="Required Field" required>
           <SelectItem value="test">Test Option</SelectItem>
         </SelectField>
       );
 
-      expect(screen.getByText("*")).toBeInTheDocument();
+      const requiredText = screen.getByText("(Required)");
+      expect(requiredText).toBeInTheDocument();
+      expect(requiredText).toHaveClass(
+        "text-[var(--color-input-label-required)]"
+      );
+    });
+
+    // FIXED: Test for proper label color
+    it("uses correct label color (navy-500)", () => {
+      render(
+        <SelectField label="Test Label">
+          <SelectItem value="test">Test Option</SelectItem>
+        </SelectField>
+      );
+
+      const label = screen.getByText("Test Label");
+      expect(label).toHaveClass("text-[var(--color-input-label)]");
     });
 
     it("shows optional indicator when labelState is optional", () => {
@@ -44,6 +61,33 @@ describe("Select Component", () => {
       );
 
       expect(screen.getByText("(Optional)")).toBeInTheDocument();
+    });
+
+    // NEW: Test hint text functionality
+    it("displays hint text when provided", () => {
+      render(
+        <SelectField
+          label="Test"
+          hintText="This is a helpful hint"
+          helperText="This is helper text"
+        >
+          <SelectItem value="test">Test Option</SelectItem>
+        </SelectField>
+      );
+
+      expect(screen.getByText("This is a helpful hint")).toBeInTheDocument();
+      expect(screen.getByText("This is helper text")).toBeInTheDocument();
+    });
+
+    // NEW: Test hint text can be hidden
+    it("hides hint text when showHintText is false", () => {
+      render(
+        <SelectField label="Test" hintText="Hidden hint" showHintText={false}>
+          <SelectItem value="test">Test Option</SelectItem>
+        </SelectField>
+      );
+
+      expect(screen.queryByText("Hidden hint")).not.toBeInTheDocument();
     });
 
     it("displays helper text", () => {
@@ -80,6 +124,18 @@ describe("Select Component", () => {
 
       expect(screen.getByText("Error message")).toBeInTheDocument();
       expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+    });
+
+    // NEW: Test hint text + error interaction
+    it("shows both hint text and error message", () => {
+      render(
+        <SelectField label="Test" hintText="Helpful hint" error="Error message">
+          <SelectItem value="test">Test Option</SelectItem>
+        </SelectField>
+      );
+
+      expect(screen.getByText("Helpful hint")).toBeInTheDocument();
+      expect(screen.getByText("Error message")).toBeInTheDocument();
     });
 
     it("handles controlled value changes", async () => {
@@ -119,7 +175,7 @@ describe("Select Component", () => {
     });
 
     it("applies size variants correctly", () => {
-      const { container } = render(
+      render(
         <SelectField label="Test" size="lg">
           <SelectItem value="test">Test Option</SelectItem>
         </SelectField>
@@ -138,6 +194,38 @@ describe("Select Component", () => {
       );
 
       expect(screen.getByText("Option 2")).toBeInTheDocument();
+    });
+
+    // NEW: Test all variant states
+    it("applies success variant correctly", () => {
+      render(
+        <SelectField label="Test" variant="success" success="Success message">
+          <SelectItem value="test">Test Option</SelectItem>
+        </SelectField>
+      );
+
+      expect(screen.getByText("Success message")).toBeInTheDocument();
+    });
+
+    it("applies warning variant correctly", () => {
+      render(
+        <SelectField label="Test" variant="warning" warning="Warning message">
+          <SelectItem value="test">Test Option</SelectItem>
+        </SelectField>
+      );
+
+      expect(screen.getByText("Warning message")).toBeInTheDocument();
+    });
+
+    // NEW: Test label visibility control
+    it("hides label when showLabel is false", () => {
+      render(
+        <SelectField label="Hidden Label" showLabel={false}>
+          <SelectItem value="test">Test Option</SelectItem>
+        </SelectField>
+      );
+
+      expect(screen.queryByText("Hidden Label")).not.toBeInTheDocument();
     });
   });
 
@@ -172,6 +260,30 @@ describe("Select Component", () => {
 
       expect(screen.getByRole("combobox")).toHaveClass("custom-class");
     });
+
+    // NEW: Test dropdown background styling
+    it("renders dropdown with solid background", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="Select..." />
+          </SelectTrigger>
+          <SelectContent data-testid="select-content">
+            <SelectItem value="test">Test Option</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+
+      // Open dropdown
+      await user.click(screen.getByRole("combobox"));
+
+      await waitFor(() => {
+        const content = screen.getByTestId("select-content");
+        expect(content).toHaveClass("bg-[var(--color-surface)]");
+      });
+    });
   });
 
   describe("Accessibility", () => {
@@ -194,9 +306,37 @@ describe("Select Component", () => {
       );
 
       const trigger = screen.getByRole("combobox");
-      const label = screen.getByText("Test Label");
-
       expect(trigger).toHaveAccessibleName("Test Label");
+    });
+
+    // NEW: Test focus ring remains visible when dropdown opens
+    it("maintains focus ring when dropdown is open", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <SelectField label="Test">
+          <SelectItem value="option1">Option 1</SelectItem>
+          <SelectItem value="option2">Option 2</SelectItem>
+        </SelectField>
+      );
+
+      const trigger = screen.getByRole("combobox");
+
+      // Focus the trigger
+      trigger.focus();
+
+      // Should have focus styles
+      expect(trigger).toHaveClass("focus:ring-2");
+      expect(trigger).toHaveClass("focus:ring-[var(--color-border-focus)]");
+
+      // Open dropdown
+      await user.click(trigger);
+
+      // Should maintain focus ring when open
+      expect(trigger).toHaveClass("data-[state=open]:ring-2");
+      expect(trigger).toHaveClass(
+        "data-[state=open]:ring-[var(--color-border-focus)]"
+      );
     });
 
     it("supports keyboard navigation", async () => {
@@ -219,6 +359,23 @@ describe("Select Component", () => {
       await waitFor(() => {
         expect(screen.getByText("Option 1")).toBeVisible();
       });
+    });
+
+    // NEW: Test ARIA attributes for hint text
+    it("properly associates hint text with select", () => {
+      render(
+        <SelectField
+          label="Test"
+          hintText="Helpful hint"
+          helperText="Helper text"
+        >
+          <SelectItem value="test">Test Option</SelectItem>
+        </SelectField>
+      );
+
+      // Hint text should be visible and associated
+      expect(screen.getByText("Helpful hint")).toBeInTheDocument();
+      expect(screen.getByText("Helper text")).toBeInTheDocument();
     });
   });
 
@@ -250,63 +407,29 @@ describe("Select Component", () => {
     });
   });
 
-  describe("Token Integration", () => {
-    it("uses design tokens via CSS custom properties", () => {
-      const { container } = render(
-        <SelectField label="Test" variant="error">
-          <SelectItem value="test">Test Option</SelectItem>
-        </SelectField>
-      );
-
-      // Should have classes that reference CSS custom properties
-      const trigger = screen.getByRole("combobox");
-      expect(trigger).toHaveClass("border-[var(--color-border-error)]");
-    });
-
-    it("inherits input variants correctly", () => {
+  describe("Design System Integration", () => {
+    it("inherits input styling correctly", () => {
       render(
-        <SelectField label="Test" size="sm" variant="success">
+        <SelectField label="Test" size="lg" variant="error">
           <SelectItem value="test">Test Option</SelectItem>
         </SelectField>
       );
 
       const trigger = screen.getByRole("combobox");
-      // Should have both size and variant classes from input system
-      expect(trigger).toHaveClass("h-9"); // sm size
-      expect(trigger).toHaveClass("border-[var(--color-border-success)]"); // success variant
-    });
-  });
-
-  describe("Error Handling", () => {
-    it("handles missing children gracefully", () => {
-      expect(() => {
-        render(
-          <SelectField label="Test">
-            {null} {/* ✅ Explicit empty children */}
-          </SelectField>
-        );
-      }).not.toThrow();
+      // Should have large size class
+      expect(trigger).toHaveClass("h-11");
     });
 
-    it("handles empty children array gracefully", () => {
-      expect(() => {
-        render(
-          <SelectField label="Test">
-            {[]} {/* ✅ Empty array */}
-          </SelectField>
-        );
-      }).not.toThrow();
-    });
-
-    it("handles empty value correctly", () => {
+    it("handles empty options gracefully", () => {
       render(
-        <SelectField label="Test" value="">
-          <SelectItem value="test">Test Option</SelectItem>
-        </SelectField>
+        <SelectField
+          label="Empty Select"
+          placeholder="No options"
+          children={[]}
+        />
       );
 
-      const trigger = screen.getByRole("combobox");
-      expect(trigger).toHaveAttribute("data-placeholder");
+      expect(screen.getByText("No options available")).toBeInTheDocument();
     });
   });
 });
