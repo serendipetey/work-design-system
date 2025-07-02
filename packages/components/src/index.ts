@@ -8,9 +8,7 @@ export * from "./ui/select";
 export * from "./ui/table";
 export * from "./ui/pagination";
 export * from "./ui/data-table";
-
-// NEW: Export sorting dropdown
-export * from "./ui/sorting-dropdown";
+export * from "./ui/column-sort-controls";
 
 // Export utility functions from src/lib/utils.ts
 export * from "./lib/utils";

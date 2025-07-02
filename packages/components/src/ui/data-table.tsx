@@ -11,7 +11,7 @@ import {
   TableCell,
 } from "./table";
 import { Pagination } from "./pagination";
-import { SortingDropdown, type SortDirection } from "./sorting-dropdown";
+import { ColumnSortControls } from "./column-sort-controls";
 import { cn } from "@/lib/utils";
 
 // Default icons - replace with your icon system
@@ -63,10 +63,6 @@ export interface DataTableColumn<TData = any> {
   key: string;
   header: string;
   sortable?: boolean;
-
-  // NEW: Add sorting method configuration
-  sortingMethod?: "arrows" | "dropdown" | "both";
-
   width?: string;
   render?: (value: any, row: TData, index: number) => React.ReactNode;
   className?: string;
@@ -192,17 +188,18 @@ function useDataTable<TData>(
     return sortedData.slice(startIndex, startIndex + pageSize);
   }, [sortedData, currentPage, pageSize]);
 
-  // Handle sort
-  const handleSort = React.useCallback(
-    (key: string) => {
-      if (sortField === key) {
-        setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-      } else {
-        setSortField(key);
-        setSortDirection("asc");
-      }
+  // Handle sort column change
+  const handleSortColumnChange = React.useCallback((key: string | null) => {
+    setSortField(key);
+    setCurrentPage(1); // Reset to first page
+  }, []);
+
+  // Handle sort direction change
+  const handleSortDirectionChange = React.useCallback(
+    (direction: "asc" | "desc") => {
+      setSortDirection(direction);
     },
-    [sortField, sortDirection]
+    []
   );
 
   // Handle search
@@ -229,91 +226,11 @@ function useDataTable<TData>(
 
     // Handlers
     handleSearch,
-    handleSort,
+    handleSortColumnChange,
+    handleSortDirectionChange,
     handlePageChange,
   };
 }
-
-// Enhanced TableHead component to handle different sorting methods
-interface EnhancedTableHeadProps {
-  column: DataTableColumn;
-  sortField: string | null;
-  sortDirection: "asc" | "desc";
-  onSort: (key: string) => void;
-}
-
-const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
-  column,
-  sortField,
-  sortDirection,
-  onSort,
-}) => {
-  const sortingMethod = column.sortingMethod || "both"; // Default to both
-  const isCurrentSort = sortField === column.key;
-  const currentDirection = isCurrentSort ? sortDirection : false;
-
-  // Handle dropdown sort changes
-  const handleDropdownSort = (direction: SortDirection) => {
-    if (direction === null) {
-      // Reset sorting - this would need more complex logic to handle "no sort"
-      return;
-    }
-
-    if (sortField !== column.key || sortDirection !== direction) {
-      onSort(column.key);
-      // The useDataTable hook will handle direction logic
-    }
-  };
-
-  const renderSortingControls = () => {
-    if (!column.sortable) return null;
-
-    switch (sortingMethod) {
-      case "arrows":
-        return null; // TableHead will render the arrow
-
-      case "dropdown":
-        return (
-          <SortingDropdown
-            value={isCurrentSort ? sortDirection : null}
-            onValueChange={handleDropdownSort}
-            size="sm"
-            className="ml-2"
-          />
-        );
-
-      case "both":
-      default:
-        return (
-          <div className="flex items-center gap-2 ml-2">
-            <SortingDropdown
-              value={isCurrentSort ? sortDirection : null}
-              onValueChange={handleDropdownSort}
-              size="sm"
-            />
-          </div>
-        );
-    }
-  };
-
-  return (
-    <TableHead
-      sortable={
-        column.sortable &&
-        (sortingMethod === "arrows" || sortingMethod === "both")
-      }
-      sortDirection={currentDirection}
-      onSort={column.sortable ? () => onSort(column.key) : undefined}
-      className={cn(column.className)}
-      style={column.width ? { width: column.width } : undefined}
-    >
-      <div className="flex items-center justify-between">
-        <span>{column.header}</span>
-        {renderSortingControls()}
-      </div>
-    </TableHead>
-  );
-};
 
 // Main DataTable component
 export const DataTable = <TData,>({
@@ -346,7 +263,8 @@ export const DataTable = <TData,>({
     sortDirection,
     currentPage,
     handleSearch,
-    handleSort,
+    handleSortColumnChange,
+    handleSortDirectionChange,
     handlePageChange,
   } = useDataTable(data, {
     searchable,
@@ -370,6 +288,7 @@ export const DataTable = <TData,>({
 
   const hasActions = rowActions.length > 0;
   const showPagination = totalItems > (pagination.pageSize || 10);
+  const hasSortableColumns = columns.some((col) => col.sortable);
 
   return (
     <div className={cn("w-full space-y-6", className)} {...props}>
@@ -390,22 +309,36 @@ export const DataTable = <TData,>({
       )}
 
       {/* Toolbar */}
-      {(searchable || toolbarActions.length > 0) && (
+      {(searchable || hasSortableColumns || toolbarActions.length > 0) && (
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-          {/* Search */}
-          {searchable && (
-            <div className="w-full sm:w-auto sm:min-w-[300px]">
-              <Input
-                placeholder={searchPlaceholder}
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-                leftIcon={<SearchIcon />}
-                className="w-full"
-              />
-            </div>
-          )}
+          {/* Left side: Search + Sort Controls */}
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+            {/* Search */}
+            {searchable && (
+              <div className="w-full sm:w-auto sm:min-w-[300px]">
+                <Input
+                  placeholder={searchPlaceholder}
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  leftIcon={<SearchIcon />}
+                  className="w-full"
+                />
+              </div>
+            )}
 
-          {/* Toolbar actions */}
+            {/* Sort Controls */}
+            {hasSortableColumns && (
+              <ColumnSortControls
+                columns={columns}
+                currentColumn={sortField}
+                currentDirection={sortDirection}
+                onColumnChange={handleSortColumnChange}
+                onDirectionChange={handleSortDirectionChange}
+              />
+            )}
+          </div>
+
+          {/* Right side: Toolbar actions */}
           {toolbarActions.length > 0 && (
             <div className="flex gap-3">
               {toolbarActions.map((action, index) => (
@@ -441,13 +374,13 @@ export const DataTable = <TData,>({
             <TableHeader>
               <TableRow>
                 {columns.map((column) => (
-                  <EnhancedTableHead
+                  <TableHead
                     key={column.key}
-                    column={column}
-                    sortField={sortField}
-                    sortDirection={sortDirection}
-                    onSort={handleSort}
-                  />
+                    className={cn(column.className)}
+                    style={column.width ? { width: column.width } : undefined}
+                  >
+                    {column.header}
+                  </TableHead>
                 ))}
                 {hasActions && (
                   <TableHead className="text-center">Action</TableHead>
@@ -556,6 +489,7 @@ export const createDefaultRowActions = <TData,>(
       icon: <DeleteIcon />,
       onClick: onDelete,
       variant: "ghost",
+      className: "text-destructive hover:text-destructive",
     });
   }
 
