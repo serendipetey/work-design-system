@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { SidebarMenu, SidebarToggle } from "./sidebar-menu";
 import { SidebarProfile, type SidebarProfileData } from "./sidebar-profile";
+import { SidebarBusinessLogo } from "./sidebar-business-logo";
 import { SidebarMenuItem } from "./sidebar-menu-item";
 import {
   SidebarMenuSection,
@@ -35,6 +36,7 @@ const meta: Meta<typeof SidebarMenu> = {
         component: `
 A comprehensive sidebar navigation menu for logged-in users with:
 
+- **Business Logo**: Prominent branding with optional dashboard navigation
 - **User Profile Section**: Entity name, contact info, role, and entity switching
 - **Collapsible Sections**: Accordion-style grouping of related services
 - **Smart Active States**: URL-based navigation with auto-expansion
@@ -94,72 +96,25 @@ const fullNavigationConfig: NavigationConfig = {
       defaultOpen: true,
       items: [
         {
-          id: "funding-apply",
+          id: "apply-funding",
           label: "Apply for Funding",
           href: "/funding/apply",
         },
         {
-          id: "funding-returns",
+          id: "submit-returns",
           label: "Submit Returns",
           href: "/funding/returns",
           badge: "3",
         },
         {
-          id: "funding-history",
-          label: "Application History",
-          href: "/funding/history",
+          id: "view-applications",
+          label: "View Applications",
+          href: "/funding/applications",
         },
         {
-          id: "funding-reports",
-          label: "Financial Reports",
-          href: "/funding/reports",
-        },
-      ],
-    },
-    {
-      id: "registration",
-      title: "Registration Services",
-      icon: Building2,
-      items: [
-        { id: "reg-new", label: "New Registration", href: "/registration/new" },
-        {
-          id: "reg-renewals",
-          label: "Renewals",
-          href: "/registration/renewals",
-          badge: "2",
-        },
-        {
-          id: "reg-amendments",
-          label: "Amendments",
-          href: "/registration/amendments",
-        },
-        {
-          id: "reg-certificates",
-          label: "Certificates",
-          href: "/registration/certificates",
-        },
-      ],
-    },
-    {
-      id: "licensing",
-      title: "Licensing",
-      icon: FileText,
-      items: [
-        {
-          id: "lic-apply",
-          label: "Apply for License",
-          href: "/licensing/apply",
-        },
-        {
-          id: "lic-manage",
-          label: "Manage Licenses",
-          href: "/licensing/manage",
-        },
-        {
-          id: "lic-renewals",
-          label: "License Renewals",
-          href: "/licensing/renewals",
-          badge: "1",
+          id: "funding-calculator",
+          label: "Funding Calculator",
+          href: "/funding/calculator",
         },
       ],
     },
@@ -169,79 +124,83 @@ const fullNavigationConfig: NavigationConfig = {
       icon: Shield,
       items: [
         {
-          id: "comp-audits",
+          id: "compliance-overview",
+          label: "Overview",
+          href: "/compliance",
+        },
+        {
+          id: "audit-reports",
           label: "Audit Reports",
           href: "/compliance/audits",
         },
         {
-          id: "comp-requirements",
-          label: "Requirements",
-          href: "/compliance/requirements",
-        },
-        {
-          id: "comp-violations",
-          label: "Violations",
-          href: "/compliance/violations",
-          badge: "!",
+          id: "policy-management",
+          label: "Policy Management",
+          href: "/compliance/policies",
         },
       ],
     },
-  ],
-};
-
-const limitedNavigationConfig: NavigationConfig = {
-  standalone: [
     {
-      id: "dashboard",
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: BarChart3,
-    },
-  ],
-  sections: [
-    {
-      id: "registration",
-      title: "Registration",
-      icon: Building2,
-      defaultOpen: true,
+      id: "reports",
+      title: "Reports",
+      icon: FileText,
       items: [
         {
-          id: "reg-view",
-          label: "View Registration",
-          href: "/registration/view",
+          id: "financial-reports",
+          label: "Financial Reports",
+          href: "/reports/financial",
         },
         {
-          id: "reg-renew",
-          label: "Renew Registration",
-          href: "/registration/renew",
-          badge: "Due",
+          id: "analytics",
+          label: "Analytics",
+          href: "/reports/analytics",
+        },
+        {
+          id: "export-data",
+          label: "Export Data",
+          href: "/reports/export",
         },
       ],
     },
   ],
 };
 
-// Interactive stories
-export const Default: Story = {
+// Complete sidebar with all components including business logo
+export const CompleteWithLogo: Story = {
   render: () => {
-    const [currentPath, setCurrentPath] = useState("/dashboard");
+    const [currentPath, setCurrentPath] = useState("/funding/apply");
 
     const { activeItemId, expandedSections, toggleSection, isSectionExpanded } =
       useNavigationState(fullNavigationConfig, currentPath);
 
     const handleNavigation = (href: string) => {
+      console.log("Navigate to:", href);
       setCurrentPath(href);
+    };
+
+    const handleLogoClick = () => {
+      console.log("Navigate to dashboard");
+      setCurrentPath("/dashboard");
     };
 
     return (
       <div className="h-screen flex">
-        <SidebarMenu>
+        <SidebarMenu size="md">
+          {/* Business Logo */}
+          <SidebarBusinessLogo
+            businessName="Portal Pro"
+            onClick={handleLogoClick}
+          />
+
+          {/* User Profile */}
           <SidebarProfile
             user={adminUser}
             onSwitchEntity={() => console.log("Switch entity")}
           />
 
+          {/* Navigation */}
           <div className="flex-1 py-4">
+            {/* Standalone Items */}
             <div className="px-2 mb-4 space-y-1">
               {fullNavigationConfig.standalone?.map((item) => (
                 <SidebarMenuItem
@@ -256,6 +215,7 @@ export const Default: Story = {
               ))}
             </div>
 
+            {/* Collapsible Sections */}
             <SidebarMenuSectionRoot type="multiple" value={expandedSections}>
               {fullNavigationConfig.sections.map((section) => (
                 <SidebarMenuSection
@@ -285,6 +245,7 @@ export const Default: Story = {
             </SidebarMenuSectionRoot>
           </div>
 
+          {/* Bottom Actions */}
           <div className="border-t border-[var(--color-border)] p-2 space-y-1">
             <SidebarMenuItem
               icon={Bell}
@@ -315,45 +276,70 @@ export const Default: Story = {
           </div>
         </SidebarMenu>
 
-        <div className="flex-1 p-8 bg-[var(--color-surface-subtle)]">
-          <h1 className="text-2xl font-bold text-[var(--color-text-heading)]">
-            Current Page: {currentPath}
-          </h1>
-          <p className="text-[var(--color-text-body)] mt-2">
-            Active Item: {activeItemId || "None"}
-          </p>
-          <p className="text-[var(--color-text-muted)] mt-1">
-            Expanded: {expandedSections.join(", ") || "None"}
-          </p>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 p-4 sm:p-8 bg-[var(--color-surface-subtle)] overflow-auto">
+            <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-text-heading)]">
+              Complete Sidebar with Business Logo
+            </h1>
+            <p className="text-[var(--color-text-body)] mt-2">
+              Current Page: {currentPath}
+            </p>
+            <p className="text-[var(--color-text-muted)] mt-1 text-sm">
+              Active Item: {activeItemId || "None"}
+            </p>
+          </div>
         </div>
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Complete sidebar implementation showcasing the business logo integration with all navigation components and Option A styling refinements.",
+      },
+    },
+  },
 };
 
-export const LimitedAccess: Story = {
+// With custom logo image
+export const WithCustomLogo: Story = {
   render: () => {
     const [currentPath, setCurrentPath] = useState("/dashboard");
 
     const { activeItemId, expandedSections, toggleSection, isSectionExpanded } =
-      useNavigationState(limitedNavigationConfig, currentPath);
+      useNavigationState(fullNavigationConfig, currentPath);
+
+    const handleNavigation = (href: string) => {
+      setCurrentPath(href);
+    };
 
     return (
       <div className="h-screen flex">
-        <SidebarMenu>
+        <SidebarMenu size="md">
+          {/* Custom Logo */}
+          <SidebarBusinessLogo
+            businessName="Tech Solutions Inc"
+            logoUrl="https://via.placeholder.com/130x42/0e3a6c/ffffff?text=TechSol"
+            width={130}
+            height={42}
+            onClick={() => handleNavigation("/dashboard")}
+          />
+
           <SidebarProfile
-            user={regularUser}
+            user={managerUser}
             onSwitchEntity={() => console.log("Switch entity")}
           />
 
           <div className="flex-1 py-4">
             <div className="px-2 mb-4 space-y-1">
-              {limitedNavigationConfig.standalone?.map((item) => (
+              {fullNavigationConfig.standalone?.map((item) => (
                 <SidebarMenuItem
                   key={item.id}
                   icon={item.icon}
                   active={activeItemId === item.id}
-                  onNavigate={(href: string) => setCurrentPath(href)}
+                  onNavigate={handleNavigation}
                   href={item.href}
                 >
                   {item.label}
@@ -362,7 +348,7 @@ export const LimitedAccess: Story = {
             </div>
 
             <SidebarMenuSectionRoot type="multiple" value={expandedSections}>
-              {limitedNavigationConfig.sections.map((section) => (
+              {fullNavigationConfig.sections.slice(0, 2).map((section) => (
                 <SidebarMenuSection
                   key={section.id}
                   title={section.title}
@@ -372,12 +358,12 @@ export const LimitedAccess: Story = {
                   onToggle={() => toggleSection(section.id)}
                 >
                   <div className="space-y-1 px-2">
-                    {section.items.map((item) => (
+                    {section.items.slice(0, 3).map((item) => (
                       <SidebarMenuItem
                         key={item.id}
                         size="sm"
                         active={activeItemId === item.id}
-                        onNavigate={(href: string) => setCurrentPath(href)}
+                        onNavigate={handleNavigation}
                         href={item.href}
                         badge={item.badge}
                       >
@@ -389,36 +375,15 @@ export const LimitedAccess: Story = {
               ))}
             </SidebarMenuSectionRoot>
           </div>
-
-          <div className="border-t border-[var(--color-border)] p-2 space-y-1">
-            <SidebarMenuItem
-              icon={Users}
-              size="sm"
-              active={currentPath === "/profile"}
-              onNavigate={(href: string) => setCurrentPath(href)}
-              href="/profile"
-            >
-              Profile
-            </SidebarMenuItem>
-            <SidebarMenuItem
-              icon={LogOut}
-              size="sm"
-              onClick={() => console.log("Sign out")}
-            >
-              Sign Out
-            </SidebarMenuItem>
-          </div>
         </SidebarMenu>
 
         <div className="flex-1 p-8 bg-[var(--color-surface-subtle)]">
           <h1 className="text-2xl font-bold text-[var(--color-text-heading)]">
-            Limited User Access
+            Custom Logo Integration
           </h1>
           <p className="text-[var(--color-text-body)] mt-2">
-            Current Page: {currentPath}
-          </p>
-          <p className="text-[var(--color-text-muted)] mt-1">
-            This user has restricted access to only essential functions.
+            Demonstrates sidebar with a custom logo image instead of
+            placeholder.
           </p>
         </div>
       </div>
@@ -426,126 +391,8 @@ export const LimitedAccess: Story = {
   },
 };
 
-export const WithBadges: Story = {
-  render: () => (
-    <div className="h-screen flex">
-      <SidebarMenu>
-        <SidebarProfile
-          user={managerUser}
-          onSwitchEntity={() => console.log("Switch entity")}
-        />
-
-        <div className="flex-1 py-4">
-          <div className="px-2 mb-4">
-            <SidebarMenuItem icon={BarChart3} active>
-              Dashboard
-            </SidebarMenuItem>
-          </div>
-
-          <SidebarMenuSectionRoot type="multiple" value={["urgent", "pending"]}>
-            <SidebarMenuSection
-              title="Urgent Actions"
-              icon={AlertCircle}
-              value="urgent"
-              badge="!"
-            >
-              <div className="space-y-1 px-2">
-                <SidebarMenuItem size="sm" badge="Overdue">
-                  License Renewal
-                </SidebarMenuItem>
-                <SidebarMenuItem size="sm" badge="2 Days">
-                  Compliance Filing
-                </SidebarMenuItem>
-              </div>
-            </SidebarMenuSection>
-
-            <SidebarMenuSection
-              title="Pending Items"
-              icon={Clock}
-              value="pending"
-              badge="12"
-            >
-              <div className="space-y-1 px-2">
-                <SidebarMenuItem size="sm" badge="5">
-                  Document Reviews
-                </SidebarMenuItem>
-                <SidebarMenuItem size="sm" badge="3">
-                  Approval Requests
-                </SidebarMenuItem>
-                <SidebarMenuItem size="sm" badge="4">
-                  Status Updates
-                </SidebarMenuItem>
-              </div>
-            </SidebarMenuSection>
-          </SidebarMenuSectionRoot>
-        </div>
-
-        <div className="border-t border-[var(--color-border)] p-2 space-y-1">
-          <SidebarMenuItem icon={Bell} size="sm" badge="23">
-            Notifications
-          </SidebarMenuItem>
-          <SidebarMenuItem icon={Users} size="sm">
-            Profile
-          </SidebarMenuItem>
-          <SidebarMenuItem icon={LogOut} size="sm">
-            Sign Out
-          </SidebarMenuItem>
-        </div>
-      </SidebarMenu>
-
-      <div className="flex-1 p-8 bg-[var(--color-surface-subtle)]">
-        <h1 className="text-2xl font-bold text-[var(--color-text-heading)]">
-          Badge Notifications Demo
-        </h1>
-        <p className="text-[var(--color-text-body)] mt-2">
-          Shows various badge types for urgent items, counts, and status
-          indicators.
-        </p>
-      </div>
-    </div>
-  ),
-};
-
-export const NoEntitySwitch: Story = {
-  render: () => (
-    <div className="h-screen flex">
-      <SidebarMenu>
-        <SidebarProfile user={adminUser} />
-
-        <div className="flex-1 py-4">
-          <div className="px-2 space-y-1">
-            <SidebarMenuItem icon={BarChart3} active>
-              Dashboard
-            </SidebarMenuItem>
-            <SidebarMenuItem icon={DollarSign}>Funding</SidebarMenuItem>
-            <SidebarMenuItem icon={Building2}>Registration</SidebarMenuItem>
-            <SidebarMenuItem icon={FileText}>Licensing</SidebarMenuItem>
-          </div>
-        </div>
-
-        <div className="border-t border-[var(--color-border)] p-2 space-y-1">
-          <SidebarMenuItem icon={Users} size="sm">
-            Profile
-          </SidebarMenuItem>
-          <SidebarMenuItem icon={LogOut} size="sm">
-            Sign Out
-          </SidebarMenuItem>
-        </div>
-      </SidebarMenu>
-
-      <div className="flex-1 p-8 bg-[var(--color-surface-subtle)]">
-        <h1 className="text-2xl font-bold text-[var(--color-text-heading)]">
-          Single Entity User
-        </h1>
-        <p className="text-[var(--color-text-body)] mt-2">
-          No entity switching option when user only has access to one entity.
-        </p>
-      </div>
-    </div>
-  ),
-};
-
-export const ResponsiveMobile: Story = {
+// Mobile responsive version with logo
+export const ResponsiveMobileWithLogo: Story = {
   render: () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [currentPath, setCurrentPath] = useState("/dashboard");
@@ -555,7 +402,6 @@ export const ResponsiveMobile: Story = {
 
     const handleNavigation = (href: string) => {
       setCurrentPath(href);
-      // Auto-close mobile sidebar on navigation
       setMobileOpen(false);
     };
 
@@ -564,7 +410,7 @@ export const ResponsiveMobile: Story = {
         {/* Mobile header with toggle */}
         <div className="sm:hidden fixed top-0 left-0 right-0 z-30 bg-[var(--color-surface)] border-b border-[var(--color-border)] px-4 py-3 flex items-center justify-between">
           <h1 className="text-lg font-semibold text-[var(--color-text-heading)]">
-            {adminUser.entity.name}
+            Portal Pro
           </h1>
           <SidebarToggle open={mobileOpen} onToggle={setMobileOpen} />
         </div>
@@ -576,6 +422,14 @@ export const ResponsiveMobile: Story = {
           onMobileToggle={setMobileOpen}
           size="md"
         >
+          <SidebarBusinessLogo
+            businessName="Portal Pro"
+            onClick={() => {
+              handleNavigation("/dashboard");
+              setMobileOpen(false);
+            }}
+          />
+
           <SidebarProfile
             user={adminUser}
             onSwitchEntity={() => {
@@ -667,72 +521,18 @@ export const ResponsiveMobile: Story = {
 
           <div className="flex-1 p-4 sm:p-8 bg-[var(--color-surface-subtle)] overflow-auto">
             <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-text-heading)]">
-              Responsive Sidebar Demo
+              Responsive Sidebar with Logo
             </h1>
             <p className="text-[var(--color-text-body)] mt-2">
               Current Page: {currentPath}
             </p>
             <p className="text-[var(--color-text-muted)] mt-1 text-sm">
-              Active Item: {activeItemId || "None"}
+              Try resizing the window or using mobile view to see responsive
+              behavior.
             </p>
-
-            <div className="mt-6 p-4 bg-[var(--color-surface)] rounded border">
-              <h3 className="font-semibold mb-3">Responsive Features:</h3>
-              <ul className="list-disc list-inside space-y-2 text-sm">
-                <li>
-                  <strong>Mobile:</strong> Overlay sidebar with backdrop and
-                  hamburger toggle
-                </li>
-                <li>
-                  <strong>Tablet+:</strong> Fixed sidebar that remains visible
-                </li>
-                <li>
-                  <strong>Touch:</strong> Larger touch targets (44px minimum)
-                </li>
-                <li>
-                  <strong>Keyboard:</strong> Full keyboard navigation with
-                  proper focus management
-                </li>
-                <li>
-                  <strong>Screen Readers:</strong> Comprehensive ARIA labels and
-                  live regions
-                </li>
-                <li>
-                  <strong>Auto-close:</strong> Mobile sidebar closes on
-                  navigation
-                </li>
-              </ul>
-            </div>
-
-            <div className="mt-4 p-4 bg-[var(--color-surface)] rounded border">
-              <h3 className="font-semibold mb-3">Accessibility Features:</h3>
-              <ul className="list-disc list-inside space-y-2 text-sm">
-                <li>Proper semantic navigation structure</li>
-                <li>Active page announcement for screen readers</li>
-                <li>Badge counts announced appropriately</li>
-                <li>Focus management with visible focus indicators</li>
-                <li>Keyboard shortcuts (Escape to close mobile menu)</li>
-                <li>High contrast focus states</li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>
     );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: `
-Demonstrates responsive behavior across screen sizes:
-- **Mobile**: Overlay sidebar with backdrop, hamburger menu toggle
-- **Desktop**: Fixed sidebar that remains visible
-- **Accessibility**: Enhanced keyboard navigation and screen reader support
-- **Touch**: Larger touch targets for mobile devices
-
-Try resizing your browser window to see the responsive behavior in action.
-        `,
-      },
-    },
   },
 };

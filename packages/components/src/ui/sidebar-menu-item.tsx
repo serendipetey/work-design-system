@@ -10,13 +10,15 @@ const sidebarMenuItemVariants = cva(
   [
     "flex items-center gap-3 px-4 py-3 w-full text-left",
     "text-sm font-medium transition-colors duration-150",
-    "hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)]",
+    "hover:bg-[var(--color-navy-200)] hover:text-[var(--color-navy-600)]",
     "focus-visible:outline-none",
     "focus-visible:bg-[var(--color-focus-500)] focus-visible:text-[var(--color-navy-500)]",
     "disabled:opacity-50 disabled:pointer-events-none",
     // Enhanced accessibility states
     "focus:ring-2 focus:ring-[var(--color-border-focus)] focus:ring-offset-1",
     "focus:ring-offset-[var(--color-surface)]",
+    // Added border radius for softer appearance
+    "rounded-[var(--radius-md)]",
     // Improved text contrast
     "group relative",
   ],
@@ -24,10 +26,10 @@ const sidebarMenuItemVariants = cva(
     variants: {
       active: {
         true: [
-          "bg-[var(--color-primary)]",
+          "bg-[var(--color-navy-500)]",
           "text-[var(--color-white)]",
-          "border-r-2 border-[var(--color-red-500)]",
           "font-semibold",
+          // Removed border-r-2 for seamless appearance
         ].join(" "),
         false: "text-[var(--color-text-body)]",
       },

@@ -21,11 +21,15 @@ const sidebarMenuSectionTriggerVariants = cva([
   "focus:ring-offset-[var(--color-surface)]",
   "group relative",
   "min-h-[44px] sm:min-h-[40px]",
+  // Added Option A expanded state styling
+  "data-[state=open]:bg-[var(--color-navy-100)]",
 ]);
 
 const sidebarMenuSectionContentVariants = cva([
   "data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up",
   "overflow-hidden",
+  // Option A: Expanded section gets navy-100 background
+  "data-[state=open]:bg-[var(--color-navy-100)]",
 ]);
 
 // Interface definitions
@@ -165,7 +169,8 @@ const SidebarMenuSection = React.forwardRef<
           role="region"
           aria-labelledby={`section-${sectionValue}`}
         >
-          <div className="pb-2">{children}</div>
+          {/* Fixed: Better padding to prevent first item clipping */}
+          <div className="pt-1 pb-3 px-2">{children}</div>
         </AccordionPrimitive.Content>
       </AccordionPrimitive.Item>
     );

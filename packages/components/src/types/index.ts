@@ -12,14 +12,14 @@ export interface BaseComponentProps {
 // Re-export VariantProps for components that use CVA
 export type { VariantProps };
 
-// Export checkbox/radio types for external use
+// Export form component types
 export type {
   CheckboxProps,
   RadioGroupProps,
   RadioItemProps,
 } from "../ui/checkbox";
 
-// Export table types for external use
+// Export table component types
 export type {
   TableProps,
   TableHeaderProps,
@@ -29,7 +29,7 @@ export type {
   TableCellProps,
 } from "../ui/table";
 
-// Export sidebar types for external use
+// Export sidebar navigation component types
 export type { SidebarMenuProps, SidebarToggleProps } from "../ui/sidebar-menu";
 export type {
   SidebarProfileProps,
@@ -40,6 +40,7 @@ export type {
   SidebarMenuSectionProps,
   SidebarMenuSectionRootProps,
 } from "../ui/sidebar-menu-section";
+export type { SidebarBusinessLogoProps } from "../ui/sidebar-business-logo";
 export type {
   NavigationItem,
   NavigationSection,
