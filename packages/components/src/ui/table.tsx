@@ -199,30 +199,18 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
         <div className="flex items-center space-x-2">
           <span>{children}</span>
           {sortable && (
-            <span className="ml-2 flex flex-col">
-              {/* Up Arrow - Larger and more accessible */}
+            <span className="ml-2">
               <svg
-                width="12"
-                height="8"
-                viewBox="0 0 12 8"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
                 className={cn(
-                  "fill-[var(--color-navy-500)] transition-opacity", // Fixed: use navy color
-                  sortDirection === "asc" ? "opacity-100" : "opacity-40"
+                  "fill-[var(--color-navy-500)] transition-transform duration-150",
+                  sortDirection === "desc" ? "rotate-180" : "rotate-0",
+                  !sortDirection && "opacity-40"
                 )}
               >
-                <path d="M6 0L0 8h12L6 0z" />
-              </svg>
-              {/* Down Arrow - Larger and more accessible */}
-              <svg
-                width="12"
-                height="8"
-                viewBox="0 0 12 8"
-                className={cn(
-                  "fill-[var(--color-navy-500)] transition-opacity", // Fixed: use navy color
-                  sortDirection === "desc" ? "opacity-100" : "opacity-40"
-                )}
-              >
-                <path d="M6 8L12 0H0l6 8z" />
+                <path d="M8 2L6 6h1.5v8h1v-8H10L8 2z" />
               </svg>
             </span>
           )}

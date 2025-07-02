@@ -1,5 +1,5 @@
+// packages/components/src/index.ts
 // Main entry point for the component library
-// File: packages/components/src/index.ts
 
 // Export all components
 export * from "./ui/button";
@@ -8,6 +8,9 @@ export * from "./ui/select";
 export * from "./ui/table";
 export * from "./ui/pagination";
 export * from "./ui/data-table";
+
+// NEW: Export sorting dropdown
+export * from "./ui/sorting-dropdown";
 
 // Export utility functions from src/lib/utils.ts
 export * from "./lib/utils";

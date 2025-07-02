@@ -1,4 +1,4 @@
-// File: packages/components/src/ui/data-table.tsx
+// packages/components/src/ui/data-table.tsx
 import * as React from "react";
 import { Button } from "./button";
 import { Input } from "./input";
@@ -11,6 +11,7 @@ import {
   TableCell,
 } from "./table";
 import { Pagination } from "./pagination";
+import { SortingDropdown, type SortDirection } from "./sorting-dropdown";
 import { cn } from "@/lib/utils";
 
 // Default icons - replace with your icon system
@@ -62,6 +63,10 @@ export interface DataTableColumn<TData = any> {
   key: string;
   header: string;
   sortable?: boolean;
+
+  // NEW: Add sorting method configuration
+  sortingMethod?: "arrows" | "dropdown" | "both";
+
   width?: string;
   render?: (value: any, row: TData, index: number) => React.ReactNode;
   className?: string;
@@ -229,6 +234,87 @@ function useDataTable<TData>(
   };
 }
 
+// Enhanced TableHead component to handle different sorting methods
+interface EnhancedTableHeadProps {
+  column: DataTableColumn;
+  sortField: string | null;
+  sortDirection: "asc" | "desc";
+  onSort: (key: string) => void;
+}
+
+const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
+  column,
+  sortField,
+  sortDirection,
+  onSort,
+}) => {
+  const sortingMethod = column.sortingMethod || "both"; // Default to both
+  const isCurrentSort = sortField === column.key;
+  const currentDirection = isCurrentSort ? sortDirection : false;
+
+  // Handle dropdown sort changes
+  const handleDropdownSort = (direction: SortDirection) => {
+    if (direction === null) {
+      // Reset sorting - this would need more complex logic to handle "no sort"
+      return;
+    }
+
+    if (sortField !== column.key || sortDirection !== direction) {
+      onSort(column.key);
+      // The useDataTable hook will handle direction logic
+    }
+  };
+
+  const renderSortingControls = () => {
+    if (!column.sortable) return null;
+
+    switch (sortingMethod) {
+      case "arrows":
+        return null; // TableHead will render the arrow
+
+      case "dropdown":
+        return (
+          <SortingDropdown
+            value={isCurrentSort ? sortDirection : null}
+            onValueChange={handleDropdownSort}
+            size="sm"
+            className="ml-2"
+          />
+        );
+
+      case "both":
+      default:
+        return (
+          <div className="flex items-center gap-2 ml-2">
+            <SortingDropdown
+              value={isCurrentSort ? sortDirection : null}
+              onValueChange={handleDropdownSort}
+              size="sm"
+            />
+          </div>
+        );
+    }
+  };
+
+  return (
+    <TableHead
+      sortable={
+        column.sortable &&
+        (sortingMethod === "arrows" || sortingMethod === "both")
+      }
+      sortDirection={currentDirection}
+      onSort={column.sortable ? () => onSort(column.key) : undefined}
+      className={cn(column.className)}
+      style={column.width ? { width: column.width } : undefined}
+    >
+      <div className="flex items-center justify-between">
+        <span>{column.header}</span>
+        {renderSortingControls()}
+      </div>
+    </TableHead>
+  );
+};
+
 // Main DataTable component
 export const DataTable = <TData,>({
   data,
@@ -351,24 +437,17 @@ export const DataTable = <TData,>({
             </div>
           </div>
         ) : (
-          <Table>
+          <Table variant={striped ? "striped" : "default"}>
             <TableHeader>
               <TableRow>
                 {columns.map((column) => (
-                  <TableHead
+                  <EnhancedTableHead
                     key={column.key}
-                    sortable={column.sortable}
-                    sortDirection={
-                      sortField === column.key ? sortDirection : false
-                    }
-                    onSort={
-                      column.sortable ? () => handleSort(column.key) : undefined
-                    }
-                    className={cn(column.className)}
-                    style={column.width ? { width: column.width } : undefined}
-                  >
-                    {column.header}
-                  </TableHead>
+                    column={column}
+                    sortField={sortField}
+                    sortDirection={sortDirection}
+                    onSort={handleSort}
+                  />
                 ))}
                 {hasActions && (
                   <TableHead className="text-center">Action</TableHead>
@@ -383,7 +462,7 @@ export const DataTable = <TData,>({
                       ? getRowKey(row, index)
                       : `row-${currentPage}-${index}`
                   }
-                  variant={striped && index % 2 !== 0 ? "striped" : "default"}
+                  variant={striped ? "striped" : "default"}
                 >
                   {columns.map((column) => (
                     <TableCell
