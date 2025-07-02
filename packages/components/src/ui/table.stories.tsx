@@ -97,12 +97,12 @@ const meta: Meta<typeof Table> = {
         component: `
 Enhanced table component with improved interaction states:
 
-- **Destructive delete actions** with proper visual treatment (destructive colored icons)
-- **Enhanced hover states** for better user feedback 
+- **Hover states on all variants** - properly working across default and striped tables
+- **Destructive delete actions** with proper visual treatment (destructive colored icons)  
 - **Striped rows with dual hover behavior** - all rows respond to hover with appropriate styling
-- **Sortable columns** with navy-colored arrows and visual indicators
+- **Larger, more accessible sort arrows** with navy-colored indicators
 - **Responsive design** with horizontal scroll
-- **Full accessibility** with ARIA labels
+- **Full accessibility** with ARIA labels and improved visual feedback
 
 Built using design tokens and follows established component patterns.
         `,

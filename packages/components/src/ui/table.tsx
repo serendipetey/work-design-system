@@ -45,12 +45,12 @@ const tableRowVariants = cva(
     variants: {
       variant: {
         default: [
-          "hover:bg-[var(--color-gray-25)]",
+          "hover:bg-[var(--color-accent)]", // Fixed: use existing accent token
           "data-[state=selected]:bg-[var(--color-primary-50)]",
         ].join(" "),
         striped: [
-          "even:bg-[var(--color-gray-25)]",
-          "hover:bg-[var(--color-gray-50)]",
+          "even:bg-[var(--color-surface-subtle)]", // Fixed: use existing token for stripes
+          "hover:bg-[var(--color-accent)]", // Standard hover
           "even:hover:bg-[var(--color-gray-200)]", // Darker hover for striped rows
           "data-[state=selected]:bg-[var(--color-primary-50)]",
         ].join(" "),
@@ -200,27 +200,29 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
           <span>{children}</span>
           {sortable && (
             <span className="ml-2 flex flex-col">
+              {/* Up Arrow - Larger and more accessible */}
               <svg
-                width="8"
-                height="4"
-                viewBox="0 0 8 4"
+                width="12"
+                height="8"
+                viewBox="0 0 12 8"
                 className={cn(
                   "fill-[var(--color-navy-500)] transition-opacity", // Fixed: use navy color
-                  sortDirection === "asc" ? "opacity-100" : "opacity-30"
+                  sortDirection === "asc" ? "opacity-100" : "opacity-40"
                 )}
               >
-                <path d="M0 4L4 0L8 4H0Z" />
+                <path d="M6 0L0 8h12L6 0z" />
               </svg>
+              {/* Down Arrow - Larger and more accessible */}
               <svg
-                width="8"
-                height="4"
-                viewBox="0 0 8 4"
+                width="12"
+                height="8"
+                viewBox="0 0 12 8"
                 className={cn(
                   "fill-[var(--color-navy-500)] transition-opacity", // Fixed: use navy color
-                  sortDirection === "desc" ? "opacity-100" : "opacity-30"
+                  sortDirection === "desc" ? "opacity-100" : "opacity-40"
                 )}
               >
-                <path d="M0 0L4 4L8 0H0Z" />
+                <path d="M6 8L12 0H0l6 8z" />
               </svg>
             </span>
           )}
