@@ -10,18 +10,15 @@ export * from "./ui/pagination";
 export * from "./ui/data-table";
 export * from "./ui/column-sort-controls";
 
+// Export sidebar components
+export * from "./ui/sidebar-menu";
+export * from "./ui/sidebar-profile";
+export * from "./ui/sidebar-menu-item";
+export * from "./ui/sidebar-menu-section";
+export * from "./ui/sidebar-navigation-utils";
+
 // Export utility functions from src/lib/utils.ts
 export * from "./lib/utils";
 
 // Export types
 export type { BaseComponentProps, VariantProps } from "./types";
-
-// packages/components/src/index.ts
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-} from "./ui/table";
