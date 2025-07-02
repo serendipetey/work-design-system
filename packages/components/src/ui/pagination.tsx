@@ -33,9 +33,9 @@ const paginationItemVariants = cva(
           "hover:bg-[var(--color-gray-100)] hover:text-[var(--color-navy-500)]",
         ].join(" "),
         active: [
-          "bg-[var(--color-primary)] text-[var(--color-primary-foreground)]",
+          "bg-[var(--color-primary)] text-[var(--color-white)]",
           "border border-[var(--color-primary)]",
-          "hover:bg-[var(--color-primary)]/90",
+          "hover:bg-[var(--color-primary)] hover:text-[var(--color-white)]",
         ].join(" "),
         disabled: [
           "bg-transparent text-[var(--color-gray-400)]",
@@ -78,7 +78,7 @@ const paginationNavVariants = cva(
         outline: [
           "bg-transparent text-[var(--color-primary)]",
           "border border-[var(--color-primary)]",
-          "hover:bg-[var(--color-primary)] hover:text-[var(--color-primary-foreground)]",
+          "hover:bg-[var(--color-primary)] hover:text-[var(--color-white)]",
         ].join(" "),
         ghost: [
           "bg-transparent text-[var(--color-charcoal-500)]",
@@ -95,7 +95,9 @@ const paginationNavVariants = cva(
 
 // Results text variants
 const paginationResultsVariants = cva(
-  ["text-sm text-[var(--color-charcoal-500)]", "flex items-center"].join(" ")
+  ["text-sm text-[var(--color-charcoal-500)]", "flex items-center gap-1"].join(
+    " "
+  )
 );
 
 // Component Interfaces
@@ -242,7 +244,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 Pagination.displayName = "Pagination";
 
 const PaginationItem = React.forwardRef<HTMLButtonElement, PaginationItemProps>(
-  ({ className, variant, size, isActive, page, ...props }, ref) => (
+  ({ className, isActive, page, variant, size, ...props }, ref) => (
     <button
       ref={ref}
       className={cn(
@@ -352,8 +354,13 @@ const PaginationResults = React.forwardRef<
       className={cn(paginationResultsVariants(), className)}
       {...props}
     >
-      Showing <strong>{startItem}</strong> to <strong>{endItem}</strong> of{" "}
-      <strong>{totalItems}</strong> results
+      <span>Showing</span>
+      <strong>{startItem}</strong>
+      <span>to</span>
+      <strong>{endItem}</strong>
+      <span>of</span>
+      <strong>{totalItems}</strong>
+      <span>results</span>
     </div>
   );
 });
