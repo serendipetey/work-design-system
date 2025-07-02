@@ -12,6 +12,7 @@ const tableVariants = cva(
     variants: {
       variant: {
         default: "border border-[var(--color-border)]",
+        striped: "border border-[var(--color-border)]", // Add striped variant
         minimal: "border-0",
       },
       size: {
@@ -50,6 +51,7 @@ const tableRowVariants = cva(
         striped: [
           "even:bg-[var(--color-gray-25)]",
           "hover:bg-[var(--color-gray-50)]",
+          "even:hover:bg-[var(--color-gray-200)]", // Darker hover for striped rows
           "data-[state=selected]:bg-[var(--color-primary-50)]",
         ].join(" "),
       },
@@ -203,7 +205,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
                 height="4"
                 viewBox="0 0 8 4"
                 className={cn(
-                  "fill-current transition-opacity",
+                  "fill-[var(--color-navy-500)] transition-opacity", // Fixed: use navy color
                   sortDirection === "asc" ? "opacity-100" : "opacity-30"
                 )}
               >
@@ -214,7 +216,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
                 height="4"
                 viewBox="0 0 8 4"
                 className={cn(
-                  "fill-current transition-opacity",
+                  "fill-[var(--color-navy-500)] transition-opacity", // Fixed: use navy color
                   sortDirection === "desc" ? "opacity-100" : "opacity-30"
                 )}
               >

@@ -95,15 +95,16 @@ const meta: Meta<typeof Table> = {
     docs: {
       description: {
         component: `
-A flexible table component system built with composable primitives. Includes support for:
+Enhanced table component with improved interaction states:
 
-- Sortable columns with visual indicators
-- Row hover states and striping
-- Responsive design with horizontal scroll
-- Full accessibility with ARIA labels
-- Action buttons integration
+- **Destructive delete actions** with proper visual treatment (destructive colored icons)
+- **Enhanced hover states** for better user feedback 
+- **Striped rows with dual hover behavior** - all rows respond to hover with appropriate styling
+- **Sortable columns** with navy-colored arrows and visual indicators
+- **Responsive design** with horizontal scroll
+- **Full accessibility** with ARIA labels
 
-Built using design tokens and follows the established component patterns.
+Built using design tokens and follows established component patterns.
         `,
       },
     },
@@ -149,6 +150,7 @@ export const Default: Story = {
                   <Button
                     variant="ghost"
                     size="sm"
+                    className="text-destructive hover:text-destructive"
                     aria-label={`Delete ${item.name}`}
                   >
                     <DeleteIcon />
@@ -209,13 +211,8 @@ export const SortableColumns: Story = {
               </TableHead>
               <TableHead>Contact No</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead
-                sortable
-                sortDirection={sortField === "label" ? sortDirection : false}
-                onSort={() => handleSort("label")}
-              >
-                Label
-              </TableHead>
+              <TableHead>Label</TableHead>
+              <TableHead className="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -226,6 +223,25 @@ export const SortableColumns: Story = {
                 <TableCell>{item.contactNo}</TableCell>
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.label}</TableCell>
+                <TableCell>
+                  <div className="flex justify-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      aria-label={`Edit ${item.name}`}
+                    >
+                      <EditIcon />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-destructive hover:text-destructive"
+                      aria-label={`Delete ${item.name}`}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -235,31 +251,48 @@ export const SortableColumns: Story = {
   },
 };
 
-// Striped rows variant
+// Striped rows with enhanced hover behavior
 export const StripedRows: Story = {
   render: () => (
     <div className="w-full">
-      <Table>
+      <Table variant="striped">
         <TableHeader>
           <TableRow>
-            <TableHead>Created On</TableHead>
-            <TableHead>Name</TableHead>
+            <TableHead sortable>Created On</TableHead>
+            <TableHead sortable>Name</TableHead>
             <TableHead>Contact No</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Label</TableHead>
+            <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sampleData.map((item, index) => (
-            <TableRow
-              key={item.id}
-              variant={index % 2 === 0 ? "default" : "striped"}
-            >
+          {sampleData.map((item) => (
+            <TableRow key={item.id} variant="striped">
               <TableCell>{item.createdOn}</TableCell>
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.contactNo}</TableCell>
               <TableCell>{item.email}</TableCell>
               <TableCell>{item.label}</TableCell>
+              <TableCell>
+                <div className="flex justify-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label={`Edit ${item.name}`}
+                  >
+                    <EditIcon />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive hover:text-destructive"
+                    aria-label={`Delete ${item.name}`}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -374,90 +407,8 @@ export const EmptyState: Story = {
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell
-              colSpan={3}
-              className="text-center py-8 text-[var(--color-charcoal-400)]"
-            >
+            <TableCell colSpan={3} className="text-center py-8 text-gray-500">
               No data available
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
-  ),
-};
-
-// With custom content in cells
-export const CustomCellContent: Story = {
-  render: () => (
-    <div className="w-full">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>User</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell>
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-[var(--color-primary)] rounded-full flex items-center justify-center text-white text-sm font-medium">
-                  JD
-                </div>
-                <div>
-                  <div className="font-medium">John Doe</div>
-                  <div className="text-sm text-[var(--color-charcoal-400)]">
-                    john@example.com
-                  </div>
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                Active
-              </span>
-            </TableCell>
-            <TableCell>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  Edit
-                </Button>
-                <Button variant="ghost" size="sm">
-                  Delete
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-[var(--color-warning)] rounded-full flex items-center justify-center text-white text-sm font-medium">
-                  JS
-                </div>
-                <div>
-                  <div className="font-medium">Jane Smith</div>
-                  <div className="text-sm text-[var(--color-charcoal-400)]">
-                    jane@example.com
-                  </div>
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                Pending
-              </span>
-            </TableCell>
-            <TableCell>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  Edit
-                </Button>
-                <Button variant="ghost" size="sm">
-                  Delete
-                </Button>
-              </div>
             </TableCell>
           </TableRow>
         </TableBody>
