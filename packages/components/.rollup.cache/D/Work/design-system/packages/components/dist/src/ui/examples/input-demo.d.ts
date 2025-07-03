@@ -1,0 +1,34 @@
+export declare const BasicInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const RequiredInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const OptionalInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const InputWithIcon: () => import("react/jsx-runtime").JSX.Element;
+export declare const ErrorInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const SuccessInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const ClearableInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const LoadingInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const DisabledInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const DateInput: () => import("react/jsx-runtime").JSX.Element;
+export declare const ContactForm: () => import("react/jsx-runtime").JSX.Element;
+export declare const LoginForm: () => import("react/jsx-runtime").JSX.Element;
+export declare const SearchInterface: () => import("react/jsx-runtime").JSX.Element;
+export declare const SizeComparison: () => import("react/jsx-runtime").JSX.Element;
+export declare const AllStatesDemo: () => import("react/jsx-runtime").JSX.Element;
+declare const _default: {
+    BasicInput: () => import("react/jsx-runtime").JSX.Element;
+    RequiredInput: () => import("react/jsx-runtime").JSX.Element;
+    OptionalInput: () => import("react/jsx-runtime").JSX.Element;
+    InputWithIcon: () => import("react/jsx-runtime").JSX.Element;
+    ErrorInput: () => import("react/jsx-runtime").JSX.Element;
+    SuccessInput: () => import("react/jsx-runtime").JSX.Element;
+    ClearableInput: () => import("react/jsx-runtime").JSX.Element;
+    LoadingInput: () => import("react/jsx-runtime").JSX.Element;
+    DisabledInput: () => import("react/jsx-runtime").JSX.Element;
+    DateInput: () => import("react/jsx-runtime").JSX.Element;
+    ContactForm: () => import("react/jsx-runtime").JSX.Element;
+    LoginForm: () => import("react/jsx-runtime").JSX.Element;
+    SearchInterface: () => import("react/jsx-runtime").JSX.Element;
+    SizeComparison: () => import("react/jsx-runtime").JSX.Element;
+    AllStatesDemo: () => import("react/jsx-runtime").JSX.Element;
+};
+export default _default;
+//# sourceMappingURL=input-demo.d.ts.map
