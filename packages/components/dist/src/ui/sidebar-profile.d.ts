@@ -17,4 +17,3 @@ export interface SidebarProfileProps extends React.HTMLAttributes<HTMLDivElement
 }
 declare const SidebarProfile: React.ForwardRefExoticComponent<SidebarProfileProps & React.RefAttributes<HTMLDivElement>>;
 export { SidebarProfile, sidebarProfileVariants };
-//# sourceMappingURL=sidebar-profile.d.ts.map

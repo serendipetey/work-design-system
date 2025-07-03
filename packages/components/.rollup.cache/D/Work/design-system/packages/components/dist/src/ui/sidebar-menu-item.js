@@ -84,4 +84,3 @@ const SidebarMenuItem = React.forwardRef(({ className, icon: Icon, children, hre
 });
 SidebarMenuItem.displayName = "SidebarMenuItem";
 export { SidebarMenuItem, sidebarMenuItemVariants };
-//# sourceMappingURL=sidebar-menu-item.js.map

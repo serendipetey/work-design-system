@@ -25,4 +25,3 @@ export interface SidebarBusinessLogoProps extends React.HTMLAttributes<HTMLDivEl
 }
 declare const SidebarBusinessLogo: React.ForwardRefExoticComponent<SidebarBusinessLogoProps & React.RefAttributes<HTMLButtonElement | HTMLDivElement>>;
 export { SidebarBusinessLogo, sidebarBusinessLogoVariants };
-//# sourceMappingURL=sidebar-business-logo.d.ts.map

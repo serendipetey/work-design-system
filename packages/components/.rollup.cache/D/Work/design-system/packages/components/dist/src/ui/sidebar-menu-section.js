@@ -51,4 +51,3 @@ const SidebarMenuSection = React.forwardRef(({ className, title, icon: Icon, chi
 });
 SidebarMenuSection.displayName = "SidebarMenuSection";
 export { SidebarMenuSectionRoot, SidebarMenuSection, sidebarMenuSectionVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionContentVariants, };
-//# sourceMappingURL=sidebar-menu-section.js.map

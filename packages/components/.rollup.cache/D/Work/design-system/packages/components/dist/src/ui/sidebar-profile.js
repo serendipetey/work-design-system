@@ -15,4 +15,3 @@ const SidebarProfile = React.forwardRef(({ className, user, onSwitchEntity, ...p
 });
 SidebarProfile.displayName = "SidebarProfile";
 export { SidebarProfile, sidebarProfileVariants };
-//# sourceMappingURL=sidebar-profile.js.map

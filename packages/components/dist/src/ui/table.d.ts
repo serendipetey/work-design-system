@@ -36,4 +36,3 @@ declare const TableRow: React.ForwardRefExoticComponent<TableRowProps & React.Re
 declare const TableHead: React.ForwardRefExoticComponent<TableHeadProps & React.RefAttributes<HTMLTableCellElement>>;
 declare const TableCell: React.ForwardRefExoticComponent<TableCellProps & React.RefAttributes<HTMLTableCellElement>>;
 export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, tableVariants, tableHeaderVariants, tableBodyVariants, tableRowVariants, tableHeadVariants, tableCellVariants, };
-//# sourceMappingURL=table.d.ts.map

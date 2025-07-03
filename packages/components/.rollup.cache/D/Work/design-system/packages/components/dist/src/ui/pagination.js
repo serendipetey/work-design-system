@@ -146,4 +146,3 @@ const PaginationResults = React.forwardRef(({ className, currentPage, itemsPerPa
 });
 PaginationResults.displayName = "PaginationResults";
 export { Pagination, PaginationItem, PaginationPrevious, PaginationNext, PaginationEllipsis, PaginationResults, paginationVariants, paginationItemVariants, paginationNavVariants, paginationResultsVariants, };
-//# sourceMappingURL=pagination.js.map

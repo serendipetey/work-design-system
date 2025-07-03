@@ -37,4 +37,3 @@ declare const PaginationNext: React.ForwardRefExoticComponent<PaginationNavProps
 declare const PaginationEllipsis: React.ForwardRefExoticComponent<PaginationEllipsisProps & React.RefAttributes<HTMLSpanElement>>;
 declare const PaginationResults: React.ForwardRefExoticComponent<PaginationResultsProps & React.RefAttributes<HTMLDivElement>>;
 export { Pagination, PaginationItem, PaginationPrevious, PaginationNext, PaginationEllipsis, PaginationResults, paginationVariants, paginationItemVariants, paginationNavVariants, paginationResultsVariants, };
-//# sourceMappingURL=pagination.d.ts.map

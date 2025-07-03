@@ -24,4 +24,3 @@ export const ColumnSortControls = ({ columns, currentColumn, currentDirection = 
     const selectValue = currentColumn || "none";
     return (_jsxs("div", { className: cn("flex items-center gap-2", className), children: [_jsxs(SelectField, { value: selectValue, onValueChange: handleColumnChange, size: "md", disabled: disabled, showLabel: false, placeholder: "Sort by column", className: "min-w-[160px]", children: [_jsx(SelectItem, { value: "none", children: "No sorting" }), sortableColumns.map((column) => (_jsx(SelectItem, { value: column.key, children: column.header }, column.key)))] }), _jsx(Button, { variant: "ghost", size: "md", onClick: handleDirectionToggle, disabled: disabled || !currentColumn, "aria-label": `Sort ${currentDirection === "asc" ? "ascending" : "descending"}`, className: "px-3", children: _jsx(DirectionIcon, { direction: currentDirection }) })] }));
 };
-//# sourceMappingURL=column-sort-controls.js.map

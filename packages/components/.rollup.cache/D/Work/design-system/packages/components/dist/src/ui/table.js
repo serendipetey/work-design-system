@@ -103,4 +103,3 @@ TableHead.displayName = "TableHead";
 const TableCell = React.forwardRef(({ className, size, ...props }, ref) => (_jsx("td", { ref: ref, className: cn(tableCellVariants({ size }), className), ...props })));
 TableCell.displayName = "TableCell";
 export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, tableVariants, tableHeaderVariants, tableBodyVariants, tableRowVariants, tableHeadVariants, tableCellVariants, };
-//# sourceMappingURL=table.js.map

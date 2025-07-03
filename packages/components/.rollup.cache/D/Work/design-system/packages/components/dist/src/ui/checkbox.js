@@ -206,4 +206,3 @@ const CheckboxGroup = React.forwardRef(({ containerClassName, labelClassName, he
 CheckboxGroup.displayName = "CheckboxGroup";
 // Exports
 export { Checkbox, CheckboxGroup, RadioGroup, RadioItem, checkboxVariants, radioVariants, };
-//# sourceMappingURL=checkbox.js.map

@@ -12,4 +12,3 @@ export type { SidebarMenuItemProps } from "../ui/sidebar-menu-item";
 export type { SidebarMenuSectionProps, SidebarMenuSectionRootProps, } from "../ui/sidebar-menu-section";
 export type { SidebarBusinessLogoProps } from "../ui/sidebar-business-logo";
 export type { NavigationItem, NavigationSection, NavigationConfig, } from "../ui/sidebar-navigation-utils";
-//# sourceMappingURL=index.d.ts.map

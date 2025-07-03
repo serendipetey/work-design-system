@@ -10,4 +10,3 @@ export interface ColumnSortControlsProps {
     disabled?: boolean;
 }
 export declare const ColumnSortControls: React.FC<ColumnSortControlsProps>;
-//# sourceMappingURL=column-sort-controls.d.ts.map

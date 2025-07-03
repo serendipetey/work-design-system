@@ -30,4 +30,3 @@ const SidebarBusinessLogo = React.forwardRef(({ className, businessName = "Your 
 });
 SidebarBusinessLogo.displayName = "SidebarBusinessLogo";
 export { SidebarBusinessLogo, sidebarBusinessLogoVariants };
-//# sourceMappingURL=sidebar-business-logo.js.map

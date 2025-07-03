@@ -55,4 +55,3 @@ const SidebarToggle = React.forwardRef(({ className, open, onToggle, ...props },
 });
 SidebarToggle.displayName = "SidebarToggle";
 export { SidebarMenu, SidebarToggle, sidebarMenuVariants };
-//# sourceMappingURL=sidebar-menu.js.map

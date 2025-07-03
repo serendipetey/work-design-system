@@ -63,4 +63,3 @@ interface CheckboxGroupProps {
 }
 declare const CheckboxGroup: React.ForwardRefExoticComponent<CheckboxGroupProps & React.RefAttributes<HTMLDivElement>>;
 export { Checkbox, CheckboxGroup, RadioGroup, RadioItem, checkboxVariants, radioVariants, };
-//# sourceMappingURL=checkbox.d.ts.map

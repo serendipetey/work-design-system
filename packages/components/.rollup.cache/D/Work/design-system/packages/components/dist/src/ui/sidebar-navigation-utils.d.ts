@@ -31,4 +31,3 @@ export declare function useNavigationState(config: NavigationConfig, currentPath
     isSectionExpanded: (sectionId: string) => boolean;
     isActive: (href?: string) => boolean;
 };
-//# sourceMappingURL=sidebar-navigation-utils.d.ts.map

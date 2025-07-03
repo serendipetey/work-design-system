@@ -72,4 +72,3 @@ declare function useDataTable<TData>(data: TData[], options?: {
 export declare const DataTable: <TData>({ data, columns, title, description, className, searchable, searchPlaceholder, onSearch, defaultSort, onSort, pagination, rowActions, toolbarActions, footerActions, loading, emptyMessage, striped, hoverable, getRowKey, ...props }: DataTableProps<TData>) => import("react/jsx-runtime").JSX.Element;
 export declare const createDefaultRowActions: <TData>(onEdit?: (row: TData) => void, onDelete?: (row: TData) => void) => DataTableAction<TData>[];
 export { useDataTable };
-//# sourceMappingURL=data-table.d.ts.map

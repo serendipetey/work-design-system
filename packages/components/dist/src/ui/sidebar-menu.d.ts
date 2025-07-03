@@ -16,4 +16,3 @@ export interface SidebarToggleProps extends React.ButtonHTMLAttributes<HTMLButto
 }
 declare const SidebarToggle: React.ForwardRefExoticComponent<SidebarToggleProps & React.RefAttributes<HTMLButtonElement>>;
 export { SidebarMenu, SidebarToggle, sidebarMenuVariants };
-//# sourceMappingURL=sidebar-menu.d.ts.map

@@ -77,4 +77,3 @@ export function useNavigationState(config, currentPath) {
         isActive,
     };
 }
-//# sourceMappingURL=sidebar-navigation-utils.js.map

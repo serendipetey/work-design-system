@@ -133,4 +133,3 @@ export const createDefaultRowActions = (onEdit, onDelete) => {
 };
 // Export the hook for advanced use cases
 export { useDataTable };
-//# sourceMappingURL=data-table.js.map

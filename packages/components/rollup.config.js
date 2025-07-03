@@ -5,7 +5,7 @@ const peerDepsExternal = require("rollup-plugin-peer-deps-external");
 const postcss = require("rollup-plugin-postcss");
 
 // Only generate source maps in production builds
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = false;
 
 module.exports = {
   input: "src/index.ts",
@@ -31,6 +31,8 @@ module.exports = {
       tsconfig: "./tsconfig.json",
       declaration: true,
       declarationDir: "dist",
+      sourceMap: isProduction,
+      declarationMap: isProduction, // ← ADD THIS LINE TOO
       exclude: ["**/*.test.*", "**/*.stories.*", "scripts/**/*"],
     }),
     postcss({

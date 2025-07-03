@@ -31,4 +31,3 @@ interface SelectFieldProps extends Omit<React.ComponentPropsWithoutRef<typeof Se
 }
 declare const SelectField: React.ForwardRefExoticComponent<SelectFieldProps & React.RefAttributes<HTMLButtonElement>>;
 export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem, SelectField, type SelectFieldProps, };
-//# sourceMappingURL=select.d.ts.map

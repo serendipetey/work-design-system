@@ -13,4 +13,3 @@ export * from "./ui/sidebar-business-logo";
 export * from "./ui/sidebar-navigation-utils";
 export * from "./lib/utils";
 export type { BaseComponentProps, VariantProps } from "./types";
-//# sourceMappingURL=index.d.ts.map
