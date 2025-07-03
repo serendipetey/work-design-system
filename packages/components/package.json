@@ -1,10 +1,15 @@
 {
-  "name": "@your-company/components",
+  "name": "@serendipetey/components",
   "version": "1.0.0",
   "description": "React component library built with design system tokens",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/serendipetey/design-system.git",
+    "directory": "packages/components"
+  },
   "files": [
     "dist/**/*",
     "src/**/*"
@@ -37,7 +42,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
-    "@your-company/design-tokens": "workspace:*",
+    "@serendipetey/design-tokens": "*",
     "class-variance-authority": "^0.7.1",
     "tailwind-merge": "^2.6.0"
   },
@@ -76,5 +81,9 @@
     "tsx": "^4.0.0",
     "typescript": "^5.0.0",
     "vite": "^5.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   }
 }

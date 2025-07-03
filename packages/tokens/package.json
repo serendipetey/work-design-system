@@ -1,8 +1,13 @@
 {
-  "name": "@your-company/design-tokens",
+  "name": "@serendipetey/design-tokens",
   "version": "1.0.0",
   "description": "Design tokens for your design system",
   "main": "dist/css/index.css",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/serendipetey/design-system.git",
+    "directory": "packages/tokens"
+  },
   "files": [
     "dist/**/*",
     "src/**/*"
@@ -20,6 +25,7 @@
     "rimraf": "^5.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   }
 }
