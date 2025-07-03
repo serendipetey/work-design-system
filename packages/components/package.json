@@ -15,7 +15,8 @@
     "src/**/*"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "NODE_ENV=production rollup -c",
+    "build:dev": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -28,6 +29,8 @@
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "clean": "rimraf dist",
+    "clean:bloat": "bash scripts/cleanup-build-bloat.sh",
+    "clean:all": "pnpm run clean:bloat && pnpm run clean",
     "validate:tokens": "tsx scripts/validate-tokens.ts",
     "validate:button": "tsx scripts/validate-tokens.ts",
     "validate:input": "tsx scripts/validate-input-tokens.ts",
@@ -77,6 +80,8 @@
     "jest-environment-jsdom": "^29.0.0",
     "rimraf": "^5.0.0",
     "rollup": "^4.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
     "storybook": "^8.6.14",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0",

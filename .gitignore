@@ -26,6 +26,12 @@ yarn-error.log*
 .cache/
 coverage/
 
+# 🚨 NEW: Rollup build artifacts (prevents bloat)
+.rollup.cache/
+**/.rollup.cache/
+*.map
+**/*.map
+
 # Logs
 logs
 *.log
@@ -98,6 +104,5 @@ dist-ssr/
 .code-workspace
 design-system.code-workspace
 examples/*
-
 
 *storybook.log
