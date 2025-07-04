@@ -120,9 +120,13 @@ const createHoverCSS = () => {
       border-color: var(--button-primary-border-hover, var(--color-navy-600, #0a2d54)) !important;
     }
     
+    .design-system-button[data-variant="outline"] {
+      border-width: var(--border-md, 2px) !important;
+    }
+    
     .design-system-button[data-variant="outline"]:hover:not(:disabled) {
-      background-color: var(--button-outline-bg-hover, var(--color-navy-500, #0e3a6c)) !important;
-      color: var(--button-outline-text-hover, var(--color-white, #ffffff)) !important;
+      background-color: var(--button-outline-bg-hover, var(--color-navy-100, #f0f3f7)) !important;
+      color: var(--button-outline-text-hover, var(--color-navy-500, #0e3a6c)) !important;
       border-color: var(--button-outline-border-hover, var(--color-navy-500, #0e3a6c)) !important;
     }
     
@@ -163,39 +167,9 @@ const createHoverCSS = () => {
       border: 1px solid transparent !important;
       border-bottom: var(--button-unified-focus-border-width, 3px) solid var(--button-unified-focus-border, var(--color-navy-500, #0e3a6c)) !important;
       
-      /* Flat bottom edge (no border-radius on bottom) */
+      /* Flat bottom edge */
       border-bottom-left-radius: 0 !important;
       border-bottom-right-radius: 0 !important;
-      
-      /* Keep rounded top corners - use design system border radius token */
-      border-top-left-radius: var(--button-border-radius, var(--radius-sm, 6px)) !important;
-      border-top-right-radius: var(--button-border-radius, var(--radius-sm, 6px)) !important;
-      
-      /* Ensure icons and child elements also get navy color */
-      * {
-        color: var(--button-unified-focus-text, var(--color-navy-500, #0e3a6c)) !important;
-      }
-      
-      /* Handle SVG icons specifically */
-      svg {
-        color: var(--button-unified-focus-text, var(--color-navy-500, #0e3a6c)) !important;
-        fill: currentColor !important;
-      }
-    }
-    
-    /* 🎯 CLICK/ACTIVE STATES - Subtle press animation for mouse clicks */
-    .design-system-button:active {
-      transform: translateY(1px) !important;
-      transition: transform 100ms ease-out !important;
-    }
-    
-    /* Override focus for disabled buttons - prevent focus styling */
-    .design-system-button:disabled:focus-visible {
-      background-color: var(--color-disabled, #f3f4f6) !important;
-      color: var(--color-disabled-text, #6b7280) !important;
-      border-bottom: 1px solid var(--color-border, #d1d5db) !important;
-      border-radius: var(--button-border-radius, var(--radius-sm, 6px)) !important;
-      transform: none !important;
     }
   `;
     document.head.appendChild(style);

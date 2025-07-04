@@ -17,7 +17,7 @@
 
   /* Button Styling */
   --button-border-radius: var(--radius-sm);
-  --button-border-width: var(--border-sm);
+  --button-border-width: var(--border-md);
   --button-icon-size-sm: var(--icon-xs);
   --button-icon-size-md: var(--icon-sm);
   --button-icon-size-lg: var(--icon-md);
@@ -39,7 +39,7 @@
 
   /* Outline Button */
   --button-outline-bg: var(--color-surface);
-  --button-outline-bg-hover: var(--color-surface);
+  --button-outline-bg-hover: var(--color-surface-subtle);
   --button-outline-bg-focus: var(--color-primary-focus);
   --button-outline-bg-disabled: var(--color-disabled);
 
