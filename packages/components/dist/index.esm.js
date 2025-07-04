@@ -2829,7 +2829,7 @@ const createHoverCSS = () => {
     document.head.appendChild(style);
 };
 // Simple spinner component
-const Spinner = () => (jsx("div", { className: "w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" }));
+const Spinner$1 = () => (jsx("div", { className: "w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" }));
 const Button = React.forwardRef(({ className, variant = "primary", size = "md", asChild = false, loading = false, leftIcon, rightIcon, children, disabled, style, ...props }, ref) => {
     const Comp = asChild ? Slot$1 : "button";
     const isDisabled = disabled || loading;
@@ -2842,58 +2842,166 @@ const Button = React.forwardRef(({ className, variant = "primary", size = "md", 
         ...getButtonStyles(variant || "primary", size || "md"),
         ...style, // User styles take precedence
     };
-    return (jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsx("span", { className: "mr-2", children: jsx(Spinner, {}) })), !loading && leftIcon && (jsx("span", { className: "mr-2 inline-flex items-center justify-center", children: leftIcon })), children, !loading && rightIcon && (jsx("span", { className: "ml-2 inline-flex items-center justify-center", children: rightIcon }))] }));
+    return (jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsx("span", { className: "mr-2", children: jsx(Spinner$1, {}) })), !loading && leftIcon && (jsx("span", { className: "mr-2 inline-flex items-center justify-center", children: leftIcon })), children, !loading && rightIcon && (jsx("span", { className: "ml-2 inline-flex items-center justify-center", children: rightIcon }))] }));
 });
 Button.displayName = "Button";
 
-// Input component variants using your design tokens
-const inputVariants = cva([
-    // Base styles using design tokens
-    "flex h-10 w-full rounded-md border bg-background px-3 py-2",
-    "text-sm transition-all duration-200",
-    "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-    "placeholder:text-muted-foreground",
-    "disabled:cursor-not-allowed disabled:opacity-50",
-    // Focus styles - 3px darker orange outline, keep original border
-    "focus-visible:outline-none",
-    "focus-visible:ring-0",
-    "focus-visible:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]", // 3px darker orange outline
-    "focus:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]", // Same for :focus
-], {
+// Spinner component for loading state
+const Spinner = () => (jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", className: "animate-spin", children: [jsx("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", className: "opacity-25" }), jsx("path", { fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z", className: "opacity-75" })] }));
+// 🎯 NEW ARCHITECTURE: CSS Custom Properties via Inline Styles
+const inputStyles = {
+    // Base styles using CSS custom properties
+    base: {
+        // Layout & Structure
+        display: "flex",
+        width: "100%",
+        border: "var(--input-border-width, 1px) solid",
+        borderRadius: "var(--input-border-radius)",
+        backgroundColor: "var(--input-bg)",
+        // Typography
+        fontFamily: "var(--font-family-sans)",
+        fontSize: "var(--font-size-sm)",
+        lineHeight: "var(--line-height-sm)",
+        // Transitions
+        transition: "var(--input-transition)",
+        // States
+        outline: "none",
+        // File input specific
+        "&::file-selector-button": {
+            border: 0,
+            backgroundColor: "transparent",
+            fontSize: "var(--font-size-sm)",
+            fontWeight: "var(--font-weight-medium)",
+        },
+        // Placeholder styling
+        "&::placeholder": {
+            color: "var(--color-input-placeholder)",
+        },
+    },
+    // Variant styles
+    variants: {
+        default: {
+            borderColor: "var(--color-border)",
+            color: "var(--color-input-text)",
+        },
+        error: {
+            borderColor: "var(--color-border-error)",
+            color: "var(--color-input-text-error)",
+        },
+        success: {
+            borderColor: "var(--color-border-success)",
+            color: "var(--color-input-text-success)",
+        },
+        warning: {
+            borderColor: "var(--color-border-warning)",
+            color: "var(--color-input-text-warning)",
+        },
+    },
+    // Size styles
+    sizes: {
+        sm: {
+            height: "var(--input-height-sm)", // 32px
+            paddingLeft: "var(--input-padding-x-sm)",
+            paddingRight: "var(--input-padding-x-sm)",
+            fontSize: "var(--font-size-xs)",
+        },
+        md: {
+            height: "var(--input-height-md)", // 40px
+            paddingLeft: "var(--input-padding-x-md)",
+            paddingRight: "var(--input-padding-x-md)",
+            fontSize: "var(--font-size-sm)",
+        },
+        lg: {
+            height: "var(--input-height-lg)", // 48px
+            paddingLeft: "var(--input-padding-x-lg)",
+            paddingRight: "var(--input-padding-x-lg)",
+            fontSize: "var(--font-size-base)",
+        },
+        xl: {
+            height: "var(--input-height-xl)", // 56px
+            paddingLeft: "var(--input-padding-x-xl)",
+            paddingRight: "var(--input-padding-x-xl)",
+            fontSize: "var(--font-size-lg)",
+        },
+    },
+    // State styles
+    states: {
+        disabled: {
+            cursor: "not-allowed",
+            opacity: "0.5",
+        },
+        loading: {
+            paddingRight: "2.5rem", // Make room for spinner
+        },
+    },
+};
+// Label styles using CSS custom properties
+const labelStyles = {
+    base: {
+        display: "block",
+        fontSize: "var(--font-size-sm)",
+        fontWeight: "var(--font-weight-medium)",
+        color: "var(--color-text-heading) !important", // ✅ Force navy-500 for labels
+        marginBottom: "var(--space-1)",
+    },
+    states: {
+        default: {
+            color: "var(--color-text-heading)", // ✅ Navy-500
+        },
+        required: {
+            color: "var(--color-text-heading)", // ✅ Navy-500
+        },
+        optional: {
+            color: "var(--color-text-secondary)",
+        },
+        disabled: {
+            color: "var(--color-text-disabled)",
+        },
+    },
+};
+// Helper text styles
+const helperStyles = {
+    base: {
+        marginTop: "var(--space-1)",
+        fontSize: "var(--font-size-xs)",
+        lineHeight: "var(--line-height-xs)",
+    },
+    variants: {
+        default: {
+            color: "var(--color-text-secondary)",
+        },
+        error: {
+            color: "var(--color-text-error)",
+        },
+        success: {
+            color: "var(--color-text-success)",
+        },
+        warning: {
+            color: "var(--color-text-warning)",
+        },
+        muted: {
+            color: "var(--color-text-muted)",
+        },
+    },
+};
+// 🎯 CVA for className-based utilities (minimal usage)
+const inputVariants = cva(
+// Base classes for layout/structure only
+"flex w-full transition-all duration-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50", {
     variants: {
         variant: {
-            default: [
-                "border-[var(--color-border)]",
-                "text-[var(--color-input-text)]",
-                "placeholder:text-[var(--color-input-placeholder)]",
-            ],
-            error: [
-                "border-[var(--color-border-error)]",
-                "text-[var(--color-input-text-error)]",
-                // Override with darker error focus shadow
-                "focus-visible:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-                "focus:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-            ],
-            success: [
-                "border-[var(--color-border-success)]",
-                "text-[var(--color-input-text-success)]",
-                // Override with darker success focus shadow
-                "focus-visible:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-                "focus:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-            ],
-            warning: [
-                "border-[var(--color-border-warning)]",
-                "text-[var(--color-input-text-warning)]",
-                // Override with darker warning focus shadow
-                "focus-visible:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-                "focus:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-            ],
+            default: "",
+            error: "",
+            success: "",
+            warning: "",
+            // Keep empty - styles come from CSS custom properties
         },
         size: {
-            sm: "h-8 px-2 py-1 text-xs",
-            md: "h-10 px-3 py-2 text-sm",
-            lg: "h-12 px-4 py-3 text-base",
-            xl: "h-14 px-5 py-4 text-lg",
+            sm: "",
+            md: "",
+            lg: "",
+            xl: "",
+            // Keep empty - styles come from CSS custom properties
         },
     },
     defaultVariants: {
@@ -2901,86 +3009,132 @@ const inputVariants = cva([
         size: "md",
     },
 });
-// Label variants using your typography tokens
-const labelVariants = cva([
-    "typography-label",
-    "text-sm font-medium leading-none",
-    "peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-], {
-    variants: {
-        state: {
-            default: "text-[var(--color-input-label)]",
-            required: "text-[var(--color-input-label)]",
-            optional: "text-[var(--color-input-label)]",
-            disabled: "text-[var(--color-input-text-disabled)]",
-        },
-    },
-    defaultVariants: {
-        state: "default",
-    },
-});
-// Helper text variants using your design tokens
-const helperVariants = cva(["typography-helper", "text-xs mt-1"], {
-    variants: {
-        variant: {
-            default: "text-[var(--color-input-helper)]",
-            error: "text-[var(--color-input-text-error)]",
-            success: "text-[var(--color-input-text-success)]",
-            warning: "text-[var(--color-input-text-warning)]",
-            muted: "text-[var(--color-text-muted)]",
-        },
-    },
-    defaultVariants: {
-        variant: "default",
-    },
-});
-const Input = React.forwardRef(({ className, containerClassName, labelClassName, inputClassName, helperClassName, type = "text", variant, size, label, labelState = "default", showLabel = true, hintText, showHintText = true, helperText, leftIcon, rightIcon, leftText, rightText, error, success, warning, loading, clearable, onClear, value, disabled, ...props }, ref) => {
-    // Determine the current variant based on state
-    const currentVariant = React.useMemo(() => {
-        if (error)
-            return "error";
-        if (success)
-            return "success";
-        if (warning)
-            return "warning";
-        return variant || "default";
-    }, [error, success, warning, variant]);
-    // Determine helper text content and variant
-    const helperContent = React.useMemo(() => {
-        if (error && typeof error === "string")
-            return error;
-        if (success && typeof success === "string")
-            return success;
-        if (warning && typeof warning === "string")
-            return warning;
-        return helperText;
-    }, [error, success, warning, helperText]);
-    const helperVariant = React.useMemo(() => {
-        if (error)
-            return "error";
-        if (success)
-            return "success";
-        if (warning)
-            return "warning";
-        return "default";
-    }, [error, success, warning]);
-    // Generate unique ID for accessibility
-    const inputId = React.useId();
-    const helperTextId = React.useId();
-    // Show clear button logic
-    const showClear = clearable && value && !disabled && !loading;
-    // Left and right content logic
-    const hasLeftContent = leftIcon || leftText;
-    const hasRightContent = rightIcon || rightText || showClear || loading;
-    // Clear icon component
-    const ClearIcon = () => (jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "h-4 w-4", children: jsx("path", { d: "M18 6L6 18M6 6l12 12" }) }));
-    // Loading spinner component
-    const LoadingSpinner = () => (jsxs("svg", { className: "animate-spin h-4 w-4 text-[var(--color-text-muted)]", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", children: [jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }), jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })] }));
-    return (jsxs("div", { className: cn("space-y-2", containerClassName), children: [showLabel && label && (jsxs("div", { className: "flex items-center gap-1", children: [jsx("label", { htmlFor: inputId, className: cn(labelVariants({
-                            state: disabled ? "disabled" : labelState,
-                        }), labelClassName), children: label }), labelState === "required" && (jsx("span", { className: "text-[var(--color-input-label-required)] text-sm", children: "(Required)" })), labelState === "optional" && (jsx("span", { className: "text-[var(--color-input-label-optional)] text-sm", children: "(Optional)" }))] })), showHintText && hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" })), children: hintText })), jsxs("div", { className: "relative", children: [hasLeftContent && (jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-navy-500)] text-sm font-medium", children: leftIcon || leftText })), jsx("input", { id: inputId, type: type, ref: ref, value: value, disabled: disabled || loading, "aria-invalid": !!error, "aria-describedby": helperContent ? helperTextId : undefined, className: cn(inputVariants({ variant: currentVariant, size }), hasLeftContent && "pl-10", hasRightContent && "pr-10", className, inputClassName), ...props }), jsxs("div", { className: "absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2", children: [loading && jsx(LoadingSpinner, {}), showClear && (jsx("button", { type: "button", onClick: onClear, className: "text-[var(--color-navy-500)] hover:text-[var(--color-navy-600)] transition-colors", "aria-label": "Clear input", children: jsx(ClearIcon, {}) })), rightText && !loading && !showClear && (jsx("span", { className: "text-[var(--color-navy-500)] text-sm font-medium", children: rightText })), rightIcon && !loading && !showClear && !rightText && (jsx("div", { className: "text-[var(--color-navy-500)]", children: rightIcon }))] })] }), helperContent && (jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+// 🎯 Dynamic Focus CSS Injection
+const injectFocusStyles = (variant) => {
+    const focusStyleId = `input-focus-${variant}`;
+    // Remove existing focus styles
+    const existingStyle = document.getElementById(focusStyleId);
+    if (existingStyle)
+        existingStyle.remove();
+    // Create new focus styles
+    const style = document.createElement("style");
+    style.id = focusStyleId;
+    const focusStyles = {
+        default: `
+      .input-${variant}:focus {
+        box-shadow: var(--input-focus-shadow-default) !important;
+      }
+    `,
+        error: `
+      .input-${variant}:focus {
+        box-shadow: var(--input-focus-shadow-error) !important;
+      }
+    `,
+        success: `
+      .input-${variant}:focus {
+        box-shadow: var(--input-focus-shadow-success) !important;
+      }
+    `,
+        warning: `
+      .input-${variant}:focus {
+        box-shadow: var(--input-focus-shadow-warning) !important;
+      }
+    `,
+    };
+    style.textContent = focusStyles[variant] || focusStyles.default;
+    document.head.appendChild(style);
+};
+// 🎯 Main Component
+const Input = React__default.forwardRef(({ className, variant = "default", size = "md", label, labelState = "default", showLabel = true, hintText, showHintText = true, helperText, leftIcon, rightIcon, leftText, rightText, error, success, warning, loading = false, containerClassName, labelClassName, inputClassName, helperClassName, clearable = false, onClear, disabled, style, ...props }, ref) => {
+    const elementRef = React__default.useRef(null);
+    // Combine refs
+    React__default.useImperativeHandle(ref, () => elementRef.current);
+    // Determine final variant based on states
+    const finalVariant = error
+        ? "error"
+        : success
+            ? "success"
+            : warning
+                ? "warning"
+                : variant;
+    // Inject focus styles on mount
+    React__default.useEffect(() => {
+        if (elementRef.current && finalVariant) {
+            injectFocusStyles(finalVariant);
+            elementRef.current.classList.add(`input-${finalVariant}`);
+        }
+    }, [finalVariant]);
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom
+    const combinedStyles = {
+        ...inputStyles.base,
+        ...(finalVariant &&
+            inputStyles.variants[finalVariant]
+            ? inputStyles.variants[finalVariant]
+            : {}),
+        ...(size && inputStyles.sizes[size]
+            ? inputStyles.sizes[size]
+            : {}),
+        ...(disabled ? inputStyles.states.disabled : {}),
+        ...(loading ? inputStyles.states.loading : {}),
+        ...style, // Allow style overrides
+    };
+    // Determine helper text and variant
+    const displayHelperText = error
+        ? typeof error === "string"
+            ? error
+            : "Invalid input"
+        : success
+            ? typeof success === "string"
+                ? success
+                : "Valid input"
+            : warning
+                ? typeof warning === "string"
+                    ? warning
+                    : "Warning"
+                : helperText;
+    const helperVariant = error
+        ? "error"
+        : success
+            ? "success"
+            : warning
+                ? "warning"
+                : "default";
+    return (jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxs("label", { htmlFor: props.id, className: cn(labelClassName), style: {
+                    ...labelStyles.base,
+                    ...(labelState &&
+                        labelStyles.states[labelState]
+                        ? labelStyles.states[labelState]
+                        : labelStyles.states.default),
+                    ...(disabled ? labelStyles.states.disabled : {}),
+                }, children: [label, labelState === "required" && (jsx("span", { style: { color: "var(--color-text-error)" }, children: " *" })), labelState === "optional" && (jsxs("span", { style: { color: "var(--color-text-secondary)" }, children: [" ", "(optional)"] }))] })), showHintText && hintText && (jsx("div", { style: {
+                    ...helperStyles.base,
+                    ...helperStyles.variants.muted,
+                    marginTop: 0,
+                    marginBottom: "var(--space-1)",
+                }, children: hintText })), jsxs("div", { className: "relative", children: [(leftText || leftIcon) && (jsxs("div", { className: "absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center", children: [leftIcon && jsx("span", { className: "mr-1", children: leftIcon }), leftText && (jsx("span", { style: {
+                                    color: "var(--color-text-secondary)",
+                                    fontSize: "var(--font-size-sm)",
+                                }, children: leftText }))] })), jsx("input", { ref: elementRef, className: cn(inputVariants({ variant: finalVariant, size }), inputClassName, className), style: {
+                            ...combinedStyles,
+                            paddingLeft: leftText || leftIcon ? "2.5rem" : combinedStyles.paddingLeft,
+                            paddingRight: rightText || rightIcon || loading || clearable
+                                ? "2.5rem"
+                                : combinedStyles.paddingRight,
+                        }, disabled: disabled || loading, "aria-invalid": !!error, "aria-describedby": displayHelperText ? `${props.id}-helper` : undefined, ...props }), jsxs("div", { className: "absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1", children: [loading && jsx(Spinner, {}), !loading && clearable && props.value && (jsx("button", { type: "button", onClick: onClear, className: "text-gray-400 hover:text-gray-600", style: { fontSize: "var(--font-size-sm)" }, children: "\u00D7" })), !loading && rightIcon && jsx("span", { children: rightIcon }), !loading && rightText && (jsx("span", { style: {
+                                    color: "var(--color-text-secondary)",
+                                    fontSize: "var(--font-size-sm)",
+                                }, children: rightText }))] })] }), displayHelperText && (jsx("div", { id: `${props.id}-helper`, className: cn(helperClassName), style: {
+                    ...helperStyles.base,
+                    ...(helperVariant &&
+                        helperStyles.variants[helperVariant]
+                        ? helperStyles.variants[helperVariant]
+                        : helperStyles.variants.default),
+                }, children: displayHelperText }))] }));
 });
 Input.displayName = "Input";
+// Legacy exports for compatibility
+const labelVariants = () => ""; // Placeholder for backward compatibility
+const helperVariants = () => ""; // Placeholder for backward compatibility
 
 // packages/core/number/src/number.ts
 function clamp$1(value, [min, max]) {
@@ -8461,11 +8615,10 @@ helperText, error, success, warning, placeholder, value, onValueChange, defaultV
                 : variant;
     const effectiveLabelState = required && labelState === "default" ? "required" : labelState;
     const helperContent = error || helperText;
-    const helperVariant = error ? "error" : "muted";
     // Check if component has valid options
     const hasOptions = React.Children.count(children) > 0;
     return (jsxs("div", { className: cn("space-y-2", className), children: [showLabel && label && (jsxs("div", { className: "flex items-center gap-1", children: [jsx("label", { htmlFor: id, className: "text-sm font-medium text-[var(--color-input-label)]" // FIXED: Use proper navy-500 color
-                        , children: label }), effectiveLabelState === "required" && (jsx("span", { className: "text-[var(--color-input-label-required)] text-sm", children: "(Required)" })), effectiveLabelState === "optional" && (jsx("span", { className: "text-[var(--color-input-label-optional)] text-sm", children: "(Optional)" }))] })), showHintText && hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" })), children: hintText })), jsxs(Select, { value: value, onValueChange: onValueChange, defaultValue: defaultValue, name: name, required: required, disabled: disabled, ...props, children: [jsx(SelectTrigger, { ref: ref, id: id, variant: effectiveVariant, size: size, children: jsx(SelectValue, { placeholder: hasOptions ? placeholder : "No options available" }) }), jsx(SelectContent, { children: hasOptions ? (children) : (jsx("div", { className: "py-2 px-3 text-sm text-[var(--color-text-muted)]", children: "No options available" })) })] }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant })), children: helperContent }))] }));
+                        , children: label }), effectiveLabelState === "required" && (jsx("span", { className: "text-[var(--color-input-label-required)] text-sm", children: "(Required)" })), effectiveLabelState === "optional" && (jsx("span", { className: "text-[var(--color-input-label-optional)] text-sm", children: "(Optional)" }))] })), showHintText && hintText && (jsx("p", { className: cn(helperVariants()), children: hintText })), jsxs(Select, { value: value, onValueChange: onValueChange, defaultValue: defaultValue, name: name, required: required, disabled: disabled, ...props, children: [jsx(SelectTrigger, { ref: ref, id: id, variant: effectiveVariant, size: size, children: jsx(SelectValue, { placeholder: hasOptions ? placeholder : "No options available" }) }), jsx(SelectContent, { children: hasOptions ? (children) : (jsx("div", { className: "py-2 px-3 text-sm text-[var(--color-text-muted)]", children: "No options available" })) })] }), helperContent && (jsx("p", { className: cn(helperVariants()), children: helperContent }))] }));
 });
 SelectField.displayName = "SelectField";
 

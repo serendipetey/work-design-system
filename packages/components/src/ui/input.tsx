@@ -1,58 +1,190 @@
 // packages/components/src/ui/input.tsx
-import * as React from "react";
+import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// Input component variants using your design tokens
+// Spinner component for loading state
+const Spinner = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    className="animate-spin"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="4"
+      className="opacity-25"
+    />
+    <path
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      className="opacity-75"
+    />
+  </svg>
+);
+
+// 🎯 NEW ARCHITECTURE: CSS Custom Properties via Inline Styles
+const inputStyles = {
+  // Base styles using CSS custom properties
+  base: {
+    // Layout & Structure
+    display: "flex",
+    width: "100%",
+    border: "var(--input-border-width, 1px) solid",
+    borderRadius: "var(--input-border-radius)",
+    backgroundColor: "var(--input-bg)",
+
+    // Typography
+    fontFamily: "var(--font-family-sans)",
+    fontSize: "var(--font-size-sm)",
+    lineHeight: "var(--line-height-sm)",
+
+    // Transitions
+    transition: "var(--input-transition)",
+
+    // States
+    outline: "none",
+
+    // File input specific
+    "&::file-selector-button": {
+      border: 0,
+      backgroundColor: "transparent",
+      fontSize: "var(--font-size-sm)",
+      fontWeight: "var(--font-weight-medium)",
+    },
+
+    // Placeholder styling
+    "&::placeholder": {
+      color: "var(--color-input-placeholder)",
+    },
+  },
+
+  // Variant styles
+  variants: {
+    default: {
+      borderColor: "var(--color-border)",
+      color: "var(--color-input-text)",
+    },
+    error: {
+      borderColor: "var(--color-border-error)",
+      color: "var(--color-input-text-error)",
+    },
+    success: {
+      borderColor: "var(--color-border-success)",
+      color: "var(--color-input-text-success)",
+    },
+    warning: {
+      borderColor: "var(--color-border-warning)",
+      color: "var(--color-input-text-warning)",
+    },
+  },
+
+  // Size styles
+  sizes: {
+    sm: {
+      height: "var(--input-height-sm)", // 32px
+      paddingLeft: "var(--input-padding-x-sm)",
+      paddingRight: "var(--input-padding-x-sm)",
+      fontSize: "var(--font-size-xs)",
+    },
+    md: {
+      height: "var(--input-height-md)", // 40px
+      paddingLeft: "var(--input-padding-x-md)",
+      paddingRight: "var(--input-padding-x-md)",
+      fontSize: "var(--font-size-sm)",
+    },
+    lg: {
+      height: "var(--input-height-lg)", // 48px
+      paddingLeft: "var(--input-padding-x-lg)",
+      paddingRight: "var(--input-padding-x-lg)",
+      fontSize: "var(--font-size-base)",
+    },
+    xl: {
+      height: "var(--input-height-xl)", // 56px
+      paddingLeft: "var(--input-padding-x-xl)",
+      paddingRight: "var(--input-padding-x-xl)",
+      fontSize: "var(--font-size-lg)",
+    },
+  },
+
+  // State styles
+  states: {
+    disabled: {
+      cursor: "not-allowed",
+      opacity: "0.5",
+    },
+    loading: {
+      paddingRight: "2.5rem", // Make room for spinner
+    },
+  },
+};
+
+// Label styles using CSS custom properties
+const labelStyles = {
+  base: {
+    display: "block",
+    fontSize: "var(--font-size-sm)",
+    fontWeight: "var(--font-weight-medium)",
+    marginBottom: "var(--space-1)",
+    // Remove color from here - let child spans handle it
+  },
+  states: {
+    disabled: {
+      color: "var(--color-text-disabled)",
+    },
+  },
+};
+
+// Helper text styles
+const helperStyles = {
+  base: {
+    marginTop: "var(--space-1)",
+    fontSize: "var(--font-size-xs)",
+    lineHeight: "var(--line-height-xs)",
+  },
+  variants: {
+    default: {
+      color: "var(--color-text-secondary)",
+    },
+    error: {
+      color: "var(--color-text-error)",
+    },
+    success: {
+      color: "var(--color-text-success)",
+    },
+    warning: {
+      color: "var(--color-text-warning)",
+    },
+    muted: {
+      color: "var(--color-text-muted)",
+    },
+  },
+};
+
+// 🎯 CVA for className-based utilities (minimal usage)
 const inputVariants = cva(
-  [
-    // Base styles using design tokens
-    "flex h-10 w-full rounded-md border bg-background px-3 py-2",
-    "text-sm transition-all duration-200",
-    "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-    "placeholder:text-muted-foreground",
-    "disabled:cursor-not-allowed disabled:opacity-50",
-    // Focus styles - 3px darker orange outline, keep original border
-    "focus-visible:outline-none",
-    "focus-visible:ring-0",
-    "focus-visible:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]", // 3px darker orange outline
-    "focus:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]", // Same for :focus
-  ],
+  // Base classes for layout/structure only
+  "flex w-full transition-all duration-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: [
-          "border-[var(--color-border)]",
-          "text-[var(--color-input-text)]",
-          "placeholder:text-[var(--color-input-placeholder)]",
-        ],
-        error: [
-          "border-[var(--color-border-error)]",
-          "text-[var(--color-input-text-error)]",
-          // Override with darker error focus shadow
-          "focus-visible:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-          "focus:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-        ],
-        success: [
-          "border-[var(--color-border-success)]",
-          "text-[var(--color-input-text-success)]",
-          // Override with darker success focus shadow
-          "focus-visible:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-          "focus:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-        ],
-        warning: [
-          "border-[var(--color-border-warning)]",
-          "text-[var(--color-input-text-warning)]",
-          // Override with darker warning focus shadow
-          "focus-visible:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-          "focus:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-        ],
+        default: "",
+        error: "",
+        success: "",
+        warning: "",
+        // Keep empty - styles come from CSS custom properties
       },
       size: {
-        sm: "h-8 px-2 py-1 text-xs",
-        md: "h-10 px-3 py-2 text-sm",
-        lg: "h-12 px-4 py-3 text-base",
-        xl: "h-14 px-5 py-4 text-lg",
+        sm: "",
+        md: "",
+        lg: "",
+        xl: "",
+        // Keep empty - styles come from CSS custom properties
       },
     },
     defaultVariants: {
@@ -62,93 +194,78 @@ const inputVariants = cva(
   }
 );
 
-// Label variants using your typography tokens
-const labelVariants = cva(
-  [
-    "typography-label",
-    "text-sm font-medium leading-none",
-    "peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-  ],
-  {
-    variants: {
-      state: {
-        default: "text-[var(--color-input-label)]",
-        required: "text-[var(--color-input-label)]",
-        optional: "text-[var(--color-input-label)]",
-        disabled: "text-[var(--color-input-text-disabled)]",
-      },
-    },
-    defaultVariants: {
-      state: "default",
-    },
-  }
-);
+// 🎯 Dynamic Focus CSS Injection
+const injectFocusStyles = (variant: string) => {
+  const focusStyleId = `input-focus-${variant}`;
 
-// Helper text variants using your design tokens
-const helperVariants = cva(["typography-helper", "text-xs mt-1"], {
-  variants: {
-    variant: {
-      default: "text-[var(--color-input-helper)]",
-      error: "text-[var(--color-input-text-error)]",
-      success: "text-[var(--color-input-text-success)]",
-      warning: "text-[var(--color-input-text-warning)]",
-      muted: "text-[var(--color-text-muted)]",
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-  },
-});
+  // Remove existing focus styles
+  const existingStyle = document.getElementById(focusStyleId);
+  if (existingStyle) existingStyle.remove();
 
+  // Create new focus styles
+  const style = document.createElement("style");
+  style.id = focusStyleId;
+
+  const focusStyles: Record<string, string> = {
+    default: `
+      .input-${variant}:focus {
+        box-shadow: var(--input-focus-shadow-default) !important;
+      }
+    `,
+    error: `
+      .input-${variant}:focus {
+        box-shadow: var(--input-focus-shadow-error) !important;
+      }
+    `,
+    success: `
+      .input-${variant}:focus {
+        box-shadow: var(--input-focus-shadow-success) !important;
+      }
+    `,
+    warning: `
+      .input-${variant}:focus {
+        box-shadow: var(--input-focus-shadow-warning) !important;
+      }
+    `,
+  };
+
+  style.textContent = focusStyles[variant] || focusStyles.default;
+  document.head.appendChild(style);
+};
+
+// TypeScript Interfaces
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
     VariantProps<typeof inputVariants> {
-  // Label system
   label?: string;
   labelState?: "default" | "required" | "optional";
   showLabel?: boolean;
-
-  // Helper/hint text system
   hintText?: string;
   showHintText?: boolean;
   helperText?: string;
-
-  // Icon and text system
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   leftText?: string;
   rightText?: string;
-
-  // State management
   error?: string | boolean;
   success?: string | boolean;
   warning?: string | boolean;
-
-  // Loading state
   loading?: boolean;
-
-  // Custom class names
   containerClassName?: string;
   labelClassName?: string;
   inputClassName?: string;
   helperClassName?: string;
-
-  // Clearable functionality
   clearable?: boolean;
   onClear?: () => void;
 }
 
+// 🎯 Main Component
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
-      containerClassName,
-      labelClassName,
-      inputClassName,
-      helperClassName,
-      type = "text",
-      variant,
-      size,
+      variant = "default",
+      size = "md",
       label,
       labelState = "default",
       showLabel = true,
@@ -162,186 +279,218 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       error,
       success,
       warning,
-      loading,
-      clearable,
+      loading = false,
+      containerClassName,
+      labelClassName,
+      inputClassName,
+      helperClassName,
+      clearable = false,
       onClear,
-      value,
       disabled,
+      style,
       ...props
     },
     ref
   ) => {
-    // Determine the current variant based on state
-    const currentVariant = React.useMemo(() => {
-      if (error) return "error";
-      if (success) return "success";
-      if (warning) return "warning";
-      return variant || "default";
-    }, [error, success, warning, variant]);
+    const elementRef = React.useRef<HTMLInputElement>(null);
 
-    // Determine helper text content and variant
-    const helperContent = React.useMemo(() => {
-      if (error && typeof error === "string") return error;
-      if (success && typeof success === "string") return success;
-      if (warning && typeof warning === "string") return warning;
-      return helperText;
-    }, [error, success, warning, helperText]);
+    // Combine refs
+    React.useImperativeHandle(ref, () => elementRef.current!);
 
-    const helperVariant = React.useMemo(() => {
-      if (error) return "error";
-      if (success) return "success";
-      if (warning) return "warning";
-      return "default";
-    }, [error, success, warning]);
+    // Determine final variant based on states
+    const finalVariant = error
+      ? "error"
+      : success
+      ? "success"
+      : warning
+      ? "warning"
+      : variant;
 
-    // Generate unique ID for accessibility
-    const inputId = React.useId();
-    const helperTextId = React.useId();
+    // Inject focus styles on mount
+    React.useEffect(() => {
+      if (elementRef.current && finalVariant) {
+        injectFocusStyles(finalVariant);
+        elementRef.current.classList.add(`input-${finalVariant}`);
+      }
+    }, [finalVariant]);
 
-    // Show clear button logic
-    const showClear = clearable && value && !disabled && !loading;
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom
+    const combinedStyles = {
+      ...inputStyles.base,
+      ...(finalVariant &&
+      inputStyles.variants[finalVariant as keyof typeof inputStyles.variants]
+        ? inputStyles.variants[
+            finalVariant as keyof typeof inputStyles.variants
+          ]
+        : {}),
+      ...(size && inputStyles.sizes[size as keyof typeof inputStyles.sizes]
+        ? inputStyles.sizes[size as keyof typeof inputStyles.sizes]
+        : {}),
+      ...(disabled ? inputStyles.states.disabled : {}),
+      ...(loading ? inputStyles.states.loading : {}),
+      ...style, // Allow style overrides
+    };
 
-    // Left and right content logic
-    const hasLeftContent = leftIcon || leftText;
-    const hasRightContent = rightIcon || rightText || showClear || loading;
+    // Determine helper text and variant
+    const displayHelperText = error
+      ? typeof error === "string"
+        ? error
+        : "Invalid input"
+      : success
+      ? typeof success === "string"
+        ? success
+        : "Valid input"
+      : warning
+      ? typeof warning === "string"
+        ? warning
+        : "Warning"
+      : helperText;
 
-    // Clear icon component
-    const ClearIcon = () => (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className="h-4 w-4"
-      >
-        <path d="M18 6L6 18M6 6l12 12" />
-      </svg>
-    );
-
-    // Loading spinner component
-    const LoadingSpinner = () => (
-      <svg
-        className="animate-spin h-4 w-4 text-[var(--color-text-muted)]"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-        />
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        />
-      </svg>
-    );
+    const helperVariant = error
+      ? "error"
+      : success
+      ? "success"
+      : warning
+      ? "warning"
+      : "default";
 
     return (
-      <div className={cn("space-y-2", containerClassName)}>
+      <div className={cn("w-full", containerClassName)}>
         {/* Label */}
         {showLabel && label && (
-          <div className="flex items-center gap-1">
-            <label
-              htmlFor={inputId}
-              className={cn(
-                labelVariants({
-                  state: disabled ? "disabled" : labelState,
-                }),
-                labelClassName
-              )}
+          <label
+            htmlFor={props.id}
+            className={cn(labelClassName)}
+            style={{
+              ...labelStyles.base,
+              ...(disabled ? labelStyles.states.disabled : {}),
+            }}
+          >
+            <span
+              style={{
+                color: disabled
+                  ? "var(--color-text-disabled)"
+                  : "var(--color-navy-500)",
+              }}
             >
               {label}
-            </label>
-            {/* Required text in red parentheses */}
+            </span>
             {labelState === "required" && (
-              <span className="text-[var(--color-input-label-required)] text-sm">
-                (Required)
-              </span>
+              <span style={{ color: "var(--color-text-error)" }}> *</span>
             )}
             {labelState === "optional" && (
-              <span className="text-[var(--color-input-label-optional)] text-sm">
-                (Optional)
+              <span style={{ color: "var(--color-gray-500)" }}>
+                {" "}
+                (optional)
               </span>
             )}
-          </div>
+          </label>
         )}
 
         {/* Hint Text */}
         {showHintText && hintText && (
-          <p className={cn(helperVariants({ variant: "muted" }))}>{hintText}</p>
+          <div
+            style={{
+              ...helperStyles.base,
+              ...helperStyles.variants.muted,
+              marginTop: 0,
+              marginBottom: "var(--space-1)",
+            }}
+          >
+            {hintText}
+          </div>
         )}
 
         {/* Input Container */}
         <div className="relative">
-          {/* Left Content (Icon or Text) */}
-          {hasLeftContent && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-navy-500)] text-sm font-medium">
-              {leftIcon || leftText}
+          {/* Left Text/Icon */}
+          {(leftText || leftIcon) && (
+            <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center">
+              {leftIcon && <span className="mr-1">{leftIcon}</span>}
+              {leftText && (
+                <span
+                  style={{
+                    color: "var(--color-text-secondary)",
+                    fontSize: "var(--font-size-sm)",
+                  }}
+                >
+                  {leftText}
+                </span>
+              )}
             </div>
           )}
 
           {/* Input Field */}
           <input
-            id={inputId}
-            type={type}
-            ref={ref}
-            value={value}
+            ref={elementRef}
+            className={cn(
+              inputVariants({ variant: finalVariant, size }),
+              inputClassName,
+              className
+            )}
+            style={{
+              ...combinedStyles,
+              paddingLeft:
+                leftText || leftIcon ? "2.5rem" : combinedStyles.paddingLeft,
+              paddingRight:
+                rightText || rightIcon || loading || clearable
+                  ? "2.5rem"
+                  : combinedStyles.paddingRight,
+            }}
             disabled={disabled || loading}
             aria-invalid={!!error}
-            aria-describedby={helperContent ? helperTextId : undefined}
-            className={cn(
-              inputVariants({ variant: currentVariant, size }),
-              hasLeftContent && "pl-10",
-              hasRightContent && "pr-10",
-              className,
-              inputClassName
-            )}
+            aria-describedby={
+              displayHelperText ? `${props.id}-helper` : undefined
+            }
             {...props}
           />
 
-          {/* Right Content (Icons, Text, Clear, Loading) */}
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-            {loading && <LoadingSpinner />}
-            {showClear && (
+          {/* Right Icons/Text */}
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
+            {loading && <Spinner />}
+            {!loading && clearable && props.value && (
               <button
                 type="button"
                 onClick={onClear}
-                className="text-[var(--color-navy-500)] hover:text-[var(--color-navy-600)] transition-colors"
-                aria-label="Clear input"
+                className="text-gray-400 hover:text-gray-600"
+                style={{ fontSize: "var(--font-size-sm)" }}
               >
-                <ClearIcon />
+                ×
               </button>
             )}
-            {rightText && !loading && !showClear && (
-              <span className="text-[var(--color-navy-500)] text-sm font-medium">
+            {!loading && rightIcon && <span>{rightIcon}</span>}
+            {!loading && rightText && (
+              <span
+                style={{
+                  color: "var(--color-text-secondary)",
+                  fontSize: "var(--font-size-sm)",
+                }}
+              >
                 {rightText}
               </span>
-            )}
-            {rightIcon && !loading && !showClear && !rightText && (
-              <div className="text-[var(--color-navy-500)]">{rightIcon}</div>
             )}
           </div>
         </div>
 
         {/* Helper Text */}
-        {helperContent && (
-          <p
-            id={helperTextId}
-            className={cn(
-              helperVariants({ variant: helperVariant }),
-              helperClassName
-            )}
+        {displayHelperText && (
+          <div
+            id={`${props.id}-helper`}
+            className={cn(helperClassName)}
+            style={{
+              ...helperStyles.base,
+              ...(helperVariant &&
+              helperStyles.variants[
+                helperVariant as keyof typeof helperStyles.variants
+              ]
+                ? helperStyles.variants[
+                    helperVariant as keyof typeof helperStyles.variants
+                  ]
+                : helperStyles.variants.default),
+            }}
           >
-            {helperContent}
-          </p>
+            {displayHelperText}
+          </div>
         )}
       </div>
     );
@@ -349,5 +498,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = "Input";
+
+// Legacy exports for compatibility
+const labelVariants = () => ""; // Placeholder for backward compatibility
+const helperVariants = () => ""; // Placeholder for backward compatibility
 
 export { Input, inputVariants, labelVariants, helperVariants };
