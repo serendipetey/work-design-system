@@ -37,9 +37,12 @@ const Spinner = () => (
 const inputStyles = {
   // Base styles using design tokens with reliable fallbacks
   base: {
-    // Layout & Structure
+    // Layout & Structure - FIXED: Added proper responsive width constraints
     display: "flex" as const,
     width: "100%",
+    maxWidth: "100%", // 🔧 FIX: Prevent overflow beyond container
+    minWidth: "0", // 🔧 FIX: Allow shrinking in flex/grid containers
+    boxSizing: "border-box" as const, // 🔧 FIX: Include padding/border in width calculations
     border: "1px solid var(--color-border, #d1d5db)",
     borderRadius: "var(--input-border-radius, 6px)",
     backgroundColor: "var(--input-bg, #ffffff)",
@@ -119,7 +122,7 @@ const labelStyles = {
   base: {
     display: "block" as const,
     fontSize: "var(--font-size-base, 16px)",
-    fontWeight: "var(--font-weight-semibold, 600)",
+    fontWeight: "var(--font-weight-semibold, 500)",
     marginBottom: "2px", // AGGRESSIVE: Reduced from 8px to 2px
     color: "var(--color-input-label, #1e40af)",
     fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
@@ -188,6 +191,43 @@ const inputVariants = cva(
   }
 );
 
+// 🎯 Helper text variants for consistent styling across components
+const helperVariants = cva(
+  // Base helper text styles using design tokens
+  "text-[var(--font-size-base,16px)] leading-[var(--line-height-loose,1.75)] font-[var(--font-weight-regular,400)] font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)] tracking-[var(--letter-spacing-wide,0.0225em)] mt-1",
+  {
+    variants: {
+      variant: {
+        default: "text-[var(--color-input-helper,#39444f)]",
+        error: "text-[var(--color-input-text-error,#eb0000)]",
+        success: "text-[var(--color-input-text-success,#007d85)]",
+        warning: "text-[var(--color-input-text-warning,#b75b00)]",
+        muted: "text-[var(--color-text-muted,#8f949a)]",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+// 🎯 Label variants for consistent styling across components
+const labelVariants = cva(
+  // Base label styles using design tokens
+  "block text-[var(--font-size-base,16px)] font-[var(--font-weight-semibold,500)] mb-0.5 font-[var(--font-family-sans,'Poppins',sans-serif)]",
+  {
+    variants: {
+      variant: {
+        default: "text-[var(--color-input-label,#1e40af)]",
+        disabled: "text-[var(--color-disabled-text,#6b7280)]",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
 // 🎯 OPTIMAL: Design Tokens with Fallbacks for Focus Styles
 const injectFocusStyles = (variant: string) => {
   const focusStyleId = `input-focus-${variant}`;
@@ -196,138 +236,127 @@ const injectFocusStyles = (variant: string) => {
   const existingStyle = document.getElementById(focusStyleId);
   if (existingStyle) existingStyle.remove();
 
-  // Create new focus styles with tokens and fallbacks
+  // Create new focus styles
   const style = document.createElement("style");
   style.id = focusStyleId;
 
-  const focusStyles: Record<string, string> = {
-    default: `
-      .input-${variant}:focus {
-        outline: 2px solid var(--color-focus-500, #ff9900);
-        outline-offset: 2px;
-        border-color: var(--color-border-focus, #3b82f6);
-      }
-    `,
-    error: `
-      .input-${variant}:focus {
-        outline: 2px solid var(--color-error-500, #dc2626);
-        outline-offset: 2px;
-        border-color: var(--color-border-error, #dc2626);
-      }
-    `,
-    success: `
-      .input-${variant}:focus {
-        outline: 2px solid var(--color-success-500, #059669);
-        outline-offset: 2px;
-        border-color: var(--color-border-success, #059669);
-      }
-    `,
-    warning: `
-      .input-${variant}:focus {
-        outline: 2px solid var(--color-warning-500, #d97706);
-        outline-offset: 2px;
-        border-color: var(--color-border-warning, #d97706);
-      }
-    `,
-  };
+  let shadowToken;
+  switch (variant) {
+    case "error":
+      shadowToken =
+        "var(--input-focus-shadow-error, 0 0 0 3px rgba(235, 0, 0, 0.6))";
+      break;
+    case "success":
+      shadowToken =
+        "var(--input-focus-shadow-success, 0 0 0 3px rgba(0, 125, 133, 0.6))";
+      break;
+    case "warning":
+      shadowToken =
+        "var(--input-focus-shadow-warning, 0 0 0 3px rgba(183, 91, 0, 0.8))";
+      break;
+    default:
+      shadowToken =
+        "var(--input-focus-shadow-default, 0 0 0 3px rgba(255, 153, 0, 0.8))";
+  }
 
-  style.textContent = focusStyles[variant] || focusStyles.default;
+  style.textContent = `
+    .input-${variant}:focus {
+      box-shadow: ${shadowToken};
+    }
+  `;
+
   document.head.appendChild(style);
 };
 
-// CVA exports for compatibility
-export const labelVariants = cva("text-sm font-medium text-gray-900", {
-  variants: {
-    state: {
-      default: "",
-      disabled: "text-gray-500",
-    },
-  },
-  defaultVariants: {
-    state: "default",
-  },
-});
-
-export const helperVariants = cva("text-sm", {
-  variants: {
-    variant: {
-      default: "text-gray-600",
-      error: "text-red-600",
-      success: "text-green-600",
-      warning: "text-orange-600",
-      muted: "text-gray-500",
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-  },
-});
-
-// TypeScript Interfaces
+// TypeScript interface for component props
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
     VariantProps<typeof inputVariants> {
+  // Custom sizing (overrides HTML input size)
+  size?: "sm" | "md" | "lg" | "xl";
+
+  // Label Props
   label?: string;
-  labelState?: "default" | "required" | "optional";
-  showLabel?: boolean;
-  hintText?: string;
-  showHintText?: boolean;
-  helperText?: string;
+  labelState?: "required" | "optional";
+  hideLabel?: boolean;
+
+  // Styling Overrides
+  containerClassName?: string;
+  labelClassName?: string;
+  helperClassName?: string;
+
+  // Content & State
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   leftText?: string;
   rightText?: string;
-  error?: string | boolean;
-  success?: string | boolean;
-  warning?: string | boolean;
   loading?: boolean;
-  containerClassName?: string;
-  labelClassName?: string;
-  inputClassName?: string;
-  helperClassName?: string;
   clearable?: boolean;
   onClear?: () => void;
+
+  // Helper Text & Validation
+  hintText?: string;
+  error?: string;
+  success?: string;
+  warning?: string;
 }
 
-// 🎯 FIXED: Main Component with Proper Error Handling
+// 🎯 Main Component Implementation
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
+      type = "text",
       variant = "default",
       size = "md",
+
+      // Label props
       label,
-      labelState = "default",
-      showLabel = true,
-      hintText,
-      showHintText = true,
-      helperText,
+      labelState,
+      hideLabel = false,
+
+      // Styling
+      containerClassName,
+      labelClassName,
+      helperClassName,
+      style,
+
+      // Content
       leftIcon,
       rightIcon,
       leftText,
       rightText,
+      loading = false,
+      clearable = false,
+      onClear,
+
+      // Validation
+      hintText,
       error,
       success,
       warning,
-      loading = false,
-      containerClassName,
-      labelClassName,
-      inputClassName,
-      helperClassName,
-      clearable = false,
-      onClear,
-      disabled,
-      style,
+
+      // State
+      disabled = false,
       ...props
     },
     ref
   ) => {
     const elementRef = React.useRef<HTMLInputElement>(null);
+    const inputId = React.useId();
 
     // Combine refs
     React.useImperativeHandle(ref, () => elementRef.current!);
 
-    // Determine final variant based on states
+    // Inject focus styles on mount
+    React.useEffect(() => {
+      if (elementRef.current && variant) {
+        injectFocusStyles(variant);
+        elementRef.current.classList.add(`input-${variant}`);
+      }
+    }, [variant]);
+
+    // 🎯 Determine final variant based on validation state
     const finalVariant = error
       ? "error"
       : success
@@ -336,46 +365,26 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ? "warning"
       : variant;
 
-    // Inject focus styles on mount
-    React.useEffect(() => {
-      if (elementRef.current && finalVariant) {
-        injectFocusStyles(finalVariant);
-        elementRef.current.classList.add(`input-${finalVariant}`);
-      }
-    }, [finalVariant]);
-
-    // 🎯 FIXED: Combine styles with proper null checking
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom
     const combinedStyles = {
       ...inputStyles.base,
-      ...(finalVariant &&
-      inputStyles.variants[finalVariant as keyof typeof inputStyles.variants]
-        ? inputStyles.variants[
-            finalVariant as keyof typeof inputStyles.variants
-          ]
+      ...(finalVariant && inputStyles.variants[finalVariant]
+        ? inputStyles.variants[finalVariant]
         : {}),
-      ...(size && inputStyles.sizes[size as keyof typeof inputStyles.sizes]
-        ? inputStyles.sizes[size as keyof typeof inputStyles.sizes]
-        : {}),
+      ...(size && inputStyles.sizes[size] ? inputStyles.sizes[size] : {}),
       ...(disabled ? inputStyles.states.disabled : {}),
       ...(loading ? inputStyles.states.loading : {}),
-      ...style, // Allow style overrides
+      ...style, // Custom overrides
     };
 
-    // Determine helper text and variant
-    const displayHelperText = error
-      ? typeof error === "string"
-        ? error
-        : "Invalid input"
-      : success
-      ? typeof success === "string"
-        ? success
-        : "Valid input"
-      : warning
-      ? typeof warning === "string"
-        ? warning
-        : "Warning"
-      : helperText;
+    // Build final className
+    const finalClassName = cn(
+      inputVariants({ variant: finalVariant, size }),
+      className
+    );
 
+    // Helper text logic
+    const displayHelperText = error || success || warning;
     const helperVariant = error
       ? "error"
       : success
@@ -383,17 +392,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       : warning
       ? "warning"
       : "default";
+    const showLabel = !hideLabel;
+    const showHintText = hintText && !displayHelperText;
 
-    // Build final className
-    const finalClassName = cn(
-      inputVariants({ variant, size }),
-      inputClassName,
-      className
-    );
-
-    // Generate unique IDs for accessibility
-    const inputId =
-      props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    // IDs for accessibility
     const helperTextId = displayHelperText ? `${inputId}-helper` : undefined;
 
     return (
@@ -465,6 +467,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
             ref={elementRef}
             id={inputId}
+            type={type}
             disabled={disabled}
             className={finalClassName}
             aria-invalid={error ? "true" : undefined}
@@ -544,5 +547,5 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = "Input";
 
 // 🎯 Named Exports for compatibility with existing imports
-export { Input, inputVariants };
+export { Input, inputVariants, helperVariants, labelVariants };
 export default Input;

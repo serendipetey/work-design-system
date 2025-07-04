@@ -2872,9 +2872,12 @@ const Spinner = () => (jsxRuntime.jsxs("svg", { width: "16", height: "16", viewB
 const inputStyles = {
     // Base styles using design tokens with reliable fallbacks
     base: {
-        // Layout & Structure
+        // Layout & Structure - FIXED: Added proper responsive width constraints
         display: "flex",
         width: "100%",
+        maxWidth: "100%", // 🔧 FIX: Prevent overflow beyond container
+        minWidth: "0", // 🔧 FIX: Allow shrinking in flex/grid containers
+        boxSizing: "border-box", // 🔧 FIX: Include padding/border in width calculations
         border: "1px solid var(--color-border, #d1d5db)",
         borderRadius: "var(--input-border-radius, 6px)",
         backgroundColor: "var(--input-bg, #ffffff)",
@@ -2947,7 +2950,7 @@ const labelStyles = {
     base: {
         display: "block",
         fontSize: "var(--font-size-base, 16px)",
-        fontWeight: "var(--font-weight-semibold, 600)",
+        fontWeight: "var(--font-weight-semibold, 500)",
         marginBottom: "2px", // AGGRESSIVE: Reduced from 8px to 2px
         color: "var(--color-input-label, #1e40af)",
         fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
@@ -3011,6 +3014,37 @@ const inputVariants = cva(
         size: "md",
     },
 });
+// 🎯 Helper text variants for consistent styling across components
+const helperVariants = cva(
+// Base helper text styles using design tokens
+"text-[var(--font-size-base,16px)] leading-[var(--line-height-loose,1.75)] font-[var(--font-weight-regular,400)] font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)] tracking-[var(--letter-spacing-wide,0.0225em)] mt-1", {
+    variants: {
+        variant: {
+            default: "text-[var(--color-input-helper,#39444f)]",
+            error: "text-[var(--color-input-text-error,#eb0000)]",
+            success: "text-[var(--color-input-text-success,#007d85)]",
+            warning: "text-[var(--color-input-text-warning,#b75b00)]",
+            muted: "text-[var(--color-text-muted,#8f949a)]",
+        },
+    },
+    defaultVariants: {
+        variant: "default",
+    },
+});
+// 🎯 Label variants for consistent styling across components
+const labelVariants = cva(
+// Base label styles using design tokens
+"block text-[var(--font-size-base,16px)] font-[var(--font-weight-semibold,500)] mb-0.5 font-[var(--font-family-sans,'Poppins',sans-serif)]", {
+    variants: {
+        variant: {
+            default: "text-[var(--color-input-label,#1e40af)]",
+            disabled: "text-[var(--color-disabled-text,#6b7280)]",
+        },
+    },
+    defaultVariants: {
+        variant: "default",
+    },
+});
 // 🎯 OPTIMAL: Design Tokens with Fallbacks for Focus Styles
 const injectFocusStyles = (variant) => {
     const focusStyleId = `input-focus-${variant}`;
@@ -3018,74 +3052,58 @@ const injectFocusStyles = (variant) => {
     const existingStyle = document.getElementById(focusStyleId);
     if (existingStyle)
         existingStyle.remove();
-    // Create new focus styles with tokens and fallbacks
+    // Create new focus styles
     const style = document.createElement("style");
     style.id = focusStyleId;
-    const focusStyles = {
-        default: `
-      .input-${variant}:focus {
-        outline: 2px solid var(--color-focus-500, #ff9900);
-        outline-offset: 2px;
-        border-color: var(--color-border-focus, #3b82f6);
-      }
-    `,
-        error: `
-      .input-${variant}:focus {
-        outline: 2px solid var(--color-error-500, #dc2626);
-        outline-offset: 2px;
-        border-color: var(--color-border-error, #dc2626);
-      }
-    `,
-        success: `
-      .input-${variant}:focus {
-        outline: 2px solid var(--color-success-500, #059669);
-        outline-offset: 2px;
-        border-color: var(--color-border-success, #059669);
-      }
-    `,
-        warning: `
-      .input-${variant}:focus {
-        outline: 2px solid var(--color-warning-500, #d97706);
-        outline-offset: 2px;
-        border-color: var(--color-border-warning, #d97706);
-      }
-    `,
-    };
-    style.textContent = focusStyles[variant] || focusStyles.default;
+    let shadowToken;
+    switch (variant) {
+        case "error":
+            shadowToken =
+                "var(--input-focus-shadow-error, 0 0 0 3px rgba(235, 0, 0, 0.6))";
+            break;
+        case "success":
+            shadowToken =
+                "var(--input-focus-shadow-success, 0 0 0 3px rgba(0, 125, 133, 0.6))";
+            break;
+        case "warning":
+            shadowToken =
+                "var(--input-focus-shadow-warning, 0 0 0 3px rgba(183, 91, 0, 0.8))";
+            break;
+        default:
+            shadowToken =
+                "var(--input-focus-shadow-default, 0 0 0 3px rgba(255, 153, 0, 0.8))";
+    }
+    style.textContent = `
+    .input-${variant}:focus {
+      box-shadow: ${shadowToken};
+    }
+  `;
     document.head.appendChild(style);
 };
-// CVA exports for compatibility
-const labelVariants = cva("text-sm font-medium text-gray-900", {
-    variants: {
-        state: {
-            default: "",
-            disabled: "text-gray-500",
-        },
-    },
-    defaultVariants: {
-        state: "default",
-    },
-});
-const helperVariants = cva("text-sm", {
-    variants: {
-        variant: {
-            default: "text-gray-600",
-            error: "text-red-600",
-            success: "text-green-600",
-            warning: "text-orange-600",
-            muted: "text-gray-500",
-        },
-    },
-    defaultVariants: {
-        variant: "default",
-    },
-});
-// 🎯 FIXED: Main Component with Proper Error Handling
-const Input = React.forwardRef(({ className, variant = "default", size = "md", label, labelState = "default", showLabel = true, hintText, showHintText = true, helperText, leftIcon, rightIcon, leftText, rightText, error, success, warning, loading = false, containerClassName, labelClassName, inputClassName, helperClassName, clearable = false, onClear, disabled, style, ...props }, ref) => {
+// 🎯 Main Component Implementation
+const Input = React.forwardRef(({ className, type = "text", variant = "default", size = "md", 
+// Label props
+label, labelState, hideLabel = false, 
+// Styling
+containerClassName, labelClassName, helperClassName, style, 
+// Content
+leftIcon, rightIcon, leftText, rightText, loading = false, clearable = false, onClear, 
+// Validation
+hintText, error, success, warning, 
+// State
+disabled = false, ...props }, ref) => {
     const elementRef = React.useRef(null);
+    const inputId = React.useId();
     // Combine refs
     React.useImperativeHandle(ref, () => elementRef.current);
-    // Determine final variant based on states
+    // Inject focus styles on mount
+    React.useEffect(() => {
+        if (elementRef.current && variant) {
+            injectFocusStyles(variant);
+            elementRef.current.classList.add(`input-${variant}`);
+        }
+    }, [variant]);
+    // 🎯 Determine final variant based on validation state
     const finalVariant = error
         ? "error"
         : success
@@ -3093,41 +3111,21 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
             : warning
                 ? "warning"
                 : variant;
-    // Inject focus styles on mount
-    React.useEffect(() => {
-        if (elementRef.current && finalVariant) {
-            injectFocusStyles(finalVariant);
-            elementRef.current.classList.add(`input-${finalVariant}`);
-        }
-    }, [finalVariant]);
-    // 🎯 FIXED: Combine styles with proper null checking
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom
     const combinedStyles = {
         ...inputStyles.base,
-        ...(finalVariant &&
-            inputStyles.variants[finalVariant]
+        ...(finalVariant && inputStyles.variants[finalVariant]
             ? inputStyles.variants[finalVariant]
             : {}),
-        ...(size && inputStyles.sizes[size]
-            ? inputStyles.sizes[size]
-            : {}),
+        ...(size && inputStyles.sizes[size] ? inputStyles.sizes[size] : {}),
         ...(disabled ? inputStyles.states.disabled : {}),
         ...(loading ? inputStyles.states.loading : {}),
-        ...style, // Allow style overrides
+        ...style, // Custom overrides
     };
-    // Determine helper text and variant
-    const displayHelperText = error
-        ? typeof error === "string"
-            ? error
-            : "Invalid input"
-        : success
-            ? typeof success === "string"
-                ? success
-                : "Valid input"
-            : warning
-                ? typeof warning === "string"
-                    ? warning
-                    : "Warning"
-                : helperText;
+    // Build final className
+    const finalClassName = cn(inputVariants({ variant: finalVariant, size }), className);
+    // Helper text logic
+    const displayHelperText = error || success || warning;
     const helperVariant = error
         ? "error"
         : success
@@ -3135,10 +3133,9 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
             : warning
                 ? "warning"
                 : "default";
-    // Build final className
-    const finalClassName = cn(inputVariants({ variant, size }), inputClassName, className);
-    // Generate unique IDs for accessibility
-    const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const showLabel = !hideLabel;
+    const showHintText = hintText && !displayHelperText;
+    // IDs for accessibility
     const helperTextId = displayHelperText ? `${inputId}-helper` : undefined;
     return (jsxRuntime.jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxRuntime.jsxs("label", { htmlFor: inputId, className: cn(labelClassName), style: {
                     ...labelStyles.base,
@@ -3151,7 +3148,7 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
                     ...helperStyles.variants.muted,
                     marginTop: "0px", // AGGRESSIVE: No space between label and hint
                     marginBottom: "2px", // AGGRESSIVE: Minimal space before input
-                }, children: hintText })), jsxRuntime.jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxRuntime.jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && jsxRuntime.jsx("span", { className: "text-sm", children: leftText })] })), jsxRuntime.jsx("input", { ...props, ref: elementRef, id: inputId, disabled: disabled, className: finalClassName, "aria-invalid": error ? "true" : undefined, "aria-describedby": helperTextId, style: {
+                }, children: hintText })), jsxRuntime.jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxRuntime.jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && jsxRuntime.jsx("span", { className: "text-sm", children: leftText })] })), jsxRuntime.jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, "aria-invalid": error ? "true" : undefined, "aria-describedby": helperTextId, style: {
                             ...combinedStyles,
                             paddingLeft: leftIcon || leftText ? "2.5rem" : combinedStyles.paddingLeft,
                             paddingRight: rightIcon || rightText || loading || clearable

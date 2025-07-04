@@ -4,34 +4,32 @@ declare const inputVariants: (props?: ({
     variant?: "default" | "error" | "success" | "warning" | null | undefined;
     size?: "sm" | "md" | "lg" | "xl" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export declare const labelVariants: (props?: ({
-    state?: "default" | "disabled" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export declare const helperVariants: (props?: ({
+declare const helperVariants: (props?: ({
     variant?: "default" | "error" | "success" | "warning" | "muted" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const labelVariants: (props?: ({
+    variant?: "default" | "disabled" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">, VariantProps<typeof inputVariants> {
+    size?: "sm" | "md" | "lg" | "xl";
     label?: string;
-    labelState?: "default" | "required" | "optional";
-    showLabel?: boolean;
-    hintText?: string;
-    showHintText?: boolean;
-    helperText?: string;
+    labelState?: "required" | "optional";
+    hideLabel?: boolean;
+    containerClassName?: string;
+    labelClassName?: string;
+    helperClassName?: string;
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
     leftText?: string;
     rightText?: string;
-    error?: string | boolean;
-    success?: string | boolean;
-    warning?: string | boolean;
     loading?: boolean;
-    containerClassName?: string;
-    labelClassName?: string;
-    inputClassName?: string;
-    helperClassName?: string;
     clearable?: boolean;
     onClear?: () => void;
+    hintText?: string;
+    error?: string;
+    success?: string;
+    warning?: string;
 }
 declare const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>>;
-export { Input, inputVariants };
+export { Input, inputVariants, helperVariants, labelVariants };
 export default Input;
