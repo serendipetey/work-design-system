@@ -1,33 +1,104 @@
-// packages/components/src/ui/button.tsx
-// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
-// Updated with correct unified focus styles
-
-import React from "react";
+import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// Helper function to get CSS custom property with fallback
-const getCSSVar = (varName: string, fallback: string): string => {
-  if (
-    typeof window !== "undefined" &&
-    typeof window.getComputedStyle === "function"
-  ) {
-    try {
-      const computedValue = getComputedStyle(document.documentElement)
-        .getPropertyValue(varName)
-        .trim();
-      return computedValue || fallback;
-    } catch {
-      return fallback;
-    }
-  }
-  return fallback;
+// 🎯 Design Token Style Application
+const getButtonStyles = (variant: string, size: string) => {
+  const baseStyles = {
+    fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+    fontWeight: "var(--button-font-weight, 500)",
+    borderRadius: "var(--button-border-radius, var(--radius-sm, 6px))",
+    borderWidth: "var(--button-border-width, 1px)",
+    borderStyle: "solid",
+    cursor: "pointer",
+    transition: "var(--button-transition, all 150ms ease-in-out)",
+  };
+
+  const sizeStyles: Record<string, any> = {
+    sm: {
+      height: "var(--button-height-sm, 32px)",
+      paddingLeft: "var(--button-padding-x-sm, 12px)",
+      paddingRight: "var(--button-padding-x-sm, 12px)",
+      fontSize: "var(--button-font-size-sm, 12px)",
+    },
+    md: {
+      height: "var(--button-height-md, 40px)",
+      paddingLeft: "var(--button-padding-x-md, 16px)",
+      paddingRight: "var(--button-padding-x-md, 16px)",
+      fontSize: "var(--button-font-size-md, 14px)",
+    },
+    lg: {
+      height: "var(--button-height-lg, 48px)",
+      paddingLeft: "var(--button-padding-x-lg, 20px)",
+      paddingRight: "var(--button-padding-x-lg, 20px)",
+      fontSize: "var(--button-font-size-lg, 16px)",
+    },
+    xl: {
+      height: "var(--button-height-xl, 56px)",
+      paddingLeft: "var(--button-padding-x-xl, 24px)",
+      paddingRight: "var(--button-padding-x-xl, 24px)",
+      fontSize: "var(--button-font-size-xl, 18px)",
+    },
+  };
+
+  const variantStyles: Record<string, any> = {
+    primary: {
+      backgroundColor:
+        "var(--button-primary-bg, var(--color-navy-500, #0e3a6c))",
+      color: "var(--button-primary-text, var(--color-white, #ffffff))",
+      borderColor:
+        "var(--button-primary-border, var(--color-navy-500, #0e3a6c))",
+    },
+    outline: {
+      backgroundColor: "var(--button-outline-bg, transparent)",
+      color: "var(--button-outline-text, var(--color-navy-500, #0e3a6c))",
+      borderColor:
+        "var(--button-outline-border, var(--color-navy-500, #0e3a6c))",
+    },
+    cta: {
+      backgroundColor: "var(--button-cta-bg, var(--color-red-500, #dc2626))",
+      color: "var(--button-cta-text, var(--color-white, #ffffff))",
+      borderColor: "var(--button-cta-border, var(--color-red-500, #dc2626))",
+    },
+    success: {
+      backgroundColor:
+        "var(--button-success-bg, var(--color-success-500, #007d85))",
+      color: "var(--button-success-text, var(--color-white, #ffffff))",
+      borderColor:
+        "var(--button-success-border, var(--color-success-500, #007d85))",
+    },
+    warning: {
+      backgroundColor:
+        "var(--button-warning-bg, var(--color-warning-500, #b75b00))",
+      color: "var(--button-warning-text, var(--color-white, #ffffff))",
+      borderColor:
+        "var(--button-warning-border, var(--color-warning-500, #b75b00))",
+    },
+    destructive: {
+      backgroundColor:
+        "var(--button-destructive-bg, var(--color-destructive-500, #d92b2b))",
+      color: "var(--button-destructive-text, var(--color-white, #ffffff))",
+      borderColor:
+        "var(--button-destructive-border, var(--color-destructive-500, #d92b2b))",
+    },
+    ghost: {
+      backgroundColor: "var(--button-ghost-bg, transparent)",
+      color: "var(--button-ghost-text, var(--color-navy-500, #0e3a6c))",
+      borderColor: "var(--button-ghost-border, transparent)",
+    },
+  };
+
+  return {
+    ...baseStyles,
+    ...sizeStyles[size],
+    ...variantStyles[variant],
+  };
 };
 
-// Base classes using CVA for Tailwind compatibility
+// CVA for basic structure and layout
 const buttonBaseClasses = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap transition-all duration-150 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -53,149 +124,46 @@ const buttonBaseClasses = cva(
   }
 );
 
-// Get button styles based on variant and size
-const getButtonStyles = (variant: string, size: string) => {
-  const styles: React.CSSProperties = {
-    // Base styles
-    fontFamily: getCSSVar("--font-family-sans", "system-ui, sans-serif"),
-    fontWeight: getCSSVar("--font-weight-medium", "500"),
-    border: "1px solid transparent",
-    borderRadius: getCSSVar(
-      "--button-border-radius",
-      getCSSVar("--radius-sm", "6px")
-    ),
-    cursor: "pointer",
-    transition: "all 200ms ease-in-out",
-  };
-
-  // Size styles
-  switch (size) {
-    case "sm":
-      styles.height = getCSSVar("--button-height-sm", "32px");
-      styles.paddingLeft = getCSSVar("--button-padding-x-sm", "12px");
-      styles.paddingRight = getCSSVar("--button-padding-x-sm", "12px");
-      styles.fontSize = getCSSVar("--font-size-sm", "14px");
-      break;
-    case "lg":
-      styles.height = getCSSVar("--button-height-lg", "48px");
-      styles.paddingLeft = getCSSVar("--button-padding-x-lg", "20px");
-      styles.paddingRight = getCSSVar("--button-padding-x-lg", "20px");
-      styles.fontSize = getCSSVar("--font-size-lg", "18px");
-      break;
-    case "xl":
-      styles.height = getCSSVar("--button-height-xl", "56px");
-      styles.paddingLeft = getCSSVar("--button-padding-x-xl", "24px");
-      styles.paddingRight = getCSSVar("--button-padding-x-xl", "24px");
-      styles.fontSize = getCSSVar("--font-size-xl", "20px");
-      break;
-    default: // md
-      styles.height = getCSSVar("--button-height-md", "40px");
-      styles.paddingLeft = getCSSVar("--button-padding-x-md", "16px");
-      styles.paddingRight = getCSSVar("--button-padding-x-md", "16px");
-      styles.fontSize = getCSSVar("--font-size-base", "16px");
-  }
-
-  // Variant styles
-  switch (variant) {
-    case "primary":
-      styles.backgroundColor = getCSSVar(
-        "--button-primary-bg",
-        getCSSVar("--color-navy-500", "#0e3a6c")
-      );
-      styles.color = getCSSVar("--button-primary-text", "#ffffff");
-      styles.borderColor = getCSSVar("--button-primary-border", "transparent");
-      break;
-    case "outline":
-      styles.backgroundColor = getCSSVar("--button-outline-bg", "transparent");
-      styles.color = getCSSVar(
-        "--button-outline-text",
-        getCSSVar("--color-navy-500", "#0e3a6c")
-      );
-      styles.borderColor = getCSSVar(
-        "--button-outline-border",
-        getCSSVar("--color-navy-500", "#0e3a6c")
-      );
-      break;
-    case "cta":
-      styles.backgroundColor = getCSSVar(
-        "--button-cta-bg",
-        getCSSVar("--color-red-500", "#a30134")
-      );
-      styles.color = getCSSVar("--button-cta-text", "#ffffff");
-      styles.borderColor = getCSSVar("--button-cta-border", "transparent");
-      break;
-    case "success":
-      styles.backgroundColor = getCSSVar(
-        "--button-success-bg",
-        getCSSVar("--color-success-500", "#007d85")
-      );
-      styles.color = getCSSVar("--button-success-text", "#ffffff");
-      styles.borderColor = getCSSVar("--button-success-border", "transparent");
-      break;
-    case "warning":
-      styles.backgroundColor = getCSSVar(
-        "--button-warning-bg",
-        getCSSVar("--color-warning-500", "#b75b00")
-      );
-      styles.color = getCSSVar("--button-warning-text", "#ffffff");
-      styles.borderColor = getCSSVar("--button-warning-border", "transparent");
-      break;
-    case "destructive":
-      styles.backgroundColor = getCSSVar(
-        "--button-destructive-bg",
-        getCSSVar("--color-destructive-500", "#d92b2b")
-      );
-      styles.color = getCSSVar("--button-destructive-text", "#ffffff");
-      styles.borderColor = getCSSVar(
-        "--button-destructive-border",
-        "transparent"
-      );
-      break;
-    case "ghost":
-      styles.backgroundColor = getCSSVar("--button-ghost-bg", "transparent");
-      styles.color = getCSSVar(
-        "--button-ghost-text",
-        getCSSVar("--color-navy-500", "#0e3a6c")
-      );
-      styles.borderColor = getCSSVar("--button-ghost-border", "transparent");
-      break;
-  }
-
-  return styles;
-};
-
-// 🎯 UPDATED: Create CSS for hover and focus states with correct unified focus standard
+// 🎯 Enhanced Hover and Focus CSS Injection
 const createHoverCSS = () => {
-  if (typeof document === "undefined") return;
-
-  // Check if styles already exist
-  if (document.getElementById("button-hover-styles")) return;
+  if (document.getElementById("button-interactive-styles")) return;
 
   const style = document.createElement("style");
-  style.id = "button-hover-styles";
+  style.id = "button-interactive-styles";
   style.textContent = `
-    /* Hover styles for all variants - using correct design token colors */
-    .design-system-button[data-variant="primary"]:hover {
+    /* 🎯 HOVER STATES - Color transitions using design tokens */
+    .design-system-button[data-variant="primary"]:hover:not(:disabled) {
       background-color: var(--button-primary-bg-hover, var(--color-navy-600, #0a2d54)) !important;
+      border-color: var(--button-primary-border-hover, var(--color-navy-600, #0a2d54)) !important;
     }
-    .design-system-button[data-variant="outline"]:hover {
+    
+    .design-system-button[data-variant="outline"]:hover:not(:disabled) {
       background-color: var(--button-outline-bg-hover, var(--color-navy-500, #0e3a6c)) !important;
-      color: var(--button-outline-text-hover, #ffffff) !important;
-      border-color: var(--button-outline-border-hover, var(--color-navy-600, #0a2d54)) !important;
+      color: var(--button-outline-text-hover, var(--color-white, #ffffff)) !important;
+      border-color: var(--button-outline-border-hover, var(--color-navy-500, #0e3a6c)) !important;
     }
-    .design-system-button[data-variant="cta"]:hover {
-      background-color: var(--button-cta-bg-hover, var(--color-red-600, #7a0125)) !important;
+    
+    .design-system-button[data-variant="cta"]:hover:not(:disabled) {
+      background-color: var(--button-cta-bg-hover, var(--color-red-600, #b91c1c)) !important;
+      border-color: var(--button-cta-border-hover, var(--color-red-600, #b91c1c)) !important;
     }
-    .design-system-button[data-variant="success"]:hover {
-      background-color: var(--button-success-bg-hover, var(--color-success-600, #00646a)) !important;
+    
+    .design-system-button[data-variant="success"]:hover:not(:disabled) {
+      background-color: var(--button-success-bg-hover, var(--color-success-600, #006064)) !important;
+      border-color: var(--button-success-border-hover, var(--color-success-600, #006064)) !important;
     }
-    .design-system-button[data-variant="warning"]:hover {
-      background-color: var(--button-warning-bg-hover, var(--color-warning-600, #924900)) !important;
+    
+    .design-system-button[data-variant="warning"]:hover:not(:disabled) {
+      background-color: var(--button-warning-bg-hover, var(--color-warning-600, #a04d00)) !important;
+      border-color: var(--button-warning-border-hover, var(--color-warning-600, #a04d00)) !important;
     }
-    .design-system-button[data-variant="destructive"]:hover {
-      background-color: var(--button-destructive-bg-hover, var(--color-destructive-600, #b12222)) !important;
+    
+    .design-system-button[data-variant="destructive"]:hover:not(:disabled) {
+      background-color: var(--button-destructive-bg-hover, var(--color-destructive-600, #c42323)) !important;
+      border-color: var(--button-destructive-border-hover, var(--color-destructive-600, #c42323)) !important;
     }
-    .design-system-button[data-variant="ghost"]:hover {
+    
+    .design-system-button[data-variant="ghost"]:hover:not(:disabled) {
       background-color: var(--button-ghost-bg-hover, var(--color-navy-100, #f0f3f7)) !important;
     }
     
@@ -251,9 +219,9 @@ const createHoverCSS = () => {
   document.head.appendChild(style);
 };
 
-// Simple spinner component
+// 🎯 FIXED: Larger, more visible spinner component
 const Spinner = () => (
-  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+  <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
 );
 
 export interface ButtonProps
