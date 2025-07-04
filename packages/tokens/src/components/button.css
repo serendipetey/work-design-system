@@ -1,152 +1,124 @@
-/* design-system/packages/tokens/src/components/button.css */
-
-/* design-system/packages/tokens/src/components/button.css */
-
 :root {
-  /* Button Base Properties */
-  --button-border-radius: 6px;
-  --button-transition: all 150ms ease-in-out;
-
-  /* Button Typography - Exact design token values */
-  --button-font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, sans-serif;
-  --button-font-weight: 500; /* ← FIXED: 600 → 500 (medium - matches Storybook) */
-  --button-line-height: 1.5; /* normal */
-  --button-letter-spacing: 0.025em; /* wider */
-  --button-text-transform: none;
-
-  /* Size-specific font sizes */
-  --button-font-size-sm: 0.75rem; /* 12px */
-  --button-font-size-md: 0.875rem; /* 14px - matches your design */
-  --button-font-size-lg: 1rem; /* 16px */
-  --button-font-size-xl: 1.125rem; /* 18px */
-  --button-font-size: 0.875rem; /* Default fallback */
-
-  /* Button Heights */
+  /* Button Sizing */
   --button-height-sm: 32px;
   --button-height-md: 40px;
   --button-height-lg: 48px;
   --button-height-xl: 56px;
 
-  /* Button Horizontal Padding */
-  --button-padding-x-sm: 12px;
-  --button-padding-x-md: 16px;
-  --button-padding-x-lg: 24px;
-  --button-padding-x-xl: 32px;
+  --button-padding-x-sm: var(--space-22);
+  --button-padding-x-md: var(--space-24);
+  --button-padding-x-lg: var(--space-32);
+  --button-padding-x-xl: var(--space-48);
 
-  /* Primary Button */
-  --button-primary-bg: #0e3a6c;
-  --button-primary-text: #ffffff;
-  --button-primary-border: transparent;
-  --button-primary-bg-hover: #0a2d54;
-  --button-primary-bg-focus: #07203c;
+  --button-padding-y-sm: var(--space-6);
+  --button-padding-y-md: var(--space-8);
+  --button-padding-y-lg: var(--space-16);
+  --button-padding-y-xl: var(--space-20);
 
-  /* Outline Button */
-  --button-outline-bg: transparent;
-  --button-outline-text: #0e3a6c;
-  --button-outline-border: #0e3a6c;
-  --button-outline-bg-hover: #f0f3f7;
-  --button-outline-bg-focus: #e3e9ef;
+  /* Button Styling */
+  --button-border-radius: var(--radius-sm);
+  --button-border-width: var(--border-sm);
+  --button-icon-size-sm: var(--icon-xs);
+  --button-icon-size-md: var(--icon-sm);
+  --button-icon-size-lg: var(--icon-md);
+  --button-icon-size-xl: var(--icon-lg);
+  --button-icon-gap: var(--space-8);
 
-  /* CTA Button */
-  --button-cta-bg: #ff6b35;
-  --button-cta-text: #ffffff;
-  --button-cta-border: transparent;
-  --button-cta-bg-hover: #ff5722;
-  --button-cta-bg-focus: #e64a19;
+  /* Primary Button (Filled) */
+  --button-primary-bg: var(--color-primary);
+  --button-primary-bg-hover: var(--color-primary-hover);
+  --button-primary-bg-focus: var(--color-primary-focus);
+  --button-primary-bg-disabled: var(--color-disabled);
 
-  /* Success Button */
-  --button-success-bg: #007d85;
-  --button-success-text: #ffffff;
-  --button-success-border: transparent;
-  --button-success-bg-hover: #006b73;
-  --button-success-bg-focus: #005961;
+  --button-primary-text: var(--color-text-inverse);
+  --button-primary-text-disabled: var(--color-disabled-text);
+  --button-primary-text-focus: var(--color-primary);
 
-  /* Warning Button */
-  --button-warning-bg: #b75b00;
-  --button-warning-text: #ffffff;
-  --button-warning-border: transparent;
-  --button-warning-bg-hover: #a04f00;
-  --button-warning-bg-focus: #8a4400;
-
-  /* Destructive Button */
-  --button-destructive-bg: #dc2626;
-  --button-destructive-text: #ffffff;
-  --button-destructive-border: transparent;
-  --button-destructive-bg-hover: #b91c1c;
-  --button-destructive-bg-focus: #991b1b;
-
-  /* Ghost Button */
-  --button-ghost-bg: transparent;
-  --button-ghost-text: #0e3a6c;
-  --button-ghost-border: transparent;
-  --button-ghost-bg-hover: #f0f3f7;
-  --button-ghost-bg-focus: #e3e9ef;
-
-  /* Button Heights */
-  --button-height-sm: 32px;
-  --button-height-md: 40px;
-  --button-height-lg: 48px;
-  --button-height-xl: 56px;
-
-  /* Button Horizontal Padding */
-  --button-padding-x-sm: 12px;
-  --button-padding-x-md: 16px;
-  --button-padding-x-lg: 24px;
-  --button-padding-x-xl: 32px;
-
-  /* Button Vertical Padding */
-  --button-padding-y-sm: 6px;
-  --button-padding-y-md: 8px;
-  --button-padding-y-lg: 12px;
-  --button-padding-y-xl: 16px;
-
-  /* Primary Button */
-  --button-primary-bg: #0e3a6c;
-  --button-primary-text: #ffffff;
-  --button-primary-border: transparent;
-  --button-primary-bg-hover: #0a2d54;
-  --button-primary-bg-focus: #07203c;
+  --button-primary-border: var(--color-transparent);
+  --button-primary-border-focus: var(--color-primary-focus);
 
   /* Outline Button */
-  --button-outline-bg: transparent;
-  --button-outline-text: #0e3a6c;
-  --button-outline-border: #0e3a6c;
-  --button-outline-bg-hover: #f0f3f7;
-  --button-outline-bg-focus: #e3e9ef;
+  --button-outline-bg: var(--color-surface);
+  --button-outline-bg-hover: var(--color-surface);
+  --button-outline-bg-focus: var(--color-primary-focus);
+  --button-outline-bg-disabled: var(--color-disabled);
+
+  --button-outline-text: var(--color-primary);
+  --button-outline-text-hover: var(--color-primary-hover);
+  --button-outline-text-focus: var(--color-primary);
+  --button-outline-text-disabled: var(--color-disabled-text);
+
+  --button-outline-border: var(--color-primary);
+  --button-outline-border-hover: var(--color-primary-hover);
+  --button-outline-border-focus: var(--color-primary-focus);
+  --button-outline-border-disabled: var(--color-disabled);
 
   /* CTA Button */
-  --button-cta-bg: #ff6b35;
-  --button-cta-text: #ffffff;
-  --button-cta-border: transparent;
-  --button-cta-bg-hover: #ff5722;
-  --button-cta-bg-focus: #e64a19;
+  --button-cta-bg: var(--color-cta);
+  --button-cta-bg-hover: var(--color-cta-hover);
+  --button-cta-bg-focus: var(--color-warning-500);
+  --button-cta-bg-disabled: var(--color-disabled);
 
-  /* Success Button */
-  --button-success-bg: #007d85;
-  --button-success-text: #ffffff;
-  --button-success-border: transparent;
-  --button-success-bg-hover: #006b73;
-  --button-success-bg-focus: #005961;
+  --button-cta-text: var(--color-text-inverse);
+  --button-cta-text-disabled: var(--color-disabled-text);
+  --button-cta-text-focus: var(--color-primary);
 
-  /* Warning Button */
-  --button-warning-bg: #b75b00;
-  --button-warning-text: #ffffff;
-  --button-warning-border: transparent;
-  --button-warning-bg-hover: #a04f00;
-  --button-warning-bg-focus: #8a4400;
+  --button-cta-border: var(--color-transparent);
+  --button-cta-border-focus: var(--color-primary-focus);
+
+  /* Success Button - NEW */
+  --button-success-bg: var(--color-success);
+  --button-success-bg-hover: var(--color-success-hover);
+  --button-success-bg-focus: var(--color-warning-500);
+  --button-success-bg-disabled: var(--color-disabled);
+
+  --button-success-text: var(--color-button-success-text);
+  --button-success-text-disabled: var(--color-disabled-text);
+  --button-success-text-focus: var(--color-primary);
+
+  --button-success-border: var(--color-transparent);
+  --button-success-border-focus: var(--color-primary-focus);
+
+  /* Warning Button - NEW */
+  --button-warning-bg: var(--color-warning);
+  --button-warning-bg-hover: var(--color-warning-hover);
+  --button-warning-bg-focus: var(--color-warning-500);
+  --button-warning-bg-disabled: var(--color-disabled);
+
+  --button-warning-text: var(--color-button-warning-text);
+  --button-warning-text-disabled: var(--color-disabled-text);
+  --button-warning-text-focus: var(--color-primary);
+
+  --button-warning-border: var(--color-transparent);
+  --button-warning-border-focus: var(--color-primary-focus);
 
   /* Destructive Button */
-  --button-destructive-bg: #dc2626;
-  --button-destructive-text: #ffffff;
-  --button-destructive-border: transparent;
-  --button-destructive-bg-hover: #b91c1c;
-  --button-destructive-bg-focus: #991b1b;
+  --button-destructive-bg: var(--color-destructive);
+  --button-destructive-bg-hover: var(--color-destructive-hover);
+  --button-destructive-bg-focus: var(--color-warning-500);
+  --button-destructive-bg-disabled: var(--color-disabled);
 
-  /* Ghost Button */
-  --button-ghost-bg: transparent;
-  --button-ghost-text: #0e3a6c;
-  --button-ghost-border: transparent;
-  --button-ghost-bg-hover: #f0f3f7;
-  --button-ghost-bg-focus: #e3e9ef;
+  --button-destructive-text: var(--color-text-inverse);
+  --button-destructive-text-disabled: var(--color-disabled-text);
+  --button-destructive-text-focus: var(--color-primary);
+
+  --button-destructive-border: var(--color-transparent);
+  --button-destructive-border-focus: var(--color-primary-focus);
+
+  /* UNIFIED FOCUS STATES - All buttons use these when focused */
+  --button-unified-focus-bg: var(
+    --color-focus-500
+  ); /* #ff9900 - Orange background */
+  --button-unified-focus-text: var(--color-navy-500); /* #0e3a6c - Navy text */
+  --button-unified-focus-border: var(
+    --color-navy-500
+  ); /* #0e3a6c - Navy border */
+  --button-unified-focus-border-width: 3px; /* Thick bottom border */
+
+  /* Focus Ring - UPDATED - Remove all focus rings */
+  --button-focus-ring: none;
+  --button-focus-ring-primary: none;
+  --button-focus-ring-success: none;
+  --button-focus-ring-warning: none;
+  --button-focus-ring-destructive: none;
 }
