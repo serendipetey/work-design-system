@@ -2779,7 +2779,7 @@ const getButtonStyles = (variant, size) => {
             styles.borderColor = getCSSVar("--button-outline-border", "#0e3a6c");
             break;
         case "cta":
-            styles.backgroundColor = getCSSVar("--button-cta-bg", "#dc2626");
+            styles.backgroundColor = getCSSVar("--button-cta-bg", "#a30134"); // FIXED: Brand red instead of #dc2626
             styles.color = getCSSVar("--button-cta-text", "#ffffff");
             styles.borderColor = getCSSVar("--button-cta-border", "transparent");
             break;
@@ -2948,7 +2948,7 @@ const labelStyles = {
         display: "block",
         fontSize: "var(--font-size-base, 16px)",
         fontWeight: "var(--font-weight-semibold, 600)",
-        marginBottom: "var(--spacing-2, 8px)",
+        marginBottom: "2px", // AGGRESSIVE: Reduced from 8px to 2px
         color: "var(--color-input-label, #1e40af)",
         fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
     },
@@ -2958,29 +2958,31 @@ const labelStyles = {
         },
     },
 };
-// Helper text styles - tokens with fallbacks
+// Helper text styles - MUCH tighter spacing
 const helperStyles = {
     base: {
-        marginTop: "var(--spacing-1, 4px)",
-        fontSize: "var(--font-size-sm, 14px)",
-        lineHeight: "var(--line-height-sm, 1.4)",
-        fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
+        fontSize: "var(--font-size-base, 16px)", // Accessibility: 16px
+        lineHeight: "var(--line-height-loose, 1.75)",
+        fontWeight: "var(--font-weight-regular, 400)",
+        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+        marginTop: "1px", // AGGRESSIVE: Almost no space above helper text
+        letterSpacing: "var(--letter-spacing-wide, 0.0225em)",
     },
     variants: {
         default: {
-            color: "var(--color-text-secondary, #4b5563)",
+            color: "var(--color-input-helper, #39444f)",
         },
         error: {
-            color: "var(--color-text-error, #dc2626)",
+            color: "var(--color-input-text-error, #eb0000)",
         },
         success: {
-            color: "var(--color-text-success, #059669)",
+            color: "var(--color-input-text-success, #007d85)",
         },
         warning: {
-            color: "var(--color-text-warning, #d97706)",
+            color: "var(--color-input-text-warning, #b75b00)",
         },
         muted: {
-            color: "var(--color-text-muted, #6b7280)",
+            color: "var(--color-text-muted, #8f949a)",
         },
     },
 };
@@ -3141,11 +3143,14 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
     return (jsxRuntime.jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxRuntime.jsxs("label", { htmlFor: inputId, className: cn(labelClassName), style: {
                     ...labelStyles.base,
                     ...(disabled ? labelStyles.states.disabled : {}),
-                }, children: [jsxRuntime.jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (jsxRuntime.jsxs("span", { style: { color: "var(--color-text-error, #dc2626)" }, children: [" ", "*"] })), labelState === "optional" && (jsxRuntime.jsxs("span", { style: { color: "var(--color-text-muted, #6b7280)" }, children: [" ", "(Optional)"] }))] })), showHintText && hintText && !displayHelperText && (jsxRuntime.jsx("p", { style: {
+                }, children: [jsxRuntime.jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (jsxRuntime.jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (jsxRuntime.jsxs("span", { style: {
+                            color: "var(--color-text-muted, #6b7280)",
+                            fontWeight: "var(--font-weight-regular, 400)", // FIXED: Override bold inheritance
+                        }, children: [" ", "(Optional)"] }))] })), showHintText && hintText && !displayHelperText && (jsxRuntime.jsx("p", { style: {
                     ...helperStyles.base,
                     ...helperStyles.variants.muted,
-                    marginTop: showLabel && label ? "var(--spacing-1, 4px)" : "0",
-                    marginBottom: "var(--spacing-1, 4px)",
+                    marginTop: "0px", // AGGRESSIVE: No space between label and hint
+                    marginBottom: "2px", // AGGRESSIVE: Minimal space before input
                 }, children: hintText })), jsxRuntime.jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxRuntime.jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && jsxRuntime.jsx("span", { className: "text-sm", children: leftText })] })), jsxRuntime.jsx("input", { ...props, ref: elementRef, id: inputId, disabled: disabled, className: finalClassName, "aria-invalid": error ? "true" : undefined, "aria-describedby": helperTextId, style: {
                             ...combinedStyles,
                             paddingLeft: leftIcon || leftText ? "2.5rem" : combinedStyles.paddingLeft,
@@ -3155,6 +3160,7 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
                         } }), jsxRuntime.jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (jsxRuntime.jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: jsxRuntime.jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (jsxRuntime.jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: jsxRuntime.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: jsxRuntime.jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (jsxRuntime.jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && jsxRuntime.jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && (jsxRuntime.jsx("p", { id: helperTextId, className: cn(helperClassName), style: {
                     ...helperStyles.base,
                     ...helperStyles.variants[helperVariant],
+                    marginTop: "1px", // AGGRESSIVE: Almost no space above validation text
                 }, children: displayHelperText }))] }));
 });
 Input.displayName = "Input";

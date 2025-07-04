@@ -120,7 +120,7 @@ const labelStyles = {
     display: "block" as const,
     fontSize: "var(--font-size-base, 16px)",
     fontWeight: "var(--font-weight-semibold, 600)",
-    marginBottom: "var(--spacing-2, 8px)",
+    marginBottom: "2px", // AGGRESSIVE: Reduced from 8px to 2px
     color: "var(--color-input-label, #1e40af)",
     fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
   },
@@ -131,29 +131,31 @@ const labelStyles = {
   },
 };
 
-// Helper text styles - tokens with fallbacks
+// Helper text styles - MUCH tighter spacing
 const helperStyles = {
   base: {
-    marginTop: "var(--spacing-1, 4px)",
-    fontSize: "var(--font-size-sm, 14px)",
-    lineHeight: "var(--line-height-sm, 1.4)",
-    fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
+    fontSize: "var(--font-size-base, 16px)", // Accessibility: 16px
+    lineHeight: "var(--line-height-loose, 1.75)",
+    fontWeight: "var(--font-weight-regular, 400)",
+    fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+    marginTop: "1px", // AGGRESSIVE: Almost no space above helper text
+    letterSpacing: "var(--letter-spacing-wide, 0.0225em)",
   },
   variants: {
     default: {
-      color: "var(--color-text-secondary, #4b5563)",
+      color: "var(--color-input-helper, #39444f)",
     },
     error: {
-      color: "var(--color-text-error, #dc2626)",
+      color: "var(--color-input-text-error, #eb0000)",
     },
     success: {
-      color: "var(--color-text-success, #059669)",
+      color: "var(--color-input-text-success, #007d85)",
     },
     warning: {
-      color: "var(--color-text-warning, #d97706)",
+      color: "var(--color-input-text-warning, #b75b00)",
     },
     muted: {
-      color: "var(--color-text-muted, #6b7280)",
+      color: "var(--color-text-muted, #8f949a)",
     },
   },
 };
@@ -410,13 +412,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {label}
             </span>
             {labelState === "required" && (
-              <span style={{ color: "var(--color-text-error, #dc2626)" }}>
+              <span
+                style={{ color: "var(--color-input-label-required, #a30134)" }}
+              >
                 {" "}
                 *
               </span>
             )}
             {labelState === "optional" && (
-              <span style={{ color: "var(--color-text-muted, #6b7280)" }}>
+              <span
+                style={{
+                  color: "var(--color-text-muted, #6b7280)",
+                  fontWeight: "var(--font-weight-regular, 400)", // FIXED: Override bold inheritance
+                }}
+              >
                 {" "}
                 (Optional)
               </span>
@@ -430,8 +439,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             style={{
               ...helperStyles.base,
               ...helperStyles.variants.muted,
-              marginTop: showLabel && label ? "var(--spacing-1, 4px)" : "0",
-              marginBottom: "var(--spacing-1, 4px)",
+              marginTop: "0px", // AGGRESSIVE: No space between label and hint
+              marginBottom: "2px", // AGGRESSIVE: Minimal space before input
             }}
           >
             {hintText}
@@ -521,6 +530,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             style={{
               ...helperStyles.base,
               ...helperStyles.variants[helperVariant],
+              marginTop: "1px", // AGGRESSIVE: Almost no space above validation text
             }}
           >
             {displayHelperText}

@@ -107,7 +107,7 @@ const getButtonStyles = (variant: string, size: string) => {
       styles.borderColor = getCSSVar("--button-outline-border", "#0e3a6c");
       break;
     case "cta":
-      styles.backgroundColor = getCSSVar("--button-cta-bg", "#dc2626");
+      styles.backgroundColor = getCSSVar("--button-cta-bg", "#a30134"); // FIXED: Brand red instead of #dc2626
       styles.color = getCSSVar("--button-cta-text", "#ffffff");
       styles.borderColor = getCSSVar("--button-cta-border", "transparent");
       break;
