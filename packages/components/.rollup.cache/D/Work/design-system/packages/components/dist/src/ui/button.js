@@ -167,7 +167,8 @@ const createHoverCSS = () => {
       background-color: var(--button-unified-focus-bg, var(--color-focus-500, #ff9900)) !important;
       color: var(--button-unified-focus-text, var(--color-navy-500, #0e3a6c)) !important;
       
-      /* Thick navy bottom border */
+      /* Clear all borders first, then apply thick navy bottom border */
+      border: 1px solid transparent !important;
       border-bottom: var(--button-unified-focus-border-width, 3px) solid var(--button-unified-focus-border, var(--color-navy-500, #0e3a6c)) !important;
       
       /* Flat bottom edge (no border-radius on bottom) */
