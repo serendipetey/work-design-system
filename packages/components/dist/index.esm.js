@@ -2667,75 +2667,64 @@ function cn(...inputs) {
     return twMerge(clsx(inputs));
 }
 
-// ✅ FIXED: Removed broken CSS import that was causing styling issues
-// Design tokens are already loaded via the main CSS files
 // Spinner component for loading state
 const Spinner = () => (jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", className: "animate-spin", children: [jsx("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", className: "opacity-25" }), jsx("path", { fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z", className: "opacity-75" })] }));
 const buttonVariants = cva(
-// Base button styles with UNIFIED focus states
+// Base button styles with hover states
 [
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium",
+    "inline-flex items-center justify-center whitespace-nowrap", // ← REMOVED font-medium
     "transition-all duration-150 ease-in-out cursor-pointer",
     "disabled:pointer-events-none disabled:opacity-50",
-    "active:translate-y-[1px]",
-    // UNIFIED FOCUS STYLES - Override all variants with !important and fix border-radius
-    "focus-visible:outline-none",
-    "focus-visible:!bg-[#ff9900]", // Direct hex value for orange background
-    "focus-visible:!text-[#0e3a6c]", // Direct hex value for navy text
-    "focus-visible:!border-t-0 focus-visible:!border-l-0 focus-visible:!border-r-0", // Remove top, left, right borders
-    "focus-visible:!border-b-[3px] focus-visible:!border-b-[#0e3a6c]", // Thick navy bottom border
-    "focus-visible:!rounded-t-md focus-visible:!rounded-b-none", // Keep top radius, remove bottom radius
-    "focus-visible:!shadow-none", // Remove any box shadows
-].join(" "), {
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+    "border border-transparent", // Default transparent border
+], {
     variants: {
         variant: {
-            // Primary Button - removed focus-visible classes since they're now in base
             primary: [
-                "bg-primary text-primary-foreground",
-                "border border-primary",
-                "hover:bg-primary/90",
-            ].join(" "),
-            // Outline Button - removed focus-visible classes
+                "bg-[var(--button-primary-bg,#0e3a6c)] text-[var(--button-primary-text,white)]",
+                "hover:bg-[var(--button-primary-bg-hover,#0a2d54)]",
+                "active:bg-[var(--button-primary-bg-focus,#07203c)] active:transform active:scale-95",
+            ],
             outline: [
-                "bg-transparent text-primary",
-                "border border-primary",
-                "hover:bg-primary hover:text-primary-foreground",
-            ].join(" "),
-            // CTA Button - removed focus-visible classes
+                "bg-[var(--button-outline-bg,transparent)] text-[var(--button-outline-text,#0e3a6c)]",
+                "border-[var(--button-outline-border,#0e3a6c)]",
+                "hover:bg-[var(--button-outline-bg-hover,#f0f3f7)]",
+                "active:bg-[var(--button-outline-bg-focus,#e3e9ef)] active:transform active:scale-95",
+            ],
             cta: [
-                "bg-cta text-cta-foreground",
-                "border border-cta",
-                "hover:bg-cta/90",
-            ].join(" "),
-            // Success Button - removed focus-visible classes
+                "bg-[var(--button-cta-bg,#ff6b35)] text-[var(--button-cta-text,white)]",
+                "hover:bg-[var(--button-cta-bg-hover,#ff5722)]",
+                "active:bg-[var(--button-cta-bg-focus,#e64a19)] active:transform active:scale-95",
+            ],
             success: [
-                "bg-success text-success-foreground",
-                "border border-success",
-                "hover:bg-success/90",
-            ].join(" "),
-            // Warning Button - removed focus-visible classes
+                "bg-[var(--button-success-bg,#007d85)] text-[var(--button-success-text,white)]",
+                "hover:bg-[var(--button-success-bg-hover,#006b73)]",
+                "active:bg-[var(--button-success-bg-focus,#005961)] active:transform active:scale-95",
+            ],
             warning: [
-                "bg-warning text-warning-foreground",
-                "border border-warning",
-                "hover:bg-warning/90",
-            ].join(" "),
-            // Destructive Button - removed focus-visible classes
+                "bg-[var(--button-warning-bg,#b75b00)] text-[var(--button-warning-text,white)]",
+                "hover:bg-[var(--button-warning-bg-hover,#a04f00)]",
+                "active:bg-[var(--button-warning-bg-focus,#8a4400)] active:transform active:scale-95",
+            ],
             destructive: [
-                "bg-destructive text-destructive-foreground",
-                "border border-destructive",
-                "hover:bg-destructive/90",
-            ].join(" "),
-            // Ghost Button - removed focus-visible classes
+                "bg-[var(--button-destructive-bg,#dc2626)] text-[var(--button-destructive-text,white)]",
+                "hover:bg-[var(--button-destructive-bg-hover,#b91c1c)]",
+                "active:bg-[var(--button-destructive-bg-focus,#991b1b)] active:transform active:scale-95",
+            ],
             ghost: [
-                "text-primary",
-                "hover:bg-accent hover:text-accent-foreground",
-            ].join(" "),
+                "bg-transparent text-[var(--button-outline-text,#0e3a6c)]",
+                "hover:bg-[var(--button-ghost-bg-hover,#f0f3f7)]",
+                "active:bg-[var(--button-ghost-bg-focus,#e3e9ef)] active:transform active:scale-95",
+            ],
         },
         size: {
-            sm: "h-8 px-3 text-xs",
-            md: "h-10 px-4 py-2",
-            lg: "h-11 px-8",
-            xl: "h-12 px-8 text-base",
+            sm: ["h-8 px-3 text-xs", "rounded-[var(--button-border-radius,6px)]"],
+            md: ["h-10 px-4 text-sm", "rounded-[var(--button-border-radius,6px)]"],
+            lg: [
+                "h-12 px-6 text-base",
+                "rounded-[var(--button-border-radius,6px)]",
+            ],
+            xl: ["h-14 px-8 text-lg", "rounded-[var(--button-border-radius,6px)]"],
         },
     },
     defaultVariants: {
@@ -2743,10 +2732,55 @@ const buttonVariants = cva(
         size: "md",
     },
 });
-const Button = React.forwardRef(({ className, variant, size, asChild = false, loading = false, leftIcon, rightIcon, children, disabled, ...props }, ref) => {
+// Typography styles using design tokens
+const getTypographyStyles = () => {
+    return {
+        fontFamily: "var(--button-font-family, 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif)",
+        fontWeight: "var(--button-font-weight, 500)", // ← FIXED: 600 → 500 (medium instead of semibold)
+        letterSpacing: "var(--button-letter-spacing, 0.025em)",
+        // Removed textTransform to fix TypeScript error - handled via CSS classes instead
+    };
+};
+// Size-specific font sizes to match your design system exactly
+const getSizeFontStyles = (size) => {
+    switch (size) {
+        case "sm":
+            return {
+                fontSize: "var(--button-font-size-sm, 0.75rem)", // 12px
+                lineHeight: "var(--button-line-height, 1.5)",
+            };
+        case "md":
+            return {
+                fontSize: "var(--button-font-size-md, 0.875rem)", // 14px - matching your design
+                lineHeight: "var(--button-line-height, 1.5)",
+            };
+        case "lg":
+            return {
+                fontSize: "var(--button-font-size-lg, 1rem)", // 16px
+                lineHeight: "var(--button-line-height, 1.5)",
+            };
+        case "xl":
+            return {
+                fontSize: "var(--button-font-size-xl, 1.125rem)", // 18px
+                lineHeight: "var(--button-line-height, 1.5)",
+            };
+        default:
+            return {
+                fontSize: "var(--button-font-size, 0.875rem)", // Default to 14px
+                lineHeight: "var(--button-line-height, 1.5)",
+            };
+    }
+};
+const Button = React.forwardRef(({ className, variant = "primary", size = "md", asChild = false, loading = false, leftIcon, rightIcon, children, disabled, style, ...props }, ref) => {
     const Comp = asChild ? Slot$1 : "button";
     const isDisabled = disabled || loading;
-    return (jsxs(Comp, { className: cn(buttonVariants({ variant, size, className })), ref: ref, disabled: isDisabled, ...props, children: [loading && jsx(Spinner, {}), !loading && leftIcon && (jsx("span", { className: "inline-flex items-center justify-center", children: leftIcon })), children, !loading && rightIcon && (jsx("span", { className: "inline-flex items-center justify-center", children: rightIcon }))] }));
+    // Combine all styles: typography + size-specific fonts + custom styles
+    const combinedStyle = {
+        ...getTypographyStyles(),
+        ...getSizeFontStyles(size || "md"),
+        ...style, // User styles take precedence
+    };
+    return (jsxs(Comp, { className: cn(buttonVariants({ variant, size, className })), style: combinedStyle, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsx("span", { className: "mr-2", children: jsx(Spinner, {}) })), !loading && leftIcon && (jsx("span", { className: "mr-2 inline-flex items-center justify-center", children: leftIcon })), children, !loading && rightIcon && (jsx("span", { className: "ml-2 inline-flex items-center justify-center", children: rightIcon }))] }));
 });
 Button.displayName = "Button";
 

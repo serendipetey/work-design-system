@@ -1,10 +1,87 @@
 /* design-system/packages/tokens/src/components/button.css */
 
+/* design-system/packages/tokens/src/components/button.css */
+
 :root {
   /* Button Base Properties */
   --button-border-radius: 6px;
-  --button-font-weight: 500;
   --button-transition: all 150ms ease-in-out;
+
+  /* Button Typography - Exact design token values */
+  --button-font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  --button-font-weight: 500; /* ← FIXED: 600 → 500 (medium - matches Storybook) */
+  --button-line-height: 1.5; /* normal */
+  --button-letter-spacing: 0.025em; /* wider */
+  --button-text-transform: none;
+
+  /* Size-specific font sizes */
+  --button-font-size-sm: 0.75rem; /* 12px */
+  --button-font-size-md: 0.875rem; /* 14px - matches your design */
+  --button-font-size-lg: 1rem; /* 16px */
+  --button-font-size-xl: 1.125rem; /* 18px */
+  --button-font-size: 0.875rem; /* Default fallback */
+
+  /* Button Heights */
+  --button-height-sm: 32px;
+  --button-height-md: 40px;
+  --button-height-lg: 48px;
+  --button-height-xl: 56px;
+
+  /* Button Horizontal Padding */
+  --button-padding-x-sm: 12px;
+  --button-padding-x-md: 16px;
+  --button-padding-x-lg: 24px;
+  --button-padding-x-xl: 32px;
+
+  /* Primary Button */
+  --button-primary-bg: #0e3a6c;
+  --button-primary-text: #ffffff;
+  --button-primary-border: transparent;
+  --button-primary-bg-hover: #0a2d54;
+  --button-primary-bg-focus: #07203c;
+
+  /* Outline Button */
+  --button-outline-bg: transparent;
+  --button-outline-text: #0e3a6c;
+  --button-outline-border: #0e3a6c;
+  --button-outline-bg-hover: #f0f3f7;
+  --button-outline-bg-focus: #e3e9ef;
+
+  /* CTA Button */
+  --button-cta-bg: #ff6b35;
+  --button-cta-text: #ffffff;
+  --button-cta-border: transparent;
+  --button-cta-bg-hover: #ff5722;
+  --button-cta-bg-focus: #e64a19;
+
+  /* Success Button */
+  --button-success-bg: #007d85;
+  --button-success-text: #ffffff;
+  --button-success-border: transparent;
+  --button-success-bg-hover: #006b73;
+  --button-success-bg-focus: #005961;
+
+  /* Warning Button */
+  --button-warning-bg: #b75b00;
+  --button-warning-text: #ffffff;
+  --button-warning-border: transparent;
+  --button-warning-bg-hover: #a04f00;
+  --button-warning-bg-focus: #8a4400;
+
+  /* Destructive Button */
+  --button-destructive-bg: #dc2626;
+  --button-destructive-text: #ffffff;
+  --button-destructive-border: transparent;
+  --button-destructive-bg-hover: #b91c1c;
+  --button-destructive-bg-focus: #991b1b;
+
+  /* Ghost Button */
+  --button-ghost-bg: transparent;
+  --button-ghost-text: #0e3a6c;
+  --button-ghost-border: transparent;
+  --button-ghost-bg-hover: #f0f3f7;
+  --button-ghost-bg-focus: #e3e9ef;
 
   /* Button Heights */
   --button-height-sm: 32px;
