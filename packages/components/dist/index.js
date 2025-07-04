@@ -2961,19 +2961,10 @@ const labelStyles = {
         display: "block",
         fontSize: "var(--font-size-sm)",
         fontWeight: "var(--font-weight-medium)",
-        color: "var(--color-text-heading) !important", // ✅ Force navy-500 for labels
         marginBottom: "var(--space-1)",
+        // Remove color from here - let child spans handle it
     },
     states: {
-        default: {
-            color: "var(--color-text-heading)", // ✅ Navy-500
-        },
-        required: {
-            color: "var(--color-text-heading)", // ✅ Navy-500
-        },
-        optional: {
-            color: "var(--color-text-secondary)",
-        },
         disabled: {
             color: "var(--color-text-disabled)",
         },
@@ -3121,12 +3112,12 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
                 : "default";
     return (jsxRuntime.jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxRuntime.jsxs("label", { htmlFor: props.id, className: cn(labelClassName), style: {
                     ...labelStyles.base,
-                    ...(labelState &&
-                        labelStyles.states[labelState]
-                        ? labelStyles.states[labelState]
-                        : labelStyles.states.default),
                     ...(disabled ? labelStyles.states.disabled : {}),
-                }, children: [label, labelState === "required" && (jsxRuntime.jsx("span", { style: { color: "var(--color-text-error)" }, children: " *" })), labelState === "optional" && (jsxRuntime.jsxs("span", { style: { color: "var(--color-text-secondary)" }, children: [" ", "(optional)"] }))] })), showHintText && hintText && (jsxRuntime.jsx("div", { style: {
+                }, children: [jsxRuntime.jsx("span", { style: {
+                            color: disabled
+                                ? "var(--color-text-disabled)"
+                                : "var(--color-navy-500)",
+                        }, children: label }), labelState === "required" && (jsxRuntime.jsx("span", { style: { color: "var(--color-text-error)" }, children: " *" })), labelState === "optional" && (jsxRuntime.jsxs("span", { style: { color: "var(--color-gray-500)" }, children: [" ", "(optional)"] }))] })), showHintText && hintText && (jsxRuntime.jsx("div", { style: {
                     ...helperStyles.base,
                     ...helperStyles.variants.muted,
                     marginTop: 0,
