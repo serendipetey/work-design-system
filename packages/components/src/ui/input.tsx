@@ -28,95 +28,80 @@ const Spinner = () => (
   </svg>
 );
 
-// 🎯 NEW ARCHITECTURE: CSS Custom Properties via Inline Styles
+// 🎯 FIXED: CSS Custom Properties via Inline Styles (Valid Inline Properties Only)
 const inputStyles = {
   // Base styles using CSS custom properties
   base: {
     // Layout & Structure
-    display: "flex",
+    display: "flex" as const,
     width: "100%",
-    border: "var(--input-border-width, 1px) solid",
-    borderRadius: "var(--input-border-radius)",
-    backgroundColor: "var(--input-bg)",
+    border: "1px solid var(--color-border, #d1d5db)",
+    borderRadius: "var(--input-border-radius, 6px)",
+    backgroundColor: "var(--input-bg, #ffffff)",
 
     // Typography
-    fontFamily: "var(--font-family-sans)",
-    fontSize: "var(--font-size-sm)",
-    lineHeight: "var(--line-height-sm)",
+    fontFamily: "var(--font-family-sans, system-ui, sans-serif)",
+    fontSize: "var(--font-size-sm, 14px)",
+    lineHeight: "var(--line-height-sm, 1.4)",
+    color: "var(--color-charcoal-500, #374151)",
 
     // Transitions
-    transition: "var(--input-transition)",
+    transition: "var(--input-transition, all 200ms ease-in-out)",
 
     // States
     outline: "none",
-
-    // File input specific
-    "&::file-selector-button": {
-      border: 0,
-      backgroundColor: "transparent",
-      fontSize: "var(--font-size-sm)",
-      fontWeight: "var(--font-weight-medium)",
-    },
-
-    // Placeholder styling
-    "&::placeholder": {
-      color: "var(--color-input-placeholder)",
-    },
   },
 
   // Variant styles
   variants: {
     default: {
-      borderColor: "var(--color-border)",
-      color: "var(--color-input-text)",
+      borderColor: "var(--color-border, #d1d5db)",
     },
     error: {
-      borderColor: "var(--color-border-error)",
-      color: "var(--color-input-text-error)",
+      borderColor: "var(--color-border-error, #dc2626)",
     },
     success: {
-      borderColor: "var(--color-border-success)",
-      color: "var(--color-input-text-success)",
+      borderColor: "var(--color-border-success, #059669)",
     },
     warning: {
-      borderColor: "var(--color-border-warning)",
-      color: "var(--color-input-text-warning)",
+      borderColor: "var(--color-border-warning, #d97706)",
     },
   },
 
   // Size styles
   sizes: {
     sm: {
-      height: "var(--input-height-sm)", // 32px
-      paddingLeft: "var(--input-padding-x-sm)",
-      paddingRight: "var(--input-padding-x-sm)",
-      fontSize: "var(--font-size-xs)",
+      height: "var(--input-height-sm, 32px)",
+      paddingLeft: "var(--input-padding-x-sm, 8px)",
+      paddingRight: "var(--input-padding-x-sm, 8px)",
+      fontSize: "var(--font-size-xs, 12px)",
     },
     md: {
-      height: "var(--input-height-md)", // 40px
-      paddingLeft: "var(--input-padding-x-md)",
-      paddingRight: "var(--input-padding-x-md)",
-      fontSize: "var(--font-size-sm)",
+      height: "var(--input-height-md, 40px)",
+      paddingLeft: "var(--input-padding-x-md, 12px)",
+      paddingRight: "var(--input-padding-x-md, 12px)",
+      fontSize: "var(--font-size-sm, 14px)",
     },
     lg: {
-      height: "var(--input-height-lg)", // 48px
-      paddingLeft: "var(--input-padding-x-lg)",
-      paddingRight: "var(--input-padding-x-lg)",
-      fontSize: "var(--font-size-base)",
+      height: "var(--input-height-lg, 48px)",
+      paddingLeft: "var(--input-padding-x-lg, 16px)",
+      paddingRight: "var(--input-padding-x-lg, 16px)",
+      fontSize: "var(--font-size-base, 16px)",
     },
     xl: {
-      height: "var(--input-height-xl)", // 56px
-      paddingLeft: "var(--input-padding-x-xl)",
-      paddingRight: "var(--input-padding-x-xl)",
-      fontSize: "var(--font-size-lg)",
+      height: "var(--input-height-xl, 56px)",
+      paddingLeft: "var(--input-padding-x-xl, 20px)",
+      paddingRight: "var(--input-padding-x-xl, 20px)",
+      fontSize: "var(--font-size-lg, 18px)",
     },
   },
 
   // State styles
   states: {
     disabled: {
-      cursor: "not-allowed",
+      cursor: "not-allowed" as const,
       opacity: "0.5",
+      backgroundColor: "var(--color-disabled, #f3f4f6)",
     },
     loading: {
       paddingRight: "2.5rem", // Make room for spinner
@@ -127,15 +112,15 @@ const inputStyles = {
 // Label styles using CSS custom properties
 const labelStyles = {
   base: {
-    display: "block",
-    fontSize: "var(--font-size-sm)",
-    fontWeight: "var(--font-weight-medium)",
-    marginBottom: "var(--space-1)",
-    // Remove color from here - let child spans handle it
+    display: "block" as const,
+    fontSize: "var(--font-size-sm, 14px)",
+    fontWeight: "var(--font-weight-medium, 500)",
+    marginBottom: "var(--spacing-1, 4px)",
+    color: "var(--color-navy-500, #1e40af)",
   },
   states: {
     disabled: {
-      color: "var(--color-text-disabled)",
+      color: "var(--color-gray-500, #6b7280)",
     },
   },
 };
@@ -143,33 +128,33 @@ const labelStyles = {
 // Helper text styles
 const helperStyles = {
   base: {
-    marginTop: "var(--space-1)",
-    fontSize: "var(--font-size-sm)",
-    lineHeight: "var(--line-height-sm)",
+    marginTop: "var(--spacing-1, 4px)",
+    fontSize: "var(--font-size-sm, 14px)",
+    lineHeight: "var(--line-height-sm, 1.4)",
   },
   variants: {
     default: {
-      color: "var(--color-text-secondary)",
+      color: "var(--color-gray-600, #4b5563)",
     },
     error: {
-      color: "var(--color-text-error)",
+      color: "var(--color-error-500, #dc2626)",
     },
     success: {
-      color: "var(--color-text-success)",
+      color: "var(--color-success-500, #059669)",
     },
     warning: {
-      color: "var(--color-text-warning)",
+      color: "var(--color-warning-500, #d97706)",
     },
     muted: {
-      color: "var(--color-text-muted)",
+      color: "var(--color-gray-500, #6b7280)",
     },
   },
 };
 
 // 🎯 CVA for className-based utilities (minimal usage)
 const inputVariants = cva(
-  // Base classes for layout/structure only
-  "flex w-full transition-all duration-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+  // Base classes for layout/structure only - REMOVED problematic selectors
+  "flex w-full transition-all duration-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-gray-400",
   {
     variants: {
       variant: {
@@ -194,7 +179,7 @@ const inputVariants = cva(
   }
 );
 
-// 🎯 Dynamic Focus CSS Injection
+// 🎯 FIXED: Simplified Focus CSS Injection
 const injectFocusStyles = (variant: string) => {
   const focusStyleId = `input-focus-${variant}`;
 
@@ -209,22 +194,30 @@ const injectFocusStyles = (variant: string) => {
   const focusStyles: Record<string, string> = {
     default: `
       .input-${variant}:focus {
-        box-shadow: var(--input-focus-shadow-default) !important;
+        outline: 2px solid var(--color-focus-500, #ff9900);
+        outline-offset: 2px;
+        border-color: var(--color-border-focus, #3b82f6);
       }
     `,
     error: `
       .input-${variant}:focus {
-        box-shadow: var(--input-focus-shadow-error) !important;
+        outline: 2px solid var(--color-error-500, #dc2626);
+        outline-offset: 2px;
+        border-color: var(--color-border-error, #dc2626);
       }
     `,
     success: `
       .input-${variant}:focus {
-        box-shadow: var(--input-focus-shadow-success) !important;
+        outline: 2px solid var(--color-success-500, #059669);
+        outline-offset: 2px;
+        border-color: var(--color-border-success, #059669);
       }
     `,
     warning: `
       .input-${variant}:focus {
-        box-shadow: var(--input-focus-shadow-warning) !important;
+        outline: 2px solid var(--color-warning-500, #d97706);
+        outline-offset: 2px;
+        border-color: var(--color-border-warning, #d97706);
       }
     `,
   };
@@ -232,6 +225,34 @@ const injectFocusStyles = (variant: string) => {
   style.textContent = focusStyles[variant] || focusStyles.default;
   document.head.appendChild(style);
 };
+
+// CVA exports for compatibility
+export const labelVariants = cva("text-sm font-medium text-gray-900", {
+  variants: {
+    state: {
+      default: "",
+      disabled: "text-gray-500",
+    },
+  },
+  defaultVariants: {
+    state: "default",
+  },
+});
+
+export const helperVariants = cva("text-sm", {
+  variants: {
+    variant: {
+      default: "text-gray-600",
+      error: "text-red-600",
+      success: "text-green-600",
+      warning: "text-orange-600",
+      muted: "text-gray-500",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
 
 // TypeScript Interfaces
 export interface InputProps
@@ -259,7 +280,7 @@ export interface InputProps
   onClear?: () => void;
 }
 
-// 🎯 Main Component
+// 🎯 FIXED: Main Component with Proper Error Handling
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
@@ -314,7 +335,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
     }, [finalVariant]);
 
-    // 🎯 Combine styles: Base + Variant + Size + State + Custom
+    // 🎯 FIXED: Combine styles with proper null checking
     const combinedStyles = {
       ...inputStyles.base,
       ...(finalVariant &&
@@ -354,160 +375,149 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ? "warning"
       : "default";
 
+    // Build final className
+    const finalClassName = cn(
+      inputVariants({ variant, size }),
+      inputClassName,
+      className
+    );
+
+    // Generate unique IDs for accessibility
+    const inputId =
+      props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const helperTextId = displayHelperText ? `${inputId}-helper` : undefined;
+
     return (
       <div className={cn("w-full", containerClassName)}>
         {/* Label */}
         {showLabel && label && (
-          <div
-            className="flex items-center gap-1"
-            style={{ marginBottom: "var(--space-1)" }}
+          <label
+            htmlFor={inputId}
+            className={cn(labelClassName)}
+            style={{
+              ...labelStyles.base,
+              ...(disabled ? labelStyles.states.disabled : {}),
+            }}
           >
-            <label
-              htmlFor={props.id}
-              className={cn(labelClassName)}
-              style={{
-                fontSize: "var(--font-size-sm)",
-                fontWeight: "var(--font-weight-medium)",
-                color: disabled
-                  ? "var(--color-text-disabled)"
-                  : "var(--color-navy-500)", // Navy-500 for label text
-              }}
-            >
+            <span style={{ color: "var(--color-navy-500, #1e40af)" }}>
               {label}
-            </label>
-            {/* FIXED: Keep asterisk (*) but use proper CTA red color */}
+            </span>
             {labelState === "required" && (
-              <span
-                style={{
-                  color: "var(--color-input-label-required)", // CTA red #a30134
-                  fontSize: "var(--font-size-sm)",
-                  fontWeight: "var(--font-weight-medium)",
-                }}
-              >
+              <span style={{ color: "var(--color-error-500, #dc2626)" }}>
+                {" "}
                 *
               </span>
             )}
-            {/* FIXED: Add proper space before (Optional) */}
             {labelState === "optional" && (
-              <span
-                style={{
-                  color: "var(--color-input-label-optional)", // Gray for optional
-                  fontSize: "var(--font-size-sm)",
-                }}
-              >
+              <span style={{ color: "var(--color-gray-500, #6b7280)" }}>
+                {" "}
                 (Optional)
               </span>
             )}
-          </div>
+          </label>
         )}
 
-        {/* FIXED: Hint Text with accessible font size */}
-        {showHintText && hintText && (
-          <div
+        {/* Hint Text */}
+        {showHintText && hintText && !displayHelperText && (
+          <p
             style={{
-              marginTop: 0,
-              marginBottom: "var(--space-1)",
-              fontSize: "var(--font-size-sm)", // ACCESSIBILITY: Same size as other text
-              lineHeight: "var(--line-height-sm)",
-              color: "var(--color-text-muted)",
+              ...helperStyles.base,
+              ...helperStyles.variants.muted,
+              marginTop: showLabel && label ? "var(--spacing-1, 4px)" : "0",
+              marginBottom: "var(--spacing-1, 4px)",
             }}
           >
             {hintText}
-          </div>
+          </p>
         )}
 
         {/* Input Container */}
         <div className="relative">
           {/* Left Text/Icon */}
-          {(leftText || leftIcon) && (
-            <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center">
-              {leftIcon && <span className="mr-1">{leftIcon}</span>}
-              {leftText && (
-                <span
-                  style={{
-                    color: "var(--color-text-secondary)",
-                    fontSize: "var(--font-size-sm)",
-                  }}
-                >
-                  {leftText}
-                </span>
-              )}
+          {(leftIcon || leftText) && (
+            <div
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center"
+              style={{ color: "var(--color-gray-500, #6b7280)" }}
+            >
+              {leftIcon}
+              {leftText && <span className="text-sm">{leftText}</span>}
             </div>
           )}
 
-          {/* Input Field */}
+          {/* Input Element */}
           <input
+            {...props}
             ref={elementRef}
-            className={cn(
-              inputVariants({ variant: finalVariant, size }),
-              inputClassName,
-              className
-            )}
+            id={inputId}
+            disabled={disabled}
+            className={finalClassName}
+            aria-invalid={error ? "true" : undefined}
+            aria-describedby={helperTextId}
             style={{
               ...combinedStyles,
               paddingLeft:
-                leftText || leftIcon ? "2.5rem" : combinedStyles.paddingLeft,
+                leftIcon || leftText ? "2.5rem" : combinedStyles.paddingLeft,
               paddingRight:
-                rightText || rightIcon || loading || clearable
+                rightIcon || rightText || loading || clearable
                   ? "2.5rem"
                   : combinedStyles.paddingRight,
             }}
-            disabled={disabled || loading}
-            aria-invalid={!!error}
-            aria-describedby={
-              displayHelperText ? `${props.id}-helper` : undefined
-            }
-            {...props}
           />
 
-          {/* Right Icons/Text */}
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-            {loading && <Spinner />}
-            {!loading && clearable && props.value && (
+          {/* Right Side Content */}
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+            {/* Loading Spinner */}
+            {loading && (
+              <div style={{ color: "var(--color-gray-500, #6b7280)" }}>
+                <Spinner />
+              </div>
+            )}
+
+            {/* Clear Button */}
+            {clearable && props.value && !disabled && !loading && (
               <button
                 type="button"
                 onClick={onClear}
-                className="text-gray-400 hover:text-gray-600"
-                style={{ fontSize: "var(--font-size-sm)" }}
+                className="hover:text-gray-700 focus:outline-none"
+                style={{ color: "var(--color-gray-500, #6b7280)" }}
+                aria-label="Clear input"
               >
-                ×
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
               </button>
             )}
-            {!loading && rightIcon && <span>{rightIcon}</span>}
-            {!loading && rightText && (
-              <span
-                style={{
-                  color: "var(--color-text-secondary)",
-                  fontSize: "var(--font-size-sm)",
-                }}
+
+            {/* Right Text/Icon */}
+            {(rightIcon || rightText) && !loading && !clearable && (
+              <div
+                className="flex items-center"
+                style={{ color: "var(--color-gray-500, #6b7280)" }}
               >
-                {rightText}
-              </span>
+                {rightText && <span className="text-sm">{rightText}</span>}
+                {rightIcon}
+              </div>
             )}
           </div>
         </div>
 
         {/* Helper Text */}
         {displayHelperText && (
-          <div
-            id={`${props.id}-helper`}
+          <p
+            id={helperTextId}
             className={cn(helperClassName)}
             style={{
-              marginTop: "var(--space-1)",
-              fontSize: "var(--font-size-sm)", // ACCESSIBILITY: Same size as other text (not xs)
-              lineHeight: "var(--line-height-sm)",
-              color:
-                helperVariant === "error"
-                  ? "var(--color-input-text-error)"
-                  : helperVariant === "success"
-                  ? "var(--color-input-text-success)"
-                  : helperVariant === "warning"
-                  ? "var(--color-input-text-warning)"
-                  : "var(--color-text-muted)",
+              ...helperStyles.base,
+              ...helperStyles.variants[helperVariant],
             }}
           >
             {displayHelperText}
-          </div>
+          </p>
         )}
       </div>
     );
@@ -516,8 +526,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
 Input.displayName = "Input";
 
-// Legacy exports for compatibility
-const labelVariants = () => ""; // Placeholder for backward compatibility
-const helperVariants = () => ""; // Placeholder for backward compatibility
-
-export { Input, inputVariants, labelVariants, helperVariants };
+// 🎯 Named Exports for compatibility with existing imports
+export { Input, inputVariants };
+export default Input;

@@ -1,6 +1,6 @@
 {
   "name": "@serendipetey/components",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "React component library built with design system tokens",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

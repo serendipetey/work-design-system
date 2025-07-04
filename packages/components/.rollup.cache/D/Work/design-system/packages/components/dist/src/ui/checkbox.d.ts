@@ -3,11 +3,11 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { type VariantProps } from "class-variance-authority";
 declare const checkboxVariants: (props?: ({
-    variant?: "default" | "error" | "success" | "warning" | null | undefined;
+    variant?: "success" | "warning" | "default" | "error" | null | undefined;
     size?: "sm" | "md" | "lg" | "xl" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 declare const radioVariants: (props?: ({
-    variant?: "default" | "error" | "success" | "warning" | null | undefined;
+    variant?: "success" | "warning" | "default" | "error" | null | undefined;
     size?: "sm" | "md" | "lg" | "xl" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export interface CheckboxProps extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>, VariantProps<typeof checkboxVariants> {

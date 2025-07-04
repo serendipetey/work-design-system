@@ -1,8 +1,14 @@
 import React from "react";
 import { type VariantProps } from "class-variance-authority";
 declare const inputVariants: (props?: ({
-    variant?: "default" | "error" | "success" | "warning" | null | undefined;
+    variant?: "success" | "warning" | "default" | "error" | null | undefined;
     size?: "sm" | "md" | "lg" | "xl" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+export declare const labelVariants: (props?: ({
+    state?: "disabled" | "default" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+export declare const helperVariants: (props?: ({
+    variant?: "success" | "warning" | "default" | "error" | "muted" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">, VariantProps<typeof inputVariants> {
     label?: string;
@@ -27,6 +33,5 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
     onClear?: () => void;
 }
 declare const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>>;
-declare const labelVariants: () => string;
-declare const helperVariants: () => string;
-export { Input, inputVariants, labelVariants, helperVariants };
+export { Input, inputVariants };
+export default Input;
