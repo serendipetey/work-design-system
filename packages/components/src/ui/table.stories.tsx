@@ -9,7 +9,7 @@ import {
   TableHead,
   TableCell,
 } from "./table";
-import { Button } from "./button";
+import { Button } from "./button-old";
 
 // Sample icons for demo
 const EditIcon = () => (

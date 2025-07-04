@@ -1,6 +1,6 @@
 // packages/components/src/ui/data-table.tsx
 import * as React from "react";
-import { Button } from "./button";
+import { Button } from "./button-old";
 import { Input } from "./input";
 import {
   Table,

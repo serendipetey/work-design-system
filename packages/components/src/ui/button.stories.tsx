@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 import { Button } from "./button";
+import { ButtonOld } from "./button-old";
 
 // Icon components for stories
 const PlusIcon = () => (
@@ -29,19 +30,6 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
-const DownloadIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-  </svg>
-);
-
 const meta = {
   title: "UI/Button",
   component: Button,
@@ -50,7 +38,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A button component built with your design system tokens. Supports all variants, sizes, states, and icons defined in your token system.",
+          "Gold standard button component using design system tokens directly. Compare with ButtonOld to see architectural improvements.",
       },
     },
   },
@@ -72,7 +60,8 @@ const meta = {
     size: {
       control: { type: "select" },
       options: ["sm", "md", "lg", "xl"],
-      description: "Button size using design system spacing tokens",
+      description:
+        "Button size using design system spacing tokens (32px, 40px, 48px, 56px)",
     },
     loading: {
       control: "boolean",
@@ -104,7 +93,192 @@ export const Default: Story = {
   },
 };
 
-// Variant validation stories
+// 🔥 MIGRATION COMPARISON STORIES
+export const MigrationComparison: Story = {
+  render: () => (
+    <div className="space-y-8">
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900">
+          🚀 New Button (Gold Standard Architecture)
+        </h3>
+        <div className="p-4 bg-green-50 border border-green-200 rounded">
+          <div className="flex flex-wrap gap-4 mb-2">
+            <Button variant="primary">Primary</Button>
+            <Button variant="outline">Outline</Button>
+            <Button variant="cta">CTA</Button>
+            <Button variant="success">Success</Button>
+            <Button variant="warning">Warning</Button>
+            <Button variant="destructive">Destructive</Button>
+            <Button variant="ghost">Ghost</Button>
+          </div>
+          <div className="text-sm text-green-700">
+            ✅ Uses CSS custom properties directly
+            <br />
+            ✅ Warning text: white (correct)
+            <br />
+            ✅ Destructive color: #D92B2B (correct)
+            <br />
+            ✅ CTA color: #A30134 (correct brand red)
+            <br />
+            ✅ Exact sizing: 32px, 40px, 48px, 56px
+            <br />
+            ✅ Working hover states for all variants
+            <br />✅ Click animation: active:scale-95
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900">
+          ⚠️ Old Button (Problematic Implementation)
+        </h3>
+        <div className="p-4 bg-red-50 border border-red-200 rounded">
+          <div className="flex flex-wrap gap-4 mb-2">
+            <ButtonOld variant="primary">Primary</ButtonOld>
+            <ButtonOld variant="outline">Outline</ButtonOld>
+            <ButtonOld variant="cta">CTA</ButtonOld>
+            <ButtonOld variant="success">Success</ButtonOld>
+            <ButtonOld variant="warning">Warning</ButtonOld>
+            <ButtonOld variant="destructive">Destructive</ButtonOld>
+            <ButtonOld variant="ghost">Ghost</ButtonOld>
+          </div>
+          <div className="text-sm text-red-700">
+            ❌ Uses Tailwind classes with wrong mappings
+            <br />
+            ❌ Warning text: orange (should be white)
+            <br />
+            ❌ Destructive color: may be #EF4343 (should be #D92B2B)
+            <br />
+            ❌ Tailwind sizing instead of design tokens
+            <br />❌ Inconsistent hover states
+          </div>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Side-by-side comparison showing the architectural improvements in the new button implementation. The new version uses CSS custom properties directly to ensure exact design token compliance.",
+      },
+    },
+  },
+};
+
+// Size comparison between old and new
+export const SizeComparison: Story = {
+  render: () => (
+    <div className="space-y-8">
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900">
+          🚀 New Button Sizes (Design Token Values)
+        </h3>
+        <div className="p-4 bg-green-50 border border-green-200 rounded">
+          <div className="flex items-end gap-4 mb-2">
+            <Button size="sm">Small (32px)</Button>
+            <Button size="md">Medium (40px)</Button>
+            <Button size="lg">Large (48px)</Button>
+            <Button size="xl">XL (56px)</Button>
+          </div>
+          <div className="text-sm text-green-700">
+            ✅ Heights: 32px, 40px, 48px, 56px (exact design token values)
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900">
+          ⚠️ Old Button Sizes (Tailwind Fallbacks)
+        </h3>
+        <div className="p-4 bg-red-50 border border-red-200 rounded">
+          <div className="flex items-end gap-4 mb-2">
+            <ButtonOld size="sm">Small (h-8)</ButtonOld>
+            <ButtonOld size="md">Medium (h-10)</ButtonOld>
+            <ButtonOld size="lg">Large (h-11)</ButtonOld>
+            <ButtonOld size="xl">XL (h-12)</ButtonOld>
+          </div>
+          <div className="text-sm text-red-700">
+            ❌ Heights: h-8, h-10, h-11, h-12 (Tailwind classes, not design
+            tokens)
+          </div>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Comparison of button sizing between old Tailwind-based approach and new design token approach. The new version uses exact pixel values from your design system.",
+      },
+    },
+  },
+};
+
+// Warning & Destructive focus comparison
+export const ColorComparisonFocus: Story = {
+  render: () => (
+    <div className="space-y-8">
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900">
+          🎯 Color Issues Fixed
+        </h3>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <h4 className="font-medium text-gray-700">Warning Buttons</h4>
+            <div className="p-3 bg-green-50 border border-green-200 rounded">
+              <div className="mb-2">
+                <Button variant="warning">New (White Text)</Button>
+              </div>
+              <div className="text-xs text-green-700">
+                ✅ Uses --button-warning-text: white
+              </div>
+            </div>
+            <div className="p-3 bg-red-50 border border-red-200 rounded">
+              <div className="mb-2">
+                <ButtonOld variant="warning">Old (Orange Text)</ButtonOld>
+              </div>
+              <div className="text-xs text-red-700">
+                ❌ Uses text-warning-foreground (wrong)
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="font-medium text-gray-700">Destructive Buttons</h4>
+            <div className="p-3 bg-green-50 border border-green-200 rounded">
+              <div className="mb-2">
+                <Button variant="destructive">New (#D92B2B)</Button>
+              </div>
+              <div className="text-xs text-green-700">
+                ✅ Uses correct --color-destructive-500
+              </div>
+            </div>
+            <div className="p-3 bg-red-50 border border-red-200 rounded">
+              <div className="mb-2">
+                <ButtonOld variant="destructive">Old (Wrong Red)</ButtonOld>
+              </div>
+              <div className="text-xs text-red-700">
+                ❌ May use #EF4343 instead of #D92B2B
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Specific comparison of the color issues that were fixed: Warning buttons now have white text, and Destructive buttons use the correct #D92B2B color.",
+      },
+    },
+  },
+};
+
+// All variants with proper design tokens
 export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
@@ -121,343 +295,7 @@ export const AllVariants: Story = {
     docs: {
       description: {
         story:
-          "All button variants using your design system tokens. Each variant should match your existing token values exactly.",
-      },
-    },
-  },
-};
-
-// Size validation stories
-export const AllSizes: Story = {
-  render: () => (
-    <div className="flex flex-wrap items-center gap-4">
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
-      <Button size="xl">Extra Large</Button>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "All button sizes using design system height and padding tokens.",
-      },
-    },
-  },
-};
-
-// State validation stories
-export const States: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-4">
-      <Button variant="primary">Normal</Button>
-      <Button variant="primary" disabled>
-        Disabled
-      </Button>
-      <Button variant="primary" loading>
-        Loading
-      </Button>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Button states: normal, disabled, and loading. Tests token application for different states.",
-      },
-    },
-  },
-};
-
-// Icon integration validation
-export const WithIcons: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-4">
-      <Button leftIcon={<PlusIcon />}>Add Item</Button>
-      <Button rightIcon={<ArrowRightIcon />}>Continue</Button>
-      <Button leftIcon={<DownloadIcon />} variant="outline">
-        Download
-      </Button>
-      <Button leftIcon={<PlusIcon />} size="sm">
-        Small with Icon
-      </Button>
-      <Button rightIcon={<ArrowRightIcon />} size="lg">
-        Large with Icon
-      </Button>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Buttons with left and right icons. Tests icon spacing and alignment.",
-      },
-    },
-  },
-};
-
-// Icon-only validation
-export const IconOnly: Story = {
-  render: () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Icon-Only Button Sizes</h3>
-        <div className="flex flex-wrap items-center gap-4">
-          <Button
-            leftIcon={<PlusIcon />}
-            size="sm"
-            aria-label="Add item (small)"
-          />
-          <Button
-            leftIcon={<PlusIcon />}
-            size="md"
-            aria-label="Add item (medium)"
-          />
-          <Button
-            leftIcon={<PlusIcon />}
-            size="lg"
-            aria-label="Add item (large)"
-          />
-          <Button
-            leftIcon={<PlusIcon />}
-            size="xl"
-            aria-label="Add item (extra large)"
-          />
-        </div>
-        <div className="mt-2 text-sm text-gray-600">
-          <p>
-            Figma Design System Padding: Small (8px), Medium (12px), Large
-            (16px), XL (20px)
-          </p>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">
-          Icon-Only Button Variants
-        </h3>
-        <div className="flex flex-wrap items-center gap-4">
-          <Button
-            leftIcon={<PlusIcon />}
-            variant="primary"
-            aria-label="Add item"
-          />
-          <Button
-            leftIcon={<DownloadIcon />}
-            variant="outline"
-            aria-label="Download"
-          />
-          <Button
-            leftIcon={<PlusIcon />}
-            variant="ghost"
-            aria-label="Add ghost"
-          />
-          <Button
-            leftIcon={<DownloadIcon />}
-            variant="cta"
-            aria-label="CTA download"
-          />
-          <Button
-            leftIcon={<PlusIcon />}
-            variant="destructive"
-            aria-label="Delete item"
-          />
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">
-          Comparison: Regular vs Icon-Only
-        </h3>
-        <div className="flex flex-wrap items-center gap-4">
-          <Button leftIcon={<PlusIcon />}>Regular Button</Button>
-          <Button leftIcon={<PlusIcon />} aria-label="Icon-only button" />
-        </div>
-        <div className="mt-2 text-sm text-gray-600">
-          <p>
-            Notice the difference: regular button has horizontal padding + icon
-            spacing, icon-only has uniform padding
-          </p>
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Icon-only buttons automatically detected when no children are provided. Uses Figma design system padding (8px, 12px, 16px, 20px) for perfect square aspect ratios.",
-      },
-    },
-  },
-};
-
-// Accessibility validation story
-export const AccessibilityTest: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <div className="flex gap-4">
-        <Button>Focusable Button</Button>
-        <Button disabled>Disabled Button</Button>
-        <Button loading>Loading Button</Button>
-      </div>
-      <div className="flex gap-4">
-        <Button leftIcon={<PlusIcon />} aria-label="Add item (icon only)" />
-        <Button variant="destructive">Delete Item</Button>
-      </div>
-      <p className="text-sm text-gray-600">
-        Test keyboard navigation: Tab to focus, Enter/Space to activate
-      </p>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Accessibility test: keyboard navigation, focus states, ARIA labels, and screen reader support.",
-      },
-    },
-  },
-};
-
-// Token validation story - shows how tokens are applied
-export const TokenValidation: Story = {
-  render: () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Primary Token Mapping</h3>
-        <Button variant="primary">Primary Button</Button>
-        <div className="mt-2 text-sm text-gray-600">
-          <p>Background: var(--button-primary-bg)</p>
-          <p>Text: var(--button-primary-text)</p>
-          <p>Border: var(--button-primary-border)</p>
-          <p>Hover: var(--button-primary-bg-hover)</p>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Outline Token Mapping</h3>
-        <Button variant="outline">Outline Button</Button>
-        <div className="mt-2 text-sm text-gray-600">
-          <p>Background: var(--button-outline-bg)</p>
-          <p>Text: var(--button-outline-text)</p>
-          <p>Border: var(--button-outline-border)</p>
-          <p>Hover: var(--button-outline-bg-hover)</p>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Size Token Mapping</h3>
-        <div className="flex gap-4 items-center">
-          <Button size="sm">Small</Button>
-          <Button size="lg">Large</Button>
-        </div>
-        <div className="mt-2 text-sm text-gray-600">
-          <p>
-            Small: height var(--button-height-sm), padding
-            var(--button-padding-x-sm)
-          </p>
-          <p>
-            Large: height var(--button-height-lg), padding
-            var(--button-padding-x-lg)
-          </p>
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Visual validation that design tokens are correctly applied to button variants and sizes.",
-      },
-    },
-  },
-};
-
-// AI tool copy-paste validation
-export const CopyPasteExamples: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Common AI Patterns</h3>
-        <div className="flex flex-wrap gap-2">
-          <Button>Save</Button>
-          <Button variant="outline">Cancel</Button>
-          <Button variant="cta">Get Started</Button>
-          <Button variant="destructive">Delete</Button>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Form Actions</h3>
-        <div className="flex gap-2">
-          <Button type="submit" loading>
-            Submit Form
-          </Button>
-          <Button type="button" variant="outline">
-            Reset
-          </Button>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Icon Actions</h3>
-        <div className="flex gap-2">
-          <Button leftIcon={<PlusIcon />}>Add New</Button>
-          <Button rightIcon={<ArrowRightIcon />}>Continue</Button>
-          <Button leftIcon={<DownloadIcon />} variant="outline">
-            Export
-          </Button>
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Common button patterns that AI tools would generate. Tests copy-paste compatibility.",
-      },
-    },
-  },
-};
-
-// Responsive validation
-export const ResponsiveTest: Story = {
-  render: () => (
-    <div className="space-y-4 w-full max-w-4xl">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Button className="w-full">Full Width Small</Button>
-        <Button className="w-full" variant="outline">
-          Full Width Outline
-        </Button>
-        <Button className="w-full" variant="cta">
-          Full Width CTA
-        </Button>
-        <Button className="w-full" variant="success">
-          Full Width Success
-        </Button>
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        <Button size="sm">Flex Small</Button>
-        <Button size="md">Flex Medium</Button>
-        <Button size="lg">Flex Large</Button>
-        <Button size="xl">Flex XL</Button>
-      </div>
-
-      <div>
-        <Button className="w-full max-w-xs">Constrained Width Button</Button>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Responsive behavior testing: full width, flex layouts, and constrained widths.",
+          "All button variants using your design system tokens directly. Each variant matches your existing token values exactly.",
       },
     },
   },

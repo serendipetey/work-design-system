@@ -1,82 +1,97 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
-import { cn } from "../lib/utils";
+import { cn } from "@/lib/utils";
+// ✅ FIXED: Removed broken CSS import that was causing styling issues
+// Design tokens are already loaded via the main CSS files
 
 // Spinner component for loading state
 const Spinner = () => (
   <svg
-    className="animate-spin -ml-1 mr-3 h-4 w-4"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
+    width="16"
+    height="16"
     viewBox="0 0 24 24"
+    fill="none"
+    className="animate-spin"
   >
     <circle
-      className="opacity-25"
       cx="12"
       cy="12"
       r="10"
       stroke="currentColor"
       strokeWidth="4"
-    ></circle>
+      className="opacity-25"
+    />
     <path
-      className="opacity-75"
       fill="currentColor"
       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-    ></path>
+      className="opacity-75"
+    />
   </svg>
 );
 
 const buttonVariants = cva(
+  // Base button styles with UNIFIED focus states
   [
     "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium",
+    "transition-all duration-150 ease-in-out cursor-pointer",
     "disabled:pointer-events-none disabled:opacity-50",
-    "font-medium tracking-wide",
-    // Click animation with smooth transitions
-    "transition-all duration-100 active:scale-95",
-  ],
+    "active:translate-y-[1px]",
+    // UNIFIED FOCUS STYLES - Override all variants with !important and fix border-radius
+    "focus-visible:outline-none",
+    "focus-visible:!bg-[#ff9900]", // Direct hex value for orange background
+    "focus-visible:!text-[#0e3a6c]", // Direct hex value for navy text
+    "focus-visible:!border-t-0 focus-visible:!border-l-0 focus-visible:!border-r-0", // Remove top, left, right borders
+    "focus-visible:!border-b-[3px] focus-visible:!border-b-[#0e3a6c]", // Thick navy bottom border
+    "focus-visible:!rounded-t-md focus-visible:!rounded-b-none", // Keep top radius, remove bottom radius
+    "focus-visible:!shadow-none", // Remove any box shadows
+  ].join(" "),
   {
     variants: {
       variant: {
-        // Clean Tailwind approach - no hybrid mixing
+        // Primary Button - removed focus-visible classes since they're now in base
         primary: [
           "bg-primary text-primary-foreground",
           "border border-primary",
           "hover:bg-primary/90",
         ].join(" "),
 
+        // Outline Button - removed focus-visible classes
         outline: [
-          "border border-primary bg-transparent text-primary",
+          "bg-transparent text-primary",
+          "border border-primary",
           "hover:bg-primary hover:text-primary-foreground",
         ].join(" "),
 
+        // CTA Button - removed focus-visible classes
         cta: [
           "bg-cta text-cta-foreground",
           "border border-cta",
           "hover:bg-cta/90",
         ].join(" "),
 
+        // Success Button - removed focus-visible classes
         success: [
           "bg-success text-success-foreground",
           "border border-success",
           "hover:bg-success/90",
         ].join(" "),
 
-        // FIXED: Uses corrected warning-foreground (now white)
+        // Warning Button - removed focus-visible classes
         warning: [
           "bg-warning text-warning-foreground",
           "border border-warning",
           "hover:bg-warning/90",
         ].join(" "),
 
-        // FIXED: Uses corrected destructive color (#d92b2b)
+        // Destructive Button - removed focus-visible classes
         destructive: [
           "bg-destructive text-destructive-foreground",
           "border border-destructive",
           "hover:bg-destructive/90",
         ].join(" "),
 
+        // Ghost Button - removed focus-visible classes
         ghost: [
           "text-primary",
           "hover:bg-accent hover:text-accent-foreground",
@@ -105,7 +120,7 @@ export interface ButtonProps
   rightIcon?: React.ReactNode;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const ButtonOld = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
@@ -147,6 +162,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-Button.displayName = "Button";
+ButtonOld.displayName = "Button";
 
-export { Button, buttonVariants };
+export { ButtonOld, buttonVariants };

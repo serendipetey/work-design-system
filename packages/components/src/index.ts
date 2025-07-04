@@ -2,7 +2,7 @@
 // Main entry point for the component library
 
 // Export all UI components
-export * from "./ui/button";
+export * from "./ui/button-old";
 export * from "./ui/input";
 export * from "./ui/select";
 export * from "./ui/table";

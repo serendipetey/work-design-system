@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../button";
+import { Button } from "../button-old";
 
 // Icons for examples (in real usage, you'd import from your icon library)
 const PlusIcon = () => (

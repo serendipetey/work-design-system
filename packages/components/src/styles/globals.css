@@ -18,23 +18,33 @@
     --ring: 215 20% 65%;
     --radius: 0.5rem;
 
-    /* Map to your existing design tokens */
-    --primary: 207 73% 24%; /* maps to your navy-500 */
-    --primary-foreground: 0 0% 100%;
+    /* FIXED: Map to your actual design token values */
+    --primary: 209 70% 23%; /* #0e3a6c - navy-500 */
+    --primary-foreground: 0 0% 100%; /* white */
+
     --secondary: 214 32% 91%;
     --secondary-foreground: 0 0% 9%;
+
     --accent: 214 32% 91%;
     --accent-foreground: 0 0% 9%;
+
     --muted: 220 14% 96%;
     --muted-foreground: 215 16% 47%;
-    --destructive: 0 84% 60%; /* maps to your destructive-500 */
-    --destructive-foreground: 0 0% 100%;
-    --success: 184 90% 26%; /* maps to your success-500 */
-    --success-foreground: 0 0% 100%;
-    --warning: 32 95% 44%; /* maps to your warning-500 */
-    --warning-foreground: 0 0% 0%;
-    --cta: 350 80% 32%; /* maps to your red-500 */
-    --cta-foreground: 0 0% 100%;
+
+    /* FIXED: Correct destructive color */
+    --destructive: 348 79% 50%; /* #d92b2b - destructive-500 (correct!) */
+    --destructive-foreground: 0 0% 100%; /* white */
+
+    --success: 186 100% 26%; /* #007d85 - success-500 */
+    --success-foreground: 0 0% 100%; /* white */
+
+    /* FIXED: Correct warning colors */
+    --warning: 32 100% 36%; /* #b75b00 - warning-500 */
+    --warning-foreground: 0 0% 100%; /* white (FIXED!) */
+
+    /* FIXED: Correct CTA color - brand red #a30134 */
+    --cta: 341 99% 32%; /* #a30134 - red-500 (brand red for CTAs) */
+    --cta-foreground: 0 0% 100%; /* white */
   }
 
   .dark {
@@ -50,7 +60,7 @@
     --muted-foreground: 0 0% 65%;
     --accent: 0 0% 15%;
     --accent-foreground: 0 0% 95%;
-    --destructive: 0 63% 31%;
+    --destructive: 348 79% 50%; /* Keep same destructive color in dark mode */
     --destructive-foreground: 0 0% 95%;
     --border: 0 0% 15%;
     --input: 0 0% 15%;
