@@ -1,4 +1,4 @@
-export * from "./ui/button-old";
+export * from "./ui/button";
 export * from "./ui/input";
 export * from "./ui/select";
 export * from "./ui/table";
