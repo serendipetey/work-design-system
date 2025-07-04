@@ -2848,9 +2848,9 @@ Button.displayName = "Button";
 
 // Spinner component for loading state
 const Spinner = () => (jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", className: "animate-spin", children: [jsx("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", className: "opacity-25" }), jsx("path", { fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z", className: "opacity-75" })] }));
-// 🎯 FIXED: CSS Custom Properties via Inline Styles (Valid Inline Properties Only)
+// 🎯 OPTIMAL: Design Tokens with Robust Fallbacks
 const inputStyles = {
-    // Base styles using CSS custom properties
+    // Base styles using design tokens with reliable fallbacks
     base: {
         // Layout & Structure
         display: "flex",
@@ -2858,17 +2858,17 @@ const inputStyles = {
         border: "1px solid var(--color-border, #d1d5db)",
         borderRadius: "var(--input-border-radius, 6px)",
         backgroundColor: "var(--input-bg, #ffffff)",
-        // Typography
-        fontFamily: "var(--font-family-sans, system-ui, sans-serif)",
-        fontSize: "var(--font-size-sm, 14px)",
-        lineHeight: "var(--line-height-sm, 1.4)",
-        color: "var(--color-charcoal-500, #374151)",
+        // Typography - tokens first, robust fallbacks
+        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+        fontSize: "var(--font-size-base, 16px)",
+        lineHeight: "var(--line-height-normal, 1.5)",
+        color: "var(--color-input-text, #374151)",
         // Transitions
         transition: "var(--input-transition, all 200ms ease-in-out)",
         // States
         outline: "none",
     },
-    // Variant styles
+    // Variant styles - tokens with fallbacks
     variants: {
         default: {
             borderColor: "var(--color-border, #d1d5db)",
@@ -2883,38 +2883,38 @@ const inputStyles = {
             borderColor: "var(--color-border-warning, #d97706)",
         },
     },
-    // Size styles
+    // Size styles - tokens with fallbacks
     sizes: {
         sm: {
             height: "var(--input-height-sm, 32px)",
             paddingLeft: "var(--input-padding-x-sm, 8px)",
             paddingRight: "var(--input-padding-x-sm, 8px)",
-            fontSize: "var(--font-size-xs, 12px)",
-        },
-        md: {
-            height: "var(--input-height-md, 40px)",
-            paddingLeft: "var(--input-padding-x-md, 12px)",
-            paddingRight: "var(--input-padding-x-md, 12px)",
             fontSize: "var(--font-size-sm, 14px)",
         },
-        lg: {
-            height: "var(--input-height-lg, 48px)",
-            paddingLeft: "var(--input-padding-x-lg, 16px)",
-            paddingRight: "var(--input-padding-x-lg, 16px)",
+        md: {
+            height: "var(--input-height-md, 48px)",
+            paddingLeft: "var(--input-padding-x-md, 16px)",
+            paddingRight: "var(--input-padding-x-md, 16px)",
             fontSize: "var(--font-size-base, 16px)",
         },
-        xl: {
-            height: "var(--input-height-xl, 56px)",
-            paddingLeft: "var(--input-padding-x-xl, 20px)",
-            paddingRight: "var(--input-padding-x-xl, 20px)",
+        lg: {
+            height: "var(--input-height-lg, 56px)",
+            paddingLeft: "var(--input-padding-x-lg, 20px)",
+            paddingRight: "var(--input-padding-x-lg, 20px)",
             fontSize: "var(--font-size-lg, 18px)",
         },
+        xl: {
+            height: "var(--input-height-xl, 64px)",
+            paddingLeft: "var(--input-padding-x-xl, 24px)",
+            paddingRight: "var(--input-padding-x-xl, 24px)",
+            fontSize: "var(--font-size-xl, 20px)",
+        },
     },
-    // State styles
+    // State styles - tokens with fallbacks
     states: {
         disabled: {
             cursor: "not-allowed",
-            opacity: "0.5",
+            opacity: "var(--opacity-disabled, 0.5)",
             backgroundColor: "var(--color-disabled, #f3f4f6)",
         },
         loading: {
@@ -2922,43 +2922,45 @@ const inputStyles = {
         },
     },
 };
-// Label styles using CSS custom properties
+// Label styles - tokens with fallbacks
 const labelStyles = {
     base: {
         display: "block",
-        fontSize: "var(--font-size-sm, 14px)",
-        fontWeight: "var(--font-weight-medium, 500)",
-        marginBottom: "var(--spacing-1, 4px)",
-        color: "var(--color-navy-500, #1e40af)",
+        fontSize: "var(--font-size-base, 16px)",
+        fontWeight: "var(--font-weight-semibold, 600)",
+        marginBottom: "var(--spacing-2, 8px)",
+        color: "var(--color-input-label, #1e40af)",
+        fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
     },
     states: {
         disabled: {
-            color: "var(--color-gray-500, #6b7280)",
+            color: "var(--color-disabled-text, #6b7280)",
         },
     },
 };
-// Helper text styles
+// Helper text styles - tokens with fallbacks
 const helperStyles = {
     base: {
         marginTop: "var(--spacing-1, 4px)",
         fontSize: "var(--font-size-sm, 14px)",
         lineHeight: "var(--line-height-sm, 1.4)",
+        fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
     },
     variants: {
         default: {
-            color: "var(--color-gray-600, #4b5563)",
+            color: "var(--color-text-secondary, #4b5563)",
         },
         error: {
-            color: "var(--color-error-500, #dc2626)",
+            color: "var(--color-text-error, #dc2626)",
         },
         success: {
-            color: "var(--color-success-500, #059669)",
+            color: "var(--color-text-success, #059669)",
         },
         warning: {
-            color: "var(--color-warning-500, #d97706)",
+            color: "var(--color-text-warning, #d97706)",
         },
         muted: {
-            color: "var(--color-gray-500, #6b7280)",
+            color: "var(--color-text-muted, #6b7280)",
         },
     },
 };
@@ -2987,14 +2989,14 @@ const inputVariants = cva(
         size: "md",
     },
 });
-// 🎯 FIXED: Simplified Focus CSS Injection
+// 🎯 OPTIMAL: Design Tokens with Fallbacks for Focus Styles
 const injectFocusStyles = (variant) => {
     const focusStyleId = `input-focus-${variant}`;
     // Remove existing focus styles
     const existingStyle = document.getElementById(focusStyleId);
     if (existingStyle)
         existingStyle.remove();
-    // Create new focus styles
+    // Create new focus styles with tokens and fallbacks
     const style = document.createElement("style");
     style.id = focusStyleId;
     const focusStyles = {
@@ -3119,18 +3121,18 @@ const Input = React__default.forwardRef(({ className, variant = "default", size 
     return (jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxs("label", { htmlFor: inputId, className: cn(labelClassName), style: {
                     ...labelStyles.base,
                     ...(disabled ? labelStyles.states.disabled : {}),
-                }, children: [jsx("span", { style: { color: "var(--color-navy-500, #1e40af)" }, children: label }), labelState === "required" && (jsxs("span", { style: { color: "var(--color-error-500, #dc2626)" }, children: [" ", "*"] })), labelState === "optional" && (jsxs("span", { style: { color: "var(--color-gray-500, #6b7280)" }, children: [" ", "(Optional)"] }))] })), showHintText && hintText && !displayHelperText && (jsx("p", { style: {
+                }, children: [jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (jsxs("span", { style: { color: "var(--color-text-error, #dc2626)" }, children: [" ", "*"] })), labelState === "optional" && (jsxs("span", { style: { color: "var(--color-text-muted, #6b7280)" }, children: [" ", "(Optional)"] }))] })), showHintText && hintText && !displayHelperText && (jsx("p", { style: {
                     ...helperStyles.base,
                     ...helperStyles.variants.muted,
                     marginTop: showLabel && label ? "var(--spacing-1, 4px)" : "0",
                     marginBottom: "var(--spacing-1, 4px)",
-                }, children: hintText })), jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-gray-500, #6b7280)" }, children: [leftIcon, leftText && jsx("span", { className: "text-sm", children: leftText })] })), jsx("input", { ...props, ref: elementRef, id: inputId, disabled: disabled, className: finalClassName, "aria-invalid": error ? "true" : undefined, "aria-describedby": helperTextId, style: {
+                }, children: hintText })), jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && jsx("span", { className: "text-sm", children: leftText })] })), jsx("input", { ...props, ref: elementRef, id: inputId, disabled: disabled, className: finalClassName, "aria-invalid": error ? "true" : undefined, "aria-describedby": helperTextId, style: {
                             ...combinedStyles,
                             paddingLeft: leftIcon || leftText ? "2.5rem" : combinedStyles.paddingLeft,
                             paddingRight: rightIcon || rightText || loading || clearable
                                 ? "2.5rem"
                                 : combinedStyles.paddingRight,
-                        } }), jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (jsx("div", { style: { color: "var(--color-gray-500, #6b7280)" }, children: jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-gray-500, #6b7280)" }, "aria-label": "Clear input", children: jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (jsxs("div", { className: "flex items-center", style: { color: "var(--color-gray-500, #6b7280)" }, children: [rightText && jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && (jsx("p", { id: helperTextId, className: cn(helperClassName), style: {
+                        } }), jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && (jsx("p", { id: helperTextId, className: cn(helperClassName), style: {
                     ...helperStyles.base,
                     ...helperStyles.variants[helperVariant],
                 }, children: displayHelperText }))] }));

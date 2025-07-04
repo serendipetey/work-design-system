@@ -1,4 +1,9 @@
 // packages/components/src/ui/input.tsx
+// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
+// This component uses CSS custom properties from the design token system
+// with reliable fallback values for maximum compatibility and maintainability.
+// Pattern: var(--design-token-name, fallback-value)
+
 import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -28,9 +33,9 @@ const Spinner = () => (
   </svg>
 );
 
-// 🎯 FIXED: CSS Custom Properties via Inline Styles (Valid Inline Properties Only)
+// 🎯 OPTIMAL: Design Tokens with Robust Fallbacks
 const inputStyles = {
-  // Base styles using CSS custom properties
+  // Base styles using design tokens with reliable fallbacks
   base: {
     // Layout & Structure
     display: "flex" as const,
@@ -39,11 +44,11 @@ const inputStyles = {
     borderRadius: "var(--input-border-radius, 6px)",
     backgroundColor: "var(--input-bg, #ffffff)",
 
-    // Typography
-    fontFamily: "var(--font-family-sans, system-ui, sans-serif)",
-    fontSize: "var(--font-size-sm, 14px)",
-    lineHeight: "var(--line-height-sm, 1.4)",
-    color: "var(--color-charcoal-500, #374151)",
+    // Typography - tokens first, robust fallbacks
+    fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+    fontSize: "var(--font-size-base, 16px)",
+    lineHeight: "var(--line-height-normal, 1.5)",
+    color: "var(--color-input-text, #374151)",
 
     // Transitions
     transition: "var(--input-transition, all 200ms ease-in-out)",
@@ -52,7 +57,7 @@ const inputStyles = {
     outline: "none",
   },
 
-  // Variant styles
+  // Variant styles - tokens with fallbacks
   variants: {
     default: {
       borderColor: "var(--color-border, #d1d5db)",
@@ -68,39 +73,39 @@ const inputStyles = {
     },
   },
 
-  // Size styles
+  // Size styles - tokens with fallbacks
   sizes: {
     sm: {
       height: "var(--input-height-sm, 32px)",
       paddingLeft: "var(--input-padding-x-sm, 8px)",
       paddingRight: "var(--input-padding-x-sm, 8px)",
-      fontSize: "var(--font-size-xs, 12px)",
-    },
-    md: {
-      height: "var(--input-height-md, 40px)",
-      paddingLeft: "var(--input-padding-x-md, 12px)",
-      paddingRight: "var(--input-padding-x-md, 12px)",
       fontSize: "var(--font-size-sm, 14px)",
     },
-    lg: {
-      height: "var(--input-height-lg, 48px)",
-      paddingLeft: "var(--input-padding-x-lg, 16px)",
-      paddingRight: "var(--input-padding-x-lg, 16px)",
+    md: {
+      height: "var(--input-height-md, 48px)",
+      paddingLeft: "var(--input-padding-x-md, 16px)",
+      paddingRight: "var(--input-padding-x-md, 16px)",
       fontSize: "var(--font-size-base, 16px)",
     },
-    xl: {
-      height: "var(--input-height-xl, 56px)",
-      paddingLeft: "var(--input-padding-x-xl, 20px)",
-      paddingRight: "var(--input-padding-x-xl, 20px)",
+    lg: {
+      height: "var(--input-height-lg, 56px)",
+      paddingLeft: "var(--input-padding-x-lg, 20px)",
+      paddingRight: "var(--input-padding-x-lg, 20px)",
       fontSize: "var(--font-size-lg, 18px)",
+    },
+    xl: {
+      height: "var(--input-height-xl, 64px)",
+      paddingLeft: "var(--input-padding-x-xl, 24px)",
+      paddingRight: "var(--input-padding-x-xl, 24px)",
+      fontSize: "var(--font-size-xl, 20px)",
     },
   },
 
-  // State styles
+  // State styles - tokens with fallbacks
   states: {
     disabled: {
       cursor: "not-allowed" as const,
-      opacity: "0.5",
+      opacity: "var(--opacity-disabled, 0.5)",
       backgroundColor: "var(--color-disabled, #f3f4f6)",
     },
     loading: {
@@ -109,44 +114,46 @@ const inputStyles = {
   },
 };
 
-// Label styles using CSS custom properties
+// Label styles - tokens with fallbacks
 const labelStyles = {
   base: {
     display: "block" as const,
-    fontSize: "var(--font-size-sm, 14px)",
-    fontWeight: "var(--font-weight-medium, 500)",
-    marginBottom: "var(--spacing-1, 4px)",
-    color: "var(--color-navy-500, #1e40af)",
+    fontSize: "var(--font-size-base, 16px)",
+    fontWeight: "var(--font-weight-semibold, 600)",
+    marginBottom: "var(--spacing-2, 8px)",
+    color: "var(--color-input-label, #1e40af)",
+    fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
   },
   states: {
     disabled: {
-      color: "var(--color-gray-500, #6b7280)",
+      color: "var(--color-disabled-text, #6b7280)",
     },
   },
 };
 
-// Helper text styles
+// Helper text styles - tokens with fallbacks
 const helperStyles = {
   base: {
     marginTop: "var(--spacing-1, 4px)",
     fontSize: "var(--font-size-sm, 14px)",
     lineHeight: "var(--line-height-sm, 1.4)",
+    fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
   },
   variants: {
     default: {
-      color: "var(--color-gray-600, #4b5563)",
+      color: "var(--color-text-secondary, #4b5563)",
     },
     error: {
-      color: "var(--color-error-500, #dc2626)",
+      color: "var(--color-text-error, #dc2626)",
     },
     success: {
-      color: "var(--color-success-500, #059669)",
+      color: "var(--color-text-success, #059669)",
     },
     warning: {
-      color: "var(--color-warning-500, #d97706)",
+      color: "var(--color-text-warning, #d97706)",
     },
     muted: {
-      color: "var(--color-gray-500, #6b7280)",
+      color: "var(--color-text-muted, #6b7280)",
     },
   },
 };
@@ -179,7 +186,7 @@ const inputVariants = cva(
   }
 );
 
-// 🎯 FIXED: Simplified Focus CSS Injection
+// 🎯 OPTIMAL: Design Tokens with Fallbacks for Focus Styles
 const injectFocusStyles = (variant: string) => {
   const focusStyleId = `input-focus-${variant}`;
 
@@ -187,7 +194,7 @@ const injectFocusStyles = (variant: string) => {
   const existingStyle = document.getElementById(focusStyleId);
   if (existingStyle) existingStyle.remove();
 
-  // Create new focus styles
+  // Create new focus styles with tokens and fallbacks
   const style = document.createElement("style");
   style.id = focusStyleId;
 
@@ -399,17 +406,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               ...(disabled ? labelStyles.states.disabled : {}),
             }}
           >
-            <span style={{ color: "var(--color-navy-500, #1e40af)" }}>
+            <span style={{ color: "var(--color-input-label, #1e40af)" }}>
               {label}
             </span>
             {labelState === "required" && (
-              <span style={{ color: "var(--color-error-500, #dc2626)" }}>
+              <span style={{ color: "var(--color-text-error, #dc2626)" }}>
                 {" "}
                 *
               </span>
             )}
             {labelState === "optional" && (
-              <span style={{ color: "var(--color-gray-500, #6b7280)" }}>
+              <span style={{ color: "var(--color-text-muted, #6b7280)" }}>
                 {" "}
                 (Optional)
               </span>
@@ -437,7 +444,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {(leftIcon || leftText) && (
             <div
               className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center"
-              style={{ color: "var(--color-gray-500, #6b7280)" }}
+              style={{ color: "var(--color-text-muted, #6b7280)" }}
             >
               {leftIcon}
               {leftText && <span className="text-sm">{leftText}</span>}
@@ -468,7 +475,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
             {/* Loading Spinner */}
             {loading && (
-              <div style={{ color: "var(--color-gray-500, #6b7280)" }}>
+              <div style={{ color: "var(--color-text-muted, #6b7280)" }}>
                 <Spinner />
               </div>
             )}
@@ -479,7 +486,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 type="button"
                 onClick={onClear}
                 className="hover:text-gray-700 focus:outline-none"
-                style={{ color: "var(--color-gray-500, #6b7280)" }}
+                style={{ color: "var(--color-text-muted, #6b7280)" }}
                 aria-label="Clear input"
               >
                 <svg
@@ -497,7 +504,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {(rightIcon || rightText) && !loading && !clearable && (
               <div
                 className="flex items-center"
-                style={{ color: "var(--color-gray-500, #6b7280)" }}
+                style={{ color: "var(--color-text-muted, #6b7280)" }}
               >
                 {rightText && <span className="text-sm">{rightText}</span>}
                 {rightIcon}
