@@ -1,7 +1,7 @@
 // packages/components/src/ui/column-sort-controls.tsx
 import * as React from "react";
 import { SelectField, SelectItem } from "./select";
-import { Button } from "./button-old";
+import { Button } from "./button";
 import { cn } from "@/lib/utils";
 import type { DataTableColumn } from "./data-table";
 

@@ -5,7 +5,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { User, ArrowUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "./button-old";
+import { Button } from "./button";
 
 const sidebarProfileVariants = cva([
   "flex flex-col p-4 border-b border-[var(--color-border)]",
