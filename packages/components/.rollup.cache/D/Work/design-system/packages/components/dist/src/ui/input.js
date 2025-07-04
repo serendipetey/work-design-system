@@ -111,8 +111,8 @@ const labelStyles = {
 const helperStyles = {
     base: {
         marginTop: "var(--space-1)",
-        fontSize: "var(--font-size-xs)",
-        lineHeight: "var(--line-height-xs)",
+        fontSize: "var(--font-size-sm)",
+        lineHeight: "var(--line-height-sm)",
     },
     variants: {
         default: {
@@ -247,18 +247,25 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
             : warning
                 ? "warning"
                 : "default";
-    return (_jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (_jsxs("label", { htmlFor: props.id, className: cn(labelClassName), style: {
-                    ...labelStyles.base,
-                    ...(disabled ? labelStyles.states.disabled : {}),
-                }, children: [_jsx("span", { style: {
+    return (_jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (_jsxs("div", { className: "flex items-center gap-1", style: { marginBottom: "var(--space-1)" }, children: [_jsx("label", { htmlFor: props.id, className: cn(labelClassName), style: {
+                            fontSize: "var(--font-size-sm)",
+                            fontWeight: "var(--font-weight-medium)",
                             color: disabled
                                 ? "var(--color-text-disabled)"
-                                : "var(--color-navy-500)",
-                        }, children: label }), labelState === "required" && (_jsx("span", { style: { color: "var(--color-text-error)" }, children: " *" })), labelState === "optional" && (_jsxs("span", { style: { color: "var(--color-gray-500)" }, children: [" ", "(optional)"] }))] })), showHintText && hintText && (_jsx("div", { style: {
-                    ...helperStyles.base,
-                    ...helperStyles.variants.muted,
+                                : "var(--color-navy-500)", // Navy-500 for label text
+                        }, children: label }), labelState === "required" && (_jsx("span", { style: {
+                            color: "var(--color-input-label-required)", // CTA red #a30134
+                            fontSize: "var(--font-size-sm)",
+                            fontWeight: "var(--font-weight-medium)",
+                        }, children: "*" })), labelState === "optional" && (_jsx("span", { style: {
+                            color: "var(--color-input-label-optional)", // Gray for optional
+                            fontSize: "var(--font-size-sm)",
+                        }, children: "(Optional)" }))] })), showHintText && hintText && (_jsx("div", { style: {
                     marginTop: 0,
                     marginBottom: "var(--space-1)",
+                    fontSize: "var(--font-size-sm)", // ACCESSIBILITY: Same size as other text
+                    lineHeight: "var(--line-height-sm)",
+                    color: "var(--color-text-muted)",
                 }, children: hintText })), _jsxs("div", { className: "relative", children: [(leftText || leftIcon) && (_jsxs("div", { className: "absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center", children: [leftIcon && _jsx("span", { className: "mr-1", children: leftIcon }), leftText && (_jsx("span", { style: {
                                     color: "var(--color-text-secondary)",
                                     fontSize: "var(--font-size-sm)",
@@ -272,11 +279,16 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
                                     color: "var(--color-text-secondary)",
                                     fontSize: "var(--font-size-sm)",
                                 }, children: rightText }))] })] }), displayHelperText && (_jsx("div", { id: `${props.id}-helper`, className: cn(helperClassName), style: {
-                    ...helperStyles.base,
-                    ...(helperVariant &&
-                        helperStyles.variants[helperVariant]
-                        ? helperStyles.variants[helperVariant]
-                        : helperStyles.variants.default),
+                    marginTop: "var(--space-1)",
+                    fontSize: "var(--font-size-sm)", // ACCESSIBILITY: Same size as other text (not xs)
+                    lineHeight: "var(--line-height-sm)",
+                    color: helperVariant === "error"
+                        ? "var(--color-input-text-error)"
+                        : helperVariant === "success"
+                            ? "var(--color-input-text-success)"
+                            : helperVariant === "warning"
+                                ? "var(--color-input-text-warning)"
+                                : "var(--color-text-muted)",
                 }, children: displayHelperText }))] }));
 });
 Input.displayName = "Input";

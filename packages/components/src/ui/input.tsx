@@ -144,8 +144,8 @@ const labelStyles = {
 const helperStyles = {
   base: {
     marginTop: "var(--space-1)",
-    fontSize: "var(--font-size-xs)",
-    lineHeight: "var(--line-height-xs)",
+    fontSize: "var(--font-size-sm)",
+    lineHeight: "var(--line-height-sm)",
   },
   variants: {
     default: {
@@ -358,43 +358,58 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div className={cn("w-full", containerClassName)}>
         {/* Label */}
         {showLabel && label && (
-          <label
-            htmlFor={props.id}
-            className={cn(labelClassName)}
-            style={{
-              ...labelStyles.base,
-              ...(disabled ? labelStyles.states.disabled : {}),
-            }}
+          <div
+            className="flex items-center gap-1"
+            style={{ marginBottom: "var(--space-1)" }}
           >
-            <span
+            <label
+              htmlFor={props.id}
+              className={cn(labelClassName)}
               style={{
+                fontSize: "var(--font-size-sm)",
+                fontWeight: "var(--font-weight-medium)",
                 color: disabled
                   ? "var(--color-text-disabled)"
-                  : "var(--color-navy-500)",
+                  : "var(--color-navy-500)", // Navy-500 for label text
               }}
             >
               {label}
-            </span>
+            </label>
+            {/* FIXED: Keep asterisk (*) but use proper CTA red color */}
             {labelState === "required" && (
-              <span style={{ color: "var(--color-text-error)" }}> *</span>
-            )}
-            {labelState === "optional" && (
-              <span style={{ color: "var(--color-gray-500)" }}>
-                {" "}
-                (optional)
+              <span
+                style={{
+                  color: "var(--color-input-label-required)", // CTA red #a30134
+                  fontSize: "var(--font-size-sm)",
+                  fontWeight: "var(--font-weight-medium)",
+                }}
+              >
+                *
               </span>
             )}
-          </label>
+            {/* FIXED: Add proper space before (Optional) */}
+            {labelState === "optional" && (
+              <span
+                style={{
+                  color: "var(--color-input-label-optional)", // Gray for optional
+                  fontSize: "var(--font-size-sm)",
+                }}
+              >
+                (Optional)
+              </span>
+            )}
+          </div>
         )}
 
-        {/* Hint Text */}
+        {/* FIXED: Hint Text with accessible font size */}
         {showHintText && hintText && (
           <div
             style={{
-              ...helperStyles.base,
-              ...helperStyles.variants.muted,
               marginTop: 0,
               marginBottom: "var(--space-1)",
+              fontSize: "var(--font-size-sm)", // ACCESSIBILITY: Same size as other text
+              lineHeight: "var(--line-height-sm)",
+              color: "var(--color-text-muted)",
             }}
           >
             {hintText}
@@ -478,15 +493,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={`${props.id}-helper`}
             className={cn(helperClassName)}
             style={{
-              ...helperStyles.base,
-              ...(helperVariant &&
-              helperStyles.variants[
-                helperVariant as keyof typeof helperStyles.variants
-              ]
-                ? helperStyles.variants[
-                    helperVariant as keyof typeof helperStyles.variants
-                  ]
-                : helperStyles.variants.default),
+              marginTop: "var(--space-1)",
+              fontSize: "var(--font-size-sm)", // ACCESSIBILITY: Same size as other text (not xs)
+              lineHeight: "var(--line-height-sm)",
+              color:
+                helperVariant === "error"
+                  ? "var(--color-input-text-error)"
+                  : helperVariant === "success"
+                  ? "var(--color-input-text-success)"
+                  : helperVariant === "warning"
+                  ? "var(--color-input-text-warning)"
+                  : "var(--color-text-muted)",
             }}
           >
             {displayHelperText}

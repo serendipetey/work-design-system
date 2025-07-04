@@ -2955,46 +2955,6 @@ const inputStyles = {
         },
     },
 };
-// Label styles using CSS custom properties
-const labelStyles = {
-    base: {
-        display: "block",
-        fontSize: "var(--font-size-sm)",
-        fontWeight: "var(--font-weight-medium)",
-        marginBottom: "var(--space-1)",
-        // Remove color from here - let child spans handle it
-    },
-    states: {
-        disabled: {
-            color: "var(--color-text-disabled)",
-        },
-    },
-};
-// Helper text styles
-const helperStyles = {
-    base: {
-        marginTop: "var(--space-1)",
-        fontSize: "var(--font-size-xs)",
-        lineHeight: "var(--line-height-xs)",
-    },
-    variants: {
-        default: {
-            color: "var(--color-text-secondary)",
-        },
-        error: {
-            color: "var(--color-text-error)",
-        },
-        success: {
-            color: "var(--color-text-success)",
-        },
-        warning: {
-            color: "var(--color-text-warning)",
-        },
-        muted: {
-            color: "var(--color-text-muted)",
-        },
-    },
-};
 // 🎯 CVA for className-based utilities (minimal usage)
 const inputVariants = cva(
 // Base classes for layout/structure only
@@ -3110,18 +3070,25 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
             : warning
                 ? "warning"
                 : "default";
-    return (jsxRuntime.jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxRuntime.jsxs("label", { htmlFor: props.id, className: cn(labelClassName), style: {
-                    ...labelStyles.base,
-                    ...(disabled ? labelStyles.states.disabled : {}),
-                }, children: [jsxRuntime.jsx("span", { style: {
+    return (jsxRuntime.jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxRuntime.jsxs("div", { className: "flex items-center gap-1", style: { marginBottom: "var(--space-1)" }, children: [jsxRuntime.jsx("label", { htmlFor: props.id, className: cn(labelClassName), style: {
+                            fontSize: "var(--font-size-sm)",
+                            fontWeight: "var(--font-weight-medium)",
                             color: disabled
                                 ? "var(--color-text-disabled)"
-                                : "var(--color-navy-500)",
-                        }, children: label }), labelState === "required" && (jsxRuntime.jsx("span", { style: { color: "var(--color-text-error)" }, children: " *" })), labelState === "optional" && (jsxRuntime.jsxs("span", { style: { color: "var(--color-gray-500)" }, children: [" ", "(optional)"] }))] })), showHintText && hintText && (jsxRuntime.jsx("div", { style: {
-                    ...helperStyles.base,
-                    ...helperStyles.variants.muted,
+                                : "var(--color-navy-500)", // Navy-500 for label text
+                        }, children: label }), labelState === "required" && (jsxRuntime.jsx("span", { style: {
+                            color: "var(--color-input-label-required)", // CTA red #a30134
+                            fontSize: "var(--font-size-sm)",
+                            fontWeight: "var(--font-weight-medium)",
+                        }, children: "*" })), labelState === "optional" && (jsxRuntime.jsx("span", { style: {
+                            color: "var(--color-input-label-optional)", // Gray for optional
+                            fontSize: "var(--font-size-sm)",
+                        }, children: "(Optional)" }))] })), showHintText && hintText && (jsxRuntime.jsx("div", { style: {
                     marginTop: 0,
                     marginBottom: "var(--space-1)",
+                    fontSize: "var(--font-size-sm)", // ACCESSIBILITY: Same size as other text
+                    lineHeight: "var(--line-height-sm)",
+                    color: "var(--color-text-muted)",
                 }, children: hintText })), jsxRuntime.jsxs("div", { className: "relative", children: [(leftText || leftIcon) && (jsxRuntime.jsxs("div", { className: "absolute left-2 top-1/2 transform -translate-y-1/2 flex items-center", children: [leftIcon && jsxRuntime.jsx("span", { className: "mr-1", children: leftIcon }), leftText && (jsxRuntime.jsx("span", { style: {
                                     color: "var(--color-text-secondary)",
                                     fontSize: "var(--font-size-sm)",
@@ -3135,11 +3102,16 @@ const Input = React.forwardRef(({ className, variant = "default", size = "md", l
                                     color: "var(--color-text-secondary)",
                                     fontSize: "var(--font-size-sm)",
                                 }, children: rightText }))] })] }), displayHelperText && (jsxRuntime.jsx("div", { id: `${props.id}-helper`, className: cn(helperClassName), style: {
-                    ...helperStyles.base,
-                    ...(helperVariant &&
-                        helperStyles.variants[helperVariant]
-                        ? helperStyles.variants[helperVariant]
-                        : helperStyles.variants.default),
+                    marginTop: "var(--space-1)",
+                    fontSize: "var(--font-size-sm)", // ACCESSIBILITY: Same size as other text (not xs)
+                    lineHeight: "var(--line-height-sm)",
+                    color: helperVariant === "error"
+                        ? "var(--color-input-text-error)"
+                        : helperVariant === "success"
+                            ? "var(--color-input-text-success)"
+                            : helperVariant === "warning"
+                                ? "var(--color-input-text-warning)"
+                                : "var(--color-text-muted)",
                 }, children: displayHelperText }))] }));
 });
 Input.displayName = "Input";
