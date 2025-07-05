@@ -2942,6 +2942,82 @@ const Button = React.forwardRef(({ className, variant, size, asChild = false, lo
 });
 Button.displayName = "Button";
 
+// packages/components/src/ui/form.tsx
+/**
+ * 🎯 CENTRALIZED FORM UTILITIES
+ *
+ * Single source of truth for ALL form component styling.
+ * Used by Input, Select, Checkbox, Radio, and future form components.
+ *
+ * Benefits:
+ * ✅ No artificial dependencies between components
+ * ✅ Consistent styling across all form elements
+ * ✅ Better performance (CVA vs inline styles)
+ * ✅ Single place to update form styling
+ * ✅ Maintains all existing design tokens
+ */
+// 🎯 Helper Text Variants - Used by ALL form components
+const helperVariants = cva("text-base leading-[1.75] font-normal font-sans tracking-wide mt-1", {
+    variants: {
+        variant: {
+            default: "text-input-helper",
+            error: "text-input-text-error",
+            success: "text-input-text-success",
+            warning: "text-input-text-warning",
+            muted: "text-text-muted",
+        },
+    },
+    defaultVariants: { variant: "default" },
+});
+// 🎯 Label Variants - Used by ALL form components
+const labelVariants = cva("block text-base font-medium mb-0.5 font-sans", {
+    variants: {
+        variant: {
+            default: "text-[var(--color-input-label,#1e40af)]",
+            disabled: "text-[var(--color-disabled-text,#6b7280)]",
+        },
+    },
+    defaultVariants: { variant: "default" },
+});
+/**
+ * 🎯 SHARED FORM LOGIC UTILITIES
+ *
+ * Common logic patterns used across all form components
+ */
+// Extract helper text content from validation props
+const getHelperContent = (error, success, warning) => {
+    return ((typeof error === "string" ? error : null) ||
+        (typeof success === "string" ? success : null) ||
+        (typeof warning === "string" ? warning : null));
+};
+// Determine helper text variant based on validation state
+const getHelperVariant = (error, success, warning) => {
+    return error
+        ? "error"
+        : success
+            ? "success"
+            : warning
+                ? "warning"
+                : "default";
+};
+/**
+ * 🎯 FORM VALIDATION UTILITIES
+ */
+// Check if field has any validation state
+const hasValidationState = (error, success, warning) => {
+    return Boolean(error || success || warning);
+};
+// Get ARIA attributes for form field
+const getFormFieldAria = (inputId, error, success, warning, hintText) => {
+    const hasHelper = hasValidationState(error, success, warning);
+    const helperId = hasHelper ? `${inputId}-helper` : undefined;
+    const descriptionId = hintText && !hasHelper ? `${inputId}-description` : undefined;
+    return {
+        "aria-invalid": error ? "true" : undefined,
+        "aria-describedby": helperId || descriptionId || undefined,
+    };
+};
+
 // Spinner component for loading state
 const Spinner = () => (jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", className: "animate-spin", children: [jsx("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", className: "opacity-25" }), jsx("path", { fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z", className: "opacity-75" })] }));
 // 🎯 OPTIMAL: Design Tokens with Robust Fallbacks
@@ -3048,18 +3124,6 @@ const helperStyles = {
         letterSpacing: "var(--letter-spacing-wide, 0.0225em)",
     },
     variants: {
-        default: {
-            color: "var(--color-input-helper, #39444f)",
-        },
-        error: {
-            color: "var(--color-input-text-error, #eb0000)",
-        },
-        success: {
-            color: "var(--color-input-text-success, #007d85)",
-        },
-        warning: {
-            color: "var(--color-input-text-warning, #b75b00)",
-        },
         muted: {
             color: "var(--color-text-muted, #8f949a)",
         },
@@ -3088,37 +3152,6 @@ const inputVariants = cva(
     defaultVariants: {
         variant: "default",
         size: "md",
-    },
-});
-// 🎯 Helper text variants for consistent styling across components
-const helperVariants = cva(
-// Base helper text styles using design tokens
-"text-[var(--font-size-base,16px)] leading-[var(--line-height-loose,1.75)] font-[var(--font-weight-regular,400)] font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)] tracking-[var(--letter-spacing-wide,0.0225em)] mt-1", {
-    variants: {
-        variant: {
-            default: "text-[var(--color-input-helper,#39444f)]",
-            error: "text-[var(--color-input-text-error,#eb0000)]",
-            success: "text-[var(--color-input-text-success,#007d85)]",
-            warning: "text-[var(--color-input-text-warning,#b75b00)]",
-            muted: "text-[var(--color-text-muted,#8f949a)]",
-        },
-    },
-    defaultVariants: {
-        variant: "default",
-    },
-});
-// 🎯 Label variants for consistent styling across components
-const labelVariants = cva(
-// Base label styles using design tokens
-"block text-[var(--font-size-base,16px)] font-[var(--font-weight-medium,500)] mb-0.5 font-[var(--font-family-sans,'Poppins',sans-serif)]", {
-    variants: {
-        variant: {
-            default: "text-[var(--color-input-label,#1e40af)]",
-            disabled: "text-[var(--color-disabled-text,#6b7280)]",
-        },
-    },
-    defaultVariants: {
-        variant: "default",
     },
 });
 // 🎯 OPTIMAL: Design Tokens with Fallbacks for Focus Styles
@@ -3202,13 +3235,10 @@ disabled = false, ...props }, ref) => {
     const finalClassName = cn(inputVariants({ variant: finalVariant, size }), className);
     // Helper text logic
     const displayHelperText = error || success || warning;
-    const helperVariant = error
-        ? "error"
-        : success
-            ? "success"
-            : warning
-                ? "warning"
-                : "default";
+    // 🎯 USE CENTRALIZED FORM UTILITIES
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    const formFieldAria = getFormFieldAria(inputId, error, success, warning, hintText);
     const showLabel = !hideLabel;
     const showHintText = hintText && !displayHelperText;
     // IDs for accessibility
@@ -3218,23 +3248,21 @@ disabled = false, ...props }, ref) => {
                     ...(disabled ? labelStyles.states.disabled : {}),
                 }, children: [jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (jsxs("span", { style: {
                             color: "var(--color-text-muted, #6b7280)",
-                            fontWeight: "var(--font-weight-regular, 400)", // FIXED: Override bold inheritance
+                            fontWeight: "var(--font-weight-regular, 400)",
                         }, children: [" ", "(Optional)"] }))] })), showHintText && hintText && !displayHelperText && (jsx("p", { style: {
                     ...helperStyles.base,
                     ...helperStyles.variants.muted,
                     marginTop: "0px", // AGGRESSIVE: No space between label and hint
                     marginBottom: "2px", // AGGRESSIVE: Minimal space before input
-                }, children: hintText })), jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && jsx("span", { className: "text-sm", children: leftText })] })), jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, "aria-invalid": error ? "true" : undefined, "aria-describedby": helperTextId, style: {
+                }, children: hintText })), jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && jsx("span", { className: "text-sm", children: leftText })] })), jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, ...formFieldAria, style: {
                             ...combinedStyles,
                             paddingLeft: leftIcon || leftText ? "2.5rem" : combinedStyles.paddingLeft,
                             paddingRight: rightIcon || rightText || loading || clearable
                                 ? "2.5rem"
                                 : combinedStyles.paddingRight,
-                        } }), jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && (jsx("p", { id: helperTextId, className: cn(helperClassName), style: {
-                    ...helperStyles.base,
-                    ...helperStyles.variants[helperVariant],
+                        } }), jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && helperContent && (jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), style: {
                     marginTop: "1px", // AGGRESSIVE: Almost no space above validation text
-                }, children: displayHelperText }))] }));
+                }, children: helperContent }))] }));
 });
 Input.displayName = "Input";
 
@@ -8636,16 +8664,8 @@ const User = createLucideIcon("User", [
   ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
 ]);
 
-// packages/components/src/ui/select.tsx
-// Select Trigger uses INPUT variants (DRY!)
-const selectTriggerVariants = cva([
-    // Use input base classes
-    "flex items-center justify-between cursor-pointer",
-    // Only override what's different for select
-    "[&>span]:line-clamp-1 [&>span]:text-left",
-    // MINIMAL FIX: Keep focus ring visible when dropdown opens
-    "data-[state=open]:ring-2 data-[state=open]:ring-[var(--color-border-focus)]",
-], {
+// 🎯 Use EXACT same CVA as Input component
+const selectTriggerVariants = cva("flex items-center justify-between w-full transition-all duration-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 [&>span]:text-left data-[state=open]:ring-2 data-[state=open]:ring-[var(--color-border-focus)]", {
     variants: {
         variant: {
             default: "",
@@ -8665,63 +8685,230 @@ const selectTriggerVariants = cva([
         size: "md",
     },
 });
-// Simple dropdown content - uses existing tokens
-const selectContentVariants = cva([
-    "relative z-50 max-h-96 min-w-[8rem] overflow-hidden",
-    "rounded-md border border-[var(--color-border)]",
-    "bg-[var(--color-surface)] text-[var(--color-text-primary)]", // FIXED: Solid white background
-    "shadow-[var(--select-content-shadow)]",
-    // Standard Radix animations
-    "data-[state=open]:animate-in data-[state=closed]:animate-out",
-    "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-    "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-]);
-// Simple item styling - uses existing tokens
-const selectItemVariants = cva([
-    "relative flex w-full cursor-default select-none items-center",
-    "rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none",
-    "hover:bg-[var(--select-item-bg-hover)]",
-    "focus:bg-[var(--color-accent)] focus:text-[var(--color-accent-foreground)]",
-    "data-[state=checked]:bg-[var(--select-item-bg-selected)]",
-    "data-[state=checked]:text-[var(--select-item-text-selected)]",
-    "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-]);
-// Base Components
+const selectContentVariants = cva("relative z-50 max-h-96 min-w-[8rem] overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2", {
+    variants: {},
+    defaultVariants: {},
+});
+const selectItemVariants = cva("relative flex w-full cursor-default select-none items-center outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50");
+// 🎯 EXACT same design token styles as Input component
+const selectStyles = {
+    // Base styles - IDENTICAL to Input component
+    base: {
+        // Typography
+        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+        fontWeight: "var(--font-weight-regular, 400)",
+        fontSize: "var(--font-size-base, 16px)",
+        lineHeight: "var(--line-height-normal, 1.5)",
+        // Layout
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        // Colors - EXACT same tokens as Input
+        backgroundColor: "var(--color-surface, #ffffff)",
+        color: "var(--color-input-text, #39444f)",
+        // Borders - EXACT same as Input
+        borderRadius: "var(--border-radius-md, 6px)",
+        borderWidth: "var(--border-width, 1px)",
+        borderStyle: "solid",
+        borderColor: "var(--color-border, #d1d5db)",
+        // Transitions
+        transition: "var(--transition-base, all 200ms ease-in-out)",
+        // States
+        cursor: "pointer",
+        outline: "none",
+    },
+    // Size variants - EXACT same height tokens as Input component
+    sizes: {
+        sm: {
+            height: "var(--input-height-sm, 32px)", // FIXED: Use input height tokens
+            paddingLeft: "var(--input-padding-x-sm, 8px)", // FIXED: Match design tokens
+            paddingRight: "var(--input-padding-x-sm, 8px)",
+            fontSize: "var(--font-size-sm, 14px)",
+        },
+        md: {
+            height: "var(--input-height-md, 40px)", // FIXED: 40px not 48px!
+            paddingLeft: "var(--input-padding-x-md, 12px)", // FIXED: 12px from design tokens
+            paddingRight: "var(--input-padding-x-md, 12px)",
+            fontSize: "var(--font-size-base, 16px)",
+        },
+        lg: {
+            height: "var(--input-height-lg, 48px)", // FIXED: 48px not 56px!
+            paddingLeft: "var(--input-padding-x-lg, 16px)", // FIXED: 16px from design tokens
+            paddingRight: "var(--input-padding-x-lg, 16px)",
+            fontSize: "var(--font-size-lg, 18px)",
+        },
+        xl: {
+            height: "var(--input-height-xl, 56px)", // FIXED: 56px not 64px!
+            paddingLeft: "var(--input-padding-x-xl, 20px)", // FIXED: 20px from design tokens
+            paddingRight: "var(--input-padding-x-xl, 20px)",
+            fontSize: "var(--font-size-xl, 20px)",
+        },
+    },
+    // State variants - EXACT same as Input component
+    variants: {
+        default: {
+            borderColor: "var(--color-border, #d1d5db)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        error: {
+            borderColor: "var(--color-input-border-error, #eb0000)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        success: {
+            borderColor: "var(--color-input-border-success, #007d85)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        warning: {
+            borderColor: "var(--color-input-border-warning, #b75b00)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+    },
+    // State styles
+    states: {
+        disabled: {
+            cursor: "not-allowed",
+            opacity: "var(--opacity-disabled, 0.5)",
+            backgroundColor: "var(--color-disabled, #f3f4f6)",
+            color: "var(--color-disabled-text, #6b7280)",
+        }},
+};
+// 🎯 EXACT same focus injection as Input component
+const injectSelectFocusStyles = (variant) => {
+    const focusStyleId = `select-focus-${variant}`;
+    // Remove existing focus styles
+    const existingStyle = document.getElementById(focusStyleId);
+    if (existingStyle)
+        existingStyle.remove();
+    // Create new focus styles
+    const style = document.createElement("style");
+    style.id = focusStyleId;
+    let shadowToken;
+    switch (variant) {
+        case "error":
+            shadowToken =
+                "var(--input-focus-shadow-error, 0 0 0 3px rgba(235, 0, 0, 0.6))";
+            break;
+        case "success":
+            shadowToken =
+                "var(--input-focus-shadow-success, 0 0 0 3px rgba(0, 125, 133, 0.6))";
+            break;
+        case "warning":
+            shadowToken =
+                "var(--input-focus-shadow-warning, 0 0 0 3px rgba(183, 91, 0, 0.8))";
+            break;
+        default:
+            shadowToken =
+                "var(--input-focus-shadow-default, 0 0 0 3px rgba(255, 153, 0, 0.8))";
+    }
+    style.textContent = `
+    .select-${variant}:focus {
+      box-shadow: ${shadowToken};
+    }
+    
+    .select-${variant}[data-state="open"] {
+      box-shadow: ${shadowToken};
+    }
+  `;
+    document.head.appendChild(style);
+};
+// Basic Select Components (using Radix UI primitives)
 const Select = Root2$1;
 const SelectGroup = Group;
 const SelectValue = Value;
-// Select Trigger - INHERITS INPUT STYLING
-const SelectTrigger = React.forwardRef(({ className, variant, size, children, ...props }, ref) => (jsxs(Trigger$1, { ref: ref, className: cn(
-    // Use input variants as base!
-    inputVariants({ variant, size }), 
-    // Add select-specific overrides
-    selectTriggerVariants({ variant, size }), className), ...props, children: [children, jsx(Icon, { asChild: true, children: jsx(ChevronDown, { className: "h-4 w-4 opacity-50" }) })] })));
+// Enhanced SelectTrigger - EXACT same architecture as Input
+const SelectTrigger = React.forwardRef(({ className, variant = "default", size = "md", children, ...props }, ref) => {
+    const elementRef = React.useRef(null);
+    // Combine refs
+    React.useImperativeHandle(ref, () => elementRef.current);
+    // Inject focus styles on mount - EXACT same as Input
+    React.useEffect(() => {
+        if (elementRef.current && variant) {
+            injectSelectFocusStyles(variant);
+            elementRef.current.classList.add(`select-${variant}`);
+        }
+    }, [variant]);
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom - EXACT same as Input
+    const combinedStyles = {
+        ...selectStyles.base,
+        ...(variant && selectStyles.variants[variant]
+            ? selectStyles.variants[variant]
+            : {}),
+        ...(size && selectStyles.sizes[size] ? selectStyles.sizes[size] : {}),
+        ...(props.disabled ? selectStyles.states.disabled : {}),
+    };
+    // Build final className - EXACT same pattern as Input
+    const finalClassName = cn(selectTriggerVariants({ variant, size }), className);
+    return (jsxs(Trigger$1, { ref: elementRef, className: finalClassName, style: combinedStyles, ...props, children: [children, jsx(Icon, { asChild: true, children: jsx(ChevronDown, { className: "h-4 w-4 opacity-50" }) })] }));
+});
 SelectTrigger.displayName = Trigger$1.displayName;
-// Select Content with proper background
-const SelectContent = React.forwardRef(({ className, children, position = "popper", ...props }, ref) => (jsx(Portal, { children: jsxs(Content2$1, { ref: ref, className: cn(selectContentVariants(), className), position: position, ...props, children: [jsx(ScrollUpButton, { className: "flex cursor-default items-center justify-center py-1", children: jsx(ChevronUp, { className: "h-4 w-4" }) }), jsx(Viewport, { className: cn("p-1", position === "popper" &&
-                    "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"), children: children }), jsx(ScrollDownButton, { className: "flex cursor-default items-center justify-center py-1", children: jsx(ChevronDown, { className: "h-4 w-4" }) })] }) })));
+// Enhanced SelectContent
+const SelectContent = React.forwardRef(({ className, children, position = "popper", ...props }, ref) => {
+    const elementRef = React.useRef(null);
+    // Combine refs
+    React.useImperativeHandle(ref, () => elementRef.current);
+    // Apply styles
+    const combinedStyles = {
+        backgroundColor: "var(--color-surface, #ffffff)",
+        borderRadius: "var(--border-radius-md, 6px)",
+        borderWidth: "var(--border-width, 1px)",
+        borderStyle: "solid",
+        borderColor: "var(--color-border, #d1d5db)",
+        maxHeight: "var(--dropdown-max-height, 240px)",
+        overflowY: "auto",
+        overflowX: "hidden",
+        zIndex: "var(--z-dropdown, 50)",
+    };
+    return (jsx(Portal, { children: jsxs(Content2$1, { ref: elementRef, className: cn(selectContentVariants(), className), style: combinedStyles, position: position, ...props, children: [jsx(ScrollUpButton, { className: "flex cursor-default items-center justify-center py-1", children: jsx(ChevronUp, { className: "h-4 w-4" }) }), jsx(Viewport, { className: cn("p-1", position === "popper" &&
+                        "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"), children: children }), jsx(ScrollDownButton, { className: "flex cursor-default items-center justify-center py-1", children: jsx(ChevronDown, { className: "h-4 w-4" }) })] }) }));
+});
 SelectContent.displayName = Content2$1.displayName;
-// Select Item with proper check icon
-const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => (jsxs(Item$1, { ref: ref, className: cn(selectItemVariants(), className), ...props, children: [jsx("span", { className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center", children: jsx(ItemIndicator, { children: jsx(Check, { className: "h-4 w-4" }) }) }), jsx(ItemText, { children: children })] })));
+// Enhanced SelectItem
+const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => {
+    const combinedStyles = {
+        display: "flex",
+        alignItems: "center",
+        position: "relative",
+        paddingTop: "var(--spacing-2, 8px)",
+        paddingBottom: "var(--spacing-2, 8px)",
+        paddingLeft: "var(--spacing-8, 32px)",
+        paddingRight: "var(--spacing-3, 12px)",
+        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+        fontSize: "var(--font-size-base, 16px)",
+        lineHeight: "var(--line-height-normal, 1.5)",
+        color: "var(--color-input-text, #39444f)",
+        cursor: "pointer",
+        userSelect: "none",
+        borderRadius: "var(--border-radius-sm, 4px)",
+        transition: "var(--transition-base, all 200ms ease-in-out)",
+    };
+    return (jsxs(Item$1, { ref: ref, className: cn(selectItemVariants(), className), style: combinedStyles, ...props, children: [jsx("span", { className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center", children: jsx(ItemIndicator, { children: jsx(Check, { className: "h-4 w-4" }) }) }), jsx(ItemText, { children: children })] }));
+});
 SelectItem.displayName = Item$1.displayName;
-const SelectField = React.forwardRef(({ className, variant, size, label, labelState = "default", showLabel = true, hintText, // ADDED: Hint text support
-showHintText = true, // ADDED: Hint text control
-helperText, error, success, warning, placeholder, value, onValueChange, defaultValue, children, required, disabled, id, name, ...props }, ref) => {
-    // Determine effective variant based on state
-    const effectiveVariant = error
+const SelectField = React.forwardRef(({ className, variant = "default", size = "md", label, labelState, hideLabel = false, hintText, helperText, error, success, warning, placeholder, value, onValueChange, defaultValue, children, required, disabled, id, name, containerClassName, labelClassName, helperClassName, ...props }, ref) => {
+    const selectId = React.useId();
+    // 🎯 EXACT same logic as Input component
+    const finalVariant = error
         ? "error"
         : success
             ? "success"
             : warning
                 ? "warning"
                 : variant;
-    const effectiveLabelState = required && labelState === "default" ? "required" : labelState;
-    const helperContent = error || helperText;
-    const helperVariant = error ? "error" : "muted";
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    const formFieldAria = getFormFieldAria(selectId, error, success, warning, hintText);
+    const showLabel = !hideLabel;
+    const showHintText = hintText && !helperContent;
+    // IDs for accessibility
+    const helperTextId = helperContent ? `${selectId}-helper` : undefined;
     // Check if component has valid options
     const hasOptions = React.Children.count(children) > 0;
-    return (jsxs("div", { className: cn("space-y-2", className), children: [showLabel && label && (jsxs("div", { className: "flex items-center gap-1", children: [jsx("label", { htmlFor: id, className: "text-sm font-medium text-[var(--color-input-label)]" // FIXED: Use proper navy-500 color
-                        , children: label }), effectiveLabelState === "required" && (jsx("span", { className: "text-[var(--color-input-label-required)] text-sm", children: "(Required)" })), effectiveLabelState === "optional" && (jsx("span", { className: "text-[var(--color-input-label-optional)] text-sm", children: "(Optional)" }))] })), showHintText && hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" })), children: hintText })), jsxs(Select, { value: value, onValueChange: onValueChange, defaultValue: defaultValue, name: name, required: required, disabled: disabled, ...props, children: [jsx(SelectTrigger, { ref: ref, id: id, variant: effectiveVariant, size: size, children: jsx(SelectValue, { placeholder: hasOptions ? placeholder : "No options available" }) }), jsx(SelectContent, { children: hasOptions ? (children) : (jsx("div", { className: "py-2 px-3 text-sm text-[var(--color-text-muted)]", children: "No options available" })) })] }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant })), children: helperContent }))] }));
+    return (jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxs("label", { htmlFor: selectId, className: cn(labelVariants({ variant: disabled ? "disabled" : "default" }), labelClassName), children: [label, labelState === "required" && (jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (jsxs("span", { style: {
+                            color: "var(--color-text-muted, #6b7280)",
+                            fontWeight: "var(--font-weight-regular, 400)",
+                        }, children: [" ", "(Optional)"] }))] })), showHintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5"), id: `${selectId}-description`, children: hintText })), jsxs(Select, { value: value, onValueChange: onValueChange, defaultValue: defaultValue, name: name, required: required, disabled: disabled, ...props, children: [jsx(SelectTrigger, { ref: ref, id: selectId, variant: finalVariant, size: size, className: className, ...formFieldAria, children: jsx(SelectValue, { placeholder: hasOptions ? placeholder : "No options available" }) }), jsx(SelectContent, { children: hasOptions ? (children) : (jsx("div", { className: "py-2 px-3 text-sm text-[var(--color-text-muted)]", children: "No options available" })) })] }), helperContent && (jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), style: {
+                    marginTop: "2px",
+                }, children: helperContent }))] }));
 });
 SelectField.displayName = "SelectField";
 
@@ -9959,4 +10146,4 @@ function useNavigationState(config, currentPath) {
     };
 }
 
-export { Button, ColumnSortControls, DataTable, Input, Pagination, PaginationEllipsis, PaginationItem, PaginationNext, PaginationPrevious, PaginationResults, Select, SelectContent, SelectField, SelectGroup, SelectItem, SelectTrigger, SelectValue, SidebarBusinessLogo, SidebarMenu, SidebarMenuItem, SidebarMenuSection, SidebarMenuSectionRoot, SidebarProfile, SidebarToggle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, buttonBaseClasses as buttonVariants, cn, createDefaultRowActions, helperVariants, inputVariants, labelVariants, paginationItemVariants, paginationNavVariants, paginationResultsVariants, paginationVariants, sidebarBusinessLogoVariants, sidebarMenuItemVariants, sidebarMenuSectionContentVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionVariants, sidebarMenuVariants, sidebarProfileVariants, tableBodyVariants, tableCellVariants, tableHeadVariants, tableHeaderVariants, tableRowVariants, tableVariants, useActiveNavigation, useDataTable, useNavigationState };
+export { Button, ColumnSortControls, DataTable, Input, Pagination, PaginationEllipsis, PaginationItem, PaginationNext, PaginationPrevious, PaginationResults, Select, SelectContent, SelectField, SelectGroup, SelectItem, SelectTrigger, SelectValue, SidebarBusinessLogo, SidebarMenu, SidebarMenuItem, SidebarMenuSection, SidebarMenuSectionRoot, SidebarProfile, SidebarToggle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, buttonBaseClasses as buttonVariants, cn, createDefaultRowActions, helperVariants, inputVariants, labelVariants, paginationItemVariants, paginationNavVariants, paginationResultsVariants, paginationVariants, selectTriggerVariants, sidebarBusinessLogoVariants, sidebarMenuItemVariants, sidebarMenuSectionContentVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionVariants, sidebarMenuVariants, sidebarProfileVariants, tableBodyVariants, tableCellVariants, tableHeadVariants, tableHeaderVariants, tableRowVariants, tableVariants, useActiveNavigation, useDataTable, useNavigationState };

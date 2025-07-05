@@ -7,6 +7,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+// 🎯 IMPORT CENTRALIZED FORM UTILITIES
+import { helperVariants, labelVariants, getHelperContent, getHelperVariant, getFormFieldAria, } from "./form";
 // Spinner component for loading state
 const Spinner = () => (_jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", className: "animate-spin", children: [_jsx("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", className: "opacity-25" }), _jsx("path", { fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z", className: "opacity-75" })] }));
 // 🎯 OPTIMAL: Design Tokens with Robust Fallbacks
@@ -155,37 +157,6 @@ const inputVariants = cva(
         size: "md",
     },
 });
-// 🎯 Helper text variants for consistent styling across components
-const helperVariants = cva(
-// Base helper text styles using design tokens
-"text-[var(--font-size-base,16px)] leading-[var(--line-height-loose,1.75)] font-[var(--font-weight-regular,400)] font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)] tracking-[var(--letter-spacing-wide,0.0225em)] mt-1", {
-    variants: {
-        variant: {
-            default: "text-[var(--color-input-helper,#39444f)]",
-            error: "text-[var(--color-input-text-error,#eb0000)]",
-            success: "text-[var(--color-input-text-success,#007d85)]",
-            warning: "text-[var(--color-input-text-warning,#b75b00)]",
-            muted: "text-[var(--color-text-muted,#8f949a)]",
-        },
-    },
-    defaultVariants: {
-        variant: "default",
-    },
-});
-// 🎯 Label variants for consistent styling across components
-const labelVariants = cva(
-// Base label styles using design tokens
-"block text-[var(--font-size-base,16px)] font-[var(--font-weight-medium,500)] mb-0.5 font-[var(--font-family-sans,'Poppins',sans-serif)]", {
-    variants: {
-        variant: {
-            default: "text-[var(--color-input-label,#1e40af)]",
-            disabled: "text-[var(--color-disabled-text,#6b7280)]",
-        },
-    },
-    defaultVariants: {
-        variant: "default",
-    },
-});
 // 🎯 OPTIMAL: Design Tokens with Fallbacks for Focus Styles
 const injectFocusStyles = (variant) => {
     const focusStyleId = `input-focus-${variant}`;
@@ -267,13 +238,10 @@ disabled = false, ...props }, ref) => {
     const finalClassName = cn(inputVariants({ variant: finalVariant, size }), className);
     // Helper text logic
     const displayHelperText = error || success || warning;
-    const helperVariant = error
-        ? "error"
-        : success
-            ? "success"
-            : warning
-                ? "warning"
-                : "default";
+    // 🎯 USE CENTRALIZED FORM UTILITIES
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    const formFieldAria = getFormFieldAria(inputId, error, success, warning, hintText);
     const showLabel = !hideLabel;
     const showHintText = hintText && !displayHelperText;
     // IDs for accessibility
@@ -283,23 +251,21 @@ disabled = false, ...props }, ref) => {
                     ...(disabled ? labelStyles.states.disabled : {}),
                 }, children: [_jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (_jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (_jsxs("span", { style: {
                             color: "var(--color-text-muted, #6b7280)",
-                            fontWeight: "var(--font-weight-regular, 400)", // FIXED: Override bold inheritance
+                            fontWeight: "var(--font-weight-regular, 400)",
                         }, children: [" ", "(Optional)"] }))] })), showHintText && hintText && !displayHelperText && (_jsx("p", { style: {
                     ...helperStyles.base,
                     ...helperStyles.variants.muted,
                     marginTop: "0px", // AGGRESSIVE: No space between label and hint
                     marginBottom: "2px", // AGGRESSIVE: Minimal space before input
-                }, children: hintText })), _jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (_jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && _jsx("span", { className: "text-sm", children: leftText })] })), _jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, "aria-invalid": error ? "true" : undefined, "aria-describedby": helperTextId, style: {
+                }, children: hintText })), _jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (_jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && _jsx("span", { className: "text-sm", children: leftText })] })), _jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, ...formFieldAria, style: {
                             ...combinedStyles,
                             paddingLeft: leftIcon || leftText ? "2.5rem" : combinedStyles.paddingLeft,
                             paddingRight: rightIcon || rightText || loading || clearable
                                 ? "2.5rem"
                                 : combinedStyles.paddingRight,
-                        } }), _jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (_jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: _jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (_jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: _jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: _jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (_jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && _jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && (_jsx("p", { id: helperTextId, className: cn(helperClassName), style: {
-                    ...helperStyles.base,
-                    ...helperStyles.variants[helperVariant],
+                        } }), _jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (_jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: _jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (_jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: _jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: _jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (_jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && _jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && helperContent && (_jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), style: {
                     marginTop: "1px", // AGGRESSIVE: Almost no space above validation text
-                }, children: displayHelperText }))] }));
+                }, children: helperContent }))] }));
 });
 Input.displayName = "Input";
 // 🎯 Named Exports for compatibility with existing imports

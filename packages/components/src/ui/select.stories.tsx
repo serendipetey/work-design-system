@@ -156,7 +156,6 @@ export const LabelStates: Story = {
 
       <SelectField
         label="Default Label"
-        labelState="default"
         hintText="Default label state"
         placeholder="Select default option"
       >
@@ -190,27 +189,25 @@ export const AllVariants: Story = {
 
       <SelectField
         label="Success State"
-        variant="success"
         defaultValue="success"
+        success="Selection saved successfully" // ✅ Use success prop
         hintText="Operation completed"
-        helperText="Selection saved successfully"
       >
         <SelectItem value="success">Success option</SelectItem>
       </SelectField>
 
       <SelectField
         label="Warning State"
-        variant="warning"
         defaultValue="warning"
+        warning="Double-check your selection" // ✅ Use warning prop
         hintText="Please review"
-        helperText="Double-check your selection"
       >
         <SelectItem value="warning">Warning option</SelectItem>
       </SelectField>
 
       <SelectField
         label="Error State"
-        error="This field is required"
+        error="This field is required" // ✅ Already correct
         placeholder="Error styling"
         hintText="Fix the error below"
       >

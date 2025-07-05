@@ -8,6 +8,15 @@ import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+// 🎯 IMPORT CENTRALIZED FORM UTILITIES
+import {
+  helperVariants,
+  labelVariants,
+  getHelperContent,
+  getHelperVariant,
+  getFormFieldAria,
+} from "./form";
+
 // Spinner component for loading state
 const Spinner = () => (
   <svg
@@ -191,42 +200,6 @@ const inputVariants = cva(
   }
 );
 
-// 🎯 Helper text variants for consistent styling across components
-const helperVariants = cva(
-  "text-base leading-[1.75] font-normal font-sans tracking-wide mt-1",
-  {
-    variants: {
-      variant: {
-        default: "text-input-helper",
-        error: "text-input-text-error",
-        success: "text-input-text-success",
-        warning: "text-input-text-warning",
-        muted: "text-text-muted",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-);
-
-// 🎯 Label variants for consistent styling across components
-const labelVariants = cva(
-  // Base label styles using design tokens
-  "block text-[var(--font-size-base,16px)] font-[var(--font-weight-medium,500)] mb-0.5 font-[var(--font-family-sans,'Poppins',sans-serif)]",
-  {
-    variants: {
-      variant: {
-        default: "text-[var(--color-input-label,#1e40af)]",
-        disabled: "text-[var(--color-disabled-text,#6b7280)]",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-);
-
 // 🎯 OPTIMAL: Design Tokens with Fallbacks for Focus Styles
 const injectFocusStyles = (variant: string) => {
   const focusStyleId = `input-focus-${variant}`;
@@ -384,18 +357,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     // Helper text logic
     const displayHelperText = error || success || warning;
-    const helperContent =
-      (typeof error === "string" ? error : null) ||
-      (typeof success === "string" ? success : null) ||
-      (typeof warning === "string" ? warning : null);
-
-    const helperVariant = error
-      ? "error"
-      : success
-      ? "success"
-      : warning
-      ? "warning"
-      : "default";
+    // 🎯 USE CENTRALIZED FORM UTILITIES
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    const formFieldAria = getFormFieldAria(
+      inputId,
+      error,
+      success,
+      warning,
+      hintText
+    );
     const showLabel = !hideLabel;
     const showHintText = hintText && !displayHelperText;
 
@@ -429,7 +400,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               <span
                 style={{
                   color: "var(--color-text-muted, #6b7280)",
-                  fontWeight: "var(--font-weight-regular, 400)", // FIXED: Override bold inheritance
+                  fontWeight: "var(--font-weight-regular, 400)",
                 }}
               >
                 {" "}
@@ -474,8 +445,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             disabled={disabled}
             className={finalClassName}
-            aria-invalid={error ? "true" : undefined}
-            aria-describedby={helperTextId}
+            {...formFieldAria}
             style={{
               ...combinedStyles,
               paddingLeft:

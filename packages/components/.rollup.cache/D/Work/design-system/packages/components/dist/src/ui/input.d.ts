@@ -1,14 +1,9 @@
 import React from "react";
 import { type VariantProps } from "class-variance-authority";
+import { helperVariants, labelVariants } from "./form";
 declare const inputVariants: (props?: ({
     variant?: "default" | "error" | "success" | "warning" | null | undefined;
     size?: "sm" | "md" | "lg" | "xl" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-declare const helperVariants: (props?: ({
-    variant?: "default" | "error" | "success" | "warning" | "muted" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-declare const labelVariants: (props?: ({
-    variant?: "default" | "disabled" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">, VariantProps<typeof inputVariants> {
     size?: "sm" | "md" | "lg" | "xl";

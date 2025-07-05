@@ -9,10 +9,38 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { inputVariants, helperVariants } from "./input";
+import {
+  helperVariants,
+  labelVariants,
+  getHelperContent,
+  getHelperVariant,
+  getFormFieldAria,
+} from "./form";
 
 // 🎯 Use EXACT same CVA as Input component
-const selectTriggerVariants = inputVariants;
+const selectTriggerVariants = cva(
+  "flex items-center justify-between w-full transition-all duration-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 [&>span]:text-left data-[state=open]:ring-2 data-[state=open]:ring-[var(--color-border-focus)]",
+  {
+    variants: {
+      variant: {
+        default: "",
+        error: "",
+        success: "",
+        warning: "",
+      },
+      size: {
+        sm: "",
+        md: "",
+        lg: "",
+        xl: "",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  }
+);
 
 const selectContentVariants = cva(
   "relative z-50 max-h-96 min-w-[8rem] overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
@@ -401,18 +429,15 @@ const SelectField = React.forwardRef<
 
     // Helper text logic - EXACT same as Input component
     const displayHelperText = error || success || warning || helperText;
-    const helperContent =
-      (typeof error === "string" ? error : null) ||
-      (typeof success === "string" ? success : null) ||
-      (typeof warning === "string" ? warning : null) ||
-      helperText;
-    const helperVariant = error
-      ? "error"
-      : success
-      ? "success"
-      : warning
-      ? "warning"
-      : "default";
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    const formFieldAria = getFormFieldAria(
+      selectId,
+      error,
+      success,
+      warning,
+      hintText
+    );
     const showLabel = !hideLabel;
     const showHintText = hintText && !helperContent;
 
@@ -428,23 +453,12 @@ const SelectField = React.forwardRef<
         {showLabel && label && (
           <label
             htmlFor={selectId}
-            className={cn(labelClassName)}
-            style={{
-              display: "block",
-              fontFamily:
-                "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
-              fontSize: "var(--font-size-base, 16px)",
-              fontWeight: "var(--font-weight-medium, 500)",
-              lineHeight: "var(--line-height-normal, 1.5)",
-              marginBottom: "2px",
-              ...(disabled
-                ? { color: "var(--color-disabled-text, #6b7280)" }
-                : {}),
-            }}
+            className={cn(
+              labelVariants({ variant: disabled ? "disabled" : "default" }),
+              labelClassName
+            )}
           >
-            <span style={{ color: "var(--color-input-label, #1e40af)" }}>
-              {label}
-            </span>
+            {label}
             {labelState === "required" && (
               <span
                 style={{ color: "var(--color-input-label-required, #a30134)" }}
@@ -468,16 +482,10 @@ const SelectField = React.forwardRef<
         )}
 
         {/* Hint Text */}
-        {showHintText && hintText && !helperContent && (
+        {showHintText && (
           <p
-            className={cn(
-              helperVariants({ variant: "muted" }),
-              helperClassName
-            )}
-            style={{
-              marginTop: "0px",
-              marginBottom: "2px",
-            }}
+            className={cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5")}
+            id={`${selectId}-description`}
           >
             {hintText}
           </p>
@@ -499,8 +507,7 @@ const SelectField = React.forwardRef<
             variant={finalVariant}
             size={size}
             className={className}
-            aria-invalid={error ? "true" : undefined}
-            aria-describedby={helperTextId}
+            {...formFieldAria}
           >
             <SelectValue
               placeholder={hasOptions ? placeholder : "No options available"}
