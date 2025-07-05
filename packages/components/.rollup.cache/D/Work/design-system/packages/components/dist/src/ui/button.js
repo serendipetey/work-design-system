@@ -223,39 +223,8 @@ const createHoverCSS = () => {
       border-bottom-right-radius: 0 !important;
     }
     
-    /* 🎯 ACTIVE/PRESS STATES - Only for enabled buttons */
-    .design-system-button[data-variant="primary"]:active:not(:disabled) {
-      background-color: var(--button-primary-bg-focus, var(--color-navy-700, #082343)) !important;
-      transform: translateY(1px) !important;
-    }
-    
-    .design-system-button[data-variant="outline"]:active:not(:disabled) {
-      background-color: var(--button-outline-bg-focus, var(--color-navy-200, #e2e8f0)) !important;
-      transform: translateY(1px) !important;
-    }
-    
-    .design-system-button[data-variant="cta"]:active:not(:disabled) {
-      background-color: var(--button-cta-bg-focus, var(--color-red-700, #991b1b)) !important;
-      transform: translateY(1px) !important;
-    }
-    
-    .design-system-button[data-variant="success"]:active:not(:disabled) {
-      background-color: var(--button-success-bg-focus, var(--color-success-700, #004d50)) !important;
-      transform: translateY(1px) !important;
-    }
-    
-    .design-system-button[data-variant="warning"]:active:not(:disabled) {
-      background-color: var(--button-warning-bg-focus, var(--color-warning-700, #8b4513)) !important;
-      transform: translateY(1px) !important;
-    }
-    
-    .design-system-button[data-variant="destructive"]:active:not(:disabled) {
-      background-color: var(--button-destructive-bg-focus, var(--color-destructive-700, #a21caf)) !important;
-      transform: translateY(1px) !important;
-    }
-    
-    .design-system-button[data-variant="ghost"]:active:not(:disabled) {
-      background-color: var(--button-ghost-bg-focus, var(--color-navy-200, #e2e8f0)) !important;
+    /* 🎯 ACTIVE/PRESS STATES - Animation only, no color changes */
+    .design-system-button:active:not(:disabled) {
       transform: translateY(1px) !important;
     }
   `;
