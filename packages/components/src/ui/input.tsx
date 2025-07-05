@@ -368,7 +368,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       hintText
     );
     const showLabel = !hideLabel;
-    const showHintText = hintText && !displayHelperText;
+    const showHintText = !!hintText;
 
     // IDs for accessibility
     const helperTextId = displayHelperText ? `${inputId}-helper` : undefined;
@@ -411,7 +411,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
 
         {/* Hint Text */}
-        {showHintText && hintText && !displayHelperText && (
+        {showHintText && (
           <p
             style={{
               ...helperStyles.base,

@@ -243,7 +243,7 @@ disabled = false, ...props }, ref) => {
     const helperVariant = getHelperVariant(error, success, warning);
     const formFieldAria = getFormFieldAria(inputId, error, success, warning, hintText);
     const showLabel = !hideLabel;
-    const showHintText = hintText && !displayHelperText;
+    const showHintText = !!hintText;
     // IDs for accessibility
     const helperTextId = displayHelperText ? `${inputId}-helper` : undefined;
     return (_jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (_jsxs("label", { htmlFor: inputId, className: cn(labelClassName), style: {
@@ -252,7 +252,7 @@ disabled = false, ...props }, ref) => {
                 }, children: [_jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (_jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (_jsxs("span", { style: {
                             color: "var(--color-text-muted, #6b7280)",
                             fontWeight: "var(--font-weight-regular, 400)",
-                        }, children: [" ", "(Optional)"] }))] })), showHintText && hintText && !displayHelperText && (_jsx("p", { style: {
+                        }, children: [" ", "(Optional)"] }))] })), showHintText && (_jsx("p", { style: {
                     ...helperStyles.base,
                     ...helperStyles.variants.muted,
                     marginTop: "0px", // AGGRESSIVE: No space between label and hint

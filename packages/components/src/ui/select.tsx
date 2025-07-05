@@ -428,7 +428,6 @@ const SelectField = React.forwardRef<
       : variant;
 
     // Helper text logic - EXACT same as Input component
-    const displayHelperText = error || success || warning || helperText;
     const helperContent = getHelperContent(error, success, warning);
     const helperVariant = getHelperVariant(error, success, warning);
     const formFieldAria = getFormFieldAria(
@@ -439,7 +438,7 @@ const SelectField = React.forwardRef<
       hintText
     );
     const showLabel = !hideLabel;
-    const showHintText = hintText && !helperContent;
+    const showHintText = !!hintText;
 
     // IDs for accessibility
     const helperTextId = helperContent ? `${selectId}-helper` : undefined;

@@ -59,16 +59,12 @@ const meta = {
     },
     labelState: {
       control: { type: "select" },
-      options: ["default", "required", "optional"],
+      options: ["required", "optional"],
       description: "Label state - controls required (*) or (Optional) display",
     },
-    showLabel: {
+    hideLabel: {
       control: "boolean",
-      description: "Toggle label visibility",
-    },
-    showHintText: {
-      control: "boolean",
-      description: "Toggle hint text visibility",
+      description: "Hide the label (label will not be displayed)",
     },
     clearable: {
       control: "boolean",
@@ -215,43 +211,7 @@ export const AllStates: Story = {
   },
 };
 
-// Label States
-export const LabelStates: Story = {
-  render: () => (
-    <div className="space-y-6">
-      <Input
-        label="Required Field"
-        labelState="required"
-        hintText="This field is required"
-        placeholder="Enter required information"
-      />
-
-      <Input
-        label="Optional Field"
-        labelState="optional"
-        hintText="This field is optional"
-        placeholder="Enter optional information"
-      />
-
-      <Input
-        label="Default Label"
-        labelState="default"
-        hintText="Default label state"
-        placeholder="Enter information"
-      />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Label states showing required (*), optional (Optional), and default labels using your design system typography tokens.",
-      },
-    },
-  },
-};
-
-// Size Variants
+// Size variants
 export const AllSizes: Story = {
   render: () => (
     <div className="space-y-4">
@@ -259,28 +219,25 @@ export const AllSizes: Story = {
         size="sm"
         label="Small"
         placeholder="Small input"
-        leftIcon={<SearchIcon />}
+        hintText="Small size variant"
       />
-
       <Input
         size="md"
         label="Medium (Default)"
         placeholder="Medium input"
-        leftIcon={<SearchIcon />}
+        hintText="Default medium size"
       />
-
       <Input
         size="lg"
         label="Large"
         placeholder="Large input"
-        leftIcon={<SearchIcon />}
+        hintText="Large size variant"
       />
-
       <Input
         size="xl"
         label="Extra Large"
         placeholder="Extra large input"
-        leftIcon={<SearchIcon />}
+        hintText="Extra large size variant"
       />
     </div>
   ),
@@ -288,39 +245,40 @@ export const AllSizes: Story = {
     docs: {
       description: {
         story:
-          "All input sizes using your design system spacing tokens. Sizes follow your existing button component sizing system.",
+          "All input sizes using your design system spacing tokens. Heights: 32px (sm), 40px (md), 48px (lg), 56px (xl).",
       },
     },
   },
 };
 
-// Icon Support
+// Icon examples
 export const WithIcons: Story = {
   render: () => (
     <div className="space-y-4">
       <Input
-        label="Left Icon"
+        label="With Left Icon"
         placeholder="Search..."
         leftIcon={<SearchIcon />}
+        hintText="Enter search terms"
       />
-
       <Input
-        label="Right Icon"
+        label="With Right Icon"
         placeholder="Select date"
         rightIcon={<CalendarIcon />}
+        hintText="Choose a date"
       />
-
       <Input
-        label="Both Icons"
-        placeholder="Search dates"
+        label="With Both Icons"
+        placeholder="Enter value"
         leftIcon={<SearchIcon />}
         rightIcon={<CalendarIcon />}
+        hintText="Multiple icons supported"
       />
-
       <Input
-        label="Clearable"
-        placeholder="Type something to see clear button"
-        defaultValue="Clear me!"
+        label="Clearable Input"
+        placeholder="Type something..."
+        defaultValue="Clear me"
+        hintText="Shows clear button when typing"
         clearable
       />
     </div>
@@ -417,6 +375,69 @@ export const AIToolExamples: Story = {
       description: {
         story:
           "Examples optimized for AI tools like Cursor and Lovable. Simple, intuitive props that AI can easily understand and replicate.",
+      },
+    },
+  },
+};
+
+// Hint + Validation Simultaneous Display
+export const HintWithValidation: Story = {
+  render: () => (
+    <div className="space-y-6 w-full max-w-lg">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">
+          🎯 Hint Text + Validation Helper Text
+        </h3>
+        <p className="text-sm text-gray-600 mb-6">
+          Demonstrates that hint text (instructional) and validation helper text
+          can display simultaneously.
+        </p>
+      </div>
+
+      {/* Password Example */}
+      <Input
+        label="Password"
+        labelState="required"
+        type="password"
+        placeholder="Enter password"
+        hintText="Password must be at least 8 characters long"
+        error="Password is too weak - add special characters"
+      />
+
+      {/* Username Example */}
+      <Input
+        label="Username"
+        placeholder="Choose a username"
+        hintText="Username will be used for login and public profile"
+        success="Username is available"
+      />
+
+      {/* Email Example */}
+      <Input
+        label="Email Address"
+        type="email"
+        placeholder="Enter your email"
+        hintText="We'll use this to send you important updates"
+        warning="This email is already in use by another account"
+      />
+
+      {/* Phone Example */}
+      <Input
+        label="Phone Number"
+        labelState="optional"
+        type="tel"
+        placeholder="Enter phone number"
+        hintText="Include country code for international numbers"
+        success="Phone number verified successfully"
+        leftIcon={<SearchIcon />}
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "🎯 **Key UX Pattern**: Hint text provides permanent instructional guidance under the label, while validation helper text gives dynamic feedback under the input. Both can display simultaneously for optimal user experience.",
       },
     },
   },

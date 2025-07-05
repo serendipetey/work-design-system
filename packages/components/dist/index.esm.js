@@ -3209,7 +3209,7 @@ disabled = false, ...props }, ref) => {
     const helperVariant = getHelperVariant(error, success, warning);
     const formFieldAria = getFormFieldAria(inputId, error, success, warning, hintText);
     const showLabel = !hideLabel;
-    const showHintText = hintText && !displayHelperText;
+    const showHintText = !!hintText;
     // IDs for accessibility
     const helperTextId = displayHelperText ? `${inputId}-helper` : undefined;
     return (jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxs("label", { htmlFor: inputId, className: cn(labelClassName), style: {
@@ -3218,7 +3218,7 @@ disabled = false, ...props }, ref) => {
                 }, children: [jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (jsxs("span", { style: {
                             color: "var(--color-text-muted, #6b7280)",
                             fontWeight: "var(--font-weight-regular, 400)",
-                        }, children: [" ", "(Optional)"] }))] })), showHintText && hintText && !displayHelperText && (jsx("p", { style: {
+                        }, children: [" ", "(Optional)"] }))] })), showHintText && (jsx("p", { style: {
                     ...helperStyles.base,
                     ...helperStyles.variants.muted,
                     marginTop: "0px", // AGGRESSIVE: No space between label and hint
@@ -8863,11 +8863,12 @@ const SelectField = React.forwardRef(({ className, variant = "default", size = "
             : warning
                 ? "warning"
                 : variant;
+    // Helper text logic - EXACT same as Input component
     const helperContent = getHelperContent(error, success, warning);
     const helperVariant = getHelperVariant(error, success, warning);
     const formFieldAria = getFormFieldAria(selectId, error, success, warning, hintText);
     const showLabel = !hideLabel;
-    const showHintText = hintText && !helperContent;
+    const showHintText = !!hintText;
     // IDs for accessibility
     const helperTextId = helperContent ? `${selectId}-helper` : undefined;
     // Check if component has valid options

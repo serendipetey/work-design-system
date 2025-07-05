@@ -347,6 +347,71 @@ export const Disabled: Story = {
   },
 };
 
+// Hint + Validation Simultaneous Display
+export const HintWithValidation: Story = {
+  render: () => (
+    <div className="space-y-6 w-full max-w-lg">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">
+          🎯 Hint Text + Validation Helper Text
+        </h3>
+        <p className="text-sm text-gray-600 mb-6">
+          Shows how Select inherits the same hint + validation pattern from
+          Input components.
+        </p>
+      </div>
+
+      {/* Department Example */}
+      <SelectField
+        label="Department"
+        labelState="required"
+        placeholder="Select your department"
+        hintText="Choose your primary department for access permissions"
+        success="Department selection saved successfully"
+      >
+        <SelectItem value="engineering">Engineering</SelectItem>
+        <SelectItem value="design">Design</SelectItem>
+        <SelectItem value="product">Product</SelectItem>
+        <SelectItem value="marketing">Marketing</SelectItem>
+      </SelectField>
+
+      {/* Priority Example */}
+      <SelectField
+        label="Priority Level"
+        placeholder="Choose priority"
+        hintText="Higher priority items will be processed first"
+        warning="High priority should only be used for urgent items"
+      >
+        <SelectItem value="low">Low Priority</SelectItem>
+        <SelectItem value="medium">Medium Priority</SelectItem>
+        <SelectItem value="high">High Priority</SelectItem>
+        <SelectItem value="critical">Critical Priority</SelectItem>
+      </SelectField>
+
+      {/* Status Example */}
+      <SelectField
+        label="Project Status"
+        defaultValue="in-progress"
+        hintText="Select current status to update team dashboard"
+        error="Status change requires manager approval"
+      >
+        <SelectItem value="planning">Planning</SelectItem>
+        <SelectItem value="in-progress">In Progress</SelectItem>
+        <SelectItem value="review">Under Review</SelectItem>
+        <SelectItem value="completed">Completed</SelectItem>
+      </SelectField>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "🎯 **Consistent UX Pattern**: Select components inherit the same hint + validation text behavior from Input, ensuring consistent form experiences across your design system.",
+      },
+    },
+  },
+};
+
 // Focus behavior demonstration
 export const FocusBehavior: Story = {
   render: () => (
