@@ -28,82 +28,156 @@
   --button-primary-bg: var(--color-primary);
   --button-primary-bg-hover: var(--color-primary-hover);
   --button-primary-bg-focus: var(--color-primary-focus);
-  --button-primary-bg-disabled: var(--color-disabled);
+  --button-primary-bg-disabled: var(--color-navy-200, #d1d9e6); /* Faded navy */
 
-  --button-primary-text: var(--color-text-inverse);
-  --button-primary-text-disabled: var(--color-disabled-text);
+  --button-primary-text: var(--color-button-primary-text);
+  --button-primary-text-disabled: var(
+    --color-navy-400,
+    #7a8699
+  ); /* Faded navy text */
   --button-primary-text-focus: var(--color-primary);
 
   --button-primary-border: var(--color-transparent);
   --button-primary-border-focus: var(--color-primary-focus);
+  --button-primary-border-disabled: var(
+    --color-navy-200,
+    #d1d9e6
+  ); /* Match background */
 
   /* Outline Button */
-  --button-outline-bg: var(--color-surface);
-  --button-outline-bg-hover: var(--color-surface-subtle);
-  --button-outline-bg-focus: var(--color-primary-focus);
-  --button-outline-bg-disabled: var(--color-disabled);
+  --button-outline-bg: var(--color-transparent);
+  --button-outline-bg-hover: var(--color-navy-100);
+  --button-outline-bg-focus: var(--color-primary);
+  --button-outline-bg-disabled: var(
+    --color-navy-50,
+    #f8f9fb
+  ); /* Very light navy background */
 
   --button-outline-text: var(--color-primary);
   --button-outline-text-hover: var(--color-primary-hover);
   --button-outline-text-focus: var(--color-primary);
-  --button-outline-text-disabled: var(--color-disabled-text);
+  --button-outline-text-disabled: var(
+    --color-navy-300,
+    #a8b3c5
+  ); /* Faded navy text */
 
   --button-outline-border: var(--color-primary);
   --button-outline-border-hover: var(--color-primary-hover);
   --button-outline-border-focus: var(--color-primary-focus);
-  --button-outline-border-disabled: var(--color-disabled);
+  --button-outline-border-disabled: var(
+    --color-navy-200,
+    #d1d9e6
+  ); /* Faded navy border */
 
   /* CTA Button */
   --button-cta-bg: var(--color-cta);
   --button-cta-bg-hover: var(--color-cta-hover);
   --button-cta-bg-focus: var(--color-warning-500);
-  --button-cta-bg-disabled: var(--color-disabled);
+  --button-cta-bg-disabled: var(--color-red-200, #fecaca); /* Faded red */
 
   --button-cta-text: var(--color-text-inverse);
-  --button-cta-text-disabled: var(--color-disabled-text);
+  --button-cta-text-disabled: var(
+    --color-red-400,
+    #f87171
+  ); /* Faded red text */
   --button-cta-text-focus: var(--color-primary);
 
   --button-cta-border: var(--color-transparent);
   --button-cta-border-focus: var(--color-primary-focus);
+  --button-cta-border-disabled: var(
+    --color-red-200,
+    #fecaca
+  ); /* Match background */
 
-  /* Success Button - NEW */
+  /* Success Button */
   --button-success-bg: var(--color-success);
   --button-success-bg-hover: var(--color-success-hover);
   --button-success-bg-focus: var(--color-warning-500);
-  --button-success-bg-disabled: var(--color-disabled);
+  --button-success-bg-disabled: var(
+    --color-success-200,
+    #a7f3d0
+  ); /* Faded teal/green */
 
   --button-success-text: var(--color-button-success-text);
-  --button-success-text-disabled: var(--color-disabled-text);
+  --button-success-text-disabled: var(
+    --color-success-400,
+    #4ade80
+  ); /* Faded teal text */
   --button-success-text-focus: var(--color-primary);
 
   --button-success-border: var(--color-transparent);
   --button-success-border-focus: var(--color-primary-focus);
+  --button-success-border-disabled: var(
+    --color-success-200,
+    #a7f3d0
+  ); /* Match background */
 
-  /* Warning Button - NEW */
+  /* Warning Button */
   --button-warning-bg: var(--color-warning);
   --button-warning-bg-hover: var(--color-warning-hover);
   --button-warning-bg-focus: var(--color-warning-500);
-  --button-warning-bg-disabled: var(--color-disabled);
+  --button-warning-bg-disabled: var(
+    --color-warning-200,
+    #fed7aa
+  ); /* Faded orange */
 
   --button-warning-text: var(--color-button-warning-text);
-  --button-warning-text-disabled: var(--color-disabled-text);
+  --button-warning-text-disabled: var(
+    --color-warning-400,
+    #fb923c
+  ); /* Faded orange text */
   --button-warning-text-focus: var(--color-primary);
 
   --button-warning-border: var(--color-transparent);
   --button-warning-border-focus: var(--color-primary-focus);
+  --button-warning-border-disabled: var(
+    --color-warning-200,
+    #fed7aa
+  ); /* Match background */
 
   /* Destructive Button */
   --button-destructive-bg: var(--color-destructive);
   --button-destructive-bg-hover: var(--color-destructive-hover);
   --button-destructive-bg-focus: var(--color-warning-500);
-  --button-destructive-bg-disabled: var(--color-disabled);
+  --button-destructive-bg-disabled: var(
+    --color-destructive-200,
+    #fecaca
+  ); /* Faded destructive red */
 
   --button-destructive-text: var(--color-text-inverse);
-  --button-destructive-text-disabled: var(--color-disabled-text);
+  --button-destructive-text-disabled: var(
+    --color-destructive-400,
+    #f87171
+  ); /* Faded destructive text */
   --button-destructive-text-focus: var(--color-primary);
 
   --button-destructive-border: var(--color-transparent);
   --button-destructive-border-focus: var(--color-primary-focus);
+  --button-destructive-border-disabled: var(
+    --color-destructive-200,
+    #fecaca
+  ); /* Match background */
+
+  /* Ghost Button */
+  --button-ghost-bg: var(--color-transparent);
+  --button-ghost-bg-hover: var(--color-navy-100);
+  --button-ghost-bg-focus: var(--color-focus-500);
+  --button-ghost-bg-disabled: var(--color-transparent); /* Keep transparent */
+
+  --button-ghost-text: var(--color-primary);
+  --button-ghost-text-hover: var(--color-primary-hover);
+  --button-ghost-text-focus: var(--color-primary);
+  --button-ghost-text-disabled: var(
+    --color-navy-300,
+    #a8b3c5
+  ); /* Faded navy text */
+
+  --button-ghost-border: var(--color-transparent);
+  --button-ghost-border-hover: var(--color-transparent);
+  --button-ghost-border-focus: var(--color-primary-focus);
+  --button-ghost-border-disabled: var(
+    --color-transparent
+  ); /* Keep transparent */
 
   /* UNIFIED FOCUS STATES - All buttons use these when focused */
   --button-unified-focus-bg: var(
