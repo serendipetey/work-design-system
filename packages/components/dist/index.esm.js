@@ -3026,7 +3026,7 @@ const labelStyles = {
     base: {
         display: "block",
         fontSize: "var(--font-size-base, 16px)",
-        fontWeight: "var(--font-weight-semibold, 500)",
+        fontWeight: "var(--font-weight-medium, 500)",
         marginBottom: "2px", // AGGRESSIVE: Reduced from 8px to 2px
         color: "var(--color-input-label, #1e40af)",
         fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
