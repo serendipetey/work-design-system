@@ -193,16 +193,15 @@ const inputVariants = cva(
 
 // 🎯 Helper text variants for consistent styling across components
 const helperVariants = cva(
-  // Base helper text styles using design tokens
-  "text-[var(--font-size-base,16px)] leading-[var(--line-height-loose,1.75)] font-[var(--font-weight-regular,400)] font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)] tracking-[var(--letter-spacing-wide,0.0225em)] mt-1",
+  "text-base leading-[1.75] font-normal font-sans tracking-wide mt-1",
   {
     variants: {
       variant: {
-        default: "text-[var(--color-input-helper,#39444f)]",
-        error: "text-[var(--color-input-text-error,#eb0000)]",
-        success: "text-[var(--color-input-text-success,#007d85)]",
-        warning: "text-[var(--color-input-text-warning,#b75b00)]",
-        muted: "text-[var(--color-text-muted,#8f949a)]",
+        default: "text-input-helper",
+        error: "text-input-text-error",
+        success: "text-input-text-success",
+        warning: "text-input-text-warning",
+        muted: "text-text-muted",
       },
     },
     defaultVariants: {
@@ -385,6 +384,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     // Helper text logic
     const displayHelperText = error || success || warning;
+    const helperContent =
+      (typeof error === "string" ? error : null) ||
+      (typeof success === "string" ? success : null) ||
+      (typeof warning === "string" ? warning : null);
+
     const helperVariant = error
       ? "error"
       : success
@@ -526,17 +530,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {/* Helper Text */}
-        {displayHelperText && (
+        {displayHelperText && helperContent && (
           <p
             id={helperTextId}
-            className={cn(helperClassName)}
+            className={cn(
+              helperVariants({ variant: helperVariant }),
+              helperClassName
+            )}
             style={{
-              ...helperStyles.base,
-              ...helperStyles.variants[helperVariant],
               marginTop: "1px", // AGGRESSIVE: Almost no space above validation text
             }}
           >
-            {displayHelperText}
+            {helperContent}
           </p>
         )}
       </div>

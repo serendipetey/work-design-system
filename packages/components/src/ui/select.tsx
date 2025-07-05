@@ -467,17 +467,14 @@ const SelectField = React.forwardRef<
           </label>
         )}
 
-        {/* Hint Text - EXACT same as Input */}
+        {/* Hint Text */}
         {showHintText && hintText && !helperContent && (
           <p
+            className={cn(
+              helperVariants({ variant: "muted" }),
+              helperClassName
+            )}
             style={{
-              fontFamily:
-                "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
-              fontSize: "var(--font-size-base, 16px)",
-              fontWeight: "var(--font-weight-regular, 400)",
-              lineHeight: "var(--line-height-loose, 1.75)",
-              letterSpacing: "var(--letter-spacing-wide, 0.0225em)",
-              color: "var(--color-text-muted, #8f949a)",
               marginTop: "0px",
               marginBottom: "2px",
             }}

@@ -48,6 +48,13 @@ module.exports = {
         "focus-text": "var(--color-navy-500)",
         "focus-border": "var(--color-navy-500)",
 
+        // 🎯 Helper text color tokens - centralized for form components
+        "input-helper": "var(--color-input-helper, #39444f)",
+        "input-text-error": "var(--color-input-text-error, #eb0000)",
+        "input-text-success": "var(--color-input-text-success, #007d85)",
+        "input-text-warning": "var(--color-input-text-warning, #b75b00)",
+        "text-muted": "var(--color-text-muted, #8f949a)",
+
         // Semantic color mappings for components
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -82,34 +89,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        success: {
-          DEFAULT: "hsl(var(--success))",
-          foreground: "hsl(var(--success-foreground))",
-        },
-        warning: {
-          DEFAULT: "hsl(var(--warning))",
-          foreground: "hsl(var(--warning-foreground))",
-        },
-        cta: {
-          DEFAULT: "hsl(var(--cta))",
-          foreground: "hsl(var(--cta-foreground))",
-        },
       },
-
-      // Typography - Mapping your existing font system
-      fontFamily: {
-        sans: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: [
-          "ui-monospace",
-          "SFMono-Regular",
-          "SF Mono",
-          "Consolas",
-          "Liberation Mono",
-          "Menlo",
-          "monospace",
-        ],
-      },
-
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
