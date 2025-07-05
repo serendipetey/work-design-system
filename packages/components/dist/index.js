@@ -3130,7 +3130,7 @@ const helperVariants = cva(
 // 🎯 Label variants for consistent styling across components
 const labelVariants = cva(
 // Base label styles using design tokens
-"block text-[var(--font-size-base,16px)] font-[var(--font-weight-semibold,500)] mb-0.5 font-[var(--font-family-sans,'Poppins',sans-serif)]", {
+"block text-[var(--font-size-base,16px)] font-[var(--font-weight-medium,500)] mb-0.5 font-[var(--font-family-sans,'Poppins',sans-serif)]", {
     variants: {
         variant: {
             default: "text-[var(--color-input-label,#1e40af)]",
