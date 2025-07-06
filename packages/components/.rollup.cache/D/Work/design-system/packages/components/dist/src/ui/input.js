@@ -94,41 +94,12 @@ const labelStyles = {
         display: "block",
         fontSize: "var(--font-size-base, 16px)",
         fontWeight: "var(--font-weight-medium, 500)",
-        marginBottom: "2px", // AGGRESSIVE: Reduced from 8px to 2px
         color: "var(--color-input-label, #1e40af)",
         fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
     },
     states: {
         disabled: {
             color: "var(--color-disabled-text, #6b7280)",
-        },
-    },
-};
-// Helper text styles - MUCH tighter spacing
-const helperStyles = {
-    base: {
-        fontSize: "var(--font-size-base, 16px)", // Accessibility: 16px
-        lineHeight: "var(--line-height-loose, 1.75)",
-        fontWeight: "var(--font-weight-regular, 400)",
-        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
-        marginTop: "1px", // AGGRESSIVE: Almost no space above helper text
-        letterSpacing: "var(--letter-spacing-wide, 0.0225em)",
-    },
-    variants: {
-        default: {
-            color: "var(--color-input-helper, #39444f)",
-        },
-        error: {
-            color: "var(--color-input-text-error, #eb0000)",
-        },
-        success: {
-            color: "var(--color-input-text-success, #007d85)",
-        },
-        warning: {
-            color: "var(--color-input-text-warning, #b75b00)",
-        },
-        muted: {
-            color: "var(--color-text-muted, #8f949a)",
         },
     },
 };
@@ -246,26 +217,19 @@ disabled = false, ...props }, ref) => {
     const showHintText = !!hintText;
     // IDs for accessibility
     const helperTextId = displayHelperText ? `${inputId}-helper` : undefined;
-    return (_jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (_jsxs("label", { htmlFor: inputId, className: cn(labelClassName), style: {
+    return (_jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (_jsxs("label", { htmlFor: inputId, className: cn(labelVariants(), labelClassName), style: {
                     ...labelStyles.base,
                     ...(disabled ? labelStyles.states.disabled : {}),
                 }, children: [_jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (_jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (_jsxs("span", { style: {
                             color: "var(--color-text-muted, #6b7280)",
                             fontWeight: "var(--font-weight-regular, 400)",
-                        }, children: [" ", "(Optional)"] }))] })), showHintText && (_jsx("p", { style: {
-                    ...helperStyles.base,
-                    ...helperStyles.variants.muted,
-                    marginTop: "0px", // AGGRESSIVE: No space between label and hint
-                    marginBottom: "2px", // AGGRESSIVE: Minimal space before input
-                }, children: hintText })), _jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (_jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && _jsx("span", { className: "text-sm", children: leftText })] })), _jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, ...formFieldAria, style: {
+                        }, children: [" ", "(Optional)"] }))] })), showHintText && (_jsx("p", { className: cn(helperVariants({ variant: "muted" })), id: `${inputId}-description`, children: hintText })), _jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (_jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && _jsx("span", { className: "text-sm", children: leftText })] })), _jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, ...formFieldAria, style: {
                             ...combinedStyles,
                             paddingLeft: leftIcon || leftText ? "2.5rem" : combinedStyles.paddingLeft,
                             paddingRight: rightIcon || rightText || loading || clearable
                                 ? "2.5rem"
                                 : combinedStyles.paddingRight,
-                        } }), _jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (_jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: _jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (_jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: _jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: _jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (_jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && _jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && helperContent && (_jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), style: {
-                    marginTop: "1px", // AGGRESSIVE: Almost no space above validation text
-                }, children: helperContent }))] }));
+                        } }), _jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (_jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: _jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (_jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: _jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: _jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (_jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && _jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && helperContent && (_jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 Input.displayName = "Input";
 // 🎯 Named Exports for compatibility with existing imports

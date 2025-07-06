@@ -2964,20 +2964,21 @@ Button.displayName = "Button";
  * ✅ Maintains all existing design tokens
  */
 // 🎯 Helper Text Variants - Used by ALL form components
-const helperVariants = cva("text-base leading-[1.75] font-normal font-sans tracking-wide mt-1", {
+const helperVariants = cva("text-sm leading-[1.25] font-normal font-sans tracking-wide", {
     variants: {
         variant: {
-            default: "text-input-helper",
-            error: "text-input-text-error",
-            success: "text-input-text-success",
-            warning: "text-input-text-warning",
-            muted: "text-text-muted",
+            default: "text-input-helper mt-1", // Standard validation spacing
+            error: "text-input-text-error mt-1",
+            success: "text-input-text-success mt-1",
+            warning: "text-input-text-warning mt-1",
+            muted: "text-text-muted mt-0 mb-1", // Hint text spacing - tighter
         },
     },
     defaultVariants: { variant: "default" },
 });
 // 🎯 Label Variants - Used by ALL form components
-const labelVariants = cva("block text-base font-medium mb-0.5 font-sans", {
+const labelVariants = cva("block text-base font-medium mb-1 font-sans", // Reduced from mb-0.5 to mb-1 for consistency
+{
     variants: {
         variant: {
             default: "text-[var(--color-input-label,#1e40af)]",
@@ -3110,29 +3111,12 @@ const labelStyles = {
         display: "block",
         fontSize: "var(--font-size-base, 16px)",
         fontWeight: "var(--font-weight-medium, 500)",
-        marginBottom: "2px", // AGGRESSIVE: Reduced from 8px to 2px
         color: "var(--color-input-label, #1e40af)",
         fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
     },
     states: {
         disabled: {
             color: "var(--color-disabled-text, #6b7280)",
-        },
-    },
-};
-// Helper text styles - MUCH tighter spacing
-const helperStyles = {
-    base: {
-        fontSize: "var(--font-size-base, 16px)", // Accessibility: 16px
-        lineHeight: "var(--line-height-loose, 1.75)",
-        fontWeight: "var(--font-weight-regular, 400)",
-        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
-        marginTop: "1px", // AGGRESSIVE: Almost no space above helper text
-        letterSpacing: "var(--letter-spacing-wide, 0.0225em)",
-    },
-    variants: {
-        muted: {
-            color: "var(--color-text-muted, #8f949a)",
         },
     },
 };
@@ -3250,26 +3234,19 @@ disabled = false, ...props }, ref) => {
     const showHintText = !!hintText;
     // IDs for accessibility
     const helperTextId = displayHelperText ? `${inputId}-helper` : undefined;
-    return (jsxRuntime.jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxRuntime.jsxs("label", { htmlFor: inputId, className: cn(labelClassName), style: {
+    return (jsxRuntime.jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxRuntime.jsxs("label", { htmlFor: inputId, className: cn(labelVariants(), labelClassName), style: {
                     ...labelStyles.base,
                     ...(disabled ? labelStyles.states.disabled : {}),
                 }, children: [jsxRuntime.jsx("span", { style: { color: "var(--color-input-label, #1e40af)" }, children: label }), labelState === "required" && (jsxRuntime.jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (jsxRuntime.jsxs("span", { style: {
                             color: "var(--color-text-muted, #6b7280)",
                             fontWeight: "var(--font-weight-regular, 400)",
-                        }, children: [" ", "(Optional)"] }))] })), showHintText && (jsxRuntime.jsx("p", { style: {
-                    ...helperStyles.base,
-                    ...helperStyles.variants.muted,
-                    marginTop: "0px", // AGGRESSIVE: No space between label and hint
-                    marginBottom: "2px", // AGGRESSIVE: Minimal space before input
-                }, children: hintText })), jsxRuntime.jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxRuntime.jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && jsxRuntime.jsx("span", { className: "text-sm", children: leftText })] })), jsxRuntime.jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, ...formFieldAria, style: {
+                        }, children: [" ", "(Optional)"] }))] })), showHintText && (jsxRuntime.jsx("p", { className: cn(helperVariants({ variant: "muted" })), id: `${inputId}-description`, children: hintText })), jsxRuntime.jsxs("div", { className: "relative", children: [(leftIcon || leftText) && (jsxRuntime.jsxs("div", { className: "absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [leftIcon, leftText && jsxRuntime.jsx("span", { className: "text-sm", children: leftText })] })), jsxRuntime.jsx("input", { ...props, ref: elementRef, id: inputId, type: type, disabled: disabled, className: finalClassName, ...formFieldAria, style: {
                             ...combinedStyles,
                             paddingLeft: leftIcon || leftText ? "2.5rem" : combinedStyles.paddingLeft,
                             paddingRight: rightIcon || rightText || loading || clearable
                                 ? "2.5rem"
                                 : combinedStyles.paddingRight,
-                        } }), jsxRuntime.jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (jsxRuntime.jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: jsxRuntime.jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (jsxRuntime.jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: jsxRuntime.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: jsxRuntime.jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (jsxRuntime.jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && jsxRuntime.jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && helperContent && (jsxRuntime.jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), style: {
-                    marginTop: "1px", // AGGRESSIVE: Almost no space above validation text
-                }, children: helperContent }))] }));
+                        } }), jsxRuntime.jsxs("div", { className: "absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2", children: [loading && (jsxRuntime.jsx("div", { style: { color: "var(--color-text-muted, #6b7280)" }, children: jsxRuntime.jsx(Spinner, {}) })), clearable && props.value && !disabled && !loading && (jsxRuntime.jsx("button", { type: "button", onClick: onClear, className: "hover:text-gray-700 focus:outline-none", style: { color: "var(--color-text-muted, #6b7280)" }, "aria-label": "Clear input", children: jsxRuntime.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", children: jsxRuntime.jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }) })), (rightIcon || rightText) && !loading && !clearable && (jsxRuntime.jsxs("div", { className: "flex items-center", style: { color: "var(--color-text-muted, #6b7280)" }, children: [rightText && jsxRuntime.jsx("span", { className: "text-sm", children: rightText }), rightIcon] }))] })] }), displayHelperText && helperContent && (jsxRuntime.jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 Input.displayName = "Input";
 
@@ -8914,9 +8891,7 @@ const SelectField = React__namespace.forwardRef(({ className, variant = "default
     return (jsxRuntime.jsxs("div", { className: cn("w-full", containerClassName), children: [showLabel && label && (jsxRuntime.jsxs("label", { htmlFor: selectId, className: cn(labelVariants({ variant: disabled ? "disabled" : "default" }), labelClassName), children: [label, labelState === "required" && (jsxRuntime.jsxs("span", { style: { color: "var(--color-input-label-required, #a30134)" }, children: [" ", "*"] })), labelState === "optional" && (jsxRuntime.jsxs("span", { style: {
                             color: "var(--color-text-muted, #6b7280)",
                             fontWeight: "var(--font-weight-regular, 400)",
-                        }, children: [" ", "(Optional)"] }))] })), showHintText && (jsxRuntime.jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5"), id: `${selectId}-description`, children: hintText })), jsxRuntime.jsxs(Select, { value: value, onValueChange: onValueChange, defaultValue: defaultValue, name: name, required: required, disabled: disabled, ...props, children: [jsxRuntime.jsx(SelectTrigger, { ref: ref, id: selectId, variant: finalVariant, size: size, className: className, ...formFieldAria, children: jsxRuntime.jsx(SelectValue, { placeholder: hasOptions ? placeholder : "No options available" }) }), jsxRuntime.jsx(SelectContent, { children: hasOptions ? (children) : (jsxRuntime.jsx("div", { className: "py-2 px-3 text-sm text-[var(--color-text-muted)]", children: "No options available" })) })] }), helperContent && (jsxRuntime.jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), style: {
-                    marginTop: "2px",
-                }, children: helperContent }))] }));
+                        }, children: [" ", "(Optional)"] }))] })), showHintText && (jsxRuntime.jsx("p", { className: cn(helperVariants({ variant: "muted" })), id: `${selectId}-description`, children: hintText })), jsxRuntime.jsxs(Select, { value: value, onValueChange: onValueChange, defaultValue: defaultValue, name: name, required: required, disabled: disabled, ...props, children: [jsxRuntime.jsx(SelectTrigger, { ref: ref, id: selectId, variant: finalVariant, size: size, className: className, ...formFieldAria, children: jsxRuntime.jsx(SelectValue, { placeholder: hasOptions ? placeholder : "No options available" }) }), jsxRuntime.jsx(SelectContent, { children: hasOptions ? (children) : (jsxRuntime.jsx("div", { className: "py-2 px-3 text-sm text-[var(--color-text-muted)]", children: "No options available" })) })] }), helperContent && (jsxRuntime.jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 SelectField.displayName = "SelectField";
 

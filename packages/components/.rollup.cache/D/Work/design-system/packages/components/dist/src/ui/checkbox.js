@@ -12,7 +12,7 @@ import { cva } from "class-variance-authority";
 import { Check, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 // 🎯 IMPORT CENTRALIZED FORM UTILITIES (Fixed from "./input")
-import { helperVariants, labelVariants, getHelperContent, getHelperVariant, getFormFieldAria, } from "./form";
+import { helperVariants, labelVariants, fieldVariants, getHelperContent, getHelperVariant, getFormFieldAria, } from "./form";
 // 🎯 DESIGN TOKEN STYLE OBJECTS WITH FALLBACKS
 const checkboxStyles = {
     base: {
@@ -237,7 +237,7 @@ const Checkbox = React.forwardRef(({ className, variant = "default", size = "md"
     };
     // Build final className
     const finalClassName = cn(checkboxVariants({ variant: finalVariant, size }), className);
-    return (_jsxs("div", { className: cn("flex flex-col gap-0.5", containerClassName), children: [_jsxs("div", { className: "flex items-start space-x-2", children: [_jsx(CheckboxPrimitive.Root, { ref: elementRef, id: checkboxId, className: finalClassName, style: combinedStyles, checked: checked, disabled: disabled, ...formFieldAria, ...props, children: _jsx(CheckboxPrimitive.Indicator, { className: "flex items-center justify-center text-current", children: checked === "indeterminate" ? (_jsx(Minus, { className: "h-3 w-3" })) : (_jsx(Check, { className: "h-3 w-3" })) }) }), label && showLabel && (_jsx("label", { htmlFor: checkboxId, className: cn(
+    return (_jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [_jsxs("div", { className: "flex items-start space-x-2", children: [_jsx(CheckboxPrimitive.Root, { ref: elementRef, id: checkboxId, className: finalClassName, style: combinedStyles, checked: checked, disabled: disabled, ...formFieldAria, ...props, children: _jsx(CheckboxPrimitive.Indicator, { className: "flex items-center justify-center text-current", children: checked === "indeterminate" ? (_jsx(Minus, { className: "h-3 w-3" })) : (_jsx(Check, { className: "h-3 w-3" })) }) }), label && showLabel && (_jsx("label", { htmlFor: checkboxId, className: cn(
                         // Individual checkbox labels use small paragraph text (charcoal)
                         "text-sm font-normal leading-normal cursor-pointer", {
                             color: "var(--color-text-body, #39444f)",
@@ -251,9 +251,9 @@ const RadioGroup = React.forwardRef(({ className, containerClassName, labelClass
     // 🎯 Use centralized form utilities
     const helperContent = getHelperContent(error, success, warning);
     const helperVariant = getHelperVariant(error, success, warning);
-    return (_jsxs("div", { className: cn("space-y-2", containerClassName), children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({
+    return (_jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({
                     variant: disabled ? "disabled" : "default",
-                }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "*" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(Optional)" }))] })), hintText && (_jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5"), children: hintText })), _jsx(RadioGroupPrimitive.Root, { className: cn("grid gap-2", className), disabled: disabled, ref: ref, ...props, children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+                }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "*" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(Optional)" }))] })), hintText && (_jsx("p", { className: cn(helperVariants({ variant: "muted" })), children: hintText })), _jsx(RadioGroupPrimitive.Root, { className: cn("grid gap-2", className), disabled: disabled, ref: ref, ...props, children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 // Radio Item Component
@@ -283,6 +283,7 @@ const RadioItem = React.forwardRef(({ className, itemClassName, labelClassName, 
     return (_jsxs("div", { className: cn("flex items-center space-x-2", itemClassName), children: [_jsx(RadioGroupPrimitive.Item, { ref: elementRef, className: finalClassName, style: combinedStyles, value: value, disabled: disabled, ...props, children: _jsx(RadioGroupPrimitive.Indicator, { className: "flex items-center justify-center", children: _jsx("div", { className: "rounded-full bg-current", style: {
                             width: "6px",
                             height: "6px",
+                            backgroundColor: "var(--color-navy-500, #1e3a8a)",
                         } }) }) }), label && (_jsx("label", { htmlFor: props.id, className: cn(
                 // Individual radio labels use small paragraph text (charcoal)
                 "text-sm font-normal leading-normal cursor-pointer", disabled && "cursor-not-allowed opacity-50", labelClassName), style: {
@@ -295,7 +296,7 @@ const CheckboxGroup = React.forwardRef(({ containerClassName, labelClassName, he
     // 🎯 Use centralized form utilities
     const helperContent = getHelperContent(error, success, warning);
     const helperVariant = getHelperVariant(error, success, warning);
-    return (_jsxs("div", { ref: ref, className: cn("space-y-2", containerClassName), ...props, children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({ variant: "default" }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "*" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(Optional)" }))] })), hintText && (_jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5"), children: hintText })), _jsx("div", { className: "space-y-1", children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+    return (_jsxs("div", { ref: ref, className: cn("space-y-2", containerClassName), ...props, children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({ variant: "default" }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "*" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(Optional)" }))] })), hintText && (_jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5"), children: hintText })), _jsx("div", { className: cn(fieldVariants({ variant: "compact" })), children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 CheckboxGroup.displayName = "CheckboxGroup";
 export { Checkbox, RadioGroup, RadioItem, CheckboxGroup, checkboxVariants, radioVariants, };
