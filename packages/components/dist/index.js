@@ -2906,6 +2906,24 @@ const createHoverCSS = () => {
       border-bottom-right-radius: 0 !important;
     }
     
+    /* 🎯 FOCUS + HOVER COMBINATION - Preserve focus accessibility with lighter orange */
+    .design-system-button:focus-visible:hover:not(:disabled) {
+      /* Remove default outline */
+      outline: none !important;
+      
+      /* Lighter orange background with navy text - focus/400 */
+      background-color: var(--button-unified-focus-hover-bg, var(--color-focus-400, #ffab33)) !important;
+      color: var(--button-unified-focus-text, var(--color-navy-500, #0e3a6c)) !important;
+      
+      /* Clear all borders first, then apply thick navy bottom border */
+      border: 1px solid transparent !important;
+      border-bottom: var(--button-unified-focus-border-width, 3px) solid var(--button-unified-focus-border, var(--color-navy-500, #0e3a6c)) !important;
+      
+      /* Flat bottom edge */
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+    
     /* 🎯 ACTIVE/PRESS STATES - Animation only, no color changes */
     .design-system-button:active:not(:disabled) {
       transform: translateY(1px) !important;

@@ -1,6 +1,6 @@
 {
   "name": "@serendipetey/design-tokens",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Design tokens for your design system",
   "main": "dist/css/index.css",
   "repository": {
