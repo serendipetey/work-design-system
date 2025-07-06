@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import {
   helperVariants,
   labelVariants,
+  fieldVariants,
   getHelperContent,
   getHelperVariant,
   getFormFieldAria,
@@ -392,7 +393,7 @@ const Checkbox = React.forwardRef<
     );
 
     return (
-      <div className={cn("flex flex-col gap-0.5", containerClassName)}>
+      <div className={cn(fieldVariants(), containerClassName)}>
         <div className="flex items-start space-x-2">
           <CheckboxPrimitive.Root
             ref={elementRef}
@@ -479,7 +480,7 @@ const RadioGroup = React.forwardRef<
     const helperVariant = getHelperVariant(error, success, warning);
 
     return (
-      <div className={cn("space-y-2", containerClassName)}>
+      <div className={cn(fieldVariants(), containerClassName)}>
         {label && showLabel && (
           <div
             className={cn(
@@ -511,11 +512,7 @@ const RadioGroup = React.forwardRef<
 
         {/* Hint text (like Input component) */}
         {hintText && (
-          <p
-            className={cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5")}
-          >
-            {hintText}
-          </p>
+          <p className={cn(helperVariants({ variant: "muted" }))}>{hintText}</p>
         )}
 
         <RadioGroupPrimitive.Root
@@ -696,7 +693,9 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
           </p>
         )}
 
-        <div className="space-y-1">{children}</div>
+        <div className={cn(fieldVariants({ variant: "compact" }))}>
+          {children}
+        </div>
 
         {helperContent && (
           <p
