@@ -62,7 +62,7 @@ declare function useDataTable<TData>(data: TData[], options?: {
     totalItems: number;
     searchQuery: string;
     sortField: string | null;
-    sortDirection: "desc" | "asc";
+    sortDirection: "asc" | "desc";
     currentPage: number;
     handleSearch: (query: string) => void;
     handleSortColumnChange: (key: string | null) => void;

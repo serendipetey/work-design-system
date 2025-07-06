@@ -27,7 +27,7 @@ A comprehensive pagination component that provides navigation through large data
 - Responsive design that works on all screen sizes
 - Consistent focus states inherited from Button component
 
-Built with design tokens and follows the established component patterns.
+Built with design tokens and follows the established component patterns. Now uses the centralized Button component for consistent styling across the design system.
         `,
       },
     },
@@ -78,6 +78,14 @@ export const Default: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Interactive pagination with proper button styling and focus states. Notice the active page uses primary button styling and inactive pages use ghost button styling.",
+      },
+    },
+  },
 };
 
 // Different configurations
@@ -96,6 +104,13 @@ export const SmallDataset: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story: "Small dataset with only 3 pages total.",
+      },
+    },
+  },
 };
 
 export const LargeDataset: Story = {
@@ -113,6 +128,14 @@ export const LargeDataset: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Large dataset showing ellipsis behavior in the middle of pagination.",
+      },
+    },
+  },
 };
 
 export const NoResults: Story = {
@@ -128,8 +151,18 @@ export const NoResults: Story = {
           onPageChange={setCurrentPage}
           showResults={false}
         />
+        <p className="text-sm text-[var(--color-charcoal-500)] mt-4 text-center">
+          Note: Pagination doesn't render when there are no items
+        </p>
       </div>
     );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "No pagination is rendered when totalItems is 0.",
+      },
+    },
   },
 };
 
@@ -149,6 +182,13 @@ export const WithoutResultsText: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story: "Pagination without results count text for cleaner layouts.",
+      },
+    },
+  },
 };
 
 export const MinimalVisiblePages: Story = {
@@ -166,6 +206,14 @@ export const MinimalVisiblePages: Story = {
         />
       </div>
     );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Minimal pagination for mobile or compact layouts with only 3 visible page numbers.",
+      },
+    },
   },
 };
 
@@ -185,6 +233,14 @@ export const MaxVisiblePages: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Extended pagination showing more page numbers for desktop layouts.",
+      },
+    },
+  },
 };
 
 // Edge cases
@@ -203,6 +259,13 @@ export const FirstPage: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story: "First page state with disabled Previous button.",
+      },
+    },
+  },
 };
 
 export const LastPage: Story = {
@@ -219,6 +282,13 @@ export const LastPage: Story = {
         />
       </div>
     );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Last page state with disabled Next button.",
+      },
+    },
   },
 };
 
@@ -240,6 +310,13 @@ export const SinglePage: Story = {
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story: "No pagination is rendered when there's only one page.",
+      },
+    },
+  },
 };
 
 // Individual component demos
@@ -255,7 +332,8 @@ export const PaginationItemDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Individual pagination item components with different states",
+        story:
+          "Individual pagination item components showing different states: inactive, active, and disabled. Now using proper Button component styling.",
       },
     },
   },
@@ -274,7 +352,7 @@ export const PaginationNavigationDemo: Story = {
     docs: {
       description: {
         story:
-          "Previous and Next navigation buttons in enabled and disabled states",
+          "Previous and Next navigation buttons in enabled and disabled states. Uses ghost button variant with proper hover and focus states.",
       },
     },
   },
@@ -293,7 +371,7 @@ export const PaginationEllipsisDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Ellipsis component used to indicate skipped pages",
+        story: "Ellipsis component used to indicate skipped pages.",
       },
     },
   },
@@ -310,7 +388,7 @@ export const PaginationResultsDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Results count display component showing different page states",
+        story: "Results count display component showing different page states.",
       },
     },
   },
@@ -389,7 +467,7 @@ export const Playground: Story = {
     docs: {
       description: {
         story:
-          "Interactive playground - use the controls below to test different configurations",
+          "Interactive playground - use the controls below to test different configurations. Notice how the buttons inherit proper styling from the centralized Button component.",
       },
     },
   },

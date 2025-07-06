@@ -2,12 +2,9 @@ import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
 declare const paginationVariants: (props?: import("class-variance-authority/types").ClassProp | undefined) => string;
 declare const paginationItemVariants: (props?: ({
-    variant?: "disabled" | "default" | "active" | null | undefined;
     size?: "sm" | "md" | "lg" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
-declare const paginationNavVariants: (props?: ({
-    variant?: "outline" | "ghost" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const paginationNavVariants: (props?: import("class-variance-authority/types").ClassProp | undefined) => string;
 declare const paginationResultsVariants: (props?: import("class-variance-authority/types").ClassProp | undefined) => string;
 export interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
     totalItems: number;
@@ -21,7 +18,7 @@ export interface PaginationItemProps extends React.ButtonHTMLAttributes<HTMLButt
     isActive?: boolean;
     page: number;
 }
-export interface PaginationNavProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof paginationNavVariants> {
+export interface PaginationNavProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 export interface PaginationEllipsisProps extends React.HTMLAttributes<HTMLSpanElement> {
 }

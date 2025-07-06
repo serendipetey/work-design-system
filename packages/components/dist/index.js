@@ -8997,83 +8997,27 @@ TableCell.displayName = "TableCell";
 
 // Pagination container variants
 const paginationVariants = cva(["mx-auto flex w-full justify-center items-center space-x-1"].join(" "));
-// Pagination item variants - inherits from buttonVariants
+// Pagination item variants - only pagination-specific overrides
 const paginationItemVariants = cva([
-    // Base styles from buttonVariants but simplified for pagination
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium",
-    "transition-all duration-150 ease-in-out cursor-pointer",
-    "disabled:pointer-events-none disabled:opacity-50",
-    "h-8 w-8 p-0", // Square buttons for page numbers
-    // Inherit unified focus states from existing buttons
-    "focus-visible:outline-none",
-    "focus-visible:!bg-[var(--color-focus-500)]",
-    "focus-visible:!text-[var(--color-navy-500)]",
-    "focus-visible:!border-t-0 focus-visible:!border-l-0 focus-visible:!border-r-0",
-    "focus-visible:!border-b-[3px] focus-visible:!border-b-[var(--color-navy-500)]",
-    "focus-visible:!shadow-none",
+    // Override padding to make square buttons for page numbers
+    "!p-0", // !important to override Button component padding
 ].join(" "), {
     variants: {
-        variant: {
-            default: [
-                "bg-transparent text-[var(--color-charcoal-500)]",
-                "border border-transparent",
-                "hover:bg-[var(--color-gray-100)] hover:text-[var(--color-navy-500)]",
-            ].join(" "),
-            active: [
-                "bg-[var(--color-primary)] text-[var(--color-white)]",
-                "border border-[var(--color-primary)]",
-                "hover:bg-[var(--color-primary)] hover:text-[var(--color-white)]",
-            ].join(" "),
-            disabled: [
-                "bg-transparent text-[var(--color-gray-400)]",
-                "border border-transparent",
-                "cursor-not-allowed",
-            ].join(" "),
-        },
         size: {
-            sm: "h-6 w-6 text-xs",
-            md: "h-8 w-8 text-sm",
-            lg: "h-10 w-10 text-base",
+            sm: "!h-6 !w-6 !text-xs",
+            md: "!h-8 !w-8 !text-sm",
+            lg: "!h-10 !w-10 !text-base",
         },
     },
     defaultVariants: {
-        variant: "default",
         size: "md",
     },
 });
-// Navigation button variants - inherits from buttonVariants but with specific styling
+// Navigation button variants - only pagination-specific sizing
 const paginationNavVariants = cva([
-    // Inherit from existing buttonVariants but customize for navigation
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium",
-    "transition-all duration-150 ease-in-out cursor-pointer",
-    "disabled:pointer-events-none disabled:opacity-50",
-    "h-8 px-3", // Rectangular for prev/next
-    // Inherit unified focus states
-    "focus-visible:outline-none",
-    "focus-visible:!bg-[var(--color-focus-500)]",
-    "focus-visible:!text-[var(--color-navy-500)]",
-    "focus-visible:!border-t-0 focus-visible:!border-l-0 focus-visible:!border-r-0",
-    "focus-visible:!border-b-[3px] focus-visible:!border-b-[var(--color-navy-500)]",
-    "focus-visible:!shadow-none",
-].join(" "), {
-    variants: {
-        variant: {
-            outline: [
-                "bg-transparent text-[var(--color-primary)]",
-                "border border-[var(--color-primary)]",
-                "hover:bg-[var(--color-primary)] hover:text-[var(--color-white)]",
-            ].join(" "),
-            ghost: [
-                "bg-transparent text-[var(--color-charcoal-500)]",
-                "border border-transparent",
-                "hover:bg-[var(--color-gray-100)] hover:text-[var(--color-navy-500)]",
-            ].join(" "),
-        },
-    },
-    defaultVariants: {
-        variant: "ghost",
-    },
-});
+    // Override height for pagination navigation
+    "!h-8 !px-3", // !important to override Button component sizing
+].join(" "));
 // Results text variants
 const paginationResultsVariants = cva(["text-sm text-[var(--color-charcoal-500)]", "flex items-center gap-1"].join(" "));
 // Helper function to generate page numbers
@@ -9120,14 +9064,14 @@ const Pagination = React__namespace.forwardRef(({ className, totalItems, current
     return (jsxRuntime.jsxs("nav", { ref: ref, role: "navigation", "aria-label": "pagination", className: cn("flex flex-col space-y-4", className), ...props, children: [showResults && (jsxRuntime.jsx(PaginationResults, { currentPage: currentPage, itemsPerPage: itemsPerPage, totalItems: totalItems })), jsxRuntime.jsxs("div", { className: cn(paginationVariants()), children: [jsxRuntime.jsx(PaginationPrevious, { onClick: () => onPageChange(currentPage - 1), disabled: currentPage === 1 }), pages.map((page, index) => page === "ellipsis" ? (jsxRuntime.jsx(PaginationEllipsis, {}, `ellipsis-${index}`)) : (jsxRuntime.jsx(PaginationItem, { page: page, isActive: page === currentPage, onClick: () => onPageChange(page) }, page))), jsxRuntime.jsx(PaginationNext, { onClick: () => onPageChange(currentPage + 1), disabled: currentPage === totalPages })] })] }));
 });
 Pagination.displayName = "Pagination";
-const PaginationItem = React__namespace.forwardRef(({ className, isActive, page, variant, size, ...props }, ref) => (jsxRuntime.jsx("button", { ref: ref, className: cn(paginationItemVariants({
-        variant: isActive ? "active" : variant,
-        size,
-    }), className), "aria-label": `Go to page ${page}`, "aria-current": isActive ? "page" : undefined, ...props, children: page })));
+const PaginationItem = React__namespace.forwardRef(({ className, isActive, page, size, ...props }, ref) => {
+    const buttonVariant = isActive ? "primary" : "ghost";
+    return (jsxRuntime.jsx(Button, { ref: ref, variant: buttonVariant, size: size, className: cn(paginationItemVariants({ size }), className), "aria-label": `Go to page ${page}`, "aria-current": isActive ? "page" : undefined, ...props, children: page }));
+});
 PaginationItem.displayName = "PaginationItem";
-const PaginationPrevious = React__namespace.forwardRef(({ className, variant = "ghost", ...props }, ref) => (jsxRuntime.jsxs("button", { ref: ref, className: cn(paginationNavVariants({ variant }), className), "aria-label": "Go to previous page", ...props, children: [jsxRuntime.jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "mr-1", children: jsxRuntime.jsx("path", { d: "M10 12L6 8L10 4", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) }), "Previous"] })));
+const PaginationPrevious = React__namespace.forwardRef(({ className, ...props }, ref) => (jsxRuntime.jsxs(Button, { ref: ref, variant: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to previous page", ...props, children: [jsxRuntime.jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "mr-1", children: jsxRuntime.jsx("path", { d: "M10 12L6 8L10 4", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) }), "Previous"] })));
 PaginationPrevious.displayName = "PaginationPrevious";
-const PaginationNext = React__namespace.forwardRef(({ className, variant = "ghost", ...props }, ref) => (jsxRuntime.jsxs("button", { ref: ref, className: cn(paginationNavVariants({ variant }), className), "aria-label": "Go to next page", ...props, children: ["Next", jsxRuntime.jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "ml-1", children: jsxRuntime.jsx("path", { d: "M6 4L10 8L6 12", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) })] })));
+const PaginationNext = React__namespace.forwardRef(({ className, ...props }, ref) => (jsxRuntime.jsxs(Button, { ref: ref, variant: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to next page", ...props, children: ["Next", jsxRuntime.jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "ml-1", children: jsxRuntime.jsx("path", { d: "M6 4L10 8L6 12", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) })] })));
 PaginationNext.displayName = "PaginationNext";
 const PaginationEllipsis = React__namespace.forwardRef(({ className, ...props }, ref) => (jsxRuntime.jsx("span", { ref: ref, "aria-hidden": true, className: cn("flex h-8 w-8 items-center justify-center text-[var(--color-charcoal-500)]", className), ...props, children: "\u2026" })));
 PaginationEllipsis.displayName = "PaginationEllipsis";
