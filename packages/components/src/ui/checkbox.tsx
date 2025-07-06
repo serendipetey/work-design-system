@@ -51,7 +51,7 @@ const checkboxStyles = {
   },
   variants: {
     default: {
-      borderColor: "var(--color-border, #d1d5db)",
+      borderColor: "var(--color-border, #9ca3af)",
       backgroundColor: "var(--color-surface, #ffffff)",
     },
     error: {
@@ -75,9 +75,9 @@ const checkboxStyles = {
   },
   states: {
     checked: {
-      backgroundColor: "var(--color-primary-500, #1e40af)",
-      borderColor: "var(--color-primary-500, #1e40af)",
-      color: "var(--color-primary-foreground, #ffffff)",
+      backgroundColor: "var(--color-navy-500, #1e3a8a)",
+      borderColor: "var(--color-navy-500, #1e3a8a)",
+      color: "var(--color-white, #ffffff)",
     },
     disabled: {
       opacity: 0.5,
@@ -111,7 +111,7 @@ const radioStyles = {
   },
   variants: {
     default: {
-      borderColor: "var(--color-border, #d1d5db)",
+      borderColor: "var(--color-border, #9ca3af)",
       backgroundColor: "var(--color-surface, #ffffff)",
     },
     error: {
@@ -135,8 +135,8 @@ const radioStyles = {
   },
   states: {
     checked: {
-      backgroundColor: "var(--color-primary-500, #1e40af)",
-      borderColor: "var(--color-primary-500, #1e40af)",
+      backgroundColor: "var(--color-navy-500, #1e3a8a)",
+      borderColor: "var(--color-navy-500, #1e3a8a)",
     },
     disabled: {
       opacity: 0.5,
@@ -160,46 +160,18 @@ const injectFocusStyles = (
   const style = document.createElement("style");
   style.id = styleId;
 
-  const focusStyles: Record<string, string> = {
-    default: `
-      .${componentType}-${variant}:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.8);
-      }
-      .${componentType}-${variant}:focus {
-        box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.8);
-      }
-    `,
-    error: `
-      .${componentType}-${variant}:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(235, 0, 0, 0.6);
-      }
-      .${componentType}-${variant}:focus {
-        box-shadow: 0 0 0 3px rgba(235, 0, 0, 0.6);
-      }
-    `,
-    success: `
-      .${componentType}-${variant}:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 125, 133, 0.6);
-      }
-      .${componentType}-${variant}:focus {
-        box-shadow: 0 0 0 3px rgba(0, 125, 133, 0.6);
-      }
-    `,
-    warning: `
-      .${componentType}-${variant}:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(183, 91, 0, 0.8);
-      }
-      .${componentType}-${variant}:focus {
-        box-shadow: 0 0 0 3px rgba(183, 91, 0, 0.8);
-      }
-    `,
-  };
+  // 🎯 ALWAYS USE ORANGE FOCUS - regardless of variant for accessibility
+  const focusStyles = `
+    .${componentType}-${variant}:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.8);
+    }
+    .${componentType}-${variant}:focus {
+      box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.8);
+    }
+  `;
 
-  style.textContent = focusStyles[variant] || focusStyles.default;
+  style.textContent = focusStyles;
   document.head.appendChild(style);
 };
 
@@ -540,7 +512,10 @@ const RadioGroup = React.forwardRef<
         {hintText && !helperContent && (
           <p
             className="text-sm"
-            style={{ color: "var(--color-input-helper, #39444f)" }}
+            style={{
+              color: "var(--color-input-helper, #39444f)",
+              fontSize: "14px",
+            }}
           >
             {hintText}
           </p>
@@ -718,7 +693,10 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
         {hintText && !helperContent && (
           <p
             className="text-sm"
-            style={{ color: "var(--color-input-helper, #39444f)" }}
+            style={{
+              color: "var(--color-input-helper, #39444f)",
+              fontSize: "14px",
+            }}
           >
             {hintText}
           </p>

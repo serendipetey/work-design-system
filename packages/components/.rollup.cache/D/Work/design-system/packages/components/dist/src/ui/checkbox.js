@@ -1,62 +1,173 @@
 // packages/components/src/ui/checkbox.tsx
+// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
+// This component uses CSS custom properties from the design token system
+// with reliable fallback values for maximum compatibility and maintainability.
+// Pattern: var(--design-token-name, fallback-value)
 "use client";
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import * as React from "react";
+import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cva } from "class-variance-authority";
 import { Check, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { labelVariants, helperVariants } from "./input"; // INHERIT FROM INPUT!
-// Checkbox/Radio uses INPUT focus states (DRY!)
-const checkboxVariants = cva([
-    // Base checkbox/radio styles
-    "peer h-4 w-4 shrink-0 rounded border transition-all duration-200 cursor-pointer",
-    "disabled:cursor-not-allowed disabled:opacity-50",
-    // INHERIT INPUT FOCUS STYLES - unified focus system
-    "focus-visible:outline-none",
-    "focus-visible:ring-0",
-    "focus-visible:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]", // Same as input focus
-    "focus:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]",
-    // Checked states
-    "data-[state=checked]:bg-[var(--color-primary)]",
-    "data-[state=checked]:text-[var(--color-button-primary-text)]",
-    "data-[state=checked]:border-[var(--color-primary)]",
-    // Indeterminate state (for checkbox only)
-    "data-[state=indeterminate]:bg-[var(--color-primary)]",
-    "data-[state=indeterminate]:text-[var(--color-button-primary-text)]",
-    "data-[state=indeterminate]:border-[var(--color-primary)]",
-], {
+// 🎯 IMPORT CENTRALIZED FORM UTILITIES (Fixed from "./input")
+import { helperVariants, labelVariants, getHelperContent, getHelperVariant, getFormFieldAria, } from "./form";
+// 🎯 DESIGN TOKEN STYLE OBJECTS WITH FALLBACKS
+const checkboxStyles = {
+    base: {
+        // Layout & Structure
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "16px",
+        height: "16px",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        cursor: "pointer",
+        flexShrink: 0,
+        // Typography & Spacing (for inner icons)
+        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+        // Borders & Colors
+        borderRadius: "var(--border-radius-sm, 4px)",
+        backgroundColor: "var(--color-surface, #ffffff)",
+        borderColor: "var(--color-border, #d1d5db)",
+        color: "var(--color-text, #374151)",
+        // Transitions
+        transition: "var(--transition-base, all 200ms ease-in-out)",
+    },
+    variants: {
+        default: {
+            borderColor: "var(--color-border, #9ca3af)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        error: {
+            borderColor: "var(--color-border-error, #eb0000)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        success: {
+            borderColor: "var(--color-border-success, #007d85)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        warning: {
+            borderColor: "var(--color-border-warning, #b75b00)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+    },
+    sizes: {
+        sm: { width: "12px", height: "12px" },
+        md: { width: "16px", height: "16px" },
+        lg: { width: "20px", height: "20px" },
+        xl: { width: "24px", height: "24px" },
+    },
+    states: {
+        checked: {
+            backgroundColor: "var(--color-navy-500, #1e3a8a)",
+            borderColor: "var(--color-navy-500, #1e3a8a)",
+            color: "var(--color-white, #ffffff)",
+        },
+        disabled: {
+            opacity: 0.5,
+            cursor: "not-allowed",
+        },
+    },
+};
+const radioStyles = {
+    base: {
+        // Layout & Structure
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "16px",
+        height: "16px",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        cursor: "pointer",
+        flexShrink: 0,
+        // Radio specific
+        borderRadius: "50%",
+        // Borders & Colors
+        backgroundColor: "var(--color-surface, #ffffff)",
+        borderColor: "var(--color-border, #d1d5db)",
+        // Transitions
+        transition: "var(--transition-base, all 200ms ease-in-out)",
+    },
+    variants: {
+        default: {
+            borderColor: "var(--color-border, #9ca3af)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        error: {
+            borderColor: "var(--color-border-error, #eb0000)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        success: {
+            borderColor: "var(--color-border-success, #007d85)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        warning: {
+            borderColor: "var(--color-border-warning, #b75b00)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+    },
+    sizes: {
+        sm: { width: "12px", height: "12px" },
+        md: { width: "16px", height: "16px" },
+        lg: { width: "20px", height: "20px" },
+        xl: { width: "24px", height: "24px" },
+    },
+    states: {
+        checked: {
+            backgroundColor: "var(--color-navy-500, #1e3a8a)",
+            borderColor: "var(--color-navy-500, #1e3a8a)",
+        },
+        disabled: {
+            opacity: 0.5,
+            cursor: "not-allowed",
+        },
+    },
+};
+// 🎯 DYNAMIC CSS INJECTION FOR FOCUS STATES
+const injectFocusStyles = (variant, componentType) => {
+    const styleId = `${componentType}-focus-${variant}`;
+    // Remove existing styles
+    const existingStyle = document.getElementById(styleId);
+    if (existingStyle)
+        existingStyle.remove();
+    // Create new focus styles
+    const style = document.createElement("style");
+    style.id = styleId;
+    // 🎯 ALWAYS USE ORANGE FOCUS - regardless of variant for accessibility
+    const focusStyles = `
+    .${componentType}-${variant}:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.8);
+    }
+    .${componentType}-${variant}:focus {
+      box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.8);
+    }
+  `;
+    style.textContent = focusStyles;
+    document.head.appendChild(style);
+};
+// 🎯 CVA CONFIGURATIONS (Minimal - styles come from design tokens)
+const checkboxVariants = cva(
+// Base Tailwind classes for layout/structure only
+"peer shrink-0 border transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none", {
     variants: {
         variant: {
-            default: ["border-[var(--color-border)]", "bg-[var(--color-surface)]"],
-            error: [
-                "border-[var(--color-border-error)]",
-                "bg-[var(--color-surface)]",
-                // Override with error focus shadow
-                "focus-visible:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-                "focus:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-            ],
-            success: [
-                "border-[var(--color-border-success)]",
-                "bg-[var(--color-surface)]",
-                // Override with success focus shadow
-                "focus-visible:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-                "focus:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-            ],
-            warning: [
-                "border-[var(--color-border-warning)]",
-                "bg-[var(--color-surface)]",
-                // Override with warning focus shadow
-                "focus-visible:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-                "focus:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-            ],
+            default: "",
+            error: "",
+            success: "",
+            warning: "",
+            // Keep empty - styles come from design tokens
         },
         size: {
-            sm: "h-3 w-3",
-            md: "h-4 w-4",
-            lg: "h-5 w-5",
-            xl: "h-6 w-6",
+            sm: "",
+            md: "",
+            lg: "",
+            xl: "",
+            // Keep empty - styles come from design tokens
         },
     },
     defaultVariants: {
@@ -64,47 +175,23 @@ const checkboxVariants = cva([
         size: "md",
     },
 });
-// Radio variant - inherits from checkbox but with rounded corners
-const radioVariants = cva([
-    // Base radio styles - same as checkbox but rounded
-    "peer shrink-0 rounded-full border transition-all duration-200 cursor-pointer",
-    "disabled:cursor-not-allowed disabled:opacity-50",
-    // INHERIT INPUT FOCUS STYLES - unified focus system
-    "focus-visible:outline-none",
-    "focus-visible:ring-0",
-    "focus-visible:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]",
-    "focus:shadow-[0_0_0_3px_rgba(255,153,0,0.8)]",
-    // Checked states with dot instead of checkmark
-    "data-[state=checked]:bg-[var(--color-primary)]",
-    "data-[state=checked]:border-[var(--color-primary)]",
-], {
+const radioVariants = cva(
+// Base Tailwind classes for layout/structure only
+"peer shrink-0 rounded-full border transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none", {
     variants: {
         variant: {
-            default: ["border-[var(--color-border)]", "bg-[var(--color-surface)]"],
-            error: [
-                "border-[var(--color-border-error)]",
-                "bg-[var(--color-surface)]",
-                "focus-visible:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-                "focus:shadow-[0_0_0_3px_rgba(235,0,0,0.6)]",
-            ],
-            success: [
-                "border-[var(--color-border-success)]",
-                "bg-[var(--color-surface)]",
-                "focus-visible:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-                "focus:shadow-[0_0_0_3px_rgba(0,125,133,0.6)]",
-            ],
-            warning: [
-                "border-[var(--color-border-warning)]",
-                "bg-[var(--color-surface)]",
-                "focus-visible:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-                "focus:shadow-[0_0_0_3px_rgba(183,91,0,0.8)]",
-            ],
+            default: "",
+            error: "",
+            success: "",
+            warning: "",
+            // Keep empty - styles come from design tokens
         },
         size: {
-            sm: "h-3 w-3",
-            md: "h-4 w-4",
-            lg: "h-5 w-5",
-            xl: "h-6 w-6",
+            sm: "",
+            md: "",
+            lg: "",
+            xl: "",
+            // Keep empty - styles come from design tokens
         },
     },
     defaultVariants: {
@@ -112,97 +199,109 @@ const radioVariants = cva([
         size: "md",
     },
 });
-// Checkbox Component
-const Checkbox = React.forwardRef(({ className, containerClassName, labelClassName, helperClassName, variant, size, label, labelState = "default", showLabel = true, hintText, showHintText = true, helperText, error, success, warning, disabled, ...props }, ref) => {
-    // Determine current variant based on state (same logic as Input)
-    const currentVariant = React.useMemo(() => {
-        if (error)
-            return "error";
-        if (success)
-            return "success";
-        if (warning)
-            return "warning";
-        return variant || "default";
-    }, [error, success, warning, variant]);
-    // Determine helper text content and variant (same logic as Input)
-    const helperContent = React.useMemo(() => {
-        if (error && typeof error === "string")
-            return error;
-        if (success && typeof success === "string")
-            return success;
-        if (warning && typeof warning === "string")
-            return warning;
-        return helperText;
-    }, [error, success, warning, helperText]);
-    const helperVariant = React.useMemo(() => {
-        if (error)
-            return "error";
-        if (success)
-            return "success";
-        if (warning)
-            return "warning";
-        return "default";
-    }, [error, success, warning]);
-    return (_jsxs("div", { className: cn("space-y-1", containerClassName), children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(CheckboxPrimitive.Root, { ref: ref, className: cn(checkboxVariants({ variant: currentVariant, size }), className), disabled: disabled, ...props, children: _jsx(CheckboxPrimitive.Indicator, { className: "flex items-center justify-center text-current", children: props.checked === "indeterminate" ? (_jsx(Minus, { className: "h-3 w-3" })) : (_jsx(Check, { className: "h-3 w-3" })) }) }), label && showLabel && (_jsx("label", { htmlFor: props.id, className: cn(
+// 🎯 MAIN COMPONENT IMPLEMENTATIONS
+const Checkbox = React.forwardRef(({ className, variant = "default", size = "md", label, labelState, showLabel = true, hintText, error, success, warning, containerClassName, labelClassName, helperClassName, checked, disabled, style, ...props }, ref) => {
+    const elementRef = React.useRef(null);
+    const checkboxId = React.useId();
+    // Combine refs
+    React.useImperativeHandle(ref, () => elementRef.current);
+    // Inject focus styles on mount
+    React.useEffect(() => {
+        if (elementRef.current && variant) {
+            injectFocusStyles(variant, "checkbox");
+            elementRef.current.classList.add(`checkbox-${variant}`);
+        }
+    }, [variant]);
+    // 🎯 Determine final variant based on validation state
+    const finalVariant = error
+        ? "error"
+        : success
+            ? "success"
+            : warning
+                ? "warning"
+                : variant;
+    // 🎯 Use centralized form utilities
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    const formFieldAria = getFormFieldAria(checkboxId, error, success, warning, hintText);
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom
+    const combinedStyles = {
+        ...checkboxStyles.base,
+        ...(finalVariant && checkboxStyles.variants[finalVariant]
+            ? checkboxStyles.variants[finalVariant]
+            : {}),
+        ...(size && checkboxStyles.sizes[size] ? checkboxStyles.sizes[size] : {}),
+        ...(checked ? checkboxStyles.states.checked : {}),
+        ...(disabled ? checkboxStyles.states.disabled : {}),
+        ...style, // Allow style overrides
+    };
+    // Build final className
+    const finalClassName = cn(checkboxVariants({ variant: finalVariant, size }), className);
+    return (_jsxs("div", { className: cn("flex flex-col gap-0.5", containerClassName), children: [_jsxs("div", { className: "flex items-start space-x-2", children: [_jsx(CheckboxPrimitive.Root, { ref: elementRef, id: checkboxId, className: finalClassName, style: combinedStyles, checked: checked, disabled: disabled, ...formFieldAria, ...props, children: _jsx(CheckboxPrimitive.Indicator, { className: "flex items-center justify-center text-current", children: checked === "indeterminate" ? (_jsx(Minus, { className: "h-3 w-3" })) : (_jsx(Check, { className: "h-3 w-3" })) }) }), label && showLabel && (_jsx("label", { htmlFor: checkboxId, className: cn(
                         // Individual checkbox labels use small paragraph text (charcoal)
-                        "text-sm font-normal leading-normal text-[var(--color-text-body)] cursor-pointer", disabled && "cursor-not-allowed opacity-50", labelClassName), children: label }))] }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+                        "text-sm font-normal leading-normal cursor-pointer", {
+                            color: "var(--color-text-body, #39444f)",
+                        }, disabled && "cursor-not-allowed opacity-50", labelClassName), style: {
+                            color: "var(--color-text-body, #39444f)",
+                        }, children: label }))] }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 // Radio Group Component
-const RadioGroup = React.forwardRef(({ className, containerClassName, labelClassName, helperClassName, label, labelState = "default", showLabel = true, hintText, showHintText = true, helperText, error, success, warning, disabled, children, ...props }, ref) => {
-    // Same state logic as Input/Checkbox
-    const helperContent = React.useMemo(() => {
-        if (error && typeof error === "string")
-            return error;
-        if (success && typeof success === "string")
-            return success;
-        if (warning && typeof warning === "string")
-            return warning;
-        return helperText;
-    }, [error, success, warning, helperText]);
-    const helperVariant = React.useMemo(() => {
-        if (error)
-            return "error";
-        if (success)
-            return "success";
-        if (warning)
-            return "warning";
-        return "default";
-    }, [error, success, warning]);
+const RadioGroup = React.forwardRef(({ className, containerClassName, labelClassName, helperClassName, label, labelState = "default", showLabel = true, hintText, error, success, warning, disabled, children, ...props }, ref) => {
+    // 🎯 Use centralized form utilities
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
     return (_jsxs("div", { className: cn("space-y-2", containerClassName), children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({
-                    state: disabled ? "disabled" : labelState,
-                }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "text-[var(--color-input-label-required)] ml-1", children: "(Required)" })), labelState === "optional" && (_jsx("span", { className: "text-[var(--color-input-label-optional)] ml-1", children: "(optional)" }))] })), hintText && showHintText && (_jsx("p", { className: "text-sm text-[var(--color-input-helper)]", children: hintText })), _jsx(RadioGroupPrimitive.Root, { className: cn("grid gap-2", className), disabled: disabled, ref: ref, ...props, children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+                    variant: disabled ? "disabled" : "default",
+                }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "(Required)" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(optional)" }))] })), hintText && !helperContent && (_jsx("p", { className: "text-sm", style: {
+                    color: "var(--color-input-helper, #39444f)",
+                    fontSize: "14px",
+                }, children: hintText })), _jsx(RadioGroupPrimitive.Root, { className: cn("grid gap-2", className), disabled: disabled, ref: ref, ...props, children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 // Radio Item Component
-const RadioItem = React.forwardRef(({ className, itemClassName, labelClassName, variant, size, label, value, disabled, ...props }, ref) => {
-    return (_jsxs("div", { className: cn("flex items-center space-x-2", itemClassName), children: [_jsx(RadioGroupPrimitive.Item, { ref: ref, className: cn(radioVariants({ variant, size }), className), value: value, disabled: disabled, ...props, children: _jsx(RadioGroupPrimitive.Indicator, { className: "flex items-center justify-center", children: _jsx("div", { className: "h-1.5 w-1.5 rounded-full bg-current" }) }) }), label && (_jsx("label", { htmlFor: props.id, className: cn(
+const RadioItem = React.forwardRef(({ className, itemClassName, labelClassName, variant = "default", size = "md", label, value, disabled, style, ...props }, ref) => {
+    const elementRef = React.useRef(null);
+    // Combine refs
+    React.useImperativeHandle(ref, () => elementRef.current);
+    // Inject focus styles on mount
+    React.useEffect(() => {
+        if (elementRef.current && variant) {
+            injectFocusStyles(variant, "radio");
+            elementRef.current.classList.add(`radio-${variant}`);
+        }
+    }, [variant]);
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom
+    const combinedStyles = {
+        ...radioStyles.base,
+        ...(variant && radioStyles.variants[variant]
+            ? radioStyles.variants[variant]
+            : {}),
+        ...(size && radioStyles.sizes[size] ? radioStyles.sizes[size] : {}),
+        ...(disabled ? radioStyles.states.disabled : {}),
+        ...style, // Allow style overrides
+    };
+    // Build final className
+    const finalClassName = cn(radioVariants({ variant, size }), className);
+    return (_jsxs("div", { className: cn("flex items-center space-x-2", itemClassName), children: [_jsx(RadioGroupPrimitive.Item, { ref: elementRef, className: finalClassName, style: combinedStyles, value: value, disabled: disabled, ...props, children: _jsx(RadioGroupPrimitive.Indicator, { className: "flex items-center justify-center", children: _jsx("div", { className: "rounded-full bg-current", style: {
+                            width: "6px",
+                            height: "6px",
+                        } }) }) }), label && (_jsx("label", { htmlFor: props.id, className: cn(
                 // Individual radio labels use small paragraph text (charcoal)
-                "text-sm font-normal leading-normal text-[var(--color-text-body)] cursor-pointer", disabled && "cursor-not-allowed opacity-50", labelClassName), children: label }))] }));
+                "text-sm font-normal leading-normal cursor-pointer", disabled && "cursor-not-allowed opacity-50", labelClassName), style: {
+                    color: "var(--color-text-body, #39444f)",
+                }, children: label }))] }));
 });
 RadioItem.displayName = RadioGroupPrimitive.Item.displayName;
-const CheckboxGroup = React.forwardRef(({ containerClassName, labelClassName, helperClassName, label, labelState = "default", showLabel = true, hintText, showHintText = true, helperText, error, success, warning, children, ...props }, ref) => {
-    // Same state logic as other components
-    const helperContent = React.useMemo(() => {
-        if (error && typeof error === "string")
-            return error;
-        if (success && typeof success === "string")
-            return success;
-        if (warning && typeof warning === "string")
-            return warning;
-        return helperText;
-    }, [error, success, warning, helperText]);
-    const helperVariant = React.useMemo(() => {
-        if (error)
-            return "error";
-        if (success)
-            return "success";
-        if (warning)
-            return "warning";
-        return "default";
-    }, [error, success, warning]);
-    return (_jsxs("div", { ref: ref, className: cn("space-y-2", containerClassName), ...props, children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({ state: labelState }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "text-[var(--color-input-label-required)] ml-1", children: "(Required)" })), labelState === "optional" && (_jsx("span", { className: "text-[var(--color-input-label-optional)] ml-1", children: "(optional)" }))] })), hintText && showHintText && (_jsx("p", { className: "text-sm text-[var(--color-input-helper)]", children: hintText })), _jsx("div", { className: "space-y-1", children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+// CheckboxGroup Component (for grouped checkboxes like in the screenshot)
+const CheckboxGroup = React.forwardRef(({ containerClassName, labelClassName, helperClassName, label, labelState = "default", showLabel = true, hintText, error, success, warning, children, ...props }, ref) => {
+    // 🎯 Use centralized form utilities
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    return (_jsxs("div", { ref: ref, className: cn("space-y-2", containerClassName), ...props, children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({ variant: "default" }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "(Required)" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(optional)" }))] })), hintText && !helperContent && (_jsx("p", { className: "text-sm", style: {
+                    color: "var(--color-input-helper, #39444f)",
+                    fontSize: "14px",
+                }, children: hintText })), _jsx("div", { className: "space-y-1", children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 CheckboxGroup.displayName = "CheckboxGroup";
-// Exports
-export { Checkbox, CheckboxGroup, RadioGroup, RadioItem, checkboxVariants, radioVariants, };
+export { Checkbox, RadioGroup, RadioItem, CheckboxGroup, checkboxVariants, radioVariants, };

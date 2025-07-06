@@ -12,10 +12,10 @@
  * ✅ Maintains all existing design tokens
  */
 export declare const helperVariants: (props?: ({
-    variant?: "default" | "error" | "success" | "warning" | "muted" | null | undefined;
+    variant?: "success" | "warning" | "default" | "error" | "muted" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const labelVariants: (props?: ({
-    variant?: "default" | "disabled" | null | undefined;
+    variant?: "disabled" | "default" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const fieldVariants: (props?: ({
     variant?: "default" | "compact" | "spacious" | null | undefined;

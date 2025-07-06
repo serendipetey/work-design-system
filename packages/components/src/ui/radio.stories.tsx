@@ -1,6 +1,5 @@
 // packages/components/src/ui/radio.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import { RadioGroup, RadioItem } from "./checkbox";
 
 const meta: Meta<typeof RadioGroup> = {
@@ -10,196 +9,225 @@ const meta: Meta<typeof RadioGroup> = {
     layout: "centered",
     docs: {
       description: {
-        component:
-          "A radio group component that inherits styling from Input components and follows the same design system patterns. Features unified focus states (--color-focus-500), semantic colors, and proper disabled states. Radio items use rounded styling with dot indicators.",
+        component: `
+RadioGroup component with design tokens + fallbacks architecture.
+
+### Key Features:
+- **Navy-500 selected state** for brand consistency
+- **Darker border (#9ca3af)** for better visibility  
+- **Orange focus ring** for all variants (accessibility)
+- **14px hint text** for proper hierarchy
+- **Consistent validation states** (error/success/warning)
+- **Size variants** (sm/md/lg/xl)
+- **Centralized form utilities** from form.tsx
+
+### Usage:
+\`\`\`tsx
+<RadioGroup 
+  label="Payment method" 
+  labelState="required"
+  error="Please select a payment method"
+>
+  <RadioItem value="card" label="Credit Card" />
+  <RadioItem value="paypal" label="PayPal" />
+</RadioGroup>
+\`\`\`
+        `,
       },
     },
   },
   tags: ["autodocs"],
   argTypes: {
     labelState: {
-      control: "select",
+      control: { type: "select" },
       options: ["default", "required", "optional"],
-      description:
-        "Label state indicator - required shows red (*) required text",
     },
     disabled: {
-      control: "boolean",
-      description: "Disable the entire radio group",
+      control: { type: "boolean" },
     },
-    value: {
-      control: "text",
-      description: "Currently selected radio value",
-    },
-    label: {
-      control: "text",
-      description: "Label text for the radio group",
-    },
-    helperText: {
-      control: "text",
-      description: "Helper text displayed below the radio group",
-    },
-    error: {
-      control: "text",
-      description:
-        "Error message (overrides helperText and sets error variant)",
+    defaultValue: {
+      control: { type: "text" },
     },
   },
-  args: {
-    onValueChange: fn(),
-  },
-} satisfies Meta<typeof RadioGroup>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Default story
+// Default radio group
 export const Default: Story = {
   args: {
-    label: "Select your preferred size",
-    defaultValue: "medium",
-    children: [
-      <RadioItem key="small" value="small" label="Small" />,
-      <RadioItem key="medium" value="medium" label="Medium" />,
-      <RadioItem key="large" value="large" label="Large" />,
-    ],
+    label: "Select an option",
+    defaultValue: "option1",
   },
+  render: (args) => (
+    <RadioGroup {...args}>
+      <RadioItem value="option1" label="Option 1" />
+      <RadioItem value="option2" label="Option 2" />
+      <RadioItem value="option3" label="Option 3" />
+    </RadioGroup>
+  ),
   parameters: {
     docs: {
       description: {
         story:
-          "Basic radio group with proper design system integration. Uses --color-border for unchecked state and --color-primary for selected state.",
+          "Basic radio group with navy-500 selected state and darker borders for better visibility.",
       },
     },
   },
 };
 
-// All variants showing inheritance from Input focus system
+// All validation variants
 export const AllVariants: Story = {
   render: () => (
-    <div className="space-y-6">
-      <RadioGroup
-        label="Default variant"
-        helperText="Uses standard border and focus colors"
-        defaultValue="option1"
-      >
-        <RadioItem value="option1" label="Option 1" />
-        <RadioItem value="option2" label="Option 2" />
-      </RadioGroup>
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <h3 className="font-semibold">Default variant</h3>
+        <RadioGroup
+          label="Default radio group"
+          hintText="Click any option to see orange focus ring (14px hint text)"
+          defaultValue="default1"
+        >
+          <RadioItem value="default1" label="Default Option 1" />
+          <RadioItem value="default2" label="Default Option 2" />
+        </RadioGroup>
+      </div>
 
-      <RadioGroup
-        label="Error variant"
-        error="Please select a valid option"
-        defaultValue=""
-      >
-        <RadioItem value="error1" label="Error Option 1" variant="error" />
-        <RadioItem value="error2" label="Error Option 2" variant="error" />
-      </RadioGroup>
+      <div className="space-y-2">
+        <h3 className="font-semibold">Error variant</h3>
+        <RadioGroup
+          label="Error radio group"
+          error="Please select a valid option"
+          hintText="Border is red, but focus ring is orange (accessibility)"
+        >
+          <RadioItem value="error1" label="Error Option 1" variant="error" />
+          <RadioItem value="error2" label="Error Option 2" variant="error" />
+        </RadioGroup>
+      </div>
 
-      <RadioGroup
-        label="Success variant"
-        success="Selection confirmed"
-        defaultValue="success1"
-      >
-        <RadioItem
-          value="success1"
-          label="Success Option 1"
-          variant="success"
-        />
-        <RadioItem
-          value="success2"
-          label="Success Option 2"
-          variant="success"
-        />
-      </RadioGroup>
+      <div className="space-y-2">
+        <h3 className="font-semibold">Success variant</h3>
+        <RadioGroup
+          label="Success radio group"
+          success="Selection confirmed"
+          hintText="Border is teal, but focus ring is orange"
+          defaultValue="success1"
+        >
+          <RadioItem
+            value="success1"
+            label="Success Option 1"
+            variant="success"
+          />
+          <RadioItem
+            value="success2"
+            label="Success Option 2"
+            variant="success"
+          />
+        </RadioGroup>
+      </div>
 
-      <RadioGroup
-        label="Warning variant"
-        warning="Please review your selection"
-        defaultValue="warning1"
-      >
-        <RadioItem
-          value="warning1"
-          label="Warning Option 1"
-          variant="warning"
-        />
-        <RadioItem
-          value="warning2"
-          label="Warning Option 2"
-          variant="warning"
-        />
-      </RadioGroup>
+      <div className="space-y-2">
+        <h3 className="font-semibold">Warning variant</h3>
+        <RadioGroup
+          label="Warning radio group"
+          warning="Please review your selection"
+          hintText="Border is orange, focus ring is also orange"
+        >
+          <RadioItem
+            value="warning1"
+            label="Warning Option 1"
+            variant="warning"
+          />
+          <RadioItem
+            value="warning2"
+            label="Warning Option 2"
+            variant="warning"
+          />
+        </RadioGroup>
+      </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "All radio group variants using inherited Input focus system. Each variant uses different focus shadow colors matching your design tokens.",
+          "All variants with consistent orange focus rings for accessibility. Border colors indicate state, focus ring is always orange.",
       },
     },
   },
 };
 
-// Size variants for radio items
+// Size variants
 export const AllSizes: Story = {
   render: () => (
     <div className="space-y-6">
-      <RadioGroup
-        label="Small radio buttons"
-        helperText="Small size for compact layouts"
-        defaultValue="sm1"
-      >
-        <RadioItem value="sm1" label="Small Option 1" size="sm" />
-        <RadioItem value="sm2" label="Small Option 2" size="sm" />
-      </RadioGroup>
+      <div className="space-y-2">
+        <h3 className="font-semibold">Small (12px)</h3>
+        <RadioGroup
+          label="Small radio group"
+          hintText="Compact size for dense layouts"
+          defaultValue="small1"
+        >
+          <RadioItem value="small1" label="Small Option 1" size="sm" />
+          <RadioItem value="small2" label="Small Option 2" size="sm" />
+        </RadioGroup>
+      </div>
 
-      <RadioGroup
-        label="Medium radio buttons (Default)"
-        helperText="Default medium size"
-        defaultValue="md1"
-      >
-        <RadioItem value="md1" label="Medium Option 1" size="md" />
-        <RadioItem value="md2" label="Medium Option 2" size="md" />
-      </RadioGroup>
+      <div className="space-y-2">
+        <h3 className="font-semibold">Medium (16px) - Default</h3>
+        <RadioGroup
+          label="Medium radio group"
+          hintText="Default size for most use cases"
+          defaultValue="medium1"
+        >
+          <RadioItem value="medium1" label="Medium Option 1" size="md" />
+          <RadioItem value="medium2" label="Medium Option 2" size="md" />
+        </RadioGroup>
+      </div>
 
-      <RadioGroup
-        label="Large radio buttons"
-        helperText="Large size for better accessibility"
-        defaultValue="lg1"
-      >
-        <RadioItem value="lg1" label="Large Option 1" size="lg" />
-        <RadioItem value="lg2" label="Large Option 2" size="lg" />
-      </RadioGroup>
+      <div className="space-y-2">
+        <h3 className="font-semibold">Large (20px)</h3>
+        <RadioGroup
+          label="Large radio group"
+          hintText="Larger size for better accessibility"
+          defaultValue="large1"
+        >
+          <RadioItem value="large1" label="Large Option 1" size="lg" />
+          <RadioItem value="large2" label="Large Option 2" size="lg" />
+        </RadioGroup>
+      </div>
 
-      <RadioGroup
-        label="Extra large radio buttons"
-        helperText="Extra large size for touch interfaces"
-        defaultValue="xl1"
-      >
-        <RadioItem value="xl1" label="XL Option 1" size="xl" />
-        <RadioItem value="xl2" label="XL Option 2" size="xl" />
-      </RadioGroup>
+      <div className="space-y-2">
+        <h3 className="font-semibold">Extra Large (24px)</h3>
+        <RadioGroup
+          label="Extra large radio group"
+          hintText="Touch-friendly size for mobile interfaces"
+          defaultValue="xl1"
+        >
+          <RadioItem value="xl1" label="XL Option 1" size="xl" />
+          <RadioItem value="xl2" label="XL Option 2" size="xl" />
+        </RadioGroup>
+      </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "All radio button sizes using design system spacing tokens, maintaining consistency with Input component sizing.",
+          "All radio sizes with design token-based dimensions and 14px hint text.",
       },
     },
   },
 };
 
-// Label states showing consistency with Input
+// Label states
 export const LabelStates: Story = {
   render: () => (
     <div className="space-y-6">
       <RadioGroup
         label="Required field"
         labelState="required"
-        helperText="This field is required for submission"
+        hintText="This field is required for submission"
         defaultValue="req1"
       >
         <RadioItem value="req1" label="Required Option 1" />
@@ -209,19 +237,13 @@ export const LabelStates: Story = {
       <RadioGroup
         label="Optional field"
         labelState="optional"
-        helperText="This field is optional"
-        defaultValue="opt1"
+        hintText="This field is optional"
       >
         <RadioItem value="opt1" label="Optional Option 1" />
         <RadioItem value="opt2" label="Optional Option 2" />
       </RadioGroup>
 
-      <RadioGroup
-        label="Default label"
-        labelState="default"
-        helperText="Default label state"
-        defaultValue="def1"
-      >
+      <RadioGroup label="Default label" hintText="No indicator text">
         <RadioItem value="def1" label="Default Option 1" />
         <RadioItem value="def2" label="Default Option 2" />
       </RadioGroup>
@@ -231,7 +253,7 @@ export const LabelStates: Story = {
     docs: {
       description: {
         story:
-          "Label states showing required (*), optional (optional), and default labels using proper design system colors. Navy-500 for labels, brand red for required indicator.",
+          "Label states with brand red required indicator and grey optional indicator.",
       },
     },
   },
@@ -239,52 +261,21 @@ export const LabelStates: Story = {
 
 // Disabled state
 export const Disabled: Story = {
-  args: {
-    label: "Locked setting",
-    disabled: true,
-    helperText: "This setting is managed by your administrator",
-    defaultValue: "disabled1",
-    children: [
-      <RadioItem key="disabled1" value="disabled1" label="Disabled Option 1" />,
-      <RadioItem key="disabled2" value="disabled2" label="Disabled Option 2" />,
-    ],
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Disabled state with proper opacity and cursor styling, matching Input component disabled patterns.",
-      },
-    },
-  },
-};
-
-// Real-world example - shipping options
-export const ShippingOptions: Story = {
   render: () => (
     <RadioGroup
-      label="Shipping method"
-      labelState="required"
-      helperText="Select your preferred delivery option"
-      defaultValue="standard"
+      label="Disabled radio group"
+      hintText="These options are currently unavailable"
+      disabled
     >
-      <RadioItem
-        value="standard"
-        label="Standard shipping (3-5 business days)"
-      />
-      <RadioItem
-        value="express"
-        label="Express shipping (1-2 business days) - $12.99"
-      />
-      <RadioItem value="overnight" label="Overnight delivery - $24.99" />
-      <RadioItem value="pickup" label="Store pickup (free)" />
+      <RadioItem value="disabled1" label="Disabled Option 1" />
+      <RadioItem value="disabled2" label="Disabled Option 2" />
+      <RadioItem value="disabled3" label="Disabled Option 3" />
     </RadioGroup>
   ),
   parameters: {
     docs: {
       description: {
-        story:
-          "Real-world example showing radio group for shipping options with pricing information and proper design system styling.",
+        story: "Disabled radio group with 50% opacity and not-allowed cursor.",
       },
     },
   },
@@ -292,87 +283,43 @@ export const ShippingOptions: Story = {
 
 // Error validation example
 export const WithValidation: Story = {
-  args: {
-    label: "Payment method",
-    labelState: "required",
-    error: "Please select a payment method to continue",
-    defaultValue: "",
-    children: [
-      <RadioItem
-        key="card"
-        value="card"
-        label="Credit/Debit Card"
-        variant="error"
-      />,
-      <RadioItem key="paypal" value="paypal" label="PayPal" variant="error" />,
-      <RadioItem
-        key="bank"
-        value="bank"
-        label="Bank Transfer"
-        variant="error"
-      />,
-    ],
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Error validation state with inherited Input error styling. Shows red border, error text, and error focus shadow on radio items.",
-      },
-    },
-  },
-};
-
-// Radio group example (matches your screenshot)
-export const RadioGroupExample: Story = {
   render: () => (
     <RadioGroup
-      label="Form label"
+      label="Payment method"
       labelState="required"
-      hintText="Hint text"
-      helperText="Additional helper information"
-      defaultValue="option1"
+      error="Please select a payment method"
+      hintText="Focus shows orange ring, not red (accessibility)"
     >
-      <RadioItem value="option1" label="Text label" />
-      <RadioItem value="option2" label="Text label" />
-      <RadioItem value="option3" label="Text label" />
-      <RadioItem value="option4" label="Text label" />
-      <RadioItem value="option5" label="Text label" />
-      <RadioItem value="option6" label="Text label" />
+      <RadioItem value="card" label="Credit Card" variant="error" />
+      <RadioItem value="paypal" label="PayPal" variant="error" />
+      <RadioItem value="bank" label="Bank Transfer" variant="error" />
     </RadioGroup>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Group of radio buttons with form label (bold, navy), hint text, and individual radio labels (small paragraph text, charcoal). Matches the design in your screenshots.",
+          "Error validation with red borders but orange focus rings for clear UX distinction.",
       },
     },
   },
 };
 
-// Radio group with different sizes
-export const RadioGroupSizes: Story = {
+// Real-world example
+export const PaymentMethodExample: Story = {
   render: () => (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-md">
       <RadioGroup
-        label="Small radio group"
-        hintText="Small size for compact forms"
-        defaultValue="sm1"
+        label="Payment method"
+        labelState="required"
+        hintText="Choose how you'd like to pay for your order"
+        defaultValue="card"
       >
-        <RadioItem value="sm1" label="Small Option 1" size="sm" />
-        <RadioItem value="sm2" label="Small Option 2" size="sm" />
-        <RadioItem value="sm3" label="Small Option 3" size="sm" />
-      </RadioGroup>
-
-      <RadioGroup
-        label="Large radio group"
-        hintText="Large size for better accessibility"
-        defaultValue="lg1"
-      >
-        <RadioItem value="lg1" label="Large Option 1" size="lg" />
-        <RadioItem value="lg2" label="Large Option 2" size="lg" />
-        <RadioItem value="lg3" label="Large Option 3" size="lg" />
+        <RadioItem value="card" label="Credit or Debit Card" />
+        <RadioItem value="paypal" label="PayPal" />
+        <RadioItem value="apple" label="Apple Pay" />
+        <RadioItem value="google" label="Google Pay" />
+        <RadioItem value="bank" label="Bank Transfer" />
       </RadioGroup>
     </div>
   ),
@@ -380,7 +327,159 @@ export const RadioGroupSizes: Story = {
     docs: {
       description: {
         story:
-          "Radio groups with different sizes showing proper form label and hint text styling across all size variants.",
+          "Real-world example of a payment method selector with multiple options.",
+      },
+    },
+  },
+};
+
+// Hint + Helper Text demonstration (like Input/Select)
+export const HintAndHelperText: Story = {
+  render: () => (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h3 className="font-semibold">Hint text only (14px, neutral)</h3>
+        <RadioGroup
+          label="Notification preference"
+          hintText="Choose how you'd like to receive updates"
+        >
+          <RadioItem value="email" label="Email notifications" />
+          <RadioItem value="sms" label="SMS notifications" />
+          <RadioItem value="none" label="No notifications" />
+        </RadioGroup>
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">
+          Helper text only (validation feedback)
+        </h3>
+        <RadioGroup
+          label="Payment method"
+          labelState="required"
+          error="Please select a payment method"
+        >
+          <RadioItem value="card" label="Credit Card" variant="error" />
+          <RadioItem value="paypal" label="PayPal" variant="error" />
+        </RadioGroup>
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">Both hint AND helper text</h3>
+        <RadioGroup
+          label="Shipping method"
+          hintText="Select your preferred delivery option (14px hint)"
+          success="Shipping method confirmed!"
+          defaultValue="standard"
+        >
+          <RadioItem
+            value="standard"
+            label="Standard (5-7 days)"
+            variant="success"
+          />
+          <RadioItem
+            value="express"
+            label="Express (2-3 days)"
+            variant="success"
+          />
+          <RadioItem value="overnight" label="Overnight" variant="success" />
+        </RadioGroup>
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">
+          Hint text transitions to helper text on validation
+        </h3>
+        <RadioGroup
+          label="Account type"
+          labelState="required"
+          hintText="Choose the account type that best fits your needs"
+          warning="Business accounts require additional verification"
+        >
+          <RadioItem
+            value="personal"
+            label="Personal Account"
+            variant="warning"
+          />
+          <RadioItem
+            value="business"
+            label="Business Account"
+            variant="warning"
+          />
+        </RadioGroup>
+        <p className="text-xs text-gray-500">
+          Note: Hint text disappears when validation message appears
+        </p>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstrates hint text (14px, neutral instructions) vs helper text (validation feedback). Matches Input/Select behavior.",
+      },
+    },
+  },
+};
+
+// Focus demonstration
+export const FocusDemonstration: Story = {
+  render: () => (
+    <div className="space-y-6">
+      <div className="p-4 border border-gray-200 rounded">
+        <h3 className="font-semibold mb-3">Tab through these radio groups:</h3>
+        <div className="space-y-4">
+          <RadioGroup
+            label="Default - Orange focus"
+            hintText="Focus ring is orange"
+          >
+            <RadioItem value="focus-default1" label="Default Option 1" />
+            <RadioItem value="focus-default2" label="Default Option 2" />
+          </RadioGroup>
+
+          <RadioGroup
+            label="Error - Orange focus (not red)"
+            error="Example error message"
+            hintText="Border red, focus orange"
+          >
+            <RadioItem
+              value="focus-error1"
+              label="Error Option 1"
+              variant="error"
+            />
+            <RadioItem
+              value="focus-error2"
+              label="Error Option 2"
+              variant="error"
+            />
+          </RadioGroup>
+
+          <RadioGroup
+            label="Success - Orange focus (not teal)"
+            success="Selection confirmed"
+            hintText="Border teal, focus orange"
+            defaultValue="focus-success1"
+          >
+            <RadioItem
+              value="focus-success1"
+              label="Success Option 1"
+              variant="success"
+            />
+            <RadioItem
+              value="focus-success2"
+              label="Success Option 2"
+              variant="success"
+            />
+          </RadioGroup>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstration of consistent orange focus rings across all variants for accessibility.",
       },
     },
   },

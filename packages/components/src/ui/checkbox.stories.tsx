@@ -1,7 +1,6 @@
 // packages/components/src/ui/checkbox.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
-import { Checkbox, CheckboxGroup, RadioGroup, RadioItem } from "./checkbox";
+import { Checkbox, CheckboxGroup } from "./checkbox";
 
 const meta: Meta<typeof Checkbox> = {
   title: "UI/Checkbox",
@@ -10,140 +9,162 @@ const meta: Meta<typeof Checkbox> = {
     layout: "centered",
     docs: {
       description: {
-        component:
-          "A checkbox component that inherits styling from Input components and follows the same design system patterns. Features unified focus states (--color-focus-500), semantic colors, and proper disabled states. Fully integrates with your design token system.",
+        component: `
+Checkbox component with design tokens + fallbacks architecture.
+
+### Key Features:
+- **Navy-500 selected state** for brand consistency
+- **Darker border (#9ca3af)** for better visibility  
+- **Orange focus ring** for all variants (accessibility)
+- **14px hint text** for proper hierarchy
+- **Consistent validation states** (error/success/warning)
+- **Size variants** (sm/md/lg/xl)
+- **Centralized form utilities** from form.tsx
+
+### Usage:
+\`\`\`tsx
+<Checkbox 
+  label="Accept terms" 
+  labelState="required"
+  error="You must accept to continue"
+  variant="error"
+  size="md"
+/>
+\`\`\`
+        `,
       },
     },
   },
   tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: "select",
+      control: { type: "select" },
       options: ["default", "error", "success", "warning"],
-      description: "Visual variant inherited from Input component focus system",
     },
     size: {
-      control: "select",
+      control: { type: "select" },
       options: ["sm", "md", "lg", "xl"],
-      description: "Size variant following Input component sizing pattern",
     },
     labelState: {
-      control: "select",
+      control: { type: "select" },
       options: ["default", "required", "optional"],
-      description:
-        "Label state indicator - required shows red (*) required text",
-    },
-    disabled: {
-      control: "boolean",
-      description: "Disable the checkbox",
     },
     checked: {
-      control: "select",
-      options: [true, false, "indeterminate"],
-      description: "Checkbox checked state - supports indeterminate",
+      control: { type: "select" },
+      options: [false, true, "indeterminate"],
     },
-    label: {
-      control: "text",
-      description: "Label text for the checkbox",
+    disabled: {
+      control: { type: "boolean" },
     },
-    helperText: {
-      control: "text",
-      description: "Helper text displayed below the checkbox",
-    },
-    error: {
-      control: "text",
-      description:
-        "Error message (overrides helperText and sets error variant)",
+    showLabel: {
+      control: { type: "boolean" },
     },
   },
-  args: { onClick: fn() },
-} satisfies Meta<typeof Checkbox>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Default story
+// Default checkbox
 export const Default: Story = {
   args: {
-    label: "Accept terms and conditions",
-    id: "terms-checkbox",
+    label: "Default checkbox",
+    id: "default-checkbox",
   },
   parameters: {
     docs: {
       description: {
         story:
-          "Basic checkbox with proper design system integration. Uses --color-border for unchecked state and --color-primary for checked state.",
+          "Basic checkbox with navy-500 selected state and darker border for better visibility.",
       },
     },
   },
 };
 
-// All variants showing inheritance from Input focus system
+// All variants showing new orange focus behavior
 export const AllVariants: Story = {
   render: () => (
-    <div className="space-y-4">
-      <Checkbox
-        variant="default"
-        label="Default variant"
-        helperText="Uses standard border and focus colors"
-        id="default-variant"
-      />
-      <Checkbox
-        variant="error"
-        label="Error variant"
-        error="This field has an error"
-        id="error-variant"
-      />
-      <Checkbox
-        variant="success"
-        label="Success variant"
-        success="Validation passed"
-        id="success-variant"
-      />
-      <Checkbox
-        variant="warning"
-        label="Warning variant"
-        warning="Please review this selection"
-        id="warning-variant"
-      />
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h3 className="font-semibold">Default variant</h3>
+        <Checkbox
+          variant="default"
+          label="Default checkbox"
+          hintText="Click to see orange focus ring (14px hint text)"
+          id="default-variant"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">Error variant</h3>
+        <Checkbox
+          variant="error"
+          label="Error checkbox"
+          error="This field has an error"
+          hintText="Border is red, but focus ring is orange (accessibility)"
+          id="error-variant"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">Success variant</h3>
+        <Checkbox
+          variant="success"
+          label="Success checkbox"
+          success="Validation passed"
+          hintText="Border is teal, but focus ring is orange"
+          id="success-variant"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">Warning variant</h3>
+        <Checkbox
+          variant="warning"
+          label="Warning checkbox"
+          warning="Please review this selection"
+          hintText="Border is orange, focus ring is also orange"
+          id="warning-variant"
+        />
+      </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "All checkbox variants using inherited Input focus system. Each variant uses different focus shadow colors matching your design tokens.",
+          "All variants with consistent orange focus rings for accessibility. Border colors indicate state, focus ring is always orange.",
       },
     },
   },
 };
 
-// Size variants showing consistency with Input
+// Size variants
 export const AllSizes: Story = {
   render: () => (
     <div className="space-y-4">
       <Checkbox
         size="sm"
         label="Small checkbox (12px)"
-        helperText="Small size for compact layouts"
+        hintText="Compact size for dense layouts"
         id="small-size"
       />
       <Checkbox
         size="md"
         label="Medium checkbox (16px)"
-        helperText="Default medium size"
+        hintText="Default size for most use cases"
         id="medium-size"
       />
       <Checkbox
         size="lg"
         label="Large checkbox (20px)"
-        helperText="Large size for better accessibility"
+        hintText="Larger size for better accessibility"
         id="large-size"
       />
       <Checkbox
         size="xl"
         label="Extra large checkbox (24px)"
-        helperText="Extra large size for touch interfaces"
+        hintText="Touch-friendly size for mobile interfaces"
         id="xl-size"
       />
     </div>
@@ -152,32 +173,31 @@ export const AllSizes: Story = {
     docs: {
       description: {
         story:
-          "All checkbox sizes using design system spacing tokens, maintaining consistency with Input component sizing.",
+          "All checkbox sizes with design token-based dimensions and 14px hint text.",
       },
     },
   },
 };
 
-// Label states showing consistency with Input
+// Label states
 export const LabelStates: Story = {
   render: () => (
     <div className="space-y-4">
       <Checkbox
         label="Required field"
         labelState="required"
-        helperText="This field is required for submission"
+        hintText="This field is required for submission"
         id="required-field"
       />
       <Checkbox
         label="Optional field"
         labelState="optional"
-        helperText="This field is optional"
+        hintText="This field is optional"
         id="optional-field"
       />
       <Checkbox
         label="Default label"
-        labelState="default"
-        helperText="Default label state"
+        hintText="No indicator text"
         id="default-label"
       />
     </div>
@@ -186,32 +206,32 @@ export const LabelStates: Story = {
     docs: {
       description: {
         story:
-          "Label states showing required (*), optional (optional), and default labels using proper design system colors. Navy-500 for labels, brand red for required indicator.",
+          "Label states with brand red required indicator and grey optional indicator.",
       },
     },
   },
 };
 
-// Checked states
+// Checked states with navy-500
 export const CheckedStates: Story = {
   render: () => (
     <div className="space-y-4">
       <Checkbox
         checked={false}
         label="Unchecked state"
-        helperText="Uses border color from design tokens"
+        hintText="Default border color (#9ca3af)"
         id="unchecked-state"
       />
       <Checkbox
         checked={true}
         label="Checked state"
-        helperText="Uses primary color background"
+        hintText="Navy-500 background with white checkmark"
         id="checked-state"
       />
       <Checkbox
         checked="indeterminate"
         label="Indeterminate state"
-        helperText="Shows minus icon for partially selected"
+        hintText="Navy-500 background with white minus icon"
         id="indeterminate-state"
       />
     </div>
@@ -220,7 +240,7 @@ export const CheckedStates: Story = {
     docs: {
       description: {
         story:
-          "All checkbox states using design system tokens. Checked state uses --color-primary background and --color-button-primary-text for icons.",
+          "All checkbox states using navy-500 for selected/indeterminate states.",
       },
     },
   },
@@ -231,87 +251,160 @@ export const Disabled: Story = {
   args: {
     label: "Disabled checkbox",
     disabled: true,
-    helperText: "This option is currently unavailable",
+    hintText: "This option is currently unavailable",
     id: "disabled-checkbox",
   },
   parameters: {
     docs: {
       description: {
-        story:
-          "Disabled state with proper opacity and cursor styling, matching Input component disabled patterns.",
+        story: "Disabled state with 50% opacity and not-allowed cursor.",
       },
     },
   },
 };
 
-// Error validation example
+// Error validation with consistent focus
 export const WithValidation: Story = {
   args: {
     variant: "error",
     label: "Terms and conditions",
     labelState: "required",
     error: "You must accept the terms to continue",
+    hintText: "Focus shows orange ring, not red (accessibility)",
     id: "validation-checkbox",
   },
   parameters: {
     docs: {
       description: {
         story:
-          "Error validation state with inherited Input error styling. Shows red border, error text, and error focus shadow.",
+          "Error validation with red border but orange focus ring for clear UX distinction.",
       },
     },
   },
 };
 
-// Group of checkboxes (matches your screenshot)
+// CheckboxGroup example
 export const CheckboxGroupExample: Story = {
   render: () => (
     <CheckboxGroup
-      label="Form label"
+      label="Interests"
       labelState="required"
-      hintText="Hint text"
-      helperText="Additional helper information"
+      hintText="Select all that apply (14px hint text)"
+      error="Please select at least one interest"
     >
-      <Checkbox label="Text label" id="group-option1" />
-      <Checkbox label="Text label" id="group-option2" />
-      <Checkbox label="Text label" id="group-option3" />
-      <Checkbox label="Text label" id="group-option4" />
-      <Checkbox label="Text label" id="group-option5" />
-      <Checkbox label="Text label" id="group-option6" />
+      <Checkbox label="Design" id="interest-design" />
+      <Checkbox label="Development" id="interest-dev" />
+      <Checkbox label="Marketing" id="interest-marketing" />
+      <Checkbox label="Sales" id="interest-sales" />
+      <Checkbox label="Analytics" id="interest-analytics" />
     </CheckboxGroup>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Group of checkboxes with form label (bold, navy), hint text, and individual checkbox labels (small paragraph text, charcoal). Matches the design in your screenshots.",
+          "Group of checkboxes with form label, hint text, validation, and individual labels.",
       },
     },
   },
 };
 
-// Checkbox group with validation
-export const CheckboxGroupWithValidation: Story = {
+// Hint + Helper Text demonstration (like Input/Select)
+export const HintAndHelperText: Story = {
   render: () => (
-    <CheckboxGroup
-      label="Skills"
-      labelState="required"
-      hintText="Select all skills that apply to you"
-      error="Please select at least one skill"
-    >
-      <Checkbox label="JavaScript" id="skill-js" variant="error" />
-      <Checkbox label="TypeScript" id="skill-ts" variant="error" />
-      <Checkbox label="React" id="skill-react" variant="error" />
-      <Checkbox label="Vue.js" id="skill-vue" variant="error" />
-      <Checkbox label="Angular" id="skill-angular" variant="error" />
-      <Checkbox label="Node.js" id="skill-node" variant="error" />
-    </CheckboxGroup>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h3 className="font-semibold">Hint text only (14px, neutral)</h3>
+        <Checkbox
+          label="Newsletter subscription"
+          hintText="Receive weekly updates about new features"
+          id="hint-only"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">
+          Helper text only (validation feedback)
+        </h3>
+        <Checkbox
+          label="Terms and conditions"
+          labelState="required"
+          error="You must accept the terms to continue"
+          id="helper-only"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">Both hint AND helper text</h3>
+        <Checkbox
+          label="Marketing emails"
+          hintText="Optional: Get product updates and promotions (14px hint)"
+          success="Thanks for subscribing!"
+          id="both-texts"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">
+          Hint text transitions to helper text on validation
+        </h3>
+        <Checkbox
+          label="Privacy policy"
+          labelState="required"
+          hintText="Please read our privacy policy before accepting"
+          error="You must accept the privacy policy"
+          id="hint-to-helper"
+        />
+        <p className="text-xs text-gray-500">
+          Note: Hint text disappears when validation message appears
+        </p>
+      </div>
+    </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Checkbox group with error validation. Shows how error states cascade to individual checkboxes while maintaining proper typography hierarchy.",
+          "Demonstrates hint text (14px, neutral instructions) vs helper text (validation feedback). Matches Input/Select behavior.",
+      },
+    },
+  },
+};
+
+// Focus demonstration
+export const FocusDemonstration: Story = {
+  render: () => (
+    <div className="space-y-6">
+      <div className="p-4 border border-gray-200 rounded">
+        <h3 className="font-semibold mb-3">Tab through these checkboxes:</h3>
+        <div className="space-y-2">
+          <Checkbox
+            variant="default"
+            label="Default - Orange focus"
+            hintText="Focus ring is orange"
+            id="focus-default"
+          />
+          <Checkbox
+            variant="error"
+            label="Error - Orange focus (not red)"
+            hintText="Border red, focus orange"
+            id="focus-error"
+          />
+          <Checkbox
+            variant="success"
+            label="Success - Orange focus (not teal)"
+            hintText="Border teal, focus orange"
+            id="focus-success"
+          />
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstration of consistent orange focus rings across all variants for accessibility.",
       },
     },
   },
