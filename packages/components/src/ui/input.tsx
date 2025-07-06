@@ -132,7 +132,6 @@ const labelStyles = {
     display: "block" as const,
     fontSize: "var(--font-size-base, 16px)",
     fontWeight: "var(--font-weight-medium, 500)",
-    marginBottom: "2px", // AGGRESSIVE: Reduced from 8px to 2px
     color: "var(--color-input-label, #1e40af)",
     fontFamily: "var(--font-family-sans, 'Poppins', sans-serif)",
   },
@@ -350,7 +349,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {showLabel && label && (
           <label
             htmlFor={inputId}
-            className={cn(labelClassName)}
+            className={cn(labelVariants(), labelClassName)}
             style={{
               ...labelStyles.base,
               ...(disabled ? labelStyles.states.disabled : {}),
@@ -384,7 +383,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {/* Hint Text */}
         {showHintText && (
           <p
-            className={cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5")}
+            className={cn(helperVariants({ variant: "muted" }))}
             id={`${inputId}-description`}
           >
             {hintText}
@@ -474,9 +473,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               helperVariants({ variant: helperVariant }),
               helperClassName
             )}
-            style={{
-              marginTop: "1px", // AGGRESSIVE: Almost no space above validation text
-            }}
           >
             {helperContent}
           </p>

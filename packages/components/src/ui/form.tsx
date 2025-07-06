@@ -21,11 +21,11 @@ export const helperVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-input-helper",
-        error: "text-input-text-error",
-        success: "text-input-text-success",
-        warning: "text-input-text-warning",
-        muted: "text-text-muted mt-0 mb-3",
+        default: "text-input-helper mt-1", // Standard validation spacing
+        error: "text-input-text-error mt-1",
+        success: "text-input-text-success mt-1",
+        warning: "text-input-text-warning mt-1",
+        muted: "text-text-muted mt-0 mb-1", // Hint text spacing - tighter
       },
     },
     defaultVariants: { variant: "default" },
@@ -34,7 +34,7 @@ export const helperVariants = cva(
 
 // 🎯 Label Variants - Used by ALL form components
 export const labelVariants = cva(
-  "block text-base font-medium mb-0.5 font-sans",
+  "block text-base font-medium mb-1 font-sans", // Reduced from mb-0.5 to mb-1 for consistency
   {
     variants: {
       variant: {
