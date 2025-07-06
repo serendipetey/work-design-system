@@ -487,7 +487,7 @@ const SelectField = React.forwardRef<
         {/* Hint Text */}
         {showHintText && (
           <p
-            className={cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5")}
+            className={cn(helperVariants({ variant: "muted" }))}
             id={`${selectId}-description`}
           >
             {hintText}
@@ -536,9 +536,6 @@ const SelectField = React.forwardRef<
               helperVariants({ variant: helperVariant }),
               helperClassName
             )}
-            style={{
-              marginTop: "2px",
-            }}
           >
             {helperContent}
           </p>
