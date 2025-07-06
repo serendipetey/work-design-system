@@ -1,4 +1,6 @@
 // packages/components/src/ui/column-sort-controls.stories.tsx
+// 🎯 UPDATED: Now includes validation state examples
+
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { ColumnSortControls } from "./column-sort-controls";
@@ -20,24 +22,25 @@ const meta: Meta<typeof ColumnSortControls> = {
     docs: {
       description: {
         component: `
-**Column Sort Controls**
+**Column Sort Controls - Now with Form Integration**
 
-Clean toolbar sorting interface combining column selection with direction toggle:
+Clean toolbar sorting interface with centralized form utilities:
+
+**Enhanced Features:**
+- **Validation States**: Error, success, warning feedback
+- **Hint Text**: Helpful guidance for users
+- **Form Integration**: Uses centralized form utilities
+- **Consistent Styling**: Matches other form components
+- **ARIA Support**: Full accessibility integration
 
 **Components:**
 - **Column Dropdown**: Shows only sortable columns from table
 - **Direction Button**: Ghost button with rotating arrow icon
-- **Auto-detection**: Filters to only sortable columns automatically
+- **Helper Messages**: Validation feedback and hints
 
 **Layout:**
 \`[Sort by: Column Name ▼] [↑/↓]\`
-
-**Features:**
-- **Unified state** - Single point of control for table sorting
-- **Clean UI** - No cluttered column headers
-- **Smart filtering** - Only sortable columns appear in dropdown
-- **Rotating arrow** - Same arrow used throughout system
-- **Disabled states** - Direction button disabled when no column selected
+\`[Helper/Error Message]\`
         `,
       },
     },
@@ -57,6 +60,22 @@ Clean toolbar sorting interface combining column selection with direction toggle
     disabled: {
       control: "boolean",
       description: "Disable all controls",
+    },
+    hintText: {
+      control: "text",
+      description: "Helpful hint text",
+    },
+    error: {
+      control: "text",
+      description: "Error message",
+    },
+    success: {
+      control: "text",
+      description: "Success message",
+    },
+    warning: {
+      control: "text",
+      description: "Warning message",
     },
   },
 };
@@ -121,6 +140,177 @@ export const Default: Story = {
   },
 };
 
+// With hint text
+export const WithHintText: Story = {
+  render: () => {
+    const [currentColumn, setCurrentColumn] = useState<string | null>(null);
+    const [currentDirection, setCurrentDirection] = useState<"asc" | "desc">(
+      "asc"
+    );
+
+    return (
+      <div className="space-y-4 p-6">
+        <h3 className="text-lg font-semibold text-[var(--color-navy-500)] mb-4">
+          With Hint Text
+        </h3>
+        <ColumnSortControls
+          columns={sampleColumns}
+          currentColumn={currentColumn}
+          currentDirection={currentDirection}
+          onColumnChange={setCurrentColumn}
+          onDirectionChange={setCurrentDirection}
+          hintText="Select a column to sort the table data"
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Sort controls with helpful hint text to guide users.",
+      },
+    },
+  },
+};
+
+// Error state
+export const ErrorState: Story = {
+  render: () => {
+    const [currentColumn, setCurrentColumn] = useState<string | null>("status");
+    const [currentDirection, setCurrentDirection] = useState<"asc" | "desc">(
+      "asc"
+    );
+
+    return (
+      <div className="space-y-4 p-6">
+        <h3 className="text-lg font-semibold text-[var(--color-navy-500)] mb-4">
+          Error State
+        </h3>
+        <ColumnSortControls
+          columns={sampleColumns}
+          currentColumn={currentColumn}
+          currentDirection={currentDirection}
+          onColumnChange={setCurrentColumn}
+          onDirectionChange={setCurrentDirection}
+          error="Failed to sort data. Please try again."
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Error state when sorting fails or encounters issues.",
+      },
+    },
+  },
+};
+
+// Success state
+export const SuccessState: Story = {
+  render: () => {
+    const [currentColumn, setCurrentColumn] = useState<string | null>("name");
+    const [currentDirection, setCurrentDirection] = useState<"asc" | "desc">(
+      "desc"
+    );
+
+    return (
+      <div className="space-y-4 p-6">
+        <h3 className="text-lg font-semibold text-[var(--color-navy-500)] mb-4">
+          Success State
+        </h3>
+        <ColumnSortControls
+          columns={sampleColumns}
+          currentColumn={currentColumn}
+          currentDirection={currentDirection}
+          onColumnChange={setCurrentColumn}
+          onDirectionChange={setCurrentDirection}
+          success="Table sorted by Customer Name (descending)"
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Success state confirming sort operation completed.",
+      },
+    },
+  },
+};
+
+// Warning state
+export const WarningState: Story = {
+  render: () => {
+    const [currentColumn, setCurrentColumn] = useState<string | null>("email");
+    const [currentDirection, setCurrentDirection] = useState<"asc" | "desc">(
+      "asc"
+    );
+
+    return (
+      <div className="space-y-4 p-6">
+        <h3 className="text-lg font-semibold text-[var(--color-navy-500)] mb-4">
+          Warning State
+        </h3>
+        <ColumnSortControls
+          columns={sampleColumns}
+          currentColumn={currentColumn}
+          currentDirection={currentDirection}
+          onColumnChange={setCurrentColumn}
+          onDirectionChange={setCurrentDirection}
+          warning="Sorting large datasets may take a few moments"
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Warning state for performance or data-related concerns.",
+      },
+    },
+  },
+};
+
+// Disabled state
+export const DisabledState: Story = {
+  render: () => {
+    const [currentColumn, setCurrentColumn] = useState<string | null>("status");
+    const [currentDirection, setCurrentDirection] = useState<"asc" | "desc">(
+      "asc"
+    );
+
+    return (
+      <div className="space-y-4 p-6">
+        <h3 className="text-lg font-semibold text-[var(--color-navy-500)] mb-4">
+          Disabled State
+        </h3>
+        <ColumnSortControls
+          columns={sampleColumns}
+          currentColumn={currentColumn}
+          currentDirection={currentDirection}
+          onColumnChange={setCurrentColumn}
+          onDirectionChange={setCurrentDirection}
+          disabled={true}
+          hintText="Sorting is temporarily disabled while data loads"
+        />
+
+        <div className="text-sm text-[var(--color-charcoal-500)]">
+          Both the dropdown and direction button are disabled.
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Disabled state for loading scenarios or when sorting is temporarily unavailable.",
+      },
+    },
+  },
+};
+
 // All sortable columns
 export const AllSortable: Story = {
   render: () => {
@@ -148,6 +338,7 @@ export const AllSortable: Story = {
             currentDirection={currentDirection}
             onColumnChange={setCurrentColumn}
             onDirectionChange={setCurrentDirection}
+            hintText="All columns in this table can be sorted"
           />
         </div>
 
@@ -162,92 +353,6 @@ export const AllSortable: Story = {
       description: {
         story:
           "Example where all columns are sortable - all appear in the dropdown selection.",
-      },
-    },
-  },
-};
-
-// No sortable columns
-export const NoSortableColumns: Story = {
-  render: () => {
-    const [currentColumn, setCurrentColumn] = useState<string | null>(null);
-    const [currentDirection, setCurrentDirection] = useState<"asc" | "desc">(
-      "asc"
-    );
-
-    const nonSortableColumns: DataTableColumn[] = [
-      { key: "name", header: "Name", sortable: false },
-      { key: "email", header: "Email", sortable: false },
-      { key: "status", header: "Status", sortable: false },
-    ];
-
-    return (
-      <div className="space-y-4 p-6">
-        <div>
-          <h3 className="text-lg font-semibold text-[var(--color-navy-500)] mb-4">
-            No Sortable Columns
-          </h3>
-          <ColumnSortControls
-            columns={nonSortableColumns}
-            currentColumn={currentColumn}
-            currentDirection={currentDirection}
-            onColumnChange={setCurrentColumn}
-            onDirectionChange={setCurrentDirection}
-          />
-        </div>
-
-        <div className="text-sm text-[var(--color-charcoal-500)]">
-          When no columns are sortable, only "No sorting" option is available.
-        </div>
-      </div>
-    );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Edge case where no columns are sortable. Only the 'No sorting' option appears in the dropdown.",
-      },
-    },
-  },
-};
-
-// Disabled state
-export const Disabled: Story = {
-  render: () => {
-    const [currentColumn, setCurrentColumn] = useState<string | null>("name");
-    const [currentDirection, setCurrentDirection] = useState<"asc" | "desc">(
-      "desc"
-    );
-
-    return (
-      <div className="space-y-4 p-6">
-        <div>
-          <h3 className="text-lg font-semibold text-[var(--color-navy-500)] mb-4">
-            Disabled State
-          </h3>
-          <ColumnSortControls
-            columns={sampleColumns}
-            currentColumn={currentColumn}
-            currentDirection={currentDirection}
-            onColumnChange={setCurrentColumn}
-            onDirectionChange={setCurrentDirection}
-            disabled={true}
-          />
-        </div>
-
-        <div className="text-sm text-[var(--color-charcoal-500)]">
-          Use disabled state during loading or when sorting is temporarily
-          unavailable.
-        </div>
-      </div>
-    );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Disabled state for loading scenarios or when sorting is temporarily unavailable.",
       },
     },
   },

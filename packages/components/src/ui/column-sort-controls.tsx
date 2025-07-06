@@ -1,9 +1,18 @@
 // packages/components/src/ui/column-sort-controls.tsx
+// 🎯 REFACTORED: Now uses centralized form utilities for consistency
+
 import * as React from "react";
 import { SelectField, SelectItem } from "./select";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
 import type { DataTableColumn } from "./data-table";
+import {
+  getHelperContent,
+  getHelperVariant,
+  getFormFieldAria,
+  helperVariants,
+  fieldVariants,
+} from "./form";
 
 export interface ColumnSortControlsProps {
   columns: DataTableColumn[];
@@ -13,6 +22,16 @@ export interface ColumnSortControlsProps {
   onDirectionChange?: (direction: "asc" | "desc") => void;
   className?: string;
   disabled?: boolean;
+
+  // Form validation props (consistent with other form components)
+  hintText?: string;
+  error?: string;
+  success?: string;
+  warning?: string;
+
+  // Container styling
+  containerClassName?: string;
+  helperClassName?: string;
 }
 
 const DirectionIcon = ({ direction }: { direction: "asc" | "desc" }) => (
@@ -37,7 +56,25 @@ export const ColumnSortControls: React.FC<ColumnSortControlsProps> = ({
   onDirectionChange,
   className,
   disabled = false,
+  hintText,
+  error,
+  success,
+  warning,
+  containerClassName,
+  helperClassName,
 }) => {
+  // 🎯 Use centralized form utilities for validation states
+  const helperContent = getHelperContent(error, success, warning);
+  const helperVariant = getHelperVariant(error, success, warning);
+  const sortControlsId = React.useId();
+  const formFieldAria = getFormFieldAria(
+    sortControlsId,
+    error,
+    success,
+    warning,
+    hintText
+  );
+
   // Filter to only sortable columns
   const sortableColumns = columns.filter((col) => col.sortable);
 
@@ -59,39 +96,75 @@ export const ColumnSortControls: React.FC<ColumnSortControlsProps> = ({
   // Get current column value for select
   const selectValue = currentColumn || "none";
 
-  return (
-    <div className={cn("flex items-center gap-2", className)}>
-      {/* Column Selection Dropdown */}
-      <SelectField
-        value={selectValue}
-        onValueChange={handleColumnChange}
-        size="md"
-        disabled={disabled}
-        showLabel={false}
-        placeholder="Sort by column"
-        className="min-w-[160px]"
-      >
-        <SelectItem value="none">No sorting</SelectItem>
-        {sortableColumns.map((column) => (
-          <SelectItem key={column.key} value={column.key}>
-            {column.header}
-          </SelectItem>
-        ))}
-      </SelectField>
+  // 🎯 Determine validation variant for consistent styling
+  const validationVariant = error
+    ? "error"
+    : success
+    ? "success"
+    : warning
+    ? "warning"
+    : "default";
 
-      {/* Direction Toggle Button */}
-      <Button
-        variant="ghost"
-        size="md"
-        onClick={handleDirectionToggle}
-        disabled={disabled || !currentColumn}
-        aria-label={`Sort ${
-          currentDirection === "asc" ? "ascending" : "descending"
-        }`}
-        className="px-3"
+  return (
+    <div className={cn(fieldVariants(), containerClassName)}>
+      {/* Hint text (like other form components) */}
+      {hintText && (
+        <p className={cn(helperVariants({ variant: "muted" }), "mb-2")}>
+          {hintText}
+        </p>
+      )}
+
+      {/* Sort Controls */}
+      <div
+        className={cn("flex items-center gap-2", className)}
+        id={sortControlsId}
       >
-        <DirectionIcon direction={currentDirection} />
-      </Button>
+        {/* Column Selection Dropdown */}
+        <SelectField
+          value={selectValue}
+          onValueChange={handleColumnChange}
+          size="md"
+          disabled={disabled}
+          hideLabel={true}
+          placeholder="Sort by column"
+          className="min-w-[160px]"
+          {...formFieldAria}
+        >
+          <SelectItem value="none">No sorting</SelectItem>
+          {sortableColumns.map((column) => (
+            <SelectItem key={column.key} value={column.key}>
+              {column.header}
+            </SelectItem>
+          ))}
+        </SelectField>
+
+        {/* Direction Toggle Button */}
+        <Button
+          variant="ghost"
+          size="md"
+          onClick={handleDirectionToggle}
+          disabled={disabled || !currentColumn}
+          aria-label={`Sort ${
+            currentDirection === "asc" ? "ascending" : "descending"
+          }`}
+          className="px-3"
+        >
+          <DirectionIcon direction={currentDirection} />
+        </Button>
+      </div>
+
+      {/* Helper/Validation Message */}
+      {helperContent && (
+        <p
+          className={cn(
+            helperVariants({ variant: helperVariant }),
+            "mt-2",
+            helperClassName
+          )}
+        >
+          {helperContent}
+        </p>
+      )}
     </div>
   );
 };

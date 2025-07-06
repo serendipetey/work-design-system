@@ -2987,6 +2987,17 @@ const labelVariants = cva("block text-base font-medium mb-1 font-sans", // Reduc
     },
     defaultVariants: { variant: "default" },
 });
+// 🎯 Form Field Container Variants
+const fieldVariants = cva("w-full space-y-1", {
+    variants: {
+        variant: {
+            default: "",
+            compact: "space-y-0.5",
+            spacious: "space-y-2",
+        },
+    },
+    defaultVariants: { variant: "default" },
+});
 /**
  * 🎯 SHARED FORM LOGIC UTILITIES
  *
@@ -9083,7 +9094,12 @@ const PaginationResults = React__namespace.forwardRef(({ className, currentPage,
 PaginationResults.displayName = "PaginationResults";
 
 const DirectionIcon = ({ direction }) => (jsxRuntime.jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", className: cn("transition-transform duration-150", direction === "desc" ? "rotate-180" : "rotate-0"), children: jsxRuntime.jsx("path", { d: "M8 2L6 6h1.5v8h1v-8H10L8 2z", fill: "currentColor" }) }));
-const ColumnSortControls = ({ columns, currentColumn, currentDirection = "asc", onColumnChange, onDirectionChange, className, disabled = false, }) => {
+const ColumnSortControls = ({ columns, currentColumn, currentDirection = "asc", onColumnChange, onDirectionChange, className, disabled = false, hintText, error, success, warning, containerClassName, helperClassName, }) => {
+    // 🎯 Use centralized form utilities for validation states
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    const sortControlsId = React__namespace.useId();
+    const formFieldAria = getFormFieldAria(sortControlsId, error, success, warning, hintText);
     // Filter to only sortable columns
     const sortableColumns = columns.filter((col) => col.sortable);
     // Handle column selection
@@ -9102,7 +9118,15 @@ const ColumnSortControls = ({ columns, currentColumn, currentDirection = "asc", 
     };
     // Get current column value for select
     const selectValue = currentColumn || "none";
-    return (jsxRuntime.jsxs("div", { className: cn("flex items-center gap-2", className), children: [jsxRuntime.jsxs(SelectField, { value: selectValue, onValueChange: handleColumnChange, size: "md", disabled: disabled, showLabel: false, placeholder: "Sort by column", className: "min-w-[160px]", children: [jsxRuntime.jsx(SelectItem, { value: "none", children: "No sorting" }), sortableColumns.map((column) => (jsxRuntime.jsx(SelectItem, { value: column.key, children: column.header }, column.key)))] }), jsxRuntime.jsx(Button, { variant: "ghost", size: "md", onClick: handleDirectionToggle, disabled: disabled || !currentColumn, "aria-label": `Sort ${currentDirection === "asc" ? "ascending" : "descending"}`, className: "px-3", children: jsxRuntime.jsx(DirectionIcon, { direction: currentDirection }) })] }));
+    // 🎯 Determine validation variant for consistent styling
+    const validationVariant = error
+        ? "error"
+        : success
+            ? "success"
+            : warning
+                ? "warning"
+                : "default";
+    return (jsxRuntime.jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [hintText && (jsxRuntime.jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mb-2"), children: hintText })), jsxRuntime.jsxs("div", { className: cn("flex items-center gap-2", className), id: sortControlsId, children: [jsxRuntime.jsxs(SelectField, { value: selectValue, onValueChange: handleColumnChange, size: "md", disabled: disabled, hideLabel: true, placeholder: "Sort by column", className: "min-w-[160px]", variant: validationVariant, ...formFieldAria, children: [jsxRuntime.jsx(SelectItem, { value: "none", children: "No sorting" }), sortableColumns.map((column) => (jsxRuntime.jsx(SelectItem, { value: column.key, children: column.header }, column.key)))] }), jsxRuntime.jsx(Button, { variant: "ghost", size: "md", onClick: handleDirectionToggle, disabled: disabled || !currentColumn, "aria-label": `Sort ${currentDirection === "asc" ? "ascending" : "descending"}`, className: "px-3", children: jsxRuntime.jsx(DirectionIcon, { direction: currentDirection }) })] }), helperContent && (jsxRuntime.jsx("p", { className: cn(helperVariants({ variant: helperVariant }), "mt-2", helperClassName), children: helperContent }))] }));
 };
 
 // Default icons - replace with your icon system

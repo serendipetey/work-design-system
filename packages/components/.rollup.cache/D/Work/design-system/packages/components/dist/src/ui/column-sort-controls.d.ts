@@ -8,5 +8,11 @@ export interface ColumnSortControlsProps {
     onDirectionChange?: (direction: "asc" | "desc") => void;
     className?: string;
     disabled?: boolean;
+    hintText?: string;
+    error?: string;
+    success?: string;
+    warning?: string;
+    containerClassName?: string;
+    helperClassName?: string;
 }
 export declare const ColumnSortControls: React.FC<ColumnSortControlsProps>;
