@@ -607,6 +607,7 @@ const RadioItem = React.forwardRef<
               style={{
                 width: "6px",
                 height: "6px",
+                backgroundColor: "var(--color-navy-500, #1e3a8a)",
               }}
             />
           </RadioGroupPrimitive.Indicator>
