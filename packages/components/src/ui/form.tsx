@@ -17,7 +17,7 @@ import { cva } from "class-variance-authority";
 
 // 🎯 Helper Text Variants - Used by ALL form components
 export const helperVariants = cva(
-  "text-sm leading-[1.75] font-normal font-sans tracking-wide mt-1",
+  "text-sm leading-[1.25] font-normal font-sans tracking-wide",
   {
     variants: {
       variant: {
@@ -25,7 +25,7 @@ export const helperVariants = cva(
         error: "text-input-text-error",
         success: "text-input-text-success",
         warning: "text-input-text-warning",
-        muted: "text-text-muted",
+        muted: "text-text-muted mt-0 mb-3",
       },
     },
     defaultVariants: { variant: "default" },
