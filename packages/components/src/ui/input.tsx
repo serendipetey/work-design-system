@@ -143,35 +143,6 @@ const labelStyles = {
   },
 };
 
-// Helper text styles - MUCH tighter spacing
-const helperStyles = {
-  base: {
-    fontSize: "var(--font-size-base, 16px)", // Accessibility: 16px
-    lineHeight: "var(--line-height-loose, 1.75)",
-    fontWeight: "var(--font-weight-regular, 400)",
-    fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
-    marginTop: "1px", // AGGRESSIVE: Almost no space above helper text
-    letterSpacing: "var(--letter-spacing-wide, 0.0225em)",
-  },
-  variants: {
-    default: {
-      color: "var(--color-input-helper, #39444f)",
-    },
-    error: {
-      color: "var(--color-input-text-error, #eb0000)",
-    },
-    success: {
-      color: "var(--color-input-text-success, #007d85)",
-    },
-    warning: {
-      color: "var(--color-input-text-warning, #b75b00)",
-    },
-    muted: {
-      color: "var(--color-text-muted, #8f949a)",
-    },
-  },
-};
-
 // 🎯 CVA for className-based utilities (minimal usage)
 const inputVariants = cva(
   // Base classes for layout/structure only - REMOVED problematic selectors
@@ -413,12 +384,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {/* Hint Text */}
         {showHintText && (
           <p
-            style={{
-              ...helperStyles.base,
-              ...helperStyles.variants.muted,
-              marginTop: "0px", // AGGRESSIVE: No space between label and hint
-              marginBottom: "2px", // AGGRESSIVE: Minimal space before input
-            }}
+            className={cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5")}
+            id={`${inputId}-description`}
           >
             {hintText}
           </p>
