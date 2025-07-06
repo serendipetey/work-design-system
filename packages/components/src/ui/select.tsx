@@ -333,7 +333,11 @@ const SelectItem = React.forwardRef<
   return (
     <SelectPrimitive.Item
       ref={ref}
-      className={cn(selectItemVariants(), className)}
+      className={cn(
+        selectItemVariants(),
+        "hover:bg-[var(--color-accent,var(--color-gray-300,#e4e4e4))]",
+        className
+      )}
       style={combinedStyles}
       {...props}
     >

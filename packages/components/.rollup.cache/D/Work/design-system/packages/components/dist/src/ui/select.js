@@ -231,7 +231,7 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
         borderRadius: "var(--border-radius-sm, 4px)",
         transition: "var(--transition-base, all 200ms ease-in-out)",
     };
-    return (_jsxs(SelectPrimitive.Item, { ref: ref, className: cn(selectItemVariants(), className), style: combinedStyles, ...props, children: [_jsx("span", { className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center", children: _jsx(SelectPrimitive.ItemIndicator, { children: _jsx(Check, { className: "h-4 w-4" }) }) }), _jsx(SelectPrimitive.ItemText, { children: children })] }));
+    return (_jsxs(SelectPrimitive.Item, { ref: ref, className: cn(selectItemVariants(), "hover:bg-[var(--color-accent,var(--color-gray-300,#e4e4e4))]", className), style: combinedStyles, ...props, children: [_jsx("span", { className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center", children: _jsx(SelectPrimitive.ItemIndicator, { children: _jsx(Check, { className: "h-4 w-4" }) }) }), _jsx(SelectPrimitive.ItemText, { children: children })] }));
 });
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 const SelectField = React.forwardRef(({ className, variant = "default", size = "md", label, labelState, hideLabel = false, hintText, helperText, error, success, warning, placeholder, value, onValueChange, defaultValue, children, required, disabled, id, name, containerClassName, labelClassName, helperClassName, ...props }, ref) => {

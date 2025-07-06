@@ -8868,7 +8868,7 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
         borderRadius: "var(--border-radius-sm, 4px)",
         transition: "var(--transition-base, all 200ms ease-in-out)",
     };
-    return (jsxs(Item$1, { ref: ref, className: cn(selectItemVariants(), className), style: combinedStyles, ...props, children: [jsx("span", { className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center", children: jsx(ItemIndicator, { children: jsx(Check, { className: "h-4 w-4" }) }) }), jsx(ItemText, { children: children })] }));
+    return (jsxs(Item$1, { ref: ref, className: cn(selectItemVariants(), "hover:bg-[var(--color-accent,var(--color-gray-300,#e4e4e4))]", className), style: combinedStyles, ...props, children: [jsx("span", { className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center", children: jsx(ItemIndicator, { children: jsx(Check, { className: "h-4 w-4" }) }) }), jsx(ItemText, { children: children })] }));
 });
 SelectItem.displayName = Item$1.displayName;
 const SelectField = React.forwardRef(({ className, variant = "default", size = "md", label, labelState, hideLabel = false, hintText, helperText, error, success, warning, placeholder, value, onValueChange, defaultValue, children, required, disabled, id, name, containerClassName, labelClassName, helperClassName, ...props }, ref) => {
