@@ -31,14 +31,14 @@ const checkboxStyles = {
         // Borders & Colors
         borderRadius: "var(--border-radius-sm, 4px)",
         backgroundColor: "var(--color-surface, #ffffff)",
-        borderColor: "var(--color-border, #d1d5db)",
+        borderColor: "var(--color-border, #b3b9bf)",
         color: "var(--color-text, #374151)",
         // Transitions
         transition: "var(--transition-base, all 200ms ease-in-out)",
     },
     variants: {
         default: {
-            borderColor: "var(--color-border, #9ca3af)",
+            borderColor: "var(--color-border, #b3b9bf)",
             backgroundColor: "var(--color-surface, #ffffff)",
         },
         error: {
@@ -253,10 +253,7 @@ const RadioGroup = React.forwardRef(({ className, containerClassName, labelClass
     const helperVariant = getHelperVariant(error, success, warning);
     return (_jsxs("div", { className: cn("space-y-2", containerClassName), children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({
                     variant: disabled ? "disabled" : "default",
-                }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "(Required)" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(optional)" }))] })), hintText && !helperContent && (_jsx("p", { className: "text-sm", style: {
-                    color: "var(--color-input-helper, #39444f)",
-                    fontSize: "14px",
-                }, children: hintText })), _jsx(RadioGroupPrimitive.Root, { className: cn("grid gap-2", className), disabled: disabled, ref: ref, ...props, children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+                }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "*" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(Optional)" }))] })), hintText && (_jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5"), children: hintText })), _jsx(RadioGroupPrimitive.Root, { className: cn("grid gap-2", className), disabled: disabled, ref: ref, ...props, children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 // Radio Item Component
@@ -298,10 +295,7 @@ const CheckboxGroup = React.forwardRef(({ containerClassName, labelClassName, he
     // 🎯 Use centralized form utilities
     const helperContent = getHelperContent(error, success, warning);
     const helperVariant = getHelperVariant(error, success, warning);
-    return (_jsxs("div", { ref: ref, className: cn("space-y-2", containerClassName), ...props, children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({ variant: "default" }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "(Required)" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(optional)" }))] })), hintText && !helperContent && (_jsx("p", { className: "text-sm", style: {
-                    color: "var(--color-input-helper, #39444f)",
-                    fontSize: "14px",
-                }, children: hintText })), _jsx("div", { className: "space-y-1", children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+    return (_jsxs("div", { ref: ref, className: cn("space-y-2", containerClassName), ...props, children: [label && showLabel && (_jsxs("div", { className: cn(labelVariants({ variant: "default" }), labelClassName), children: [label, labelState === "required" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "*" })), labelState === "optional" && (_jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(Optional)" }))] })), hintText && (_jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5"), children: hintText })), _jsx("div", { className: "space-y-1", children: children }), helperContent && (_jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 CheckboxGroup.displayName = "CheckboxGroup";
 export { Checkbox, RadioGroup, RadioItem, CheckboxGroup, checkboxVariants, radioVariants, };

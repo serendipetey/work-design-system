@@ -41,7 +41,7 @@
   --color-surface-error: var(--color-error-200); /* Light error background */
 
   /* Border Colors */
-  --color-border: var(--color-gray-300);
+  --color-border: var(--color-gray-400);
   --color-border-subtle: var(--color-gray-200);
   --color-border-focus: var(--color-navy-500);
   --color-border-success: var(--color-success-500);

@@ -43,7 +43,7 @@ const checkboxStyles = {
     // Borders & Colors
     borderRadius: "var(--border-radius-sm, 4px)",
     backgroundColor: "var(--color-surface, #ffffff)",
-    borderColor: "var(--color-border, #d1d5db)",
+    borderColor: "var(--color-border, #b3b9bf)",
     color: "var(--color-text, #374151)",
 
     // Transitions
@@ -51,7 +51,7 @@ const checkboxStyles = {
   },
   variants: {
     default: {
-      borderColor: "var(--color-border, #9ca3af)",
+      borderColor: "var(--color-border, #b3b9bf)",
       backgroundColor: "var(--color-surface, #ffffff)",
     },
     error: {
@@ -247,9 +247,10 @@ export interface CheckboxProps
   label?: string;
   labelState?: "required" | "optional";
   showLabel?: boolean;
+  hintText?: string;
 
   // Content & Validation
-  hintText?: string;
+
   error?: string;
   success?: string;
   warning?: string;
@@ -494,7 +495,7 @@ const RadioGroup = React.forwardRef<
                 className="ml-1"
                 style={{ color: "var(--color-input-label-required, #a30134)" }}
               >
-                (Required)
+                *
               </span>
             )}
             {labelState === "optional" && (
@@ -502,20 +503,16 @@ const RadioGroup = React.forwardRef<
                 className="ml-1"
                 style={{ color: "var(--color-input-label-optional, #6b7280)" }}
               >
-                (optional)
+                (Optional)
               </span>
             )}
           </div>
         )}
 
         {/* Hint text (like Input component) */}
-        {hintText && !helperContent && (
+        {hintText && (
           <p
-            className="text-sm"
-            style={{
-              color: "var(--color-input-helper, #39444f)",
-              fontSize: "14px",
-            }}
+            className={cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5")}
           >
             {hintText}
           </p>
@@ -675,7 +672,7 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
                 className="ml-1"
                 style={{ color: "var(--color-input-label-required, #a30134)" }}
               >
-                (Required)
+                *
               </span>
             )}
             {labelState === "optional" && (
@@ -683,20 +680,16 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
                 className="ml-1"
                 style={{ color: "var(--color-input-label-optional, #6b7280)" }}
               >
-                (optional)
+                (Optional)
               </span>
             )}
           </div>
         )}
 
         {/* Hint text (like Input component) */}
-        {hintText && !helperContent && (
+        {hintText && (
           <p
-            className="text-sm"
-            style={{
-              color: "var(--color-input-helper, #39444f)",
-              fontSize: "14px",
-            }}
+            className={cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5")}
           >
             {hintText}
           </p>

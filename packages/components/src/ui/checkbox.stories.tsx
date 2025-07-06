@@ -289,7 +289,7 @@ export const CheckboxGroupExample: Story = {
     <CheckboxGroup
       label="Interests"
       labelState="required"
-      hintText="Select all that apply (14px hint text)"
+      hintText="Select all that apply"
       error="Please select at least one interest"
     >
       <Checkbox label="Design" id="interest-design" />
@@ -331,16 +331,6 @@ export const HintAndHelperText: Story = {
           labelState="required"
           error="You must accept the terms to continue"
           id="helper-only"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <h3 className="font-semibold">Both hint AND helper text</h3>
-        <Checkbox
-          label="Marketing emails"
-          hintText="Optional: Get product updates and promotions (14px hint)"
-          success="Thanks for subscribing!"
-          id="both-texts"
         />
       </div>
 
