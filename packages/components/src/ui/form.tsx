@@ -25,7 +25,7 @@ export const helperVariants = cva(
         error: "text-input-text-error mt-1",
         success: "text-input-text-success mt-1",
         warning: "text-input-text-warning mt-1",
-        muted: "text-text-muted mt-0 mb-1", // Hint text spacing - tighter
+        muted: "text-text-muted", // Hint text spacing - tighter
       },
     },
     defaultVariants: { variant: "default" },
