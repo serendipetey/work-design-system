@@ -43,7 +43,6 @@ export const sidebarMenuItemVariants = cva(
     "flex items-center gap-3 px-4 py-3 w-full text-left",
     "text-sm font-medium transition-colors duration-150",
     "rounded-md", // Added rounded corners for consistency
-    "hover:bg-[var(--color-navy-200,#e0e7ff)] hover:text-[var(--color-navy-600,#1e40af)]",
     "focus-visible:outline-none",
     "disabled:opacity-50 disabled:pointer-events-none",
   ],
@@ -52,12 +51,14 @@ export const sidebarMenuItemVariants = cva(
       active: {
         true: [
           "bg-[var(--color-navy-600,#1e40af)] text-[var(--color-white,#ffffff)] font-semibold",
+          "hover:bg-[var(--color-navy-600,#1e40af)] hover:text-[var(--color-white,#ffffff)]", // Keep same color on hover
           "!focus-visible:bg-[var(--color-navy-600,#1e40af)] !focus-visible:text-[var(--color-white,#ffffff)]",
           "focus-visible:border-b-[3px] focus-visible:border-b-orange-500",
           "focus-visible:rounded-b-none",
         ],
         false: [
           "text-[var(--color-text-body,#374151)]",
+          "hover:bg-[var(--color-navy-200,#e0e7ff)] hover:text-[var(--color-navy-600,#1e40af)]", // Light blue hover for inactive
           "focus-visible:bg-[var(--button-unified-focus-bg,var(--color-focus-500,#ff9900))]",
           "focus-visible:text-[var(--button-unified-focus-text,var(--color-navy-500,#0e3a6c))]",
           "focus-visible:border-b-[3px] focus-visible:border-b-blue-600",
