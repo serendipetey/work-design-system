@@ -26,11 +26,15 @@ yarn-error.log*
 .cache/
 coverage/
 
-# 🚨 NEW: Rollup build artifacts (prevents bloat)
+# 🚨 CRITICAL: Rollup build artifacts (prevents bloat)
 .rollup.cache/
 **/.rollup.cache/
 *.map
 **/*.map
+
+# 🚨 NEW: Prevent tokens dist from accidentally copying storybook files
+packages/tokens/dist/css/stories/
+**/dist/css/stories/
 
 # Logs
 logs
