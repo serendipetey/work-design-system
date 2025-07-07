@@ -2940,14 +2940,29 @@ const Button = React__namespace.forwardRef(({ className, variant, size, asChild 
     React__namespace.useEffect(() => {
         createHoverCSS();
     }, []);
-    // 🎯 Updated: Pass disabled state to getButtonStyles
-    const combinedStyles = {
-        ...getButtonStyles(variant || "primary", size || "md", isDisabled),
-        ...style, // User styles take precedence
-    };
     // Detect if this is an icon-only button
     const isIconOnly = !children && (leftIcon || rightIcon);
-    return (jsxRuntime.jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, "data-icon-only": isIconOnly ? "true" : undefined, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsxRuntime.jsx("span", { className: "mr-2", children: jsxRuntime.jsx(Spinner$1, {}) })), !loading && leftIcon && (jsxRuntime.jsx("span", { className: "mr-2 inline-flex items-center justify-center", children: leftIcon })), children, !loading && rightIcon && (jsxRuntime.jsx("span", { className: "ml-2 inline-flex items-center justify-center", children: rightIcon }))] }));
+    // Get the base button styles
+    const baseButtonStyles = getButtonStyles(variant || "primary", size || "md", isDisabled);
+    // Icon-only padding overrides per your Figma specs
+    const iconOnlyPadding = {
+        sm: "8px",
+        md: "12px",
+        lg: "16px",
+        xl: "20px",
+    };
+    // 🎯 Updated: Override padding for icon-only buttons
+    const combinedStyles = {
+        ...baseButtonStyles,
+        ...(isIconOnly && {
+            paddingLeft: iconOnlyPadding[size || "md"],
+            paddingRight: iconOnlyPadding[size || "md"],
+            aspectRatio: "1",
+            minWidth: "auto",
+        }),
+        ...style, // User styles take precedence
+    };
+    return (jsxRuntime.jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, "data-icon-only": isIconOnly ? "true" : undefined, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsxRuntime.jsx("span", { className: "mr-2", children: jsxRuntime.jsx(Spinner$1, {}) })), !loading && leftIcon && (jsxRuntime.jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "mr-2"), children: leftIcon })), children, !loading && rightIcon && (jsxRuntime.jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "ml-2"), children: rightIcon }))] }));
 });
 Button.displayName = "Button";
 

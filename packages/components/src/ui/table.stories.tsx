@@ -211,18 +211,20 @@ export const Default: Story = {
                   <Button
                     variant="ghost"
                     size="sm"
+                    data-icon-only="true"
+                    data-size="sm"
+                    leftIcon={<EditIcon />}
                     aria-label={`Edit ${item.name}`}
-                  >
-                    <EditIcon />
-                  </Button>
+                  />
                   <Button
                     variant="ghost"
                     size="sm"
+                    data-icon-only="true"
+                    data-size="sm"
+                    leftIcon={<DeleteIcon />}
                     className="text-[var(--color-red-600, #dc2626)] hover:text-[var(--color-red-700, #b91c1c)]"
                     aria-label={`Delete ${item.name}`}
-                  >
-                    <DeleteIcon />
-                  </Button>
+                  />
                 </div>
               </TableCell>
             </TableRow>
@@ -307,18 +309,20 @@ export const SortableColumns: Story = {
                     <Button
                       variant="ghost"
                       size="sm"
+                      data-icon-only="true"
+                      data-size="sm"
+                      leftIcon={<EditIcon />}
                       aria-label={`Edit ${item.name}`}
-                    >
-                      <EditIcon />
-                    </Button>
+                    />
                     <Button
                       variant="ghost"
                       size="sm"
+                      data-icon-only="true"
+                      data-size="sm"
+                      leftIcon={<DeleteIcon />}
                       className="text-[var(--color-red-600, #dc2626)] hover:text-[var(--color-red-700, #b91c1c)]"
                       aria-label={`Delete ${item.name}`}
-                    >
-                      <DeleteIcon />
-                    </Button>
+                    />
                   </div>
                 </TableCell>
               </TableRow>
