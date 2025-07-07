@@ -7,6 +7,7 @@ import { SidebarBusinessLogo } from "./sidebar-business-logo";
 const meta: Meta<typeof SidebarBusinessLogo> = {
   title: "Navigation/SidebarBusinessLogo",
   component: SidebarBusinessLogo,
+  tags: ["autodocs"],
   parameters: {
     layout: "centered",
     docs: {

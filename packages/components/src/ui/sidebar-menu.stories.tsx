@@ -27,6 +27,7 @@ import {
 const meta: Meta<typeof SidebarMenu> = {
   title: "Navigation/SidebarMenu",
   component: SidebarMenu,
+  tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
     docs: {
