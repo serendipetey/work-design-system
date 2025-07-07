@@ -141,16 +141,16 @@ export const ColumnSortControls: React.FC<ColumnSortControlsProps> = ({
         {/* Direction Toggle Button */}
         <Button
           variant="ghost"
-          size="md"
+          size="sm"
+          leftIcon={<DirectionIcon direction={currentDirection} />}
           onClick={handleDirectionToggle}
           disabled={disabled || !currentColumn}
+          data-icon-only="true"
+          data-size="sm"
           aria-label={`Sort ${
             currentDirection === "asc" ? "ascending" : "descending"
           }`}
-          className="px-3"
-        >
-          <DirectionIcon direction={currentDirection} />
-        </Button>
+        />
       </div>
 
       {/* Helper/Validation Message */}
