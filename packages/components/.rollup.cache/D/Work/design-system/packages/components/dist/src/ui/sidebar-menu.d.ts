@@ -1,13 +1,10 @@
-import * as React from "react";
+import React from "react";
 import { type VariantProps } from "class-variance-authority";
-declare const sidebarMenuVariants: (props?: ({
-    size?: "sm" | "md" | "lg" | null | undefined;
-    mobile?: "hidden" | "overlay" | "push" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export interface SidebarMenuProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof sidebarMenuVariants> {
+import { sidebarVariants } from "./sidebar";
+export interface SidebarMenuProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof sidebarVariants> {
     children: React.ReactNode;
-    mobileOpen?: boolean;
-    onMobileToggle?: (open: boolean) => void;
+    collapsed?: boolean;
+    onToggleCollapse?: (open: boolean) => void;
 }
 declare const SidebarMenu: React.ForwardRefExoticComponent<SidebarMenuProps & React.RefAttributes<HTMLDivElement>>;
 export interface SidebarToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -15,4 +12,4 @@ export interface SidebarToggleProps extends React.ButtonHTMLAttributes<HTMLButto
     onToggle: (open: boolean) => void;
 }
 declare const SidebarToggle: React.ForwardRefExoticComponent<SidebarToggleProps & React.RefAttributes<HTMLButtonElement>>;
-export { SidebarMenu, SidebarToggle, sidebarMenuVariants };
+export { SidebarMenu, SidebarToggle, sidebarVariants };

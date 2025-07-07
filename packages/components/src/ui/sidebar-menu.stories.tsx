@@ -1,8 +1,8 @@
 // packages/components/src/ui/sidebar-menu.stories.tsx
+// 🎯 Updated to use refactored sidebar components with centralized architecture
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 import {
-  Building2,
   FileText,
   DollarSign,
   Users,
@@ -10,10 +10,8 @@ import {
   Bell,
   LogOut,
   Shield,
-  AlertCircle,
-  Clock,
 } from "lucide-react";
-import { SidebarMenu, SidebarToggle } from "./sidebar-menu";
+import { SidebarMenu } from "./sidebar-menu";
 import { SidebarProfile, type SidebarProfileData } from "./sidebar-profile";
 import { SidebarBusinessLogo } from "./sidebar-business-logo";
 import { SidebarMenuItem } from "./sidebar-menu-item";
@@ -34,27 +32,50 @@ const meta: Meta<typeof SidebarMenu> = {
     docs: {
       description: {
         component: `
-A comprehensive sidebar navigation menu for logged-in users with:
+# SidebarMenu
 
-- **Business Logo**: Prominent branding with optional dashboard navigation
-- **User Profile Section**: Entity name, contact info, role, and entity switching
-- **Collapsible Sections**: Accordion-style grouping of related services
-- **Smart Active States**: URL-based navigation with auto-expansion
+A comprehensive sidebar navigation system built with centralized architecture.
+
+## Features
+
+- **Smart Navigation**: URL-based active states with auto-expansion
+- **Collapsible Sections**: Accordion-style grouping of related services  
 - **Badge Notifications**: Visual indicators for pending items
 - **Accessibility**: Full keyboard navigation and screen reader support
-- **Responsive Design**: Works across all screen sizes
-- **Design Token Integration**: 100% token-based styling
+- **Design Token Integration**: Uses centralized styling with robust fallbacks
 
-Built for portal applications where users represent entities and need to navigate between different services and functions.
+## Usage
+
+\`\`\`tsx
+import { 
+  SidebarMenu, 
+  SidebarMenuItem, 
+  SidebarMenuSection,
+  SidebarMenuSectionRoot,
+  SidebarProfile,
+  SidebarBusinessLogo 
+} from "@serendipetey/components";
+
+<SidebarMenu size="md">
+  <SidebarBusinessLogo businessName="Portal Pro" />
+  <SidebarProfile user={userData} />
+  
+  <SidebarMenuSectionRoot value={expandedSections}>
+    <SidebarMenuSection title="Funding" icon={DollarSign}>
+      <SidebarMenuItem href="/funding/apply">Apply for Funding</SidebarMenuItem>
+    </SidebarMenuSection>
+  </SidebarMenuSectionRoot>
+</SidebarMenu>
+\`\`\`
         `,
       },
     },
   },
-  tags: ["autodocs"],
   argTypes: {
-    className: {
-      control: "text",
-      description: "Additional CSS classes",
+    size: {
+      control: { type: "select" },
+      options: ["sm", "md", "lg", "xl"],
+      description: "Sidebar width size",
     },
   },
 };
@@ -62,23 +83,7 @@ Built for portal applications where users represent entities and need to navigat
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Sample user configurations
-const adminUser: SidebarProfileData = {
-  contact: { name: "Jane Doe", role: "Administrator" },
-  entity: { name: "Acme Corp", id: "acme-001" },
-};
-
-const regularUser: SidebarProfileData = {
-  contact: { name: "John Smith", role: "User" },
-  entity: { name: "Beta Industries Ltd", id: "beta-002" },
-};
-
-const managerUser: SidebarProfileData = {
-  contact: { name: "Sarah Johnson", role: "Manager" },
-  entity: { name: "Gamma Solutions", id: "gamma-003" },
-};
-
-// Sample navigation configurations
+// 📋 Navigation Configuration (matching your current setup)
 const fullNavigationConfig: NavigationConfig = {
   standalone: [
     {
@@ -93,7 +98,6 @@ const fullNavigationConfig: NavigationConfig = {
       id: "funding",
       title: "Funding",
       icon: DollarSign,
-      defaultOpen: true,
       items: [
         {
           id: "apply-funding",
@@ -165,11 +169,27 @@ const fullNavigationConfig: NavigationConfig = {
   ],
 };
 
-// Complete sidebar with all components including business logo
-export const CompleteWithLogo: Story = {
-  render: () => {
-    const [currentPath, setCurrentPath] = useState("/funding/apply");
+// 👤 User Profile Data
+const adminUser: SidebarProfileData = {
+  contact: {
+    name: "Jane Doe",
+    role: "Administrator",
+  },
+  entity: {
+    name: "Acme Corp",
+    id: "acme-corp-1",
+  },
+};
 
+// 🎯 **Main Story: Complete Sidebar with Refactored Architecture**
+export const CompleteSidebar: Story = {
+  args: {
+    size: "md",
+  },
+  render: (args) => {
+    const [currentPath, setCurrentPath] = useState("/funding/returns");
+
+    // 🔄 Smart navigation state management using refactored utilities
     const { activeItemId, expandedSections, toggleSection, isSectionExpanded } =
       useNavigationState(fullNavigationConfig, currentPath);
 
@@ -183,22 +203,28 @@ export const CompleteWithLogo: Story = {
       setCurrentPath("/dashboard");
     };
 
+    const handleSwitchEntity = () => {
+      console.log("Switch entity clicked");
+    };
+
     return (
-      <div className="h-screen flex">
-        <SidebarMenu size="md">
-          {/* Business Logo */}
+      <div className="flex h-screen bg-[var(--color-background,#f8fafc)]">
+        {/* 🎯 Refactored Sidebar Menu */}
+        <SidebarMenu {...args}>
+          {/* 🏢 Business Logo */}
           <SidebarBusinessLogo
             businessName="Portal Pro"
+            logoUrl="https://via.placeholder.com/140x45/1e40af/ffffff?text=Portal+Pro"
             onClick={handleLogoClick}
           />
 
-          {/* User Profile */}
+          {/* 👤 User Profile */}
           <SidebarProfile
             user={adminUser}
-            onSwitchEntity={() => console.log("Switch entity")}
+            onSwitchEntity={handleSwitchEntity}
           />
 
-          {/* Navigation */}
+          {/* 🧭 Navigation using refactored components */}
           <div className="flex-1 py-4">
             {/* Standalone Items */}
             <div className="px-2 mb-4 space-y-1">
@@ -215,8 +241,14 @@ export const CompleteWithLogo: Story = {
               ))}
             </div>
 
-            {/* Collapsible Sections */}
-            <SidebarMenuSectionRoot type="multiple" value={expandedSections}>
+            {/* 📁 Collapsible Sections using refactored accordion */}
+            <SidebarMenuSectionRoot
+              value={expandedSections}
+              onValueChange={(sections) => {
+                // Handle section state changes
+                console.log("Expanded sections changed:", sections);
+              }}
+            >
               {fullNavigationConfig.sections.map((section) => (
                 <SidebarMenuSection
                   key={section.id}
@@ -245,8 +277,8 @@ export const CompleteWithLogo: Story = {
             </SidebarMenuSectionRoot>
           </div>
 
-          {/* Bottom Actions */}
-          <div className="border-t border-[var(--color-border)] p-2 space-y-1">
+          {/* 🔗 Bottom Actions */}
+          <div className="border-t border-[var(--color-border,#e5e7eb)] p-2 space-y-1">
             <SidebarMenuItem
               icon={Bell}
               size="sm"
@@ -276,18 +308,61 @@ export const CompleteWithLogo: Story = {
           </div>
         </SidebarMenu>
 
-        {/* Main Content Area */}
+        {/* 📄 Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="flex-1 p-4 sm:p-8 bg-[var(--color-surface-subtle)] overflow-auto">
-            <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-text-heading)]">
-              Complete Sidebar with Business Logo
-            </h1>
-            <p className="text-[var(--color-text-body)] mt-2">
-              Current Page: {currentPath}
-            </p>
-            <p className="text-[var(--color-text-muted)] mt-1 text-sm">
-              Active Item: {activeItemId || "None"}
-            </p>
+          <div className="flex-1 p-4 sm:p-8 bg-[var(--color-surface-subtle,#f8fafc)] overflow-auto">
+            <div className="max-w-4xl">
+              <h1 className="text-2xl font-bold text-[var(--color-text-heading,#111827)] mb-4">
+                🎯 Refactored Sidebar Components
+              </h1>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="p-4 bg-[var(--color-surface,#ffffff)] rounded-lg border border-[var(--color-border,#e5e7eb)]">
+                  <h3 className="font-semibold text-[var(--color-text-heading,#111827)] mb-2">
+                    Current State
+                  </h3>
+                  <p className="text-sm text-[var(--color-text-body,#374151)]">
+                    <strong>Current Page:</strong> {currentPath}
+                  </p>
+                  <p className="text-sm text-[var(--color-text-body,#374151)]">
+                    <strong>Active Item:</strong> {activeItemId || "None"}
+                  </p>
+                  <p className="text-sm text-[var(--color-text-body,#374151)]">
+                    <strong>Expanded Sections:</strong>{" "}
+                    {expandedSections.join(", ") || "None"}
+                  </p>
+                </div>
+
+                <div className="p-4 bg-[var(--color-surface,#ffffff)] rounded-lg border border-[var(--color-border,#e5e7eb)]">
+                  <h3 className="font-semibold text-[var(--color-text-heading,#111827)] mb-2">
+                    ✅ Architecture Benefits
+                  </h3>
+                  <ul className="text-sm text-[var(--color-text-body,#374151)] space-y-1">
+                    <li>• Centralized styling utilities</li>
+                    <li>• Design tokens with fallbacks</li>
+                    <li>• DRY principles throughout</li>
+                    <li>• Better TypeScript support</li>
+                    <li>• Enhanced maintainability</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-[var(--color-surface,#ffffff)] rounded-lg border border-[var(--color-border,#e5e7eb)]">
+                <h3 className="font-semibold text-[var(--color-text-heading,#111827)] mb-2">
+                  🔧 Implementation Notes
+                </h3>
+                <p className="text-sm text-[var(--color-text-body,#374151)] leading-relaxed">
+                  This sidebar now uses the same centralized architecture
+                  pattern as your form components. All styling is managed
+                  through{" "}
+                  <code className="bg-[var(--color-surface-subtle,#f8fafc)] px-1 rounded">
+                    sidebar.tsx
+                  </code>{" "}
+                  utilities, ensuring consistency and maintainability across
+                  your design system.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -297,242 +372,120 @@ export const CompleteWithLogo: Story = {
     docs: {
       description: {
         story:
-          "Complete sidebar implementation showcasing the business logo integration with all navigation components and Option A styling refinements.",
+          "Complete sidebar implementation showcasing all refactored components using the centralized architecture pattern. Features smart navigation state management, design token integration, and robust accessibility support.",
       },
     },
   },
 };
 
-// With custom logo image
-export const WithCustomLogo: Story = {
+// 🎯 **Story: Different Sizes**
+export const SidebarSizes: Story = {
   render: () => {
-    const [currentPath, setCurrentPath] = useState("/dashboard");
-
-    const { activeItemId, expandedSections, toggleSection, isSectionExpanded } =
-      useNavigationState(fullNavigationConfig, currentPath);
-
-    const handleNavigation = (href: string) => {
-      setCurrentPath(href);
-    };
+    const sizes = ["sm", "md", "lg", "xl"] as const;
 
     return (
-      <div className="h-screen flex">
-        <SidebarMenu size="md">
-          {/* Custom Logo */}
-          <SidebarBusinessLogo
-            businessName="Tech Solutions Inc"
-            logoUrl="https://via.placeholder.com/130x42/0e3a6c/ffffff?text=TechSol"
-            width={130}
-            height={42}
-            onClick={() => handleNavigation("/dashboard")}
-          />
-
-          <SidebarProfile
-            user={managerUser}
-            onSwitchEntity={() => console.log("Switch entity")}
-          />
-
-          <div className="flex-1 py-4">
-            <div className="px-2 mb-4 space-y-1">
-              {fullNavigationConfig.standalone?.map((item) => (
-                <SidebarMenuItem
-                  key={item.id}
-                  icon={item.icon}
-                  active={activeItemId === item.id}
-                  onNavigate={handleNavigation}
-                  href={item.href}
-                >
-                  {item.label}
-                </SidebarMenuItem>
-              ))}
-            </div>
-
-            <SidebarMenuSectionRoot type="multiple" value={expandedSections}>
-              {fullNavigationConfig.sections.slice(0, 2).map((section) => (
-                <SidebarMenuSection
-                  key={section.id}
-                  title={section.title}
-                  icon={section.icon}
-                  value={section.id}
-                  expanded={isSectionExpanded(section.id)}
-                  onToggle={() => toggleSection(section.id)}
-                >
-                  <div className="space-y-1 px-2">
-                    {section.items.slice(0, 3).map((item) => (
-                      <SidebarMenuItem
-                        key={item.id}
-                        size="sm"
-                        active={activeItemId === item.id}
-                        onNavigate={handleNavigation}
-                        href={item.href}
-                        badge={item.badge}
-                      >
-                        {item.label}
-                      </SidebarMenuItem>
-                    ))}
+      <div className="space-y-6">
+        <h2 className="text-xl font-bold">Sidebar Size Variants</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {sizes.map((size) => (
+            <div
+              key={size}
+              className="border border-[var(--color-border,#e5e7eb)] rounded-lg overflow-hidden"
+            >
+              <div className="p-3 bg-[var(--color-surface-subtle,#f8fafc)] border-b border-[var(--color-border,#e5e7eb)]">
+                <h3 className="font-medium">Size: {size}</h3>
+              </div>
+              <div className="h-64 flex">
+                <SidebarMenu size={size}>
+                  <SidebarBusinessLogo businessName="Portal Pro" />
+                  <div className="flex-1 p-2">
+                    <SidebarMenuItem icon={BarChart3} active>
+                      Dashboard
+                    </SidebarMenuItem>
+                    <SidebarMenuItem icon={Users}>Users</SidebarMenuItem>
                   </div>
-                </SidebarMenuSection>
-              ))}
-            </SidebarMenuSectionRoot>
-          </div>
-        </SidebarMenu>
-
-        <div className="flex-1 p-8 bg-[var(--color-surface-subtle)]">
-          <h1 className="text-2xl font-bold text-[var(--color-text-heading)]">
-            Custom Logo Integration
-          </h1>
-          <p className="text-[var(--color-text-body)] mt-2">
-            Demonstrates sidebar with a custom logo image instead of
-            placeholder.
-          </p>
+                </SidebarMenu>
+                <div className="flex-1 p-4 bg-[var(--color-surface-subtle,#f8fafc)]">
+                  <p className="text-sm text-[var(--color-text-muted,#6b7280)]">
+                    Content area for {size} sidebar
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Showcases all available sidebar size variants using the centralized sizing system.",
+      },
+    },
+  },
 };
 
-// Mobile responsive version with logo
-export const ResponsiveMobileWithLogo: Story = {
+// 🎯 **Story: Individual Components**
+export const IndividualComponents: Story = {
   render: () => {
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const [currentPath, setCurrentPath] = useState("/dashboard");
-
-    const { activeItemId, expandedSections, toggleSection, isSectionExpanded } =
-      useNavigationState(fullNavigationConfig, currentPath);
-
-    const handleNavigation = (href: string) => {
-      setCurrentPath(href);
-      setMobileOpen(false);
-    };
-
     return (
-      <div className="h-screen flex">
-        {/* Mobile header with toggle */}
-        <div className="sm:hidden fixed top-0 left-0 right-0 z-30 bg-[var(--color-surface)] border-b border-[var(--color-border)] px-4 py-3 flex items-center justify-between">
-          <h1 className="text-lg font-semibold text-[var(--color-text-heading)]">
-            Portal Pro
-          </h1>
-          <SidebarToggle open={mobileOpen} onToggle={setMobileOpen} />
+      <div className="space-y-8 p-6">
+        <h2 className="text-2xl font-bold">Individual Refactored Components</h2>
+
+        {/* SidebarMenuItem Examples */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">
+            SidebarMenuItem Variants
+          </h3>
+          <div className="space-y-2 max-w-xs">
+            <SidebarMenuItem icon={BarChart3} active>
+              Active Item
+            </SidebarMenuItem>
+            <SidebarMenuItem icon={Users}>Default Item</SidebarMenuItem>
+            <SidebarMenuItem icon={Bell} badge="5">
+              With Badge
+            </SidebarMenuItem>
+            <SidebarMenuItem icon={FileText} size="sm">
+              Small Size
+            </SidebarMenuItem>
+            <SidebarMenuItem icon={Shield} disabled>
+              Disabled
+            </SidebarMenuItem>
+          </div>
         </div>
 
-        {/* Sidebar with mobile overlay behavior */}
-        <SidebarMenu
-          mobile="overlay"
-          mobileOpen={mobileOpen}
-          onMobileToggle={setMobileOpen}
-          size="md"
-        >
-          <SidebarBusinessLogo
-            businessName="Portal Pro"
-            onClick={() => {
-              handleNavigation("/dashboard");
-              setMobileOpen(false);
-            }}
-          />
-
-          <SidebarProfile
-            user={adminUser}
-            onSwitchEntity={() => {
-              console.log("Switch entity");
-              setMobileOpen(false);
-            }}
-          />
-
-          <div className="flex-1 py-4">
-            <div className="px-2 mb-4 space-y-1">
-              {fullNavigationConfig.standalone?.map((item) => (
-                <SidebarMenuItem
-                  key={item.id}
-                  icon={item.icon}
-                  active={activeItemId === item.id}
-                  onNavigate={handleNavigation}
-                  href={item.href}
-                >
-                  {item.label}
-                </SidebarMenuItem>
-              ))}
-            </div>
-
-            <SidebarMenuSectionRoot type="multiple" value={expandedSections}>
-              {fullNavigationConfig.sections.map((section) => (
-                <SidebarMenuSection
-                  key={section.id}
-                  title={section.title}
-                  icon={section.icon}
-                  value={section.id}
-                  expanded={isSectionExpanded(section.id)}
-                  onToggle={() => toggleSection(section.id)}
-                >
-                  <div className="space-y-1 px-2">
-                    {section.items.map((item) => (
-                      <SidebarMenuItem
-                        key={item.id}
-                        size="sm"
-                        active={activeItemId === item.id}
-                        onNavigate={handleNavigation}
-                        href={item.href}
-                        badge={item.badge}
-                      >
-                        {item.label}
-                      </SidebarMenuItem>
-                    ))}
-                  </div>
-                </SidebarMenuSection>
-              ))}
-            </SidebarMenuSectionRoot>
+        {/* SidebarProfile Example */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">SidebarProfile</h3>
+          <div className="max-w-xs">
+            <SidebarProfile
+              user={adminUser}
+              onSwitchEntity={() => console.log("Switch entity")}
+            />
           </div>
+        </div>
 
-          <div className="border-t border-[var(--color-border)] p-2 space-y-1">
-            <SidebarMenuItem
-              icon={Bell}
-              size="sm"
-              active={currentPath === "/notifications"}
-              onNavigate={handleNavigation}
-              href="/notifications"
-              badge="5"
-            >
-              Notifications
-            </SidebarMenuItem>
-            <SidebarMenuItem
-              icon={Users}
-              size="sm"
-              active={currentPath === "/profile"}
-              onNavigate={handleNavigation}
-              href="/profile"
-            >
-              Profile
-            </SidebarMenuItem>
-            <SidebarMenuItem
-              icon={LogOut}
-              size="sm"
-              onClick={() => {
-                console.log("Sign out");
-                setMobileOpen(false);
-              }}
-            >
-              Sign Out
-            </SidebarMenuItem>
-          </div>
-        </SidebarMenu>
-
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Mobile spacer */}
-          <div className="h-16 sm:h-0 flex-shrink-0" />
-
-          <div className="flex-1 p-4 sm:p-8 bg-[var(--color-surface-subtle)] overflow-auto">
-            <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-text-heading)]">
-              Responsive Sidebar with Logo
-            </h1>
-            <p className="text-[var(--color-text-body)] mt-2">
-              Current Page: {currentPath}
-            </p>
-            <p className="text-[var(--color-text-muted)] mt-1 text-sm">
-              Try resizing the window or using mobile view to see responsive
-              behavior.
-            </p>
+        {/* SidebarBusinessLogo Example */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">SidebarBusinessLogo</h3>
+          <div className="max-w-xs">
+            <SidebarBusinessLogo
+              businessName="Portal Pro"
+              onClick={() => console.log("Logo clicked")}
+            />
           </div>
         </div>
       </div>
     );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Individual component examples showing the refactored components in isolation with their various states and configurations.",
+      },
+    },
   },
 };

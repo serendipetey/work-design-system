@@ -1,6 +1,6 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
-import React__default, { useLayoutEffect, useState, forwardRef, createElement } from 'react';
+import React__default, { useLayoutEffect, useState, forwardRef, createElement, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 import ReactDOM__default from 'react-dom';
 
@@ -2995,6 +2995,26 @@ const fieldVariants = cva("w-full space-y-1", {
     },
     defaultVariants: { variant: "default" },
 });
+// 🎯 Required Indicator Variants
+const requiredVariants = cva("ml-1", {
+    variants: {
+        variant: {
+            default: "text-[var(--color-input-label-required,#a30134)]",
+            subtle: "text-[var(--color-text-muted,#6b7280)]",
+        },
+    },
+    defaultVariants: { variant: "default" },
+});
+// 🎯 Optional Indicator Variants
+const optionalVariants = cva("ml-1 font-normal", {
+    variants: {
+        variant: {
+            default: "text-[var(--color-text-muted,#6b7280)]",
+            subtle: "text-[var(--color-text-muted,#8f949a)]",
+        },
+    },
+    defaultVariants: { variant: "default" },
+});
 /**
  * 🎯 SHARED FORM LOGIC UTILITIES
  *
@@ -3016,6 +3036,13 @@ const getHelperVariant = (error, success, warning) => {
                 ? "warning"
                 : "default";
 };
+// Generate accessible IDs for form fields
+const getFormFieldIds = (baseId) => ({
+    input: baseId,
+    label: `${baseId}-label`,
+    helper: `${baseId}-helper`,
+    description: `${baseId}-description`,
+});
 /**
  * 🎯 FORM VALIDATION UTILITIES
  */
@@ -3154,7 +3181,7 @@ const inputVariants = cva(
     },
 });
 // 🎯 OPTIMAL: Design Tokens with Fallbacks for Focus Styles
-const injectFocusStyles = (variant) => {
+const injectFocusStyles$1 = (variant) => {
     const focusStyleId = `input-focus-${variant}`;
     // Remove existing focus styles
     const existingStyle = document.getElementById(focusStyleId);
@@ -3207,7 +3234,7 @@ disabled = false, ...props }, ref) => {
     // Inject focus styles on mount
     React__default.useEffect(() => {
         if (elementRef.current && variant) {
-            injectFocusStyles(variant);
+            injectFocusStyles$1(variant);
             elementRef.current.classList.add(`input-${variant}`);
         }
     }, [variant]);
@@ -3692,7 +3719,7 @@ function createFocusGuard() {
 
 var AUTOFOCUS_ON_MOUNT = "focusScope.autoFocusOnMount";
 var AUTOFOCUS_ON_UNMOUNT = "focusScope.autoFocusOnUnmount";
-var EVENT_OPTIONS = { bubbles: false, cancelable: true };
+var EVENT_OPTIONS$1 = { bubbles: false, cancelable: true };
 var FOCUS_SCOPE_NAME = "FocusScope";
 var FocusScope = React.forwardRef((props, forwardedRef) => {
   const {
@@ -3757,11 +3784,11 @@ var FocusScope = React.forwardRef((props, forwardedRef) => {
       const previouslyFocusedElement = document.activeElement;
       const hasFocusedCandidate = container.contains(previouslyFocusedElement);
       if (!hasFocusedCandidate) {
-        const mountEvent = new CustomEvent(AUTOFOCUS_ON_MOUNT, EVENT_OPTIONS);
+        const mountEvent = new CustomEvent(AUTOFOCUS_ON_MOUNT, EVENT_OPTIONS$1);
         container.addEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
         container.dispatchEvent(mountEvent);
         if (!mountEvent.defaultPrevented) {
-          focusFirst(removeLinks(getTabbableCandidates(container)), { select: true });
+          focusFirst$1(removeLinks(getTabbableCandidates(container)), { select: true });
           if (document.activeElement === previouslyFocusedElement) {
             focus(container);
           }
@@ -3770,7 +3797,7 @@ var FocusScope = React.forwardRef((props, forwardedRef) => {
       return () => {
         container.removeEventListener(AUTOFOCUS_ON_MOUNT, onMountAutoFocus);
         setTimeout(() => {
-          const unmountEvent = new CustomEvent(AUTOFOCUS_ON_UNMOUNT, EVENT_OPTIONS);
+          const unmountEvent = new CustomEvent(AUTOFOCUS_ON_UNMOUNT, EVENT_OPTIONS$1);
           container.addEventListener(AUTOFOCUS_ON_UNMOUNT, onUnmountAutoFocus);
           container.dispatchEvent(unmountEvent);
           if (!unmountEvent.defaultPrevented) {
@@ -3810,7 +3837,7 @@ var FocusScope = React.forwardRef((props, forwardedRef) => {
   return /* @__PURE__ */ jsx(Primitive.div, { tabIndex: -1, ...scopeProps, ref: composedRefs, onKeyDown: handleKeyDown });
 });
 FocusScope.displayName = FOCUS_SCOPE_NAME;
-function focusFirst(candidates, { select = false } = {}) {
+function focusFirst$1(candidates, { select = false } = {}) {
   const previouslyFocusedElement = document.activeElement;
   for (const candidate of candidates) {
     focus(candidate, { select });
@@ -6091,7 +6118,7 @@ var Arrow$1 = React.forwardRef((props, forwardedRef) => {
   );
 });
 Arrow$1.displayName = NAME$1;
-var Root$1 = Arrow$1;
+var Root$2 = Arrow$1;
 
 // packages/react/use-size/src/use-size.tsx
 function useSize(element) {
@@ -6335,7 +6362,7 @@ var PopperArrow = React.forwardRef(function PopperArrow2(props, forwardedRef) {
           visibility: contentContext.shouldHideArrow ? "hidden" : void 0
         },
         children: /* @__PURE__ */ jsx(
-          Root$1,
+          Root$2,
           {
             ...arrowProps,
             ref: forwardedRef,
@@ -6389,7 +6416,7 @@ function getSideAndAlignFromPlacement(placement) {
   const [side, align = "center"] = placement.split("-");
   return [side, align];
 }
-var Root2$2 = Popper;
+var Root2$3 = Popper;
 var Anchor = PopperAnchor;
 var Content$1 = PopperContent;
 var Arrow = PopperArrow;
@@ -6436,7 +6463,7 @@ function useControllableState({
   const setValue = React.useCallback(
     (nextValue) => {
       if (isControlled) {
-        const value2 = isFunction(nextValue) ? nextValue(prop) : nextValue;
+        const value2 = isFunction$1(nextValue) ? nextValue(prop) : nextValue;
         if (value2 !== prop) {
           onChangeRef.current?.(value2);
         }
@@ -6466,7 +6493,7 @@ function useUncontrolledState({
   }, [value, prevValueRef]);
   return [value, setValue, onChangeRef];
 }
-function isFunction(value) {
+function isFunction$1(value) {
   return typeof value === "function";
 }
 
@@ -7401,9 +7428,9 @@ ReactRemoveScroll.classNames = RemoveScroll.classNames;
 var OPEN_KEYS = [" ", "Enter", "ArrowUp", "ArrowDown"];
 var SELECTION_KEYS = [" ", "Enter"];
 var SELECT_NAME = "Select";
-var [Collection$1, useCollection$1, createCollectionScope$1] = createCollection(SELECT_NAME);
+var [Collection$2, useCollection$2, createCollectionScope$2] = createCollection(SELECT_NAME);
 var [createSelectContext, createSelectScope] = createContextScope(SELECT_NAME, [
-  createCollectionScope$1,
+  createCollectionScope$2,
   createPopperScope
 ]);
 var usePopperScope = createPopperScope();
@@ -7447,7 +7474,7 @@ var Select$1 = (props) => {
   const isFormControl = trigger ? form || !!trigger.closest("form") : true;
   const [nativeOptionsSet, setNativeOptionsSet] = React.useState(/* @__PURE__ */ new Set());
   const nativeSelectKey = Array.from(nativeOptionsSet).map((option) => option.props.value).join(";");
-  return /* @__PURE__ */ jsx(Root2$2, { ...popperScope, children: /* @__PURE__ */ jsxs(
+  return /* @__PURE__ */ jsx(Root2$3, { ...popperScope, children: /* @__PURE__ */ jsxs(
     SelectProvider,
     {
       required,
@@ -7467,7 +7494,7 @@ var Select$1 = (props) => {
       triggerPointerDownPosRef,
       disabled,
       children: [
-        /* @__PURE__ */ jsx(Collection$1.Provider, { scope: __scopeSelect, children: /* @__PURE__ */ jsx(
+        /* @__PURE__ */ jsx(Collection$2.Provider, { scope: __scopeSelect, children: /* @__PURE__ */ jsx(
           SelectNativeOptionsProvider,
           {
             scope: props.__scopeSelect,
@@ -7508,15 +7535,15 @@ var Select$1 = (props) => {
   ) });
 };
 Select$1.displayName = SELECT_NAME;
-var TRIGGER_NAME$2 = "SelectTrigger";
+var TRIGGER_NAME$3 = "SelectTrigger";
 var SelectTrigger$1 = React.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, disabled = false, ...triggerProps } = props;
     const popperScope = usePopperScope(__scopeSelect);
-    const context = useSelectContext(TRIGGER_NAME$2, __scopeSelect);
+    const context = useSelectContext(TRIGGER_NAME$3, __scopeSelect);
     const isDisabled = context.disabled || disabled;
     const composedRefs = useComposedRefs(forwardedRef, context.onTriggerChange);
-    const getItems = useCollection$1(__scopeSelect);
+    const getItems = useCollection$2(__scopeSelect);
     const pointerTypeRef = React.useRef("touch");
     const [searchRef, handleTypeaheadSearch, resetTypeahead] = useTypeaheadSearch((search) => {
       const enabledItems = getItems().filter((item) => !item.disabled);
@@ -7585,7 +7612,7 @@ var SelectTrigger$1 = React.forwardRef(
     ) });
   }
 );
-SelectTrigger$1.displayName = TRIGGER_NAME$2;
+SelectTrigger$1.displayName = TRIGGER_NAME$3;
 var VALUE_NAME = "SelectValue";
 var SelectValue$1 = React.forwardRef(
   (props, forwardedRef) => {
@@ -7633,7 +7660,7 @@ var SelectContent$1 = React.forwardRef(
     if (!context.open) {
       const frag = fragment;
       return frag ? ReactDOM.createPortal(
-        /* @__PURE__ */ jsx(SelectContentProvider, { scope: props.__scopeSelect, children: /* @__PURE__ */ jsx(Collection$1.Slot, { scope: props.__scopeSelect, children: /* @__PURE__ */ jsx("div", { children: props.children }) }) }),
+        /* @__PURE__ */ jsx(SelectContentProvider, { scope: props.__scopeSelect, children: /* @__PURE__ */ jsx(Collection$2.Slot, { scope: props.__scopeSelect, children: /* @__PURE__ */ jsx("div", { children: props.children }) }) }),
         frag
       ) : null;
     }
@@ -7676,7 +7703,7 @@ var SelectContentImpl = React.forwardRef(
     const [selectedItemText, setSelectedItemText] = React.useState(
       null
     );
-    const getItems = useCollection$1(__scopeSelect);
+    const getItems = useCollection$2(__scopeSelect);
     const [isPositioned, setIsPositioned] = React.useState(false);
     const firstValidItemFoundRef = React.useRef(false);
     React.useEffect(() => {
@@ -7886,7 +7913,7 @@ var SelectItemAlignedPosition = React.forwardRef((props, forwardedRef) => {
   const [contentWrapper, setContentWrapper] = React.useState(null);
   const [content, setContent] = React.useState(null);
   const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
-  const getItems = useCollection$1(__scopeSelect);
+  const getItems = useCollection$2(__scopeSelect);
   const shouldExpandOnScrollRef = React.useRef(false);
   const shouldRepositionRef = React.useRef(true);
   const { viewport, selectedItem, selectedItemText, focusSelectedItem } = contentContext;
@@ -8095,7 +8122,7 @@ var SelectViewport = React.forwardRef(
           nonce
         }
       ),
-      /* @__PURE__ */ jsx(Collection$1.Slot, { scope: __scopeSelect, children: /* @__PURE__ */ jsx(
+      /* @__PURE__ */ jsx(Collection$2.Slot, { scope: __scopeSelect, children: /* @__PURE__ */ jsx(
         Primitive.div,
         {
           "data-radix-select-viewport": "",
@@ -8145,8 +8172,8 @@ var SelectViewport = React.forwardRef(
   }
 );
 SelectViewport.displayName = VIEWPORT_NAME;
-var GROUP_NAME = "SelectGroup";
-var [SelectGroupContextProvider, useSelectGroupContext] = createSelectContext(GROUP_NAME);
+var GROUP_NAME$1 = "SelectGroup";
+var [SelectGroupContextProvider, useSelectGroupContext] = createSelectContext(GROUP_NAME$1);
 var SelectGroup$1 = React.forwardRef(
   (props, forwardedRef) => {
     const { __scopeSelect, ...groupProps } = props;
@@ -8154,7 +8181,7 @@ var SelectGroup$1 = React.forwardRef(
     return /* @__PURE__ */ jsx(SelectGroupContextProvider, { scope: __scopeSelect, id: groupId, children: /* @__PURE__ */ jsx(Primitive.div, { role: "group", "aria-labelledby": groupId, ...groupProps, ref: forwardedRef }) });
   }
 );
-SelectGroup$1.displayName = GROUP_NAME;
+SelectGroup$1.displayName = GROUP_NAME$1;
 var LABEL_NAME = "SelectLabel";
 var SelectLabel = React.forwardRef(
   (props, forwardedRef) => {
@@ -8164,8 +8191,8 @@ var SelectLabel = React.forwardRef(
   }
 );
 SelectLabel.displayName = LABEL_NAME;
-var ITEM_NAME$1 = "SelectItem";
-var [SelectItemContextProvider, useSelectItemContext] = createSelectContext(ITEM_NAME$1);
+var ITEM_NAME$3 = "SelectItem";
+var [SelectItemContextProvider, useSelectItemContext] = createSelectContext(ITEM_NAME$3);
 var SelectItem$1 = React.forwardRef(
   (props, forwardedRef) => {
     const {
@@ -8175,8 +8202,8 @@ var SelectItem$1 = React.forwardRef(
       textValue: textValueProp,
       ...itemProps
     } = props;
-    const context = useSelectContext(ITEM_NAME$1, __scopeSelect);
-    const contentContext = useSelectContentContext(ITEM_NAME$1, __scopeSelect);
+    const context = useSelectContext(ITEM_NAME$3, __scopeSelect);
+    const contentContext = useSelectContentContext(ITEM_NAME$3, __scopeSelect);
     const isSelected = context.value === value;
     const [textValue, setTextValue] = React.useState(textValueProp ?? "");
     const [isFocused, setIsFocused] = React.useState(false);
@@ -8209,7 +8236,7 @@ var SelectItem$1 = React.forwardRef(
           setTextValue((prevTextValue) => prevTextValue || (node?.textContent ?? "").trim());
         }, []),
         children: /* @__PURE__ */ jsx(
-          Collection$1.ItemSlot,
+          Collection$2.ItemSlot,
           {
             scope: __scopeSelect,
             value,
@@ -8266,7 +8293,7 @@ var SelectItem$1 = React.forwardRef(
     );
   }
 );
-SelectItem$1.displayName = ITEM_NAME$1;
+SelectItem$1.displayName = ITEM_NAME$3;
 var ITEM_TEXT_NAME = "SelectItemText";
 var SelectItemText = React.forwardRef(
   (props, forwardedRef) => {
@@ -8379,7 +8406,7 @@ var SelectScrollButtonImpl = React.forwardRef((props, forwardedRef) => {
   const { __scopeSelect, onAutoScroll, ...scrollIndicatorProps } = props;
   const contentContext = useSelectContentContext("SelectScrollButton", __scopeSelect);
   const autoScrollTimerRef = React.useRef(null);
-  const getItems = useCollection$1(__scopeSelect);
+  const getItems = useCollection$2(__scopeSelect);
   const clearAutoScrollTimer = React.useCallback(() => {
     if (autoScrollTimerRef.current !== null) {
       window.clearInterval(autoScrollTimerRef.current);
@@ -8436,7 +8463,7 @@ var SelectArrow = React.forwardRef(
   }
 );
 SelectArrow.displayName = ARROW_NAME;
-var BUBBLE_INPUT_NAME = "SelectBubbleInput";
+var BUBBLE_INPUT_NAME$2 = "SelectBubbleInput";
 var SelectBubbleInput = React.forwardRef(
   ({ __scopeSelect, value, ...props }, forwardedRef) => {
     const ref = React.useRef(null);
@@ -8468,7 +8495,7 @@ var SelectBubbleInput = React.forwardRef(
     );
   }
 );
-SelectBubbleInput.displayName = BUBBLE_INPUT_NAME;
+SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$2;
 function shouldShowPlaceholder(value) {
   return value === "" || value === void 0;
 }
@@ -8501,7 +8528,7 @@ function findNextItem(items, search, currentItem) {
   const isRepeated = search.length > 1 && Array.from(search).every((char) => char === search[0]);
   const normalizedSearch = isRepeated ? search[0] : search;
   const currentItemIndex = currentItem ? items.indexOf(currentItem) : -1;
-  let wrappedItems = wrapArray(items, Math.max(currentItemIndex, 0));
+  let wrappedItems = wrapArray$1(items, Math.max(currentItemIndex, 0));
   const excludeCurrentItem = normalizedSearch.length === 1;
   if (excludeCurrentItem) wrappedItems = wrappedItems.filter((v) => v !== currentItem);
   const nextItem = wrappedItems.find(
@@ -8509,10 +8536,10 @@ function findNextItem(items, search, currentItem) {
   );
   return nextItem !== currentItem ? nextItem : void 0;
 }
-function wrapArray(array, startIndex) {
+function wrapArray$1(array, startIndex) {
   return array.map((_, index) => array[(startIndex + index) % array.length]);
 }
-var Root2$1 = Select$1;
+var Root2$2 = Select$1;
 var Trigger$1 = SelectTrigger$1;
 var Value = SelectValue$1;
 var Icon = SelectIcon;
@@ -8520,7 +8547,7 @@ var Portal = SelectPortal;
 var Content2$1 = SelectContent$1;
 var Viewport = SelectViewport;
 var Group = SelectGroup$1;
-var Item$1 = SelectItem$1;
+var Item$2 = SelectItem$1;
 var ItemText = SelectItemText;
 var ItemIndicator = SelectItemIndicator;
 var ScrollUpButton = SelectScrollUpButton;
@@ -8642,6 +8669,16 @@ const ChevronDown = createLucideIcon("ChevronDown", [
 
 
 const ChevronUp = createLucideIcon("ChevronUp", [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]]);
+
+/**
+ * @license lucide-react v0.294.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const Minus = createLucideIcon("Minus", [["path", { d: "M5 12h14", key: "1ays0h" }]]);
 
 /**
  * @license lucide-react v0.294.0 - ISC
@@ -8804,7 +8841,7 @@ const injectSelectFocusStyles = (variant) => {
     document.head.appendChild(style);
 };
 // Basic Select Components (using Radix UI primitives)
-const Select = Root2$1;
+const Select = Root2$2;
 const SelectGroup = Group;
 const SelectValue = Value;
 // Enhanced SelectTrigger - EXACT same architecture as Input
@@ -8873,9 +8910,9 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
         borderRadius: "var(--border-radius-sm, 4px)",
         transition: "var(--transition-base, all 200ms ease-in-out)",
     };
-    return (jsxs(Item$1, { ref: ref, className: cn(selectItemVariants(), "hover:bg-[var(--color-accent,var(--color-gray-300,#e4e4e4))]", className), style: combinedStyles, ...props, children: [jsx("span", { className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center", children: jsx(ItemIndicator, { children: jsx(Check, { className: "h-4 w-4" }) }) }), jsx(ItemText, { children: children })] }));
+    return (jsxs(Item$2, { ref: ref, className: cn(selectItemVariants(), "hover:bg-[var(--color-accent,var(--color-gray-300,#e4e4e4))]", className), style: combinedStyles, ...props, children: [jsx("span", { className: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center", children: jsx(ItemIndicator, { children: jsx(Check, { className: "h-4 w-4" }) }) }), jsx(ItemText, { children: children })] }));
 });
-SelectItem.displayName = Item$1.displayName;
+SelectItem.displayName = Item$2.displayName;
 const SelectField = React.forwardRef(({ className, variant = "default", size = "md", label, labelState, hideLabel = false, hintText, helperText, error, success, warning, placeholder, value, onValueChange, defaultValue, children, required, disabled, id, name, containerClassName, labelClassName, helperClassName, ...props }, ref) => {
     const selectId = React.useId();
     // 🎯 EXACT same logic as Input component
@@ -8902,6 +8939,1242 @@ const SelectField = React.forwardRef(({ className, variant = "default", size = "
                         }, children: [" ", "(Optional)"] }))] })), showHintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" })), id: `${selectId}-description`, children: hintText })), jsxs(Select, { value: value, onValueChange: onValueChange, defaultValue: defaultValue, name: name, required: required, disabled: disabled, ...props, children: [jsx(SelectTrigger, { ref: ref, id: selectId, variant: finalVariant, size: size, className: className, ...formFieldAria, children: jsx(SelectValue, { placeholder: hasOptions ? placeholder : "No options available" }) }), jsx(SelectContent, { children: hasOptions ? (children) : (jsx("div", { className: "py-2 px-3 text-sm text-[var(--color-text-muted)]", children: "No options available" })) })] }), helperContent && (jsx("p", { id: helperTextId, className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
 });
 SelectField.displayName = "SelectField";
+
+function useStateMachine(initialState, machine) {
+  return React.useReducer((state, event) => {
+    const nextState = machine[state][event];
+    return nextState ?? state;
+  }, initialState);
+}
+
+// src/presence.tsx
+var Presence = (props) => {
+  const { present, children } = props;
+  const presence = usePresence(present);
+  const child = typeof children === "function" ? children({ present: presence.isPresent }) : React.Children.only(children);
+  const ref = useComposedRefs(presence.ref, getElementRef(child));
+  const forceMount = typeof children === "function";
+  return forceMount || presence.isPresent ? React.cloneElement(child, { ref }) : null;
+};
+Presence.displayName = "Presence";
+function usePresence(present) {
+  const [node, setNode] = React.useState();
+  const stylesRef = React.useRef(null);
+  const prevPresentRef = React.useRef(present);
+  const prevAnimationNameRef = React.useRef("none");
+  const initialState = present ? "mounted" : "unmounted";
+  const [state, send] = useStateMachine(initialState, {
+    mounted: {
+      UNMOUNT: "unmounted",
+      ANIMATION_OUT: "unmountSuspended"
+    },
+    unmountSuspended: {
+      MOUNT: "mounted",
+      ANIMATION_END: "unmounted"
+    },
+    unmounted: {
+      MOUNT: "mounted"
+    }
+  });
+  React.useEffect(() => {
+    const currentAnimationName = getAnimationName(stylesRef.current);
+    prevAnimationNameRef.current = state === "mounted" ? currentAnimationName : "none";
+  }, [state]);
+  useLayoutEffect2(() => {
+    const styles = stylesRef.current;
+    const wasPresent = prevPresentRef.current;
+    const hasPresentChanged = wasPresent !== present;
+    if (hasPresentChanged) {
+      const prevAnimationName = prevAnimationNameRef.current;
+      const currentAnimationName = getAnimationName(styles);
+      if (present) {
+        send("MOUNT");
+      } else if (currentAnimationName === "none" || styles?.display === "none") {
+        send("UNMOUNT");
+      } else {
+        const isAnimating = prevAnimationName !== currentAnimationName;
+        if (wasPresent && isAnimating) {
+          send("ANIMATION_OUT");
+        } else {
+          send("UNMOUNT");
+        }
+      }
+      prevPresentRef.current = present;
+    }
+  }, [present, send]);
+  useLayoutEffect2(() => {
+    if (node) {
+      let timeoutId;
+      const ownerWindow = node.ownerDocument.defaultView ?? window;
+      const handleAnimationEnd = (event) => {
+        const currentAnimationName = getAnimationName(stylesRef.current);
+        const isCurrentAnimation = currentAnimationName.includes(event.animationName);
+        if (event.target === node && isCurrentAnimation) {
+          send("ANIMATION_END");
+          if (!prevPresentRef.current) {
+            const currentFillMode = node.style.animationFillMode;
+            node.style.animationFillMode = "forwards";
+            timeoutId = ownerWindow.setTimeout(() => {
+              if (node.style.animationFillMode === "forwards") {
+                node.style.animationFillMode = currentFillMode;
+              }
+            });
+          }
+        }
+      };
+      const handleAnimationStart = (event) => {
+        if (event.target === node) {
+          prevAnimationNameRef.current = getAnimationName(stylesRef.current);
+        }
+      };
+      node.addEventListener("animationstart", handleAnimationStart);
+      node.addEventListener("animationcancel", handleAnimationEnd);
+      node.addEventListener("animationend", handleAnimationEnd);
+      return () => {
+        ownerWindow.clearTimeout(timeoutId);
+        node.removeEventListener("animationstart", handleAnimationStart);
+        node.removeEventListener("animationcancel", handleAnimationEnd);
+        node.removeEventListener("animationend", handleAnimationEnd);
+      };
+    } else {
+      send("ANIMATION_END");
+    }
+  }, [node, send]);
+  return {
+    isPresent: ["mounted", "unmountSuspended"].includes(state),
+    ref: React.useCallback((node2) => {
+      stylesRef.current = node2 ? getComputedStyle(node2) : null;
+      setNode(node2);
+    }, [])
+  };
+}
+function getAnimationName(styles) {
+  return styles?.animationName || "none";
+}
+function getElementRef(element) {
+  let getter = Object.getOwnPropertyDescriptor(element.props, "ref")?.get;
+  let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+  if (mayWarn) {
+    return element.ref;
+  }
+  getter = Object.getOwnPropertyDescriptor(element, "ref")?.get;
+  mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+  if (mayWarn) {
+    return element.props.ref;
+  }
+  return element.props.ref || element.ref;
+}
+
+var CHECKBOX_NAME = "Checkbox";
+var [createCheckboxContext, createCheckboxScope] = createContextScope(CHECKBOX_NAME);
+var [CheckboxProviderImpl, useCheckboxContext] = createCheckboxContext(CHECKBOX_NAME);
+function CheckboxProvider(props) {
+  const {
+    __scopeCheckbox,
+    checked: checkedProp,
+    children,
+    defaultChecked,
+    disabled,
+    form,
+    name,
+    onCheckedChange,
+    required,
+    value = "on",
+    // @ts-expect-error
+    internal_do_not_use_render
+  } = props;
+  const [checked, setChecked] = useControllableState({
+    prop: checkedProp,
+    defaultProp: defaultChecked ?? false,
+    onChange: onCheckedChange,
+    caller: CHECKBOX_NAME
+  });
+  const [control, setControl] = React.useState(null);
+  const [bubbleInput, setBubbleInput] = React.useState(null);
+  const hasConsumerStoppedPropagationRef = React.useRef(false);
+  const isFormControl = control ? !!form || !!control.closest("form") : (
+    // We set this to true by default so that events bubble to forms without JS (SSR)
+    true
+  );
+  const context = {
+    checked,
+    disabled,
+    setChecked,
+    control,
+    setControl,
+    name,
+    form,
+    value,
+    hasConsumerStoppedPropagationRef,
+    required,
+    defaultChecked: isIndeterminate(defaultChecked) ? false : defaultChecked,
+    isFormControl,
+    bubbleInput,
+    setBubbleInput
+  };
+  return /* @__PURE__ */ jsx(
+    CheckboxProviderImpl,
+    {
+      scope: __scopeCheckbox,
+      ...context,
+      children: isFunction(internal_do_not_use_render) ? internal_do_not_use_render(context) : children
+    }
+  );
+}
+var TRIGGER_NAME$2 = "CheckboxTrigger";
+var CheckboxTrigger = React.forwardRef(
+  ({ __scopeCheckbox, onKeyDown, onClick, ...checkboxProps }, forwardedRef) => {
+    const {
+      control,
+      value,
+      disabled,
+      checked,
+      required,
+      setControl,
+      setChecked,
+      hasConsumerStoppedPropagationRef,
+      isFormControl,
+      bubbleInput
+    } = useCheckboxContext(TRIGGER_NAME$2, __scopeCheckbox);
+    const composedRefs = useComposedRefs(forwardedRef, setControl);
+    const initialCheckedStateRef = React.useRef(checked);
+    React.useEffect(() => {
+      const form = control?.form;
+      if (form) {
+        const reset = () => setChecked(initialCheckedStateRef.current);
+        form.addEventListener("reset", reset);
+        return () => form.removeEventListener("reset", reset);
+      }
+    }, [control, setChecked]);
+    return /* @__PURE__ */ jsx(
+      Primitive.button,
+      {
+        type: "button",
+        role: "checkbox",
+        "aria-checked": isIndeterminate(checked) ? "mixed" : checked,
+        "aria-required": required,
+        "data-state": getState$3(checked),
+        "data-disabled": disabled ? "" : void 0,
+        disabled,
+        value,
+        ...checkboxProps,
+        ref: composedRefs,
+        onKeyDown: composeEventHandlers(onKeyDown, (event) => {
+          if (event.key === "Enter") event.preventDefault();
+        }),
+        onClick: composeEventHandlers(onClick, (event) => {
+          setChecked((prevChecked) => isIndeterminate(prevChecked) ? true : !prevChecked);
+          if (bubbleInput && isFormControl) {
+            hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+            if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+          }
+        })
+      }
+    );
+  }
+);
+CheckboxTrigger.displayName = TRIGGER_NAME$2;
+var Checkbox$1 = React.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeCheckbox,
+      name,
+      checked,
+      defaultChecked,
+      required,
+      disabled,
+      value,
+      onCheckedChange,
+      form,
+      ...checkboxProps
+    } = props;
+    return /* @__PURE__ */ jsx(
+      CheckboxProvider,
+      {
+        __scopeCheckbox,
+        checked,
+        defaultChecked,
+        disabled,
+        required,
+        onCheckedChange,
+        name,
+        form,
+        value,
+        internal_do_not_use_render: ({ isFormControl }) => /* @__PURE__ */ jsxs(Fragment, { children: [
+          /* @__PURE__ */ jsx(
+            CheckboxTrigger,
+            {
+              ...checkboxProps,
+              ref: forwardedRef,
+              __scopeCheckbox
+            }
+          ),
+          isFormControl && /* @__PURE__ */ jsx(
+            CheckboxBubbleInput,
+            {
+              __scopeCheckbox
+            }
+          )
+        ] })
+      }
+    );
+  }
+);
+Checkbox$1.displayName = CHECKBOX_NAME;
+var INDICATOR_NAME$1 = "CheckboxIndicator";
+var CheckboxIndicator = React.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeCheckbox, forceMount, ...indicatorProps } = props;
+    const context = useCheckboxContext(INDICATOR_NAME$1, __scopeCheckbox);
+    return /* @__PURE__ */ jsx(
+      Presence,
+      {
+        present: forceMount || isIndeterminate(context.checked) || context.checked === true,
+        children: /* @__PURE__ */ jsx(
+          Primitive.span,
+          {
+            "data-state": getState$3(context.checked),
+            "data-disabled": context.disabled ? "" : void 0,
+            ...indicatorProps,
+            ref: forwardedRef,
+            style: { pointerEvents: "none", ...props.style }
+          }
+        )
+      }
+    );
+  }
+);
+CheckboxIndicator.displayName = INDICATOR_NAME$1;
+var BUBBLE_INPUT_NAME$1 = "CheckboxBubbleInput";
+var CheckboxBubbleInput = React.forwardRef(
+  ({ __scopeCheckbox, ...props }, forwardedRef) => {
+    const {
+      control,
+      hasConsumerStoppedPropagationRef,
+      checked,
+      defaultChecked,
+      required,
+      disabled,
+      name,
+      value,
+      form,
+      bubbleInput,
+      setBubbleInput
+    } = useCheckboxContext(BUBBLE_INPUT_NAME$1, __scopeCheckbox);
+    const composedRefs = useComposedRefs(forwardedRef, setBubbleInput);
+    const prevChecked = usePrevious(checked);
+    const controlSize = useSize(control);
+    React.useEffect(() => {
+      const input = bubbleInput;
+      if (!input) return;
+      const inputProto = window.HTMLInputElement.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(
+        inputProto,
+        "checked"
+      );
+      const setChecked = descriptor.set;
+      const bubbles = !hasConsumerStoppedPropagationRef.current;
+      if (prevChecked !== checked && setChecked) {
+        const event = new Event("click", { bubbles });
+        input.indeterminate = isIndeterminate(checked);
+        setChecked.call(input, isIndeterminate(checked) ? false : checked);
+        input.dispatchEvent(event);
+      }
+    }, [bubbleInput, prevChecked, checked, hasConsumerStoppedPropagationRef]);
+    const defaultCheckedRef = React.useRef(isIndeterminate(checked) ? false : checked);
+    return /* @__PURE__ */ jsx(
+      Primitive.input,
+      {
+        type: "checkbox",
+        "aria-hidden": true,
+        defaultChecked: defaultChecked ?? defaultCheckedRef.current,
+        required,
+        disabled,
+        name,
+        value,
+        form,
+        ...props,
+        tabIndex: -1,
+        ref: composedRefs,
+        style: {
+          ...props.style,
+          ...controlSize,
+          position: "absolute",
+          pointerEvents: "none",
+          opacity: 0,
+          margin: 0,
+          // We transform because the input is absolutely positioned but we have
+          // rendered it **after** the button. This pulls it back to sit on top
+          // of the button.
+          transform: "translateX(-100%)"
+        }
+      }
+    );
+  }
+);
+CheckboxBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
+function isFunction(value) {
+  return typeof value === "function";
+}
+function isIndeterminate(checked) {
+  return checked === "indeterminate";
+}
+function getState$3(checked) {
+  return isIndeterminate(checked) ? "indeterminate" : checked ? "checked" : "unchecked";
+}
+
+var ENTRY_FOCUS = "rovingFocusGroup.onEntryFocus";
+var EVENT_OPTIONS = { bubbles: false, cancelable: true };
+var GROUP_NAME = "RovingFocusGroup";
+var [Collection$1, useCollection$1, createCollectionScope$1] = createCollection(GROUP_NAME);
+var [createRovingFocusGroupContext, createRovingFocusGroupScope] = createContextScope(
+  GROUP_NAME,
+  [createCollectionScope$1]
+);
+var [RovingFocusProvider, useRovingFocusContext] = createRovingFocusGroupContext(GROUP_NAME);
+var RovingFocusGroup = React.forwardRef(
+  (props, forwardedRef) => {
+    return /* @__PURE__ */ jsx(Collection$1.Provider, { scope: props.__scopeRovingFocusGroup, children: /* @__PURE__ */ jsx(Collection$1.Slot, { scope: props.__scopeRovingFocusGroup, children: /* @__PURE__ */ jsx(RovingFocusGroupImpl, { ...props, ref: forwardedRef }) }) });
+  }
+);
+RovingFocusGroup.displayName = GROUP_NAME;
+var RovingFocusGroupImpl = React.forwardRef((props, forwardedRef) => {
+  const {
+    __scopeRovingFocusGroup,
+    orientation,
+    loop = false,
+    dir,
+    currentTabStopId: currentTabStopIdProp,
+    defaultCurrentTabStopId,
+    onCurrentTabStopIdChange,
+    onEntryFocus,
+    preventScrollOnEntryFocus = false,
+    ...groupProps
+  } = props;
+  const ref = React.useRef(null);
+  const composedRefs = useComposedRefs(forwardedRef, ref);
+  const direction = useDirection(dir);
+  const [currentTabStopId, setCurrentTabStopId] = useControllableState({
+    prop: currentTabStopIdProp,
+    defaultProp: defaultCurrentTabStopId ?? null,
+    onChange: onCurrentTabStopIdChange,
+    caller: GROUP_NAME
+  });
+  const [isTabbingBackOut, setIsTabbingBackOut] = React.useState(false);
+  const handleEntryFocus = useCallbackRef$1(onEntryFocus);
+  const getItems = useCollection$1(__scopeRovingFocusGroup);
+  const isClickFocusRef = React.useRef(false);
+  const [focusableItemsCount, setFocusableItemsCount] = React.useState(0);
+  React.useEffect(() => {
+    const node = ref.current;
+    if (node) {
+      node.addEventListener(ENTRY_FOCUS, handleEntryFocus);
+      return () => node.removeEventListener(ENTRY_FOCUS, handleEntryFocus);
+    }
+  }, [handleEntryFocus]);
+  return /* @__PURE__ */ jsx(
+    RovingFocusProvider,
+    {
+      scope: __scopeRovingFocusGroup,
+      orientation,
+      dir: direction,
+      loop,
+      currentTabStopId,
+      onItemFocus: React.useCallback(
+        (tabStopId) => setCurrentTabStopId(tabStopId),
+        [setCurrentTabStopId]
+      ),
+      onItemShiftTab: React.useCallback(() => setIsTabbingBackOut(true), []),
+      onFocusableItemAdd: React.useCallback(
+        () => setFocusableItemsCount((prevCount) => prevCount + 1),
+        []
+      ),
+      onFocusableItemRemove: React.useCallback(
+        () => setFocusableItemsCount((prevCount) => prevCount - 1),
+        []
+      ),
+      children: /* @__PURE__ */ jsx(
+        Primitive.div,
+        {
+          tabIndex: isTabbingBackOut || focusableItemsCount === 0 ? -1 : 0,
+          "data-orientation": orientation,
+          ...groupProps,
+          ref: composedRefs,
+          style: { outline: "none", ...props.style },
+          onMouseDown: composeEventHandlers(props.onMouseDown, () => {
+            isClickFocusRef.current = true;
+          }),
+          onFocus: composeEventHandlers(props.onFocus, (event) => {
+            const isKeyboardFocus = !isClickFocusRef.current;
+            if (event.target === event.currentTarget && isKeyboardFocus && !isTabbingBackOut) {
+              const entryFocusEvent = new CustomEvent(ENTRY_FOCUS, EVENT_OPTIONS);
+              event.currentTarget.dispatchEvent(entryFocusEvent);
+              if (!entryFocusEvent.defaultPrevented) {
+                const items = getItems().filter((item) => item.focusable);
+                const activeItem = items.find((item) => item.active);
+                const currentItem = items.find((item) => item.id === currentTabStopId);
+                const candidateItems = [activeItem, currentItem, ...items].filter(
+                  Boolean
+                );
+                const candidateNodes = candidateItems.map((item) => item.ref.current);
+                focusFirst(candidateNodes, preventScrollOnEntryFocus);
+              }
+            }
+            isClickFocusRef.current = false;
+          }),
+          onBlur: composeEventHandlers(props.onBlur, () => setIsTabbingBackOut(false))
+        }
+      )
+    }
+  );
+});
+var ITEM_NAME$2 = "RovingFocusGroupItem";
+var RovingFocusGroupItem = React.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeRovingFocusGroup,
+      focusable = true,
+      active = false,
+      tabStopId,
+      children,
+      ...itemProps
+    } = props;
+    const autoId = useId();
+    const id = tabStopId || autoId;
+    const context = useRovingFocusContext(ITEM_NAME$2, __scopeRovingFocusGroup);
+    const isCurrentTabStop = context.currentTabStopId === id;
+    const getItems = useCollection$1(__scopeRovingFocusGroup);
+    const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
+    React.useEffect(() => {
+      if (focusable) {
+        onFocusableItemAdd();
+        return () => onFocusableItemRemove();
+      }
+    }, [focusable, onFocusableItemAdd, onFocusableItemRemove]);
+    return /* @__PURE__ */ jsx(
+      Collection$1.ItemSlot,
+      {
+        scope: __scopeRovingFocusGroup,
+        id,
+        focusable,
+        active,
+        children: /* @__PURE__ */ jsx(
+          Primitive.span,
+          {
+            tabIndex: isCurrentTabStop ? 0 : -1,
+            "data-orientation": context.orientation,
+            ...itemProps,
+            ref: forwardedRef,
+            onMouseDown: composeEventHandlers(props.onMouseDown, (event) => {
+              if (!focusable) event.preventDefault();
+              else context.onItemFocus(id);
+            }),
+            onFocus: composeEventHandlers(props.onFocus, () => context.onItemFocus(id)),
+            onKeyDown: composeEventHandlers(props.onKeyDown, (event) => {
+              if (event.key === "Tab" && event.shiftKey) {
+                context.onItemShiftTab();
+                return;
+              }
+              if (event.target !== event.currentTarget) return;
+              const focusIntent = getFocusIntent(event, context.orientation, context.dir);
+              if (focusIntent !== void 0) {
+                if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+                event.preventDefault();
+                const items = getItems().filter((item) => item.focusable);
+                let candidateNodes = items.map((item) => item.ref.current);
+                if (focusIntent === "last") candidateNodes.reverse();
+                else if (focusIntent === "prev" || focusIntent === "next") {
+                  if (focusIntent === "prev") candidateNodes.reverse();
+                  const currentIndex = candidateNodes.indexOf(event.currentTarget);
+                  candidateNodes = context.loop ? wrapArray(candidateNodes, currentIndex + 1) : candidateNodes.slice(currentIndex + 1);
+                }
+                setTimeout(() => focusFirst(candidateNodes));
+              }
+            }),
+            children: typeof children === "function" ? children({ isCurrentTabStop, hasTabStop: currentTabStopId != null }) : children
+          }
+        )
+      }
+    );
+  }
+);
+RovingFocusGroupItem.displayName = ITEM_NAME$2;
+var MAP_KEY_TO_FOCUS_INTENT = {
+  ArrowLeft: "prev",
+  ArrowUp: "prev",
+  ArrowRight: "next",
+  ArrowDown: "next",
+  PageUp: "first",
+  Home: "first",
+  PageDown: "last",
+  End: "last"
+};
+function getDirectionAwareKey(key, dir) {
+  if (dir !== "rtl") return key;
+  return key === "ArrowLeft" ? "ArrowRight" : key === "ArrowRight" ? "ArrowLeft" : key;
+}
+function getFocusIntent(event, orientation, dir) {
+  const key = getDirectionAwareKey(event.key, dir);
+  if (orientation === "vertical" && ["ArrowLeft", "ArrowRight"].includes(key)) return void 0;
+  if (orientation === "horizontal" && ["ArrowUp", "ArrowDown"].includes(key)) return void 0;
+  return MAP_KEY_TO_FOCUS_INTENT[key];
+}
+function focusFirst(candidates, preventScroll = false) {
+  const PREVIOUSLY_FOCUSED_ELEMENT = document.activeElement;
+  for (const candidate of candidates) {
+    if (candidate === PREVIOUSLY_FOCUSED_ELEMENT) return;
+    candidate.focus({ preventScroll });
+    if (document.activeElement !== PREVIOUSLY_FOCUSED_ELEMENT) return;
+  }
+}
+function wrapArray(array, startIndex) {
+  return array.map((_, index) => array[(startIndex + index) % array.length]);
+}
+var Root$1 = RovingFocusGroup;
+var Item$1 = RovingFocusGroupItem;
+
+var RADIO_NAME = "Radio";
+var [createRadioContext, createRadioScope] = createContextScope(RADIO_NAME);
+var [RadioProvider, useRadioContext] = createRadioContext(RADIO_NAME);
+var Radio = React.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeRadio,
+      name,
+      checked = false,
+      required,
+      disabled,
+      value = "on",
+      onCheck,
+      form,
+      ...radioProps
+    } = props;
+    const [button, setButton] = React.useState(null);
+    const composedRefs = useComposedRefs(forwardedRef, (node) => setButton(node));
+    const hasConsumerStoppedPropagationRef = React.useRef(false);
+    const isFormControl = button ? form || !!button.closest("form") : true;
+    return /* @__PURE__ */ jsxs(RadioProvider, { scope: __scopeRadio, checked, disabled, children: [
+      /* @__PURE__ */ jsx(
+        Primitive.button,
+        {
+          type: "button",
+          role: "radio",
+          "aria-checked": checked,
+          "data-state": getState$2(checked),
+          "data-disabled": disabled ? "" : void 0,
+          disabled,
+          value,
+          ...radioProps,
+          ref: composedRefs,
+          onClick: composeEventHandlers(props.onClick, (event) => {
+            if (!checked) onCheck?.();
+            if (isFormControl) {
+              hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+              if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+            }
+          })
+        }
+      ),
+      isFormControl && /* @__PURE__ */ jsx(
+        RadioBubbleInput,
+        {
+          control: button,
+          bubbles: !hasConsumerStoppedPropagationRef.current,
+          name,
+          value,
+          checked,
+          required,
+          disabled,
+          form,
+          style: { transform: "translateX(-100%)" }
+        }
+      )
+    ] });
+  }
+);
+Radio.displayName = RADIO_NAME;
+var INDICATOR_NAME = "RadioIndicator";
+var RadioIndicator = React.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadio, forceMount, ...indicatorProps } = props;
+    const context = useRadioContext(INDICATOR_NAME, __scopeRadio);
+    return /* @__PURE__ */ jsx(Presence, { present: forceMount || context.checked, children: /* @__PURE__ */ jsx(
+      Primitive.span,
+      {
+        "data-state": getState$2(context.checked),
+        "data-disabled": context.disabled ? "" : void 0,
+        ...indicatorProps,
+        ref: forwardedRef
+      }
+    ) });
+  }
+);
+RadioIndicator.displayName = INDICATOR_NAME;
+var BUBBLE_INPUT_NAME = "RadioBubbleInput";
+var RadioBubbleInput = React.forwardRef(
+  ({
+    __scopeRadio,
+    control,
+    checked,
+    bubbles = true,
+    ...props
+  }, forwardedRef) => {
+    const ref = React.useRef(null);
+    const composedRefs = useComposedRefs(ref, forwardedRef);
+    const prevChecked = usePrevious(checked);
+    const controlSize = useSize(control);
+    React.useEffect(() => {
+      const input = ref.current;
+      if (!input) return;
+      const inputProto = window.HTMLInputElement.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(
+        inputProto,
+        "checked"
+      );
+      const setChecked = descriptor.set;
+      if (prevChecked !== checked && setChecked) {
+        const event = new Event("click", { bubbles });
+        setChecked.call(input, checked);
+        input.dispatchEvent(event);
+      }
+    }, [prevChecked, checked, bubbles]);
+    return /* @__PURE__ */ jsx(
+      Primitive.input,
+      {
+        type: "radio",
+        "aria-hidden": true,
+        defaultChecked: checked,
+        ...props,
+        tabIndex: -1,
+        ref: composedRefs,
+        style: {
+          ...props.style,
+          ...controlSize,
+          position: "absolute",
+          pointerEvents: "none",
+          opacity: 0,
+          margin: 0
+        }
+      }
+    );
+  }
+);
+RadioBubbleInput.displayName = BUBBLE_INPUT_NAME;
+function getState$2(checked) {
+  return checked ? "checked" : "unchecked";
+}
+var ARROW_KEYS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+var RADIO_GROUP_NAME = "RadioGroup";
+var [createRadioGroupContext, createRadioGroupScope] = createContextScope(RADIO_GROUP_NAME, [
+  createRovingFocusGroupScope,
+  createRadioScope
+]);
+var useRovingFocusGroupScope = createRovingFocusGroupScope();
+var useRadioScope = createRadioScope();
+var [RadioGroupProvider, useRadioGroupContext] = createRadioGroupContext(RADIO_GROUP_NAME);
+var RadioGroup$1 = React.forwardRef(
+  (props, forwardedRef) => {
+    const {
+      __scopeRadioGroup,
+      name,
+      defaultValue,
+      value: valueProp,
+      required = false,
+      disabled = false,
+      orientation,
+      dir,
+      loop = true,
+      onValueChange,
+      ...groupProps
+    } = props;
+    const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
+    const direction = useDirection(dir);
+    const [value, setValue] = useControllableState({
+      prop: valueProp,
+      defaultProp: defaultValue ?? null,
+      onChange: onValueChange,
+      caller: RADIO_GROUP_NAME
+    });
+    return /* @__PURE__ */ jsx(
+      RadioGroupProvider,
+      {
+        scope: __scopeRadioGroup,
+        name,
+        required,
+        disabled,
+        value,
+        onValueChange: setValue,
+        children: /* @__PURE__ */ jsx(
+          Root$1,
+          {
+            asChild: true,
+            ...rovingFocusGroupScope,
+            orientation,
+            dir: direction,
+            loop,
+            children: /* @__PURE__ */ jsx(
+              Primitive.div,
+              {
+                role: "radiogroup",
+                "aria-required": required,
+                "aria-orientation": orientation,
+                "data-disabled": disabled ? "" : void 0,
+                dir: direction,
+                ...groupProps,
+                ref: forwardedRef
+              }
+            )
+          }
+        )
+      }
+    );
+  }
+);
+RadioGroup$1.displayName = RADIO_GROUP_NAME;
+var ITEM_NAME$1 = "RadioGroupItem";
+var RadioGroupItem = React.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadioGroup, disabled, ...itemProps } = props;
+    const context = useRadioGroupContext(ITEM_NAME$1, __scopeRadioGroup);
+    const isDisabled = context.disabled || disabled;
+    const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
+    const radioScope = useRadioScope(__scopeRadioGroup);
+    const ref = React.useRef(null);
+    const composedRefs = useComposedRefs(forwardedRef, ref);
+    const checked = context.value === itemProps.value;
+    const isArrowKeyPressedRef = React.useRef(false);
+    React.useEffect(() => {
+      const handleKeyDown = (event) => {
+        if (ARROW_KEYS.includes(event.key)) {
+          isArrowKeyPressedRef.current = true;
+        }
+      };
+      const handleKeyUp = () => isArrowKeyPressedRef.current = false;
+      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("keyup", handleKeyUp);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+      };
+    }, []);
+    return /* @__PURE__ */ jsx(
+      Item$1,
+      {
+        asChild: true,
+        ...rovingFocusGroupScope,
+        focusable: !isDisabled,
+        active: checked,
+        children: /* @__PURE__ */ jsx(
+          Radio,
+          {
+            disabled: isDisabled,
+            required: context.required,
+            checked,
+            ...radioScope,
+            ...itemProps,
+            name: context.name,
+            ref: composedRefs,
+            onCheck: () => context.onValueChange(itemProps.value),
+            onKeyDown: composeEventHandlers((event) => {
+              if (event.key === "Enter") event.preventDefault();
+            }),
+            onFocus: composeEventHandlers(itemProps.onFocus, () => {
+              if (isArrowKeyPressedRef.current) ref.current?.click();
+            })
+          }
+        )
+      }
+    );
+  }
+);
+RadioGroupItem.displayName = ITEM_NAME$1;
+var INDICATOR_NAME2 = "RadioGroupIndicator";
+var RadioGroupIndicator = React.forwardRef(
+  (props, forwardedRef) => {
+    const { __scopeRadioGroup, ...indicatorProps } = props;
+    const radioScope = useRadioScope(__scopeRadioGroup);
+    return /* @__PURE__ */ jsx(RadioIndicator, { ...radioScope, ...indicatorProps, ref: forwardedRef });
+  }
+);
+RadioGroupIndicator.displayName = INDICATOR_NAME2;
+var Root2$1 = RadioGroup$1;
+var Item2 = RadioGroupItem;
+var Indicator = RadioGroupIndicator;
+
+// packages/components/src/ui/checkbox.tsx
+// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
+// This component uses CSS custom properties from the design token system
+// with reliable fallback values for maximum compatibility and maintainability.
+// Pattern: var(--design-token-name, fallback-value)
+// 🎯 DESIGN TOKEN STYLE OBJECTS WITH FALLBACKS
+const checkboxStyles = {
+    base: {
+        // Layout & Structure
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "16px",
+        height: "16px",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        cursor: "pointer",
+        flexShrink: 0,
+        // Typography & Spacing (for inner icons)
+        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+        // Borders & Colors
+        borderRadius: "var(--border-radius-sm, 4px)",
+        backgroundColor: "var(--color-surface, #ffffff)",
+        borderColor: "var(--color-border, #b3b9bf)",
+        color: "var(--color-text, #374151)",
+        // Transitions
+        transition: "var(--transition-base, all 200ms ease-in-out)",
+    },
+    variants: {
+        default: {
+            borderColor: "var(--color-border, #b3b9bf)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        error: {
+            borderColor: "var(--color-border-error, #eb0000)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        success: {
+            borderColor: "var(--color-border-success, #007d85)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        warning: {
+            borderColor: "var(--color-border-warning, #b75b00)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+    },
+    sizes: {
+        sm: { width: "12px", height: "12px" },
+        md: { width: "16px", height: "16px" },
+        lg: { width: "20px", height: "20px" },
+        xl: { width: "24px", height: "24px" },
+    },
+    states: {
+        checked: {
+            backgroundColor: "var(--color-navy-500, #1e3a8a)",
+            borderColor: "var(--color-navy-500, #1e3a8a)",
+            color: "var(--color-white, #ffffff)",
+        },
+        disabled: {
+            opacity: 0.5,
+            cursor: "not-allowed",
+        },
+    },
+};
+const radioStyles = {
+    base: {
+        // Layout & Structure
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "16px",
+        height: "16px",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        cursor: "pointer",
+        flexShrink: 0,
+        // Radio specific
+        borderRadius: "50%",
+        // Borders & Colors
+        backgroundColor: "var(--color-surface, #ffffff)",
+        borderColor: "var(--color-border, #d1d5db)",
+        // Transitions
+        transition: "var(--transition-base, all 200ms ease-in-out)",
+    },
+    variants: {
+        default: {
+            borderColor: "var(--color-border, #9ca3af)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        error: {
+            borderColor: "var(--color-border-error, #eb0000)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        success: {
+            borderColor: "var(--color-border-success, #007d85)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        warning: {
+            borderColor: "var(--color-border-warning, #b75b00)",
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+    },
+    sizes: {
+        sm: { width: "12px", height: "12px" },
+        md: { width: "16px", height: "16px" },
+        lg: { width: "20px", height: "20px" },
+        xl: { width: "24px", height: "24px" },
+    },
+    states: {
+        disabled: {
+            opacity: 0.5,
+            cursor: "not-allowed",
+        },
+    },
+};
+// 🎯 DYNAMIC CSS INJECTION FOR FOCUS STATES
+const injectFocusStyles = (variant, componentType) => {
+    const styleId = `${componentType}-focus-${variant}`;
+    // Remove existing styles
+    const existingStyle = document.getElementById(styleId);
+    if (existingStyle)
+        existingStyle.remove();
+    // Create new focus styles
+    const style = document.createElement("style");
+    style.id = styleId;
+    // 🎯 ALWAYS USE ORANGE FOCUS - regardless of variant for accessibility
+    const focusStyles = `
+    .${componentType}-${variant}:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.8);
+    }
+    .${componentType}-${variant}:focus {
+      box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.8);
+    }
+  `;
+    style.textContent = focusStyles;
+    document.head.appendChild(style);
+};
+// 🎯 CVA CONFIGURATIONS (Minimal - styles come from design tokens)
+const checkboxVariants = cva(
+// Base Tailwind classes for layout/structure only
+"peer shrink-0 border transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none", {
+    variants: {
+        variant: {
+            default: "",
+            error: "",
+            success: "",
+            warning: "",
+            // Keep empty - styles come from design tokens
+        },
+        size: {
+            sm: "",
+            md: "",
+            lg: "",
+            xl: "",
+            // Keep empty - styles come from design tokens
+        },
+    },
+    defaultVariants: {
+        variant: "default",
+        size: "md",
+    },
+});
+const radioVariants = cva(
+// Base Tailwind classes for layout/structure only
+"peer shrink-0 rounded-full border transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none", {
+    variants: {
+        variant: {
+            default: "",
+            error: "",
+            success: "",
+            warning: "",
+            // Keep empty - styles come from design tokens
+        },
+        size: {
+            sm: "",
+            md: "",
+            lg: "",
+            xl: "",
+            // Keep empty - styles come from design tokens
+        },
+    },
+    defaultVariants: {
+        variant: "default",
+        size: "md",
+    },
+});
+// 🎯 MAIN COMPONENT IMPLEMENTATIONS
+const Checkbox = React__default.forwardRef(({ className, variant = "default", size = "md", label, labelState, showLabel = true, hintText, error, success, warning, containerClassName, labelClassName, helperClassName, checked, disabled, style, ...props }, ref) => {
+    const elementRef = React__default.useRef(null);
+    const checkboxId = React__default.useId();
+    // Combine refs
+    React__default.useImperativeHandle(ref, () => elementRef.current);
+    // Inject focus styles on mount
+    React__default.useEffect(() => {
+        if (elementRef.current && variant) {
+            injectFocusStyles(variant, "checkbox");
+            elementRef.current.classList.add(`checkbox-${variant}`);
+        }
+    }, [variant]);
+    // 🎯 Determine final variant based on validation state
+    const finalVariant = error
+        ? "error"
+        : success
+            ? "success"
+            : warning
+                ? "warning"
+                : variant;
+    // 🎯 Use centralized form utilities
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    const formFieldAria = getFormFieldAria(checkboxId, error, success, warning, hintText);
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom
+    const combinedStyles = {
+        ...checkboxStyles.base,
+        ...(finalVariant && checkboxStyles.variants[finalVariant]
+            ? checkboxStyles.variants[finalVariant]
+            : {}),
+        ...(size && checkboxStyles.sizes[size] ? checkboxStyles.sizes[size] : {}),
+        ...(checked ? checkboxStyles.states.checked : {}),
+        ...(disabled ? checkboxStyles.states.disabled : {}),
+        ...style, // Allow style overrides
+    };
+    // Build final className
+    const finalClassName = cn(checkboxVariants({ variant: finalVariant, size }), className);
+    return (jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [jsxs("div", { className: "flex items-start space-x-2", children: [jsx(Checkbox$1, { ref: elementRef, id: checkboxId, className: finalClassName, style: combinedStyles, checked: checked, disabled: disabled, ...formFieldAria, ...props, children: jsx(CheckboxIndicator, { className: "flex items-center justify-center text-current", children: checked === "indeterminate" ? (jsx(Minus, { className: "h-3 w-3" })) : (jsx(Check, { className: "h-3 w-3" })) }) }), label && showLabel && (jsx("label", { htmlFor: checkboxId, className: cn(
+                        // Individual checkbox labels use small paragraph text (charcoal)
+                        "text-sm font-normal leading-normal cursor-pointer", {
+                            color: "var(--color-text-body, #39444f)",
+                        }, disabled && "cursor-not-allowed opacity-50", labelClassName), style: {
+                            color: "var(--color-text-body, #39444f)",
+                        }, children: label }))] }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+});
+Checkbox.displayName = Checkbox$1.displayName;
+// Radio Group Component
+const RadioGroup = React__default.forwardRef(({ className, containerClassName, labelClassName, helperClassName, label, labelState = "default", showLabel = true, hintText, error, success, warning, disabled, children, ...props }, ref) => {
+    // 🎯 Use centralized form utilities
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    return (jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [label && showLabel && (jsxs("div", { className: cn(labelVariants({
+                    variant: disabled ? "disabled" : "default",
+                }), labelClassName), children: [label, labelState === "required" && (jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "*" })), labelState === "optional" && (jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(Optional)" }))] })), hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" })), children: hintText })), jsx(Root2$1, { className: cn("grid gap-2", className), disabled: disabled, ref: ref, ...props, children: children }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+});
+RadioGroup.displayName = Root2$1.displayName;
+// Radio Item Component
+const RadioItem = React__default.forwardRef(({ className, itemClassName, labelClassName, variant = "default", size = "md", label, value, disabled, style, ...props }, ref) => {
+    const elementRef = React__default.useRef(null);
+    // Combine refs
+    React__default.useImperativeHandle(ref, () => elementRef.current);
+    // Inject focus styles on mount
+    React__default.useEffect(() => {
+        if (elementRef.current && variant) {
+            injectFocusStyles(variant, "radio");
+            elementRef.current.classList.add(`radio-${variant}`);
+        }
+    }, [variant]);
+    // 🎯 Combine styles: Base + Variant + Size + State + Custom
+    const combinedStyles = {
+        ...radioStyles.base,
+        ...(variant && radioStyles.variants[variant]
+            ? radioStyles.variants[variant]
+            : {}),
+        ...(size && radioStyles.sizes[size] ? radioStyles.sizes[size] : {}),
+        ...(disabled ? radioStyles.states.disabled : {}),
+        ...style, // Allow style overrides
+    };
+    // Build final className
+    const finalClassName = cn(radioVariants({ variant, size }), className);
+    return (jsxs("div", { className: cn("flex items-center space-x-2", itemClassName), children: [jsx(Item2, { ref: elementRef, className: finalClassName, style: combinedStyles, value: value, disabled: disabled, ...props, children: jsx(Indicator, { className: "flex items-center justify-center", children: jsx("div", { className: "rounded-full bg-current", style: {
+                            width: "6px",
+                            height: "6px",
+                            backgroundColor: "var(--color-navy-500, #1e3a8a)",
+                        } }) }) }), label && (jsx("label", { htmlFor: props.id, className: cn(
+                // Individual radio labels use small paragraph text (charcoal)
+                "text-sm font-normal leading-normal cursor-pointer", disabled && "cursor-not-allowed opacity-50", labelClassName), style: {
+                    color: "var(--color-text-body, #39444f)",
+                }, children: label }))] }));
+});
+RadioItem.displayName = Item2.displayName;
+// CheckboxGroup Component (for grouped checkboxes like in the screenshot)
+const CheckboxGroup = React__default.forwardRef(({ containerClassName, labelClassName, helperClassName, label, labelState = "default", showLabel = true, hintText, error, success, warning, children, ...props }, ref) => {
+    // 🎯 Use centralized form utilities
+    const helperContent = getHelperContent(error, success, warning);
+    const helperVariant = getHelperVariant(error, success, warning);
+    return (jsxs("div", { ref: ref, className: cn("space-y-2", containerClassName), ...props, children: [label && showLabel && (jsxs("div", { className: cn(labelVariants({ variant: "default" }), labelClassName), children: [label, labelState === "required" && (jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-required, #a30134)" }, children: "*" })), labelState === "optional" && (jsx("span", { className: "ml-1", style: { color: "var(--color-input-label-optional, #6b7280)" }, children: "(Optional)" }))] })), hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mt-0 mb-0.5"), children: hintText })), jsx("div", { className: cn(fieldVariants({ variant: "compact" })), children: children }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant }), helperClassName), children: helperContent }))] }));
+});
+CheckboxGroup.displayName = "CheckboxGroup";
+
+// Pagination container variants
+const paginationVariants = cva(["mx-auto flex w-full justify-center items-center space-x-1"].join(" "));
+// Pagination item variants - only pagination-specific overrides
+const paginationItemVariants = cva([
+    // Override padding to make square buttons for page numbers
+    "!p-0", // !important to override Button component padding
+].join(" "), {
+    variants: {
+        size: {
+            sm: "!h-6 !w-6 !text-xs",
+            md: "!h-8 !w-8 !text-sm",
+            lg: "!h-10 !w-10 !text-base",
+        },
+    },
+    defaultVariants: {
+        size: "md",
+    },
+});
+// Navigation button variants - only pagination-specific sizing
+const paginationNavVariants = cva([
+    // Override height for pagination navigation
+    "!h-8 !px-3", // !important to override Button component sizing
+].join(" "));
+// Results text variants
+const paginationResultsVariants = cva(["text-sm text-[var(--color-charcoal-500)]", "flex items-center gap-1"].join(" "));
+// Helper function to generate page numbers
+const generatePageNumbers = (currentPage, totalPages, maxVisible = 7) => {
+    if (totalPages <= maxVisible) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const halfVisible = Math.floor(maxVisible / 2);
+    const pages = [];
+    if (currentPage <= halfVisible + 1) {
+        // Show: 1, 2, 3, 4, ..., last
+        for (let i = 1; i <= maxVisible - 2; i++) {
+            pages.push(i);
+        }
+        pages.push("ellipsis");
+        pages.push(totalPages);
+    }
+    else if (currentPage >= totalPages - halfVisible) {
+        // Show: 1, ..., last-3, last-2, last-1, last
+        pages.push(1);
+        pages.push("ellipsis");
+        for (let i = totalPages - (maxVisible - 3); i <= totalPages; i++) {
+            pages.push(i);
+        }
+    }
+    else {
+        // Show: 1, ..., current-1, current, current+1, ..., last
+        pages.push(1);
+        pages.push("ellipsis");
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+            pages.push(i);
+        }
+        pages.push("ellipsis");
+        pages.push(totalPages);
+    }
+    return pages;
+};
+// Pagination Components
+const Pagination = React.forwardRef(({ className, totalItems, currentPage, itemsPerPage, onPageChange, showResults = true, maxVisiblePages = 7, ...props }, ref) => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const pages = generatePageNumbers(currentPage, totalPages, maxVisiblePages);
+    if (totalPages <= 1)
+        return null;
+    return (jsxs("nav", { ref: ref, role: "navigation", "aria-label": "pagination", className: cn("flex flex-col space-y-4", className), ...props, children: [showResults && (jsx(PaginationResults, { currentPage: currentPage, itemsPerPage: itemsPerPage, totalItems: totalItems })), jsxs("div", { className: cn(paginationVariants()), children: [jsx(PaginationPrevious, { onClick: () => onPageChange(currentPage - 1), disabled: currentPage === 1 }), pages.map((page, index) => page === "ellipsis" ? (jsx(PaginationEllipsis, {}, `ellipsis-${index}`)) : (jsx(PaginationItem, { page: page, isActive: page === currentPage, onClick: () => onPageChange(page) }, page))), jsx(PaginationNext, { onClick: () => onPageChange(currentPage + 1), disabled: currentPage === totalPages })] })] }));
+});
+Pagination.displayName = "Pagination";
+const PaginationItem = React.forwardRef(({ className, isActive, page, size, ...props }, ref) => {
+    const buttonVariant = isActive ? "primary" : "ghost";
+    return (jsx(Button, { ref: ref, variant: buttonVariant, size: size, className: cn(paginationItemVariants({ size }), className), "aria-label": `Go to page ${page}`, "aria-current": isActive ? "page" : undefined, ...props, children: page }));
+});
+PaginationItem.displayName = "PaginationItem";
+const PaginationPrevious = React.forwardRef(({ className, ...props }, ref) => (jsxs(Button, { ref: ref, variant: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to previous page", ...props, children: [jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "mr-1", children: jsx("path", { d: "M10 12L6 8L10 4", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) }), "Previous"] })));
+PaginationPrevious.displayName = "PaginationPrevious";
+const PaginationNext = React.forwardRef(({ className, ...props }, ref) => (jsxs(Button, { ref: ref, variant: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to next page", ...props, children: ["Next", jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "ml-1", children: jsx("path", { d: "M6 4L10 8L6 12", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) })] })));
+PaginationNext.displayName = "PaginationNext";
+const PaginationEllipsis = React.forwardRef(({ className, ...props }, ref) => (jsx("span", { ref: ref, "aria-hidden": true, className: cn("flex h-8 w-8 items-center justify-center text-[var(--color-charcoal-500)]", className), ...props, children: "\u2026" })));
+PaginationEllipsis.displayName = "PaginationEllipsis";
+const PaginationResults = React.forwardRef(({ className, currentPage, itemsPerPage, totalItems, ...props }, ref) => {
+    const startItem = (currentPage - 1) * itemsPerPage + 1;
+    const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+    return (jsxs("div", { ref: ref, className: cn(paginationResultsVariants(), className), ...props, children: [jsx("span", { children: "Showing" }), jsx("strong", { children: startItem }), jsx("span", { children: "to" }), jsx("strong", { children: endItem }), jsx("span", { children: "of" }), jsx("strong", { children: totalItems }), jsx("span", { children: "results" })] }));
+});
+PaginationResults.displayName = "PaginationResults";
 
 // 🎯 Design Tokens + Robust Fallbacks Architecture
 const tableStyles = {
@@ -9066,93 +10339,6 @@ const TableCell = React.forwardRef(({ className, size = "md", style, ...props },
 });
 TableCell.displayName = "TableCell";
 
-// Pagination container variants
-const paginationVariants = cva(["mx-auto flex w-full justify-center items-center space-x-1"].join(" "));
-// Pagination item variants - only pagination-specific overrides
-const paginationItemVariants = cva([
-    // Override padding to make square buttons for page numbers
-    "!p-0", // !important to override Button component padding
-].join(" "), {
-    variants: {
-        size: {
-            sm: "!h-6 !w-6 !text-xs",
-            md: "!h-8 !w-8 !text-sm",
-            lg: "!h-10 !w-10 !text-base",
-        },
-    },
-    defaultVariants: {
-        size: "md",
-    },
-});
-// Navigation button variants - only pagination-specific sizing
-const paginationNavVariants = cva([
-    // Override height for pagination navigation
-    "!h-8 !px-3", // !important to override Button component sizing
-].join(" "));
-// Results text variants
-const paginationResultsVariants = cva(["text-sm text-[var(--color-charcoal-500)]", "flex items-center gap-1"].join(" "));
-// Helper function to generate page numbers
-const generatePageNumbers = (currentPage, totalPages, maxVisible = 7) => {
-    if (totalPages <= maxVisible) {
-        return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-    const halfVisible = Math.floor(maxVisible / 2);
-    const pages = [];
-    if (currentPage <= halfVisible + 1) {
-        // Show: 1, 2, 3, 4, ..., last
-        for (let i = 1; i <= maxVisible - 2; i++) {
-            pages.push(i);
-        }
-        pages.push("ellipsis");
-        pages.push(totalPages);
-    }
-    else if (currentPage >= totalPages - halfVisible) {
-        // Show: 1, ..., last-3, last-2, last-1, last
-        pages.push(1);
-        pages.push("ellipsis");
-        for (let i = totalPages - (maxVisible - 3); i <= totalPages; i++) {
-            pages.push(i);
-        }
-    }
-    else {
-        // Show: 1, ..., current-1, current, current+1, ..., last
-        pages.push(1);
-        pages.push("ellipsis");
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-            pages.push(i);
-        }
-        pages.push("ellipsis");
-        pages.push(totalPages);
-    }
-    return pages;
-};
-// Pagination Components
-const Pagination = React.forwardRef(({ className, totalItems, currentPage, itemsPerPage, onPageChange, showResults = true, maxVisiblePages = 7, ...props }, ref) => {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const pages = generatePageNumbers(currentPage, totalPages, maxVisiblePages);
-    if (totalPages <= 1)
-        return null;
-    return (jsxs("nav", { ref: ref, role: "navigation", "aria-label": "pagination", className: cn("flex flex-col space-y-4", className), ...props, children: [showResults && (jsx(PaginationResults, { currentPage: currentPage, itemsPerPage: itemsPerPage, totalItems: totalItems })), jsxs("div", { className: cn(paginationVariants()), children: [jsx(PaginationPrevious, { onClick: () => onPageChange(currentPage - 1), disabled: currentPage === 1 }), pages.map((page, index) => page === "ellipsis" ? (jsx(PaginationEllipsis, {}, `ellipsis-${index}`)) : (jsx(PaginationItem, { page: page, isActive: page === currentPage, onClick: () => onPageChange(page) }, page))), jsx(PaginationNext, { onClick: () => onPageChange(currentPage + 1), disabled: currentPage === totalPages })] })] }));
-});
-Pagination.displayName = "Pagination";
-const PaginationItem = React.forwardRef(({ className, isActive, page, size, ...props }, ref) => {
-    const buttonVariant = isActive ? "primary" : "ghost";
-    return (jsx(Button, { ref: ref, variant: buttonVariant, size: size, className: cn(paginationItemVariants({ size }), className), "aria-label": `Go to page ${page}`, "aria-current": isActive ? "page" : undefined, ...props, children: page }));
-});
-PaginationItem.displayName = "PaginationItem";
-const PaginationPrevious = React.forwardRef(({ className, ...props }, ref) => (jsxs(Button, { ref: ref, variant: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to previous page", ...props, children: [jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "mr-1", children: jsx("path", { d: "M10 12L6 8L10 4", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) }), "Previous"] })));
-PaginationPrevious.displayName = "PaginationPrevious";
-const PaginationNext = React.forwardRef(({ className, ...props }, ref) => (jsxs(Button, { ref: ref, variant: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to next page", ...props, children: ["Next", jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "ml-1", children: jsx("path", { d: "M6 4L10 8L6 12", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) })] })));
-PaginationNext.displayName = "PaginationNext";
-const PaginationEllipsis = React.forwardRef(({ className, ...props }, ref) => (jsx("span", { ref: ref, "aria-hidden": true, className: cn("flex h-8 w-8 items-center justify-center text-[var(--color-charcoal-500)]", className), ...props, children: "\u2026" })));
-PaginationEllipsis.displayName = "PaginationEllipsis";
-const PaginationResults = React.forwardRef(({ className, currentPage, itemsPerPage, totalItems, ...props }, ref) => {
-    const startItem = (currentPage - 1) * itemsPerPage + 1;
-    const endItem = Math.min(currentPage * itemsPerPage, totalItems);
-    return (jsxs("div", { ref: ref, className: cn(paginationResultsVariants(), className), ...props, children: [jsx("span", { children: "Showing" }), jsx("strong", { children: startItem }), jsx("span", { children: "to" }), jsx("strong", { children: endItem }), jsx("span", { children: "of" }), jsx("strong", { children: totalItems }), jsx("span", { children: "results" })] }));
-});
-PaginationResults.displayName = "PaginationResults";
-
 const DirectionIcon = ({ direction }) => (jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", className: cn("transition-transform duration-150", direction === "desc" ? "rotate-180" : "rotate-0"), children: jsx("path", { d: "M8 2L6 6h1.5v8h1v-8H10L8 2z", fill: "currentColor" }) }));
 const ColumnSortControls = ({ columns, currentColumn, currentDirection = "asc", onColumnChange, onDirectionChange, className, disabled = false, hintText, error, success, warning, containerClassName, helperClassName, }) => {
     // 🎯 Use centralized form utilities for validation states
@@ -9178,9 +10364,82 @@ const ColumnSortControls = ({ columns, currentColumn, currentDirection = "asc", 
     };
     // Get current column value for select
     const selectValue = currentColumn || "none";
-    return (jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mb-2"), children: hintText })), jsxs("div", { className: cn("flex items-center gap-2", className), id: sortControlsId, children: [jsxs(SelectField, { value: selectValue, onValueChange: handleColumnChange, size: "md", disabled: disabled, hideLabel: true, placeholder: "Sort by column", className: "min-w-[160px]", ...formFieldAria, children: [jsx(SelectItem, { value: "none", children: "No sorting" }), sortableColumns.map((column) => (jsx(SelectItem, { value: column.key, children: column.header }, column.key)))] }), jsx(Button, { variant: "ghost", size: "md", onClick: handleDirectionToggle, disabled: disabled || !currentColumn, "aria-label": `Sort ${currentDirection === "asc" ? "ascending" : "descending"}`, className: "px-3", children: jsx(DirectionIcon, { direction: currentDirection }) })] }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant }), "mt-2", helperClassName), children: helperContent }))] }));
+    return (jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mb-2"), children: hintText })), jsxs("div", { className: cn("flex items-center gap-2", className), id: sortControlsId, children: [jsxs(SelectField, { value: selectValue, onValueChange: handleColumnChange, size: "md", disabled: disabled, hideLabel: true, placeholder: "Sort by column", className: "min-w-[160px]", ...formFieldAria, children: [jsx(SelectItem, { value: "none", children: "No sorting" }), sortableColumns.map((column) => (jsx(SelectItem, { value: column.key, children: column.header }, column.key)))] }), jsx(Button, { variant: "ghost", size: "sm", leftIcon: jsx(DirectionIcon, { direction: currentDirection }), onClick: handleDirectionToggle, disabled: disabled || !currentColumn, "data-icon-only": "true", "data-size": "sm", "aria-label": `Sort ${currentDirection === "asc" ? "ascending" : "descending"}` })] }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant }), "mt-2", helperClassName), children: helperContent }))] }));
 };
 
+// 🎯 Design Tokens + Robust Fallbacks Architecture for DataTable
+const dataTableStyles = {
+    base: {
+        // Typography
+        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+        // Layout & Spacing
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--spacing-4, 16px)",
+        // Background & Borders
+        backgroundColor: "var(--color-surface, #ffffff)",
+        borderRadius: "var(--border-radius-lg, 8px)",
+        // Colors
+        color: "var(--color-text-body, #374151)",
+    },
+    variants: {
+        default: {
+            backgroundColor: "var(--color-surface, #ffffff)",
+        },
+        elevated: {
+            backgroundColor: "var(--color-surface, #ffffff)",
+            boxShadow: "var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05))",
+        },
+    },
+    container: {
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: "var(--color-border, #d1d5db)",
+        borderRadius: "var(--border-radius-lg, 8px)",
+        overflow: "hidden",
+    },
+    emptyState: {
+        color: "var(--color-text-muted, #6b7280)",
+        textAlign: "center",
+    },
+    loadingState: {
+        color: "var(--color-text-muted, #6b7280)",
+        textAlign: "center",
+    },
+};
+// 🎯 DataTable CVA variants with design tokens
+const dataTableVariants = cva([
+    "w-full space-y-4",
+    "font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)]",
+].join(" "), {
+    variants: {
+        variant: {
+            default: "bg-[var(--color-surface,#ffffff)]",
+            elevated: [
+                "bg-[var(--color-surface,#ffffff)]",
+                "shadow-[var(--shadow-sm,0_1px_2px_0_rgba(0,0,0,0.05))]",
+            ].join(" "),
+        },
+        size: {
+            sm: "text-sm space-y-3",
+            md: "text-sm space-y-4",
+            lg: "text-base space-y-5",
+        },
+    },
+    defaultVariants: {
+        variant: "default",
+        size: "md",
+    },
+});
+const dataTableContainerVariants = cva([
+    "border border-[var(--color-border,#d1d5db)]",
+    "rounded-[var(--border-radius-lg,8px)]",
+    "overflow-hidden",
+].join(" "));
+const dataTableEmptyStateVariants = cva([
+    "flex items-center justify-center h-64",
+    "text-[var(--color-text-muted,#6b7280)]",
+].join(" "));
 // Default icons - replace with your icon system
 const SearchIcon = () => (jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", children: jsx("path", { d: "M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) }));
 const EditIcon = () => (jsxs("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", children: [jsx("path", { d: "M7.333 2.667H2.667A1.333 1.333 0 0 0 1.333 4v9.333A1.333 1.333 0 0 0 2.667 14.667H12a1.333 1.333 0 0 0 1.333-1.334V8", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }), jsx("path", { d: "M12.333 1.667a1.414 1.414 0 1 1 2 2L8 10l-2.667.667L6 8l6.333-6.333Z", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" })] }));
@@ -9256,7 +10515,7 @@ function useDataTable(data, options = {}) {
     };
 }
 // Main DataTable component
-const DataTable = ({ data, columns, title, description, className, searchable = true, searchPlaceholder = "Search", onSearch, defaultSort, onSort, pagination = {}, rowActions = [], toolbarActions = [], footerActions = [], loading = false, emptyMessage = "No data available", striped = false, hoverable = true, getRowKey, ...props }) => {
+const DataTable = ({ data, columns, title, description, className, variant = "default", size = "md", containerClassName, style, searchable = false, searchPlaceholder = "Search", onSearch, defaultSort, onSort, pagination = {}, rowActions = [], toolbarActions = [], footerActions = [], loading = false, emptyMessage = "No data available", striped = false, hoverable = true, getRowKey, ...props }) => {
     const { paginatedData, totalItems, searchQuery, sortField, sortDirection, currentPage, handleSearch, handleSortColumnChange, handleSortDirectionChange, handlePageChange, } = useDataTable(data, {
         searchable,
         defaultSort,
@@ -9277,9 +10536,14 @@ const DataTable = ({ data, columns, title, description, className, searchable = 
     const hasActions = rowActions.length > 0;
     const showPagination = totalItems > (pagination.pageSize || 10);
     const hasSortableColumns = columns.some((col) => col.sortable);
-    return (jsxs("div", { className: cn("w-full space-y-6", className), ...props, children: [(title || description) && (jsxs("div", { className: "space-y-2", children: [title && (jsx("h1", { className: "text-2xl font-bold text-[var(--color-navy-500)]", children: title })), description && (jsx("p", { className: "text-[var(--color-charcoal-500)] max-w-3xl", children: description }))] })), (searchable || hasSortableColumns || toolbarActions.length > 0) && (jsxs("div", { className: "flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center", children: [jsxs("div", { className: "flex flex-col sm:flex-row gap-4 items-start sm:items-center", children: [searchable && (jsx("div", { className: "w-full sm:w-auto sm:min-w-[300px]", children: jsx(Input, { placeholder: searchPlaceholder, value: searchQuery, onChange: (e) => handleSearch(e.target.value), leftIcon: jsx(SearchIcon, {}), className: "w-full" }) })), hasSortableColumns && (jsx(ColumnSortControls, { columns: columns, currentColumn: sortField, currentDirection: sortDirection, onColumnChange: handleSortColumnChange, onDirectionChange: handleSortDirectionChange }))] }), toolbarActions.length > 0 && (jsx("div", { className: "flex gap-3", children: toolbarActions.map((action, index) => (jsx(Button, { variant: action.variant || "outline", onClick: action.onClick, leftIcon: action.icon, className: action.className, children: action.label }, index))) }))] })), jsx("div", { className: "border border-[var(--color-border)] rounded-lg overflow-hidden", children: loading ? (jsx("div", { className: "flex items-center justify-center h-64", children: jsx("div", { className: "text-[var(--color-charcoal-500)]", children: "Loading..." }) })) : paginatedData.length === 0 ? (jsx("div", { className: "flex items-center justify-center h-64", children: jsx("div", { className: "text-[var(--color-charcoal-500)]", children: emptyMessage }) })) : (jsxs(Table, { variant: striped ? "striped" : "default", children: [jsx(TableHeader, { children: jsxs(TableRow, { children: [columns.map((column) => (jsx(TableHead, { className: cn(column.className), style: column.width ? { width: column.width } : undefined, children: column.header }, column.key))), hasActions && (jsx(TableHead, { className: "text-center", children: "Action" }))] }) }), jsx(TableBody, { children: paginatedData.map((row, index) => (jsxs(TableRow, { variant: striped ? "striped" : "default", children: [columns.map((column) => (jsx(TableCell, { className: cn(column.className), children: column.render
+    return (jsxs("div", { className: cn(dataTableVariants({ variant, size }), className), style: {
+            ...dataTableStyles.base,
+            ...(variant && dataTableStyles.variants[variant]),
+            ...style,
+        }, ...props, children: [(title || description) && (jsxs("div", { className: "space-y-2", children: [title && (jsx("h1", { className: "text-2xl font-bold text-[var(--color-navy-500)]", children: title })), description && (jsx("p", { className: "text-[var(--color-charcoal-500)] max-w-3xl", children: description }))] })), (searchable || hasSortableColumns || toolbarActions.length > 0) && (jsxs("div", { className: "flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center", children: [jsxs("div", { className: "flex flex-col sm:flex-row gap-4 items-start sm:items-center", children: [searchable && (jsx("div", { className: "w-full sm:w-auto sm:min-w-[300px]", children: jsx(Input, { placeholder: searchPlaceholder, value: searchQuery, onChange: (e) => handleSearch(e.target.value), leftIcon: jsx(SearchIcon, {}), className: "w-full" }) })), hasSortableColumns && (jsx(ColumnSortControls, { columns: columns, currentColumn: sortField, currentDirection: sortDirection, onColumnChange: handleSortColumnChange, onDirectionChange: handleSortDirectionChange }))] }), toolbarActions.length > 0 && (jsx("div", { className: "flex gap-3", children: toolbarActions.map((action, index) => (jsx(Button, { variant: action.variant || "outline", onClick: action.onClick, leftIcon: action.icon, className: action.className, children: action.label }, index))) }))] })), jsx("div", { className: cn(dataTableContainerVariants(), containerClassName), style: dataTableStyles.container, children: loading ? (jsx("div", { className: dataTableEmptyStateVariants(), style: dataTableStyles.loadingState, children: "Loading..." })) : paginatedData.length === 0 ? (jsx("div", { className: dataTableEmptyStateVariants(), style: dataTableStyles.emptyState, children: emptyMessage })) : (jsxs(Table, { variant: striped ? "striped" : "default", children: [jsx(TableHeader, { children: jsxs(TableRow, { children: [columns.map((column) => (jsx(TableHead, { className: cn(column.className), style: column.width ? { width: column.width } : undefined, children: column.header }, column.key))), hasActions && (jsx(TableHead, { className: "text-center", children: "Action" }))] }) }), jsx(TableBody, { children: paginatedData.map((row, index) => (jsxs(TableRow, { variant: striped ? "striped" : "default", children: [columns.map((column) => (jsx(TableCell, { className: cn(column.className), children: column.render
                                             ? column.render(row[column.key], row, index)
-                                            : String(row[column.key] || "") }, column.key))), hasActions && (jsx(TableCell, { children: jsx("div", { className: "flex justify-center gap-2", children: rowActions.map((action, actionIndex) => (jsx(Button, { variant: action.variant || "ghost", size: "sm", onClick: () => action.onClick(row, index), className: action.className, disabled: action.disabled ? action.disabled(row) : false, "aria-label": `${action.label} row ${index + 1}`, children: action.icon || action.label }, actionIndex))) }) }))] }, getRowKey
+                                            : String(row[column.key] || "") }, column.key))), hasActions && (jsx(TableCell, { children: jsx("div", { className: "flex justify-center gap-2", children: rowActions.map((action, actionIndex) => (jsx(Button, { variant: action.variant || "ghost", size: "sm", leftIcon: action.icon, "data-icon-only": "true", "data-size": "sm", onClick: () => action.onClick(row, index), className: cn(action.variant === "destructive" &&
+                                                    "text-[var(--color-red-600,#dc2626)] hover:text-[var(--color-red-700,#b91c1c)]", action.className), disabled: action.disabled ? action.disabled(row) : false, "aria-label": `${action.label} row ${index + 1}`, children: !action.icon && action.label }, actionIndex))) }) }))] }, getRowKey
                                 ? getRowKey(row, index)
                                 : `row-${currentPage}-${index}`))) })] })) }), showPagination && (jsx(Pagination, { totalItems: totalItems, currentPage: currentPage, itemsPerPage: pagination.pageSize || 10, onPageChange: handlePageChange, showResults: pagination.showResults, maxVisiblePages: pagination.maxVisiblePages })), footerActions.length > 0 && (jsx("div", { className: "flex justify-end gap-3", children: footerActions.map((action, index) => (jsx(Button, { variant: action.variant || "primary", onClick: action.onClick, leftIcon: action.icon, className: action.className, children: action.label }, index))) }))] }));
 };
@@ -9306,106 +10570,239 @@ const createDefaultRowActions = (onEdit, onDelete) => {
     return actions;
 };
 
-// packages/components/src/ui/sidebar-menu.tsx
-const sidebarMenuVariants = cva([
-    "flex flex-col h-full bg-[var(--color-surface)]",
-    "border-r border-[var(--color-border)]",
-    "overflow-y-auto overflow-x-hidden",
-    // Responsive width management
-    "w-64 sm:w-64 md:w-72 lg:w-80",
-    // Mobile responsive - can be controlled by parent
-    "min-w-0 flex-shrink-0",
+// packages/components/src/ui/sidebar.tsx
+// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
+// Single source of truth for ALL sidebar component styling.
+// Used by SidebarMenu, SidebarMenuItem, SidebarMenuSection, etc.
+/**
+ * 🎯 CENTRALIZED SIDEBAR UTILITIES
+ *
+ * Single source of truth for ALL sidebar component styling.
+ * Benefits:
+ * ✅ No artificial dependencies between components
+ * ✅ Consistent styling across all sidebar elements
+ * ✅ Better performance (CVA vs inline styles)
+ * ✅ Single place to update sidebar styling
+ * ✅ Maintains all existing design tokens
+ */
+// 🎯 Main Sidebar Container Variants
+const sidebarVariants = cva([
+    "flex flex-col h-full bg-[var(--color-surface,#ffffff)]",
+    "border-r border-[var(--color-border,#e5e7eb)]",
+    "font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)]",
 ], {
     variants: {
         size: {
-            sm: "w-56 sm:w-56 md:w-60 lg:w-64",
-            md: "w-64 sm:w-64 md:w-72 lg:w-80",
-            lg: "w-72 sm:w-72 md:w-80 lg:w-96",
-        },
-        mobile: {
-            hidden: "hidden sm:flex",
-            overlay: "fixed inset-y-0 left-0 z-50 sm:relative sm:inset-auto",
-            push: "relative",
+            sm: "w-60",
+            md: "w-72",
+            lg: "w-80",
+            xl: "w-96",
         },
     },
-    defaultVariants: {
-        size: "md",
-        mobile: "push",
-    },
+    defaultVariants: { size: "md" },
 });
-const SidebarMenu = React.forwardRef(({ className, children, size, mobile, mobileOpen = false, onMobileToggle, ...props }, ref) => {
-    const handleBackdropClick = (e) => {
-        if (e.target === e.currentTarget && mobile === "overlay") {
-            onMobileToggle?.(false);
-        }
-    };
-    const handleKeyDown = (e) => {
-        if (e.key === "Escape" && mobile === "overlay" && mobileOpen) {
-            onMobileToggle?.(false);
-        }
-    };
-    // Mobile overlay backdrop
-    if (mobile === "overlay") {
-        return (jsxs(Fragment, { children: [mobileOpen && (jsx("div", { className: "fixed inset-0 bg-black/50 z-40 sm:hidden", onClick: handleBackdropClick, onKeyDown: handleKeyDown, role: "button", tabIndex: -1, "aria-label": "Close sidebar" })), jsx("nav", { ref: ref, className: cn(sidebarMenuVariants({ size, mobile }), mobileOpen
-                        ? "translate-x-0"
-                        : "-translate-x-full sm:translate-x-0", "transition-transform duration-300 ease-in-out", className), role: "navigation", "aria-label": "Main navigation", "aria-hidden": !mobileOpen ? "true" : undefined, onKeyDown: handleKeyDown, ...props, children: children })] }));
-    }
-    return (jsx("nav", { ref: ref, className: cn(sidebarMenuVariants({ size, mobile }), className), role: "navigation", "aria-label": "Main navigation", ...props, children: children }));
-});
-SidebarMenu.displayName = "SidebarMenu";
-const SidebarToggle = React.forwardRef(({ className, open, onToggle, ...props }, ref) => {
-    return (jsx("button", { ref: ref, onClick: () => onToggle(!open), className: cn("sm:hidden p-2 rounded-md text-[var(--color-text-body)]", "hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)]", "focus-visible:outline-none focus-visible:bg-[var(--color-focus-500)]", "focus-visible:text-[var(--color-navy-500)]", className), "aria-label": open ? "Close navigation menu" : "Open navigation menu", "aria-expanded": open, ...props, children: jsx("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", "aria-hidden": "true", children: open ? (jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" })) : (jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 6h16M4 12h16M4 18h16" })) }) }));
-});
-SidebarToggle.displayName = "SidebarToggle";
-
-// packages/components/src/ui/sidebar-profile.tsx
-const sidebarProfileVariants = cva([
-    "flex flex-col p-4 border-b border-[var(--color-border)]",
-    "bg-[var(--color-surface-subtle)]",
-]);
-const SidebarProfile = React.forwardRef(({ className, user, onSwitchEntity, ...props }, ref) => {
-    return (jsxs("div", { ref: ref, className: cn(sidebarProfileVariants(), className), ...props, children: [jsxs("div", { className: "flex items-start gap-3 mb-3", children: [jsx("div", { className: "flex-shrink-0 mt-1", children: jsx("div", { className: "w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center", children: jsx(User, { className: "w-4 h-4 text-[var(--color-white)]" }) }) }), jsxs("div", { className: "flex-1 min-w-0", children: [jsx("h3", { className: "text-sm font-semibold text-[var(--color-text-heading)] truncate", children: user.entity.name }), jsx("p", { className: "text-sm text-[var(--color-text-body)] truncate", children: user.contact.name }), jsx("p", { className: "text-xs text-[var(--color-text-muted)] truncate", children: user.contact.role })] })] }), onSwitchEntity && (jsx(Button, { variant: "ghost", size: "sm", onClick: onSwitchEntity, leftIcon: jsx(ArrowUpDown, { className: "w-4 h-4" }), className: "justify-start text-[var(--color-text-link)] hover:text-[var(--color-text-link-hover)]", children: "Switch Entity" }))] }));
-});
-SidebarProfile.displayName = "SidebarProfile";
-
-// packages/components/src/ui/sidebar-menu-item.tsx
+// 🎯 Sidebar Menu Item Variants
 const sidebarMenuItemVariants = cva([
     "flex items-center gap-3 px-4 py-3 w-full text-left",
     "text-sm font-medium transition-colors duration-150",
-    "hover:bg-[var(--color-navy-200)] hover:text-[var(--color-navy-600)]",
+    "rounded-md", // Added rounded corners for consistency
+    "hover:bg-[var(--color-navy-200,#e0e7ff)] hover:text-[var(--color-navy-600,#1e40af)]",
     "focus-visible:outline-none",
-    "focus-visible:bg-[var(--color-focus-500)] focus-visible:text-[var(--color-navy-500)]",
+    "focus-visible:bg-[var(--color-focus-500,#3b82f6)] focus-visible:text-[var(--color-navy-500,#1e40af)]",
     "disabled:opacity-50 disabled:pointer-events-none",
-    // Enhanced accessibility states
-    "focus:ring-2 focus:ring-[var(--color-border-focus)] focus:ring-offset-1",
-    "focus:ring-offset-[var(--color-surface)]",
-    // Added border radius for softer appearance
-    "rounded-[var(--radius-md)]",
-    // Improved text contrast
-    "group relative",
+    "focus:ring-2 focus:ring-[var(--color-focus-500,#3b82f6)] focus:ring-offset-2",
+    "aria-[current=page]:bg-[var(--color-navy-600,#1e40af)] aria-[current=page]:text-[var(--color-white,#ffffff)]",
+    "aria-[current=page]:font-semibold",
 ], {
     variants: {
         active: {
-            true: [
-                "bg-[var(--color-navy-500)]",
-                "text-[var(--color-white)]",
-                "font-semibold",
-                // Removed border-r-2 for seamless appearance
-            ].join(" "),
-            false: "text-[var(--color-text-body)]",
+            true: "bg-[var(--color-navy-600,#1e40af)] text-[var(--color-white,#ffffff)] font-semibold rounded-md",
+            false: "text-[var(--color-text-body,#374151)]",
         },
         size: {
-            sm: "px-3 py-2 text-xs gap-2",
-            md: "px-4 py-3 text-sm gap-3",
-            lg: "px-6 py-4 text-base gap-4",
+            sm: "px-3 py-2 text-xs rounded-md",
+            md: "px-4 py-3 text-sm rounded-md",
+            lg: "px-5 py-4 text-base rounded-md",
         },
     },
-    defaultVariants: {
-        active: false,
-        size: "md",
-    },
+    defaultVariants: { active: false, size: "md" },
 });
-const SidebarMenuItem = React.forwardRef(({ className, icon: Icon, children, href, active, size, badge, onNavigate, asChild = false, disabled, ...props }, ref) => {
+// 🎯 Sidebar Menu Section Root Variants (Accordion Root)
+const sidebarMenuSectionRootVariants = cva("w-full", {
+    variants: {},
+    defaultVariants: {},
+});
+// 🎯 Sidebar Menu Section Variants (Accordion Item)
+const sidebarMenuSectionVariants = cva("border-0 bg-transparent", {
+    variants: {},
+    defaultVariants: {},
+});
+// 🎯 Sidebar Menu Section Trigger Variants (Accordion Trigger)
+const sidebarMenuSectionTriggerVariants = cva([
+    "flex w-full items-center justify-between px-4 py-3",
+    "text-sm font-medium transition-colors duration-150",
+    "rounded-md", // Added rounded corners for consistency
+    "hover:bg-[var(--color-navy-100,#f1f5f9)] hover:text-[var(--color-navy-600,#1e40af)]",
+    "focus-visible:outline-none focus-visible:ring-2",
+    "focus-visible:ring-[var(--color-focus-500,#3b82f6)] focus-visible:ring-offset-2",
+    "text-[var(--color-text-heading,#111827)] group",
+    "[&[data-state=open]>svg]:rotate-180",
+], {
+    variants: {},
+    defaultVariants: {},
+});
+// 🎯 Sidebar Menu Section Content Variants (Accordion Content)
+const sidebarMenuSectionContentVariants = cva([
+    "overflow-hidden transition-all duration-200",
+    "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+    "bg-[var(--color-navy-100,#f1f5f9)]", // Subtle navy background for expanded sections
+], {
+    variants: {},
+    defaultVariants: {},
+});
+// 🎯 Sidebar Profile Variants
+const sidebarProfileVariants = cva([
+    "flex flex-col p-4 border-b border-[var(--color-border,#e5e7eb)]",
+    "bg-[var(--color-surface-subtle,#f8fafc)]",
+], {
+    variants: {},
+    defaultVariants: {},
+});
+// 🎯 Sidebar Business Logo Variants
+const sidebarBusinessLogoVariants$1 = cva([
+    "flex items-center gap-3 p-4 border-b border-[var(--color-border,#e5e7eb)]",
+    "bg-[var(--color-surface,#ffffff)]",
+], {
+    variants: {
+        clickable: {
+            true: "cursor-pointer hover:bg-[var(--color-surface-subtle,#f8fafc)] transition-colors",
+            false: "",
+        },
+    },
+    defaultVariants: { clickable: false },
+});
+// 🎯 Sidebar Toggle Variants (Mobile)
+const sidebarToggleVariants = cva([
+    "inline-flex items-center justify-center p-2 rounded-md",
+    "text-[var(--color-text-body,#374151)]",
+    "hover:bg-[var(--color-surface-subtle,#f8fafc)] hover:text-[var(--color-text-heading,#111827)]",
+    "focus:outline-none focus:ring-2 focus:ring-[var(--color-focus-500,#3b82f6)] focus:ring-offset-2",
+    "transition-colors duration-150",
+], {
+    variants: {
+        size: {
+            sm: "p-1",
+            md: "p-2",
+            lg: "p-3",
+        },
+    },
+    defaultVariants: { size: "md" },
+});
+// 🎯 Badge Variants (for notifications)
+const sidebarBadgeVariants = cva([
+    "flex-shrink-0 ml-auto px-1.5 py-0.5 text-xs font-medium rounded-full",
+    "bg-[var(--color-red-500,#ef4444)] text-[var(--color-white,#ffffff)]",
+], {
+    variants: {
+        size: {
+            sm: "text-xs px-1 py-0.5",
+            md: "text-xs px-1.5 py-0.5",
+            lg: "text-sm px-2 py-1",
+        },
+        variant: {
+            default: "bg-[var(--color-red-500,#ef4444)] text-[var(--color-white,#ffffff)]",
+            primary: "bg-[var(--color-primary-500,#1e40af)] text-[var(--color-white,#ffffff)]",
+            warning: "bg-[var(--color-warning-500,#f59e0b)] text-[var(--color-white,#ffffff)]",
+            success: "bg-[var(--color-success-500,#10b981)] text-[var(--color-white,#ffffff)]",
+        },
+    },
+    defaultVariants: { size: "md", variant: "default" },
+});
+/**
+ * 🎯 SHARED SIDEBAR LOGIC UTILITIES
+ */
+// Icon size utility based on component size
+const getSidebarIconSize = (size = "md") => {
+    const sizeMap = {
+        sm: "w-3 h-3",
+        md: "w-4 h-4",
+        lg: "w-5 h-5",
+    };
+    return sizeMap[size];
+};
+// Generate accessible label for menu items
+const getSidebarItemAriaLabel = (label, badge, active) => {
+    let ariaLabel = typeof label === "string" ? label : "";
+    if (badge) {
+        ariaLabel += `, ${badge} items pending`;
+    }
+    if (active) {
+        ariaLabel += ", current page";
+    }
+    return ariaLabel;
+};
+// Generate accessible label for menu sections
+const getSidebarSectionAriaLabel = (title, expanded, badge) => {
+    let label = `${title} section`;
+    if (badge) {
+        label += `, ${badge} items`;
+    }
+    label += expanded ? ", expanded" : ", collapsed";
+    return label;
+};
+/**
+ * 🎯 SIDEBAR NAVIGATION UTILITIES
+ */
+// Check if a menu item should be active based on current path
+const isSidebarItemActive = (itemHref, currentPath) => {
+    if (!itemHref || !currentPath)
+        return false;
+    // Exact match for root paths
+    if (itemHref === "/" && currentPath === "/")
+        return true;
+    if (itemHref === "/" && currentPath !== "/")
+        return false;
+    // Prefix match for sub-paths
+    return currentPath.startsWith(itemHref);
+};
+// Find which sections should be expanded based on current active item
+const getExpandedSectionsForPath = (navigationConfig, currentPath) => {
+    const expandedSections = [];
+    navigationConfig.sections?.forEach((section) => {
+        const hasActiveItem = section.items?.some((item) => isSidebarItemActive(item.href, currentPath));
+        if (hasActiveItem) {
+            expandedSections.push(section.id);
+        }
+    });
+    return expandedSections;
+};
+
+// 🎯 Main Sidebar Menu Container Component
+const SidebarMenu = React__default.forwardRef(({ className, size = "md", collapsed = false, onToggleCollapse, children, style, ...props }, ref) => {
+    // 🎯 Combine styles: Base + Variant + Custom
+    const combinedStyles = {
+        // Apply any additional inline styles if needed
+        ...style,
+    };
+    // Build final className using centralized utilities
+    const finalClassName = cn(sidebarVariants({ size }), 
+    // Handle collapsed state if implemented
+    collapsed && "w-16", // Collapsed width override
+    className);
+    return (jsx("div", { ...props, ref: ref, className: finalClassName, style: combinedStyles, role: "navigation", "aria-label": "Main navigation", children: children }));
+});
+SidebarMenu.displayName = "SidebarMenu";
+const SidebarToggle = React__default.forwardRef(({ className, open, onToggle, ...props }, ref) => {
+    const handleClick = () => {
+        onToggle(!open);
+    };
+    return (jsx("button", { ...props, ref: ref, onClick: handleClick, className: cn("inline-flex items-center justify-center p-2 rounded-md", "text-[var(--color-text-body,#374151)]", "hover:bg-[var(--color-surface-subtle,#f8fafc)] hover:text-[var(--color-text-heading,#111827)]", "focus:outline-none focus:ring-2 focus:ring-[var(--color-focus-500,#3b82f6)] focus:ring-offset-2", "transition-colors duration-150", className), "aria-label": open ? "Close navigation menu" : "Open navigation menu", "aria-expanded": open, children: jsx("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", "aria-hidden": "true", children: open ? (jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" })) : (jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 6h16M4 12h16M4 18h16" })) }) }));
+});
+SidebarToggle.displayName = "SidebarToggle";
+
+// 🎯 Sidebar Menu Item Component
+const SidebarMenuItem = React__default.forwardRef(({ className, icon: Icon, children, href, active = false, size = "md", badge, disabled = false, onNavigate, style, ...props }, ref) => {
+    // Handle click events
     const handleClick = (e) => {
         if (disabled)
             return;
@@ -9415,6 +10812,7 @@ const SidebarMenuItem = React.forwardRef(({ className, icon: Icon, children, hre
         }
         props.onClick?.(e);
     };
+    // Handle keyboard navigation
     const handleKeyDown = (e) => {
         if (disabled)
             return;
@@ -9425,154 +10823,30 @@ const SidebarMenuItem = React.forwardRef(({ className, icon: Icon, children, hre
         props.onKeyDown?.(e);
     };
     // Generate accessible label for screen readers
-    const getAriaLabel = () => {
-        let label = typeof children === "string" ? children : "";
-        if (badge) {
-            label += `, ${badge} items pending`;
-        }
-        if (active) {
-            label += ", current page";
-        }
-        return label;
+    const ariaLabel = getSidebarItemAriaLabel(typeof children === "string" ? children : "", badge, active);
+    // 🎯 Build content with icon, text, and badge
+    const content = (jsxs(Fragment, { children: [Icon && (jsx(Icon, { className: cn("flex-shrink-0", getSidebarIconSize(size || "md")), "aria-hidden": "true" })), jsx("span", { className: "truncate flex-1 min-w-0", children: children }), badge && (jsx("span", { className: cn(sidebarBadgeVariants({ size })), "aria-label": `${badge} pending items`, children: badge }))] }));
+    // 🎯 Combine styles: Base + Variant + Custom
+    const combinedStyles = {
+        // Apply any additional inline styles if needed
+        ...style,
     };
-    const content = (jsxs(Fragment, { children: [Icon && (jsx(Icon, { className: cn("flex-shrink-0", size === "sm" ? "w-3 h-3" : size === "lg" ? "w-5 h-5" : "w-4 h-4"), "aria-hidden": "true" })), jsx("span", { className: "truncate flex-1 min-w-0", children: children }), badge && (jsx("span", { className: cn("flex-shrink-0 ml-auto px-1.5 py-0.5 text-xs font-medium rounded-full", "bg-[var(--color-red-500)] text-[var(--color-white)]", size === "sm" ? "text-xs px-1 py-0.5" : "text-xs px-1.5 py-0.5"), "aria-label": `${badge} pending items`, children: badge }))] }));
+    // Common props for both button and anchor variants
     const commonProps = {
         className: cn(sidebarMenuItemVariants({ active, size }), className),
-        "aria-label": getAriaLabel(),
+        style: combinedStyles,
+        "aria-label": ariaLabel,
         "aria-current": active ? "page" : undefined,
         disabled,
     };
+    // 🎯 Render as anchor if href provided without onNavigate
     if (href && !onNavigate) {
         return (jsx("a", { ref: ref, href: href, ...commonProps, ...props, children: content }));
     }
+    // 🎯 Render as button (default)
     return (jsx("button", { ref: ref, onClick: handleClick, onKeyDown: handleKeyDown, ...commonProps, ...props, children: content }));
 });
 SidebarMenuItem.displayName = "SidebarMenuItem";
-
-function useStateMachine(initialState, machine) {
-  return React.useReducer((state, event) => {
-    const nextState = machine[state][event];
-    return nextState ?? state;
-  }, initialState);
-}
-
-// src/presence.tsx
-var Presence = (props) => {
-  const { present, children } = props;
-  const presence = usePresence(present);
-  const child = typeof children === "function" ? children({ present: presence.isPresent }) : React.Children.only(children);
-  const ref = useComposedRefs(presence.ref, getElementRef(child));
-  const forceMount = typeof children === "function";
-  return forceMount || presence.isPresent ? React.cloneElement(child, { ref }) : null;
-};
-Presence.displayName = "Presence";
-function usePresence(present) {
-  const [node, setNode] = React.useState();
-  const stylesRef = React.useRef(null);
-  const prevPresentRef = React.useRef(present);
-  const prevAnimationNameRef = React.useRef("none");
-  const initialState = present ? "mounted" : "unmounted";
-  const [state, send] = useStateMachine(initialState, {
-    mounted: {
-      UNMOUNT: "unmounted",
-      ANIMATION_OUT: "unmountSuspended"
-    },
-    unmountSuspended: {
-      MOUNT: "mounted",
-      ANIMATION_END: "unmounted"
-    },
-    unmounted: {
-      MOUNT: "mounted"
-    }
-  });
-  React.useEffect(() => {
-    const currentAnimationName = getAnimationName(stylesRef.current);
-    prevAnimationNameRef.current = state === "mounted" ? currentAnimationName : "none";
-  }, [state]);
-  useLayoutEffect2(() => {
-    const styles = stylesRef.current;
-    const wasPresent = prevPresentRef.current;
-    const hasPresentChanged = wasPresent !== present;
-    if (hasPresentChanged) {
-      const prevAnimationName = prevAnimationNameRef.current;
-      const currentAnimationName = getAnimationName(styles);
-      if (present) {
-        send("MOUNT");
-      } else if (currentAnimationName === "none" || styles?.display === "none") {
-        send("UNMOUNT");
-      } else {
-        const isAnimating = prevAnimationName !== currentAnimationName;
-        if (wasPresent && isAnimating) {
-          send("ANIMATION_OUT");
-        } else {
-          send("UNMOUNT");
-        }
-      }
-      prevPresentRef.current = present;
-    }
-  }, [present, send]);
-  useLayoutEffect2(() => {
-    if (node) {
-      let timeoutId;
-      const ownerWindow = node.ownerDocument.defaultView ?? window;
-      const handleAnimationEnd = (event) => {
-        const currentAnimationName = getAnimationName(stylesRef.current);
-        const isCurrentAnimation = currentAnimationName.includes(event.animationName);
-        if (event.target === node && isCurrentAnimation) {
-          send("ANIMATION_END");
-          if (!prevPresentRef.current) {
-            const currentFillMode = node.style.animationFillMode;
-            node.style.animationFillMode = "forwards";
-            timeoutId = ownerWindow.setTimeout(() => {
-              if (node.style.animationFillMode === "forwards") {
-                node.style.animationFillMode = currentFillMode;
-              }
-            });
-          }
-        }
-      };
-      const handleAnimationStart = (event) => {
-        if (event.target === node) {
-          prevAnimationNameRef.current = getAnimationName(stylesRef.current);
-        }
-      };
-      node.addEventListener("animationstart", handleAnimationStart);
-      node.addEventListener("animationcancel", handleAnimationEnd);
-      node.addEventListener("animationend", handleAnimationEnd);
-      return () => {
-        ownerWindow.clearTimeout(timeoutId);
-        node.removeEventListener("animationstart", handleAnimationStart);
-        node.removeEventListener("animationcancel", handleAnimationEnd);
-        node.removeEventListener("animationend", handleAnimationEnd);
-      };
-    } else {
-      send("ANIMATION_END");
-    }
-  }, [node, send]);
-  return {
-    isPresent: ["mounted", "unmountSuspended"].includes(state),
-    ref: React.useCallback((node2) => {
-      stylesRef.current = node2 ? getComputedStyle(node2) : null;
-      setNode(node2);
-    }, [])
-  };
-}
-function getAnimationName(styles) {
-  return styles?.animationName || "none";
-}
-function getElementRef(element) {
-  let getter = Object.getOwnPropertyDescriptor(element.props, "ref")?.get;
-  let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
-  if (mayWarn) {
-    return element.ref;
-  }
-  getter = Object.getOwnPropertyDescriptor(element, "ref")?.get;
-  mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
-  if (mayWarn) {
-    return element.props.ref;
-  }
-  return element.props.ref || element.ref;
-}
 
 var COLLAPSIBLE_NAME = "Collapsible";
 var [createCollapsibleContext, createCollapsibleScope] = createContextScope(COLLAPSIBLE_NAME);
@@ -9999,51 +11273,28 @@ var Header = AccordionHeader;
 var Trigger2 = AccordionTrigger;
 var Content2 = AccordionContent;
 
-// packages/components/src/ui/sidebar-menu-section.tsx
-const sidebarMenuSectionVariants = cva([
-    "border-b border-[var(--color-border-subtle)] last:border-b-0",
-]);
-const sidebarMenuSectionTriggerVariants = cva([
-    "flex items-center justify-between w-full px-4 py-3",
-    "text-sm font-semibold text-[var(--color-text-heading)]",
-    "hover:bg-[var(--color-accent)] transition-colors duration-150",
-    "focus-visible:outline-none",
-    "focus-visible:bg-[var(--color-focus-500)] focus-visible:text-[var(--color-navy-500)]",
-    "focus:ring-2 focus:ring-[var(--color-border-focus)] focus:ring-offset-1",
-    "focus:ring-offset-[var(--color-surface)]",
-    "group relative",
-    "min-h-[44px] sm:min-h-[40px]",
-    // Added Option A expanded state styling
-    "data-[state=open]:bg-[var(--color-navy-100)]",
-]);
-const sidebarMenuSectionContentVariants = cva([
-    "data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up",
-    "overflow-hidden",
-    // Option A: Expanded section gets navy-100 background
-    "data-[state=open]:bg-[var(--color-navy-100)]",
-]);
-// Component implementations
-const SidebarMenuSectionRoot = React.forwardRef(({ className, type = "multiple", collapsible = true, children, value, onValueChange, ...props }, ref) => {
-    if (type === "single") {
-        return (jsx(Root2, { ref: ref, type: "single", collapsible: collapsible, value: typeof value === "string" ? value : undefined, onValueChange: onValueChange, className: cn("w-full", className), ...props, children: children }));
-    }
-    return (jsx(Root2, { ref: ref, type: "multiple", value: Array.isArray(value) ? value : [], onValueChange: onValueChange, className: cn("w-full", className), ...props, children: children }));
+// 🎯 Sidebar Menu Section Root Component
+const SidebarMenuSectionRootComponent = React__default.forwardRef(({ className, children, value, onValueChange, ...props }, ref) => {
+    return (jsx(Root2, { ref: ref, className: cn(sidebarMenuSectionRootVariants(), className), type: "multiple", value: value, onValueChange: onValueChange, ...props, children: children }));
 });
-SidebarMenuSectionRoot.displayName = "SidebarMenuSectionRoot";
-const SidebarMenuSection = React.forwardRef(({ className, title, icon: Icon, children, value, expanded, onToggle, badge, }, ref) => {
+SidebarMenuSectionRootComponent.displayName = "SidebarMenuSectionRoot";
+// 🎯 Sidebar Menu Section Component (Accordion Item)
+const SidebarMenuSection = React__default.forwardRef(({ title, icon: Icon, children, value, className, expanded = false, onToggle, badge, ...props }, ref) => {
+    // Use title as value if not provided
     const sectionValue = value || title.toLowerCase().replace(/\s+/g, "-");
     // Generate accessible label for screen readers
     const getAriaLabel = () => {
-        let label = `${title} section`;
-        if (badge) {
-            label += `, ${badge} items`;
-        }
-        label += expanded ? ", expanded" : ", collapsed";
-        return label;
+        return getSidebarSectionAriaLabel(title, expanded, badge);
     };
-    return (jsxs(Item, { ref: ref, className: cn(sidebarMenuSectionVariants(), className), value: sectionValue, children: [jsx(Header, { children: jsxs(Trigger2, { className: cn(sidebarMenuSectionTriggerVariants()), onClick: () => onToggle?.(!expanded), "aria-label": getAriaLabel(), "aria-expanded": expanded, children: [jsxs("div", { className: "flex items-center gap-3 flex-1 min-w-0", children: [Icon && (jsx(Icon, { className: "w-4 h-4 flex-shrink-0", "aria-hidden": "true" })), jsx("span", { className: "truncate font-semibold", children: title }), badge && (jsx("span", { className: "flex-shrink-0 ml-auto px-1.5 py-0.5 text-xs font-medium rounded-full bg-[var(--color-red-500)] text-[var(--color-white)]", "aria-label": `${badge} items in ${title} section`, children: badge }))] }), jsx(ChevronDown, { className: "h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180", "aria-hidden": "true" })] }) }), jsx(Content2, { className: cn(sidebarMenuSectionContentVariants()), role: "region", "aria-labelledby": `section-${sectionValue}`, children: jsx("div", { className: "pt-1 pb-3 px-2", children: children }) })] }));
+    return (jsxs(Item, { ref: ref, className: cn(sidebarMenuSectionVariants(), className), value: sectionValue, ...props, children: [jsx(Header, { children: jsxs(Trigger2, { className: cn(sidebarMenuSectionTriggerVariants()), onClick: () => onToggle?.(!expanded), "aria-label": getAriaLabel(), "aria-expanded": expanded, children: [jsxs("div", { className: "flex items-center gap-3 flex-1 min-w-0", children: [Icon && (jsx(Icon, { className: "w-4 h-4 flex-shrink-0", "aria-hidden": "true" })), jsx("span", { className: "truncate font-semibold", children: title }), badge && (jsx("span", { className: cn(sidebarBadgeVariants()), "aria-label": `${badge} items in ${title} section`, children: badge }))] }), jsx(ChevronDown, { className: "h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180", "aria-hidden": "true" })] }) }), jsx(Content2, { className: cn(sidebarMenuSectionContentVariants()), role: "region", "aria-labelledby": `section-${sectionValue}`, children: jsx("div", { className: "pt-1 pb-3 px-2", children: children }) })] }));
 });
 SidebarMenuSection.displayName = "SidebarMenuSection";
+
+// 🎯 Sidebar Profile Component
+const SidebarProfile = React__default.forwardRef(({ className, user, onSwitchEntity, ...props }, ref) => {
+    return (jsxs("div", { ref: ref, className: cn(sidebarProfileVariants(), className), ...props, children: [jsxs("div", { className: "flex items-start gap-3 mb-3", children: [jsx("div", { className: "flex-shrink-0 mt-1", children: jsx("div", { className: "w-8 h-8 rounded-full bg-[var(--color-primary,#1e40af)] flex items-center justify-center", children: jsx(User, { className: "w-4 h-4 text-[var(--color-white,#ffffff)]" }) }) }), jsxs("div", { className: "flex-1 min-w-0", children: [jsx("h3", { className: "text-sm font-semibold text-[var(--color-text-heading,#111827)] truncate", children: user.entity.name }), jsx("p", { className: "text-sm text-[var(--color-text-body,#374151)] truncate", children: user.contact.name }), jsx("p", { className: "text-xs text-[var(--color-text-muted,#6b7280)] truncate", children: user.contact.role })] })] }), onSwitchEntity && (jsx(Button, { variant: "ghost", size: "sm", onClick: onSwitchEntity, leftIcon: jsx(ArrowUpDown, { className: "w-4 h-4" }), className: "justify-start text-[var(--color-text-link,#2563eb)] hover:text-[var(--color-text-link-hover,#1d4ed8)]", children: "Switch Entity" }))] }));
+});
+SidebarProfile.displayName = "SidebarProfile";
 
 // packages/components/src/ui/sidebar-business-logo.tsx
 const sidebarBusinessLogoVariants = cva([
@@ -10072,81 +11323,127 @@ const SidebarBusinessLogo = React.forwardRef(({ className, businessName = "Your 
 SidebarBusinessLogo.displayName = "SidebarBusinessLogo";
 
 // packages/components/src/ui/sidebar-navigation-utils.tsx
-// Hook for URL-based active state detection
-function useActiveNavigation(currentPath, matchMode = "startsWith") {
-    const isActive = React.useCallback((href) => {
-        if (!href || !currentPath)
-            return false;
-        if (matchMode === "exact") {
-            return currentPath === href;
-        }
-        return currentPath.startsWith(href);
-    }, [currentPath, matchMode]);
-    const findActiveItem = React.useCallback((config) => {
-        // Check standalone items
-        if (config.standalone) {
-            for (const item of config.standalone) {
-                if (isActive(item.href))
-                    return item.id;
+// 🎯 OPTIMAL ARCHITECTURE: Centralized Navigation State Management
+// Provides smart navigation state management for sidebar components.
+// 🎯 Navigation State Hook
+const useNavigationState = (navigationConfig, currentPath) => {
+    // Find active item based on current path
+    const findActiveItemId = () => {
+        // Check standalone items first
+        for (const item of navigationConfig.standalone || []) {
+            if (isSidebarItemActive(item.href, currentPath)) {
+                return item.id;
             }
         }
         // Check section items
-        for (const section of config.sections) {
+        for (const section of navigationConfig.sections) {
             for (const item of section.items) {
-                if (isActive(item.href))
+                if (isSidebarItemActive(item.href, currentPath)) {
                     return item.id;
-                // Check sub-items
-                if (item.subItems) {
-                    for (const subItem of item.subItems) {
-                        if (isActive(subItem.href))
-                            return subItem.id;
-                    }
                 }
             }
         }
         return null;
-    }, [isActive]);
-    return { isActive, findActiveItem };
-}
-// Hook for navigation state management
-function useNavigationState(config, currentPath) {
-    const { isActive, findActiveItem } = useActiveNavigation(currentPath);
-    const [expandedSections, setExpandedSections] = React.useState(() => {
-        // Auto-expand sections that contain active items
-        const expanded = [];
-        if (currentPath) {
-            config.sections.forEach((section) => {
-                const hasActiveItem = section.items.some((item) => isActive(item.href) ||
-                    item.subItems?.some((subItem) => isActive(subItem.href)));
-                if (hasActiveItem || section.defaultOpen) {
-                    expanded.push(section.id);
-                }
-            });
+    };
+    // State management
+    const [activeItemId, setActiveItemId] = useState(findActiveItemId());
+    const [expandedSections, setExpandedSections] = useState(getExpandedSectionsForPath(navigationConfig, currentPath));
+    // Update active item when path changes
+    useEffect(() => {
+        const newActiveItemId = findActiveItemId();
+        setActiveItemId(newActiveItemId);
+        // Auto-expand sections containing the active item
+        const newExpandedSections = getExpandedSectionsForPath(navigationConfig, currentPath);
+        setExpandedSections((prev) => {
+            // Merge with existing expanded sections to preserve user interactions
+            const merged = [...new Set([...prev, ...newExpandedSections])];
+            return merged;
+        });
+    }, [currentPath, navigationConfig]);
+    // Toggle section expansion
+    const toggleSection = (sectionId) => {
+        setExpandedSections((prev) => {
+            if (prev.includes(sectionId)) {
+                return prev.filter((id) => id !== sectionId);
+            }
+            else {
+                return [...prev, sectionId];
+            }
+        });
+    };
+    // Check if section is expanded
+    const isSectionExpanded = (sectionId) => {
+        return expandedSections.includes(sectionId);
+    };
+    // Get section by ID
+    const getSectionById = (sectionId) => {
+        return navigationConfig.sections.find((section) => section.id === sectionId);
+    };
+    // Get item by ID (from any section or standalone)
+    const getItemById = (itemId) => {
+        // Check standalone items
+        const standaloneItem = navigationConfig.standalone?.find((item) => item.id === itemId);
+        if (standaloneItem)
+            return standaloneItem;
+        // Check section items
+        for (const section of navigationConfig.sections) {
+            const item = section.items.find((item) => item.id === itemId);
+            if (item)
+                return item;
         }
-        else {
-            // Default open sections
-            config.sections.forEach((section) => {
-                if (section.defaultOpen) {
-                    expanded.push(section.id);
-                }
-            });
+        return undefined;
+    };
+    // Get all navigation items as flat array
+    const getAllItems = () => {
+        const items = [];
+        // Add standalone items
+        if (navigationConfig.standalone) {
+            items.push(...navigationConfig.standalone);
         }
-        return expanded;
-    });
-    const activeItemId = React.useMemo(() => findActiveItem(config), [config, findActiveItem]);
-    const toggleSection = React.useCallback((sectionId) => {
-        setExpandedSections((prev) => prev.includes(sectionId)
-            ? prev.filter((id) => id !== sectionId)
-            : [...prev, sectionId]);
-    }, []);
-    const isSectionExpanded = React.useCallback((sectionId) => expandedSections.includes(sectionId), [expandedSections]);
+        // Add section items
+        for (const section of navigationConfig.sections) {
+            items.push(...section.items);
+        }
+        return items;
+    };
     return {
         activeItemId,
         expandedSections,
         toggleSection,
         isSectionExpanded,
-        isActive,
+        getSectionById,
+        getItemById,
+        getAllItems,
+        setActiveItemId,
+        setExpandedSections,
     };
-}
+};
+// 🎯 Navigation Builder Utilities
+const createNavigationItem = (id, label, href, options) => ({
+    id,
+    label,
+    href,
+    icon: options?.icon,
+    badge: options?.badge,
+});
+const createNavigationSection = (id, title, items, options) => ({
+    id,
+    title,
+    items,
+    icon: options?.icon,
+    badge: options?.badge,
+});
+// 🎯 Navigation Analysis Utilities
+const getNavigationStats = (navigationConfig) => {
+    const standaloneCount = navigationConfig.standalone?.length || 0;
+    const sectionCount = navigationConfig.sections.length;
+    const totalItems = (navigationConfig.standalone?.length || 0) +
+        navigationConfig.sections.reduce((sum, section) => sum + section.items.length, 0);
+    return {
+        standaloneCount,
+        sectionCount,
+        totalItems,
+    };
+};
 
-export { Button, ColumnSortControls, DataTable, Input, Pagination, PaginationEllipsis, PaginationItem, PaginationNext, PaginationPrevious, PaginationResults, Select, SelectContent, SelectField, SelectGroup, SelectItem, SelectTrigger, SelectValue, SidebarBusinessLogo, SidebarMenu, SidebarMenuItem, SidebarMenuSection, SidebarMenuSectionRoot, SidebarProfile, SidebarToggle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, buttonBaseClasses as buttonVariants, cn, createDefaultRowActions, helperVariants, inputVariants, labelVariants, paginationItemVariants, paginationNavVariants, paginationResultsVariants, paginationVariants, selectTriggerVariants, sidebarBusinessLogoVariants, sidebarMenuItemVariants, sidebarMenuSectionContentVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionVariants, sidebarMenuVariants, sidebarProfileVariants, tableBodyVariants, tableCellVariants, tableHeadVariants, tableHeaderVariants, tableRowVariants, tableVariants, useActiveNavigation, useDataTable, useNavigationState };
+export { Button, Checkbox, CheckboxGroup, ColumnSortControls, DataTable, Input, Pagination, PaginationEllipsis, PaginationItem, PaginationNext, PaginationPrevious, PaginationResults, RadioGroup, RadioItem, Select, SelectContent, SelectField, SelectGroup, SelectItem, SelectTrigger, SelectValue, SidebarBusinessLogo, SidebarMenu, SidebarMenuItem, SidebarMenuSection, SidebarMenuSectionRootComponent as SidebarMenuSectionRoot, SidebarProfile, SidebarToggle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, buttonBaseClasses as buttonVariants, checkboxVariants, cn, createDefaultRowActions, createNavigationItem, createNavigationSection, fieldVariants, getExpandedSectionsForPath, getFormFieldAria, getFormFieldIds, getHelperContent, getHelperVariant, getNavigationStats, getSidebarIconSize, getSidebarItemAriaLabel, getSidebarSectionAriaLabel, hasValidationState, helperVariants, inputVariants, isSidebarItemActive, labelVariants, optionalVariants, paginationItemVariants, paginationNavVariants, paginationResultsVariants, paginationVariants, radioVariants, requiredVariants, selectTriggerVariants, sidebarBadgeVariants, sidebarBusinessLogoVariants$1 as sidebarBusinessLogoVariants, sidebarMenuItemVariants, sidebarMenuSectionContentVariants, sidebarMenuSectionRootVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionVariants, sidebarProfileVariants, sidebarToggleVariants, sidebarVariants, tableBodyVariants, tableCellVariants, tableHeadVariants, tableHeaderVariants, tableRowVariants, tableVariants, useDataTable, useNavigationState };

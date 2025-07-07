@@ -1,6 +1,5 @@
-import * as React from "react";
-import { type VariantProps } from "class-variance-authority";
-declare const sidebarProfileVariants: (props?: import("class-variance-authority/types").ClassProp | undefined) => string;
+import React from "react";
+import { sidebarProfileVariants } from "./sidebar";
 export interface SidebarProfileData {
     contact: {
         name: string;
@@ -11,7 +10,7 @@ export interface SidebarProfileData {
         id: string;
     };
 }
-export interface SidebarProfileProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof sidebarProfileVariants> {
+export interface SidebarProfileProps extends React.HTMLAttributes<HTMLDivElement> {
     user: SidebarProfileData;
     onSwitchEntity?: () => void;
 }

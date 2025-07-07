@@ -1,4 +1,9 @@
 import * as React from "react";
+import { type VariantProps } from "class-variance-authority";
+declare const dataTableVariants: (props?: ({
+    variant?: "default" | "elevated" | null | undefined;
+    size?: "sm" | "md" | "lg" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export interface DataTableColumn<TData = any> {
     key: string;
     header: string;
@@ -22,12 +27,16 @@ export interface DataTableToolbarAction {
     variant?: "primary" | "outline" | "ghost";
     className?: string;
 }
-export interface DataTableProps<TData = any> {
+export interface DataTableProps<TData = any> extends VariantProps<typeof dataTableVariants> {
     data: TData[];
     columns: DataTableColumn<TData>[];
     title?: string;
     description?: string;
     className?: string;
+    variant?: "default" | "elevated";
+    size?: "sm" | "md" | "lg";
+    containerClassName?: string;
+    style?: React.CSSProperties;
     searchable?: boolean;
     searchPlaceholder?: string;
     onSearch?: (query: string) => void;
@@ -69,6 +78,6 @@ declare function useDataTable<TData>(data: TData[], options?: {
     handleSortDirectionChange: (direction: "asc" | "desc") => void;
     handlePageChange: (page: number) => void;
 };
-export declare const DataTable: <TData>({ data, columns, title, description, className, searchable, searchPlaceholder, onSearch, defaultSort, onSort, pagination, rowActions, toolbarActions, footerActions, loading, emptyMessage, striped, hoverable, getRowKey, ...props }: DataTableProps<TData>) => import("react/jsx-runtime").JSX.Element;
+export declare const DataTable: <TData>({ data, columns, title, description, className, variant, size, containerClassName, style, searchable, searchPlaceholder, onSearch, defaultSort, onSort, pagination, rowActions, toolbarActions, footerActions, loading, emptyMessage, striped, hoverable, getRowKey, ...props }: DataTableProps<TData>) => import("react/jsx-runtime").JSX.Element;
 export declare const createDefaultRowActions: <TData>(onEdit?: (row: TData) => void, onDelete?: (row: TData) => void) => DataTableAction<TData>[];
 export { useDataTable };

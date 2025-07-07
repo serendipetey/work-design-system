@@ -1,51 +1,19 @@
 // packages/components/src/ui/sidebar-menu-item.tsx
-"use client";
+// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
+// This component uses centralized sidebar utilities for consistent styling.
 
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import React from "react";
+import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import {
+  sidebarMenuItemVariants,
+  sidebarBadgeVariants,
+  getSidebarIconSize,
+  getSidebarItemAriaLabel,
+} from "./sidebar";
 import { LucideIcon } from "lucide-react";
 
-const sidebarMenuItemVariants = cva(
-  [
-    "flex items-center gap-3 px-4 py-3 w-full text-left",
-    "text-sm font-medium transition-colors duration-150",
-    "hover:bg-[var(--color-navy-200)] hover:text-[var(--color-navy-600)]",
-    "focus-visible:outline-none",
-    "focus-visible:bg-[var(--color-focus-500)] focus-visible:text-[var(--color-navy-500)]",
-    "disabled:opacity-50 disabled:pointer-events-none",
-    // Enhanced accessibility states
-    "focus:ring-2 focus:ring-[var(--color-border-focus)] focus:ring-offset-1",
-    "focus:ring-offset-[var(--color-surface)]",
-    // Added border radius for softer appearance
-    "rounded-[var(--radius-md)]",
-    // Improved text contrast
-    "group relative",
-  ],
-  {
-    variants: {
-      active: {
-        true: [
-          "bg-[var(--color-navy-500)]",
-          "text-[var(--color-white)]",
-          "font-semibold",
-          // Removed border-r-2 for seamless appearance
-        ].join(" "),
-        false: "text-[var(--color-text-body)]",
-      },
-      size: {
-        sm: "px-3 py-2 text-xs gap-2",
-        md: "px-4 py-3 text-sm gap-3",
-        lg: "px-6 py-4 text-base gap-4",
-      },
-    },
-    defaultVariants: {
-      active: false,
-      size: "md",
-    },
-  }
-);
-
+// 🎯 TypeScript Interface
 export interface SidebarMenuItemProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof sidebarMenuItemVariants> {
@@ -54,11 +22,11 @@ export interface SidebarMenuItemProps
   href?: string;
   active?: boolean;
   badge?: string | number;
-  asChild?: boolean;
-  onNavigate?: (href: string) => void;
   disabled?: boolean;
+  onNavigate?: (href: string) => void;
 }
 
+// 🎯 Sidebar Menu Item Component
 const SidebarMenuItem = React.forwardRef<
   HTMLButtonElement,
   SidebarMenuItemProps
@@ -69,16 +37,17 @@ const SidebarMenuItem = React.forwardRef<
       icon: Icon,
       children,
       href,
-      active,
-      size,
+      active = false,
+      size = "md",
       badge,
+      disabled = false,
       onNavigate,
-      asChild = false,
-      disabled,
+      style,
       ...props
     },
     ref
   ) => {
+    // Handle click events
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (disabled) return;
 
@@ -89,6 +58,7 @@ const SidebarMenuItem = React.forwardRef<
       props.onClick?.(e);
     };
 
+    // Handle keyboard navigation
     const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
       if (disabled) return;
 
@@ -100,36 +70,25 @@ const SidebarMenuItem = React.forwardRef<
     };
 
     // Generate accessible label for screen readers
-    const getAriaLabel = () => {
-      let label = typeof children === "string" ? children : "";
-      if (badge) {
-        label += `, ${badge} items pending`;
-      }
-      if (active) {
-        label += ", current page";
-      }
-      return label;
-    };
+    const ariaLabel = getSidebarItemAriaLabel(
+      typeof children === "string" ? children : "",
+      badge,
+      active
+    );
 
+    // 🎯 Build content with icon, text, and badge
     const content = (
       <>
         {Icon && (
           <Icon
-            className={cn(
-              "flex-shrink-0",
-              size === "sm" ? "w-3 h-3" : size === "lg" ? "w-5 h-5" : "w-4 h-4"
-            )}
+            className={cn("flex-shrink-0", getSidebarIconSize(size || "md"))}
             aria-hidden="true"
           />
         )}
         <span className="truncate flex-1 min-w-0">{children}</span>
         {badge && (
           <span
-            className={cn(
-              "flex-shrink-0 ml-auto px-1.5 py-0.5 text-xs font-medium rounded-full",
-              "bg-[var(--color-red-500)] text-[var(--color-white)]",
-              size === "sm" ? "text-xs px-1 py-0.5" : "text-xs px-1.5 py-0.5"
-            )}
+            className={cn(sidebarBadgeVariants({ size }))}
             aria-label={`${badge} pending items`}
           >
             {badge}
@@ -138,13 +97,22 @@ const SidebarMenuItem = React.forwardRef<
       </>
     );
 
+    // 🎯 Combine styles: Base + Variant + Custom
+    const combinedStyles = {
+      // Apply any additional inline styles if needed
+      ...style,
+    };
+
+    // Common props for both button and anchor variants
     const commonProps = {
       className: cn(sidebarMenuItemVariants({ active, size }), className),
-      "aria-label": getAriaLabel(),
+      style: combinedStyles,
+      "aria-label": ariaLabel,
       "aria-current": active ? ("page" as const) : undefined,
       disabled,
     };
 
+    // 🎯 Render as anchor if href provided without onNavigate
     if (href && !onNavigate) {
       return (
         <a
@@ -158,6 +126,7 @@ const SidebarMenuItem = React.forwardRef<
       );
     }
 
+    // 🎯 Render as button (default)
     return (
       <button
         ref={ref}
@@ -171,6 +140,7 @@ const SidebarMenuItem = React.forwardRef<
     );
   }
 );
+
 SidebarMenuItem.displayName = "SidebarMenuItem";
 
 export { SidebarMenuItem, sidebarMenuItemVariants };
