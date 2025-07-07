@@ -1,9 +1,54 @@
-// File: packages/components/src/ui/table.tsx
+// packages/components/src/ui/table.tsx
+// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
+
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// Table variants following existing design token patterns
+// 🎯 Design Tokens + Robust Fallbacks Architecture
+const tableStyles = {
+  base: {
+    fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+    backgroundColor: "var(--color-surface, #ffffff)",
+    color: "var(--color-text-body, #374151)",
+    borderColor: "var(--color-border, #d1d5db)",
+  },
+  variants: {
+    default: {
+      backgroundColor: "var(--color-surface, #ffffff)",
+      borderColor: "var(--color-border, #d1d5db)",
+    },
+    striped: {
+      backgroundColor: "var(--color-surface, #ffffff)",
+      borderColor: "var(--color-border, #d1d5db)",
+    },
+    minimal: {
+      backgroundColor: "var(--color-surface, #ffffff)",
+      borderColor: "transparent",
+    },
+  },
+  sizes: {
+    sm: { fontSize: "var(--font-size-xs, 12px)" },
+    md: { fontSize: "var(--font-size-sm, 14px)" },
+    lg: { fontSize: "var(--font-size-base, 16px)" },
+  },
+  header: {
+    backgroundColor: "var(--color-surface-subtle, #f9fafb)",
+    borderColor: "var(--color-border, #d1d5db)",
+    color: "var(--color-text-heading, #1f2937)",
+  },
+  cell: {
+    color: "var(--color-text-body, #374151)",
+  },
+  interactions: {
+    hover: "var(--color-gray-100, #f3f4f6)",
+    selected: "var(--color-primary-50, #eff6ff)",
+    stripedRow: "var(--color-gray-50, #f9fafb)",
+    stripedHover: "var(--color-gray-200, #e5e7eb)",
+  },
+};
+
+// Table variants with design tokens + fallbacks
 const tableVariants = cva(
   ["w-full caption-bottom text-sm", "border-collapse border-spacing-0"].join(
     " "
@@ -11,8 +56,8 @@ const tableVariants = cva(
   {
     variants: {
       variant: {
-        default: "border border-[var(--color-border)]",
-        striped: "border border-[var(--color-border)]", // Add striped variant
+        default: "border border-[var(--color-border, #d1d5db)]",
+        striped: "border border-[var(--color-border, #d1d5db)]",
         minimal: "border-0",
       },
       size: {
@@ -29,9 +74,10 @@ const tableVariants = cva(
 );
 
 const tableHeaderVariants = cva(
-  ["border-b border-[var(--color-border)]", "bg-[var(--color-gray-50)]"].join(
-    " "
-  )
+  [
+    "border-b border-[var(--color-border, #d1d5db)]",
+    "bg-[var(--color-surface-subtle, #f9fafb)]",
+  ].join(" ")
 );
 
 const tableBodyVariants = cva("");
@@ -39,20 +85,19 @@ const tableBodyVariants = cva("");
 const tableRowVariants = cva(
   [
     "transition-colors duration-150",
-    "border-b border-[var(--color-border)] last:border-0",
+    "border-b border-[var(--color-border, #d1d5db)] last:border-0",
   ].join(" "),
   {
     variants: {
       variant: {
-        default: [
-          "hover:bg-[var(--color-accent)]", // Fixed: use existing accent token
-          "data-[state=selected]:bg-[var(--color-primary-50)]",
-        ].join(" "),
+        default: ["hover:bg-gray-100", "data-[state=selected]:bg-blue-50"].join(
+          " "
+        ),
         striped: [
-          "even:bg-[var(--color-surface-subtle)]", // Fixed: use existing token for stripes
-          "hover:bg-[var(--color-accent)]", // Standard hover
-          "even:hover:bg-[var(--color-gray-200)]", // Darker hover for striped rows
-          "data-[state=selected]:bg-[var(--color-primary-50)]",
+          "even:bg-gray-50",
+          "hover:bg-gray-100",
+          "even:hover:bg-gray-200",
+          "data-[state=selected]:bg-blue-50",
         ].join(" "),
       },
     },
@@ -65,7 +110,7 @@ const tableRowVariants = cva(
 const tableHeadVariants = cva(
   [
     "h-12 px-4 text-left align-middle",
-    "font-medium text-[var(--color-navy-500)]",
+    "font-medium text-[var(--color-text-heading, #1f2937)]",
     "text-sm font-semibold",
     "[&:has([role=checkbox])]:pr-0",
   ].join(" "),
@@ -74,8 +119,10 @@ const tableHeadVariants = cva(
       sortable: {
         true: [
           "cursor-pointer select-none",
-          "hover:text-[var(--color-navy-600)]",
-          "transition-colors duration-150",
+          "hover:text-blue-600",
+          "hover:bg-gray-100",
+          "transition-all duration-150",
+          "active:bg-gray-200",
         ].join(" "),
         false: "",
       },
@@ -89,7 +136,7 @@ const tableHeadVariants = cva(
 const tableCellVariants = cva(
   [
     "px-4 py-3 align-middle",
-    "text-[var(--color-charcoal-500)]",
+    "text-[var(--color-text-body, #374151)]",
     "[&:has([role=checkbox])]:pr-0",
   ].join(" "),
   {
@@ -134,28 +181,47 @@ export interface TableCellProps
   extends React.TdHTMLAttributes<HTMLTableCellElement>,
     VariantProps<typeof tableCellVariants> {}
 
-// Table Components
+// 🎯 Table Components with Token + Fallback Architecture
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
-  ({ className, variant, size, ...props }, ref) => (
-    <div className="relative w-full overflow-auto">
-      <table
-        ref={ref}
-        className={cn(tableVariants({ variant, size }), className)}
-        {...props}
-      />
-    </div>
-  )
+  ({ className, variant = "default", size = "md", style, ...props }, ref) => {
+    // 🎯 Combine styles: Base + Variant + Size + Custom
+    const combinedStyles = {
+      ...tableStyles.base,
+      ...(variant && tableStyles.variants[variant]),
+      ...(size && tableStyles.sizes[size]),
+      ...style, // Allow style overrides
+    };
+
+    return (
+      <div className="w-full overflow-x-auto">
+        <table
+          ref={ref}
+          className={cn(tableVariants({ variant, size }), className)}
+          style={combinedStyles}
+          {...props}
+        />
+      </div>
+    );
+  }
 );
 Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(
-  ({ className, ...props }, ref) => (
-    <thead
-      ref={ref}
-      className={cn(tableHeaderVariants(), className)}
-      {...props}
-    />
-  )
+  ({ className, style, ...props }, ref) => {
+    const combinedStyles = {
+      ...tableStyles.header,
+      ...style,
+    };
+
+    return (
+      <thead
+        ref={ref}
+        className={cn(tableHeaderVariants(), className)}
+        style={combinedStyles}
+        {...props}
+      />
+    );
+  }
 );
 TableHeader.displayName = "TableHeader";
 
@@ -171,7 +237,7 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
 TableBody.displayName = "TableBody";
 
 const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
-  ({ className, variant, ...props }, ref) => (
+  ({ className, variant = "default", ...props }, ref) => (
     <tr
       ref={ref}
       className={cn(tableRowVariants({ variant }), className)}
@@ -182,11 +248,28 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
 TableRow.displayName = "TableRow";
 
 const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
-  ({ className, sortable, sortDirection, onSort, children, ...props }, ref) => {
+  (
+    {
+      className,
+      sortable = false,
+      sortDirection,
+      onSort,
+      children,
+      style,
+      ...props
+    },
+    ref
+  ) => {
     const handleSort = () => {
       if (sortable && onSort) {
         onSort();
       }
+    };
+
+    const combinedStyles = {
+      ...tableStyles.cell,
+      color: tableStyles.header.color,
+      ...style,
     };
 
     return (
@@ -194,6 +277,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
         ref={ref}
         className={cn(tableHeadVariants({ sortable }), className)}
         onClick={handleSort}
+        style={combinedStyles}
         {...props}
       >
         <div className="flex items-center space-x-2">
@@ -205,7 +289,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
                 height="16"
                 viewBox="0 0 16 16"
                 className={cn(
-                  "fill-[var(--color-navy-500)] transition-transform duration-150",
+                  "fill-[var(--color-text-heading, #1f2937)] transition-transform duration-150",
                   sortDirection === "desc" ? "rotate-180" : "rotate-0",
                   !sortDirection && "opacity-40"
                 )}
@@ -222,13 +306,21 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
-  ({ className, size, ...props }, ref) => (
-    <td
-      ref={ref}
-      className={cn(tableCellVariants({ size }), className)}
-      {...props}
-    />
-  )
+  ({ className, size = "md", style, ...props }, ref) => {
+    const combinedStyles = {
+      color: tableStyles.cell.color,
+      ...style,
+    };
+
+    return (
+      <td
+        ref={ref}
+        className={cn(tableCellVariants({ size }), className)}
+        style={combinedStyles}
+        {...props}
+      />
+    );
+  }
 );
 TableCell.displayName = "TableCell";
 
