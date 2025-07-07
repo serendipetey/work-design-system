@@ -1,0 +1,19 @@
+/* packages/tokens/src/components/select.css */
+/* SIMPLE - Follow same pattern as button/input */
+
+:root {
+  /* Select inherits ALL input styling - no duplication */
+  /* Only add dropdown-specific tokens that don't exist */
+
+  /* Dropdown Content - FIXED: Ensure solid background */
+  --select-content-bg: var(--color-surface); /* Solid white background */
+  --select-content-border: var(--color-border);
+  --select-content-shadow: var(--shadow-lg);
+
+  /* Option States (minimal additions) */
+  /* PROPER: Use semantic accent token */
+  --select-item-bg-hover: var(--color-accent); /* Uses semantic accent token */
+  /* IMPROVED: Subtle selected state for better accessibility */
+  --select-item-bg-selected: var(--color-navy-200); /* Light navy background */
+  --select-item-text-selected: var(--color-navy-600); /* Dark navy text */
+}
