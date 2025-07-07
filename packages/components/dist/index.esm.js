@@ -10606,18 +10606,26 @@ const sidebarMenuItemVariants = cva([
     "flex items-center gap-3 px-4 py-3 w-full text-left",
     "text-sm font-medium transition-colors duration-150",
     "rounded-md", // Added rounded corners for consistency
-    "hover:bg-[var(--color-navy-200,#e0e7ff)] hover:text-[var(--color-navy-600,#1e40af)]",
     "focus-visible:outline-none",
-    "focus-visible:bg-[var(--color-focus-500,#3b82f6)] focus-visible:text-[var(--color-navy-500,#1e40af)]",
     "disabled:opacity-50 disabled:pointer-events-none",
-    "focus:ring-2 focus:ring-[var(--color-focus-500,#3b82f6)] focus:ring-offset-2",
-    "aria-[current=page]:bg-[var(--color-navy-600,#1e40af)] aria-[current=page]:text-[var(--color-white,#ffffff)]",
-    "aria-[current=page]:font-semibold",
 ], {
     variants: {
         active: {
-            true: "bg-[var(--color-navy-600,#1e40af)] text-[var(--color-white,#ffffff)] font-semibold rounded-md",
-            false: "text-[var(--color-text-body,#374151)]",
+            true: [
+                "bg-[var(--color-navy-600,#1e40af)] text-[var(--color-white,#ffffff)] font-semibold",
+                "hover:bg-[var(--color-navy-600,#1e40af)] hover:text-[var(--color-white,#ffffff)]", // Keep same color on hover
+                "!focus-visible:bg-[var(--color-navy-600,#1e40af)] !focus-visible:text-[var(--color-white,#ffffff)]",
+                "focus-visible:border-b-[3px] focus-visible:border-b-orange-500",
+                "focus-visible:rounded-b-none",
+            ],
+            false: [
+                "text-[var(--color-text-body,#374151)]",
+                "hover:bg-[var(--color-navy-200,#e0e7ff)] hover:text-[var(--color-navy-600,#1e40af)]", // Light blue hover for inactive
+                "focus-visible:bg-[var(--button-unified-focus-bg,var(--color-focus-500,#ff9900))]",
+                "focus-visible:text-[var(--button-unified-focus-text,var(--color-navy-500,#0e3a6c))]",
+                "focus-visible:border-b-[3px] focus-visible:border-b-blue-600",
+                "focus-visible:rounded-b-none",
+            ],
         },
         size: {
             sm: "px-3 py-2 text-xs rounded-md",
@@ -10641,10 +10649,13 @@ const sidebarMenuSectionVariants = cva("border-0 bg-transparent", {
 const sidebarMenuSectionTriggerVariants = cva([
     "flex w-full items-center justify-between px-4 py-3",
     "text-sm font-medium transition-colors duration-150",
-    "rounded-md", // Added rounded corners for consistency
+    "rounded-md",
     "hover:bg-[var(--color-navy-100,#f1f5f9)] hover:text-[var(--color-navy-600,#1e40af)]",
-    "focus-visible:outline-none focus-visible:ring-2",
-    "focus-visible:ring-[var(--color-focus-500,#3b82f6)] focus-visible:ring-offset-2",
+    "data-[state=open]:bg-[var(--color-navy-200,#e0e7ff)] data-[state=open]:text-[var(--color-navy-700,#07203c)]", // ← ADD THIS LINE
+    "focus-visible:outline-none",
+    "focus-visible:bg-[var(--button-unified-focus-bg,var(--color-focus-500,#ff9900))] focus-visible:text-[var(--button-unified-focus-text,var(--color-navy-500,#0e3a6c))]",
+    "focus-visible:border focus-visible:border-transparent focus-visible:border-b-[3px] focus-visible:border-b-[var(--button-unified-focus-border,var(--color-navy-500,#0e3a6c))]",
+    "focus-visible:rounded-b-none",
     "text-[var(--color-text-heading,#111827)] group",
     "[&[data-state=open]>svg]:rotate-180",
 ], {
@@ -10669,7 +10680,7 @@ const sidebarProfileVariants = cva([
     defaultVariants: {},
 });
 // 🎯 Sidebar Business Logo Variants
-const sidebarBusinessLogoVariants$1 = cva([
+const sidebarBusinessLogoVariants = cva([
     "flex items-center gap-3 p-4 border-b border-[var(--color-border,#e5e7eb)]",
     "bg-[var(--color-surface,#ffffff)]",
 ], {
@@ -11297,28 +11308,159 @@ const SidebarProfile = React__default.forwardRef(({ className, user, onSwitchEnt
 SidebarProfile.displayName = "SidebarProfile";
 
 // packages/components/src/ui/sidebar-business-logo.tsx
-const sidebarBusinessLogoVariants = cva([
-    "flex items-center justify-center p-6",
-    "border-b border-[var(--color-border)]",
-    "bg-[var(--color-surface)]",
-]);
-const SidebarBusinessLogo = React.forwardRef(({ className, businessName = "Your Business", logoUrl, width = 120, height = 40, onClick, ...props }, ref) => {
-    const isClickable = !!onClick;
-    const logoContent = logoUrl ? (jsx("img", { src: logoUrl, alt: `${businessName} logo`, width: width, height: height, className: "max-w-full h-auto object-contain", style: { maxHeight: height } })) : (
-    // Placeholder when no logo provided
-    jsxs("div", { className: "flex items-center gap-3", children: [jsx("div", { className: "w-8 h-8 rounded bg-[var(--color-navy-500)] flex items-center justify-center", children: jsx(Building2, { className: "w-5 h-5 text-[var(--color-white)]" }) }), jsx("span", { className: "text-lg font-bold text-[var(--color-navy-500)] truncate max-w-[140px]", children: businessName })] }));
-    const commonClassName = cn(sidebarBusinessLogoVariants(), isClickable && [
-        "cursor-pointer",
-        "hover:bg-[var(--color-navy-100)]",
-        "transition-colors duration-150",
-        "focus-visible:outline-none",
-        "focus:ring-2 focus:ring-[var(--color-border-focus)] focus:ring-offset-1",
-        "focus:ring-offset-[var(--color-surface)]",
-    ], className);
-    if (isClickable) {
-        return (jsx("button", { ref: ref, onClick: onClick, "aria-label": `${businessName} home`, className: commonClassName, ...props, children: logoContent }));
+// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
+// This component uses CSS custom properties from the design token system
+// with reliable fallback values for maximum compatibility and maintainability.
+// Pattern: var(--design-token-name, fallback-value)
+// 🎯 Design Tokens + Robust Fallbacks Architecture
+// Note: Base layout/spacing comes from centralized CVA in sidebar.tsx
+// These styles add design token fallbacks and component-specific styling
+const sidebarBusinessLogoStyles = {
+    // Additional container styles (beyond CVA)
+    base: {
+        // Ensure proper justification for logo content
+        justifyContent: "center",
+        // Transitions (complement CVA transition-colors)
+        transition: "var(--transition-base, all 200ms ease-in-out)",
+    },
+    // Clickable state styles (minimal, CVA handles most)
+    clickable: {
+        outline: "none",
+    },
+    // Logo image styles
+    logoImage: {
+        maxWidth: "100%",
+        height: "auto",
+        objectFit: "contain",
+    },
+    // Logo container when showing logo + text
+    logoWithTextContainer: {
+        display: "flex",
+        alignItems: "center",
+        gap: "var(--spacing-3, 12px)",
+        width: "100%",
+    },
+    // Logo image when shown with text
+    logoImageWithText: {
+        flexShrink: 0,
+        maxWidth: "var(--spacing-10, 40px)",
+        height: "auto",
+        objectFit: "contain",
+    },
+    // Text-only or text with logo styles
+    businessText: {
+        // Typography
+        fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+        fontSize: "var(--font-size-lg, 18px)",
+        fontWeight: "var(--font-weight-bold, 700)",
+        lineHeight: "var(--line-height-tight, 1.25)",
+        // Colors
+        color: "var(--color-navy-500, #1e3a8a)",
+        // Layout
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        maxWidth: "140px",
+    },
+    // Fallback icon container
+    fallbackIconContainer: {
+        display: "flex",
+        alignItems: "center",
+        gap: "var(--spacing-3, 12px)",
+    },
+    // Fallback icon styles
+    fallbackIcon: {
+        width: "var(--spacing-8, 32px)",
+        height: "var(--spacing-8, 32px)",
+        borderRadius: "var(--border-radius-md, 6px)",
+        backgroundColor: "var(--color-navy-500, #1e3a8a)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+    },
+    // Fallback icon SVG
+    fallbackIconSvg: {
+        width: "var(--spacing-5, 20px)",
+        height: "var(--spacing-5, 20px)",
+        color: "var(--color-white, #ffffff)",
+    },
+};
+// 🎯 Focus/Hover Styles with Design Tokens + Fallbacks
+// Note: CVA already handles basic hover styles, this adds focus states
+const injectInteractiveStyles = () => {
+    const styleId = "sidebar-business-logo-interactive";
+    // Remove existing styles
+    const existingStyle = document.getElementById(styleId);
+    if (existingStyle)
+        existingStyle.remove();
+    // Create new interactive styles (focus states only, CVA handles hover)
+    const style = document.createElement("style");
+    style.id = styleId;
+    style.textContent = `
+    .sidebar-business-logo-clickable:focus {
+      outline: 2px solid var(--color-border-focus, #3b82f6);
+      outline-offset: 1px;
     }
-    return (jsx("div", { ref: ref, className: commonClassName, ...props, children: logoContent }));
+    .sidebar-business-logo-clickable:focus-visible {
+      outline: 2px solid var(--color-border-focus, #3b82f6);
+      outline-offset: 1px;
+    }
+  `;
+    document.head.appendChild(style);
+};
+// 🎯 Main Component with Token + Fallback Architecture
+const SidebarBusinessLogo = React.forwardRef(({ className, businessName = "Your Business", logoUrl, width = 120, height = 40, onClick, showTextWithLogo = false, textOnly = false, style, ...props }, ref) => {
+    const elementRef = React.useRef(null);
+    const isClickable = !!onClick;
+    // Combine refs
+    React.useImperativeHandle(ref, () => elementRef.current);
+    // Inject interactive styles on mount
+    React.useEffect(() => {
+        if (elementRef.current && isClickable) {
+            injectInteractiveStyles();
+            elementRef.current.classList.add("sidebar-business-logo-clickable");
+        }
+    }, [isClickable]);
+    // 🎯 Combine styles: CVA + Design Tokens + Custom
+    // CVA handles base layout, spacing, borders, and basic hover
+    // Design tokens add fallbacks and component-specific styles
+    const combinedStyles = {
+        ...sidebarBusinessLogoStyles.base,
+        ...(isClickable ? sidebarBusinessLogoStyles.clickable : {}),
+        ...style, // Allow style overrides
+    };
+    // 🎯 Build logo content based on options
+    const renderLogoContent = () => {
+        // Text only mode
+        if (textOnly) {
+            return (jsx("span", { style: sidebarBusinessLogoStyles.businessText, children: businessName }));
+        }
+        // Logo with text
+        if (logoUrl && showTextWithLogo) {
+            return (jsxs("div", { style: sidebarBusinessLogoStyles.logoWithTextContainer, children: [jsx("img", { src: logoUrl, alt: `${businessName} logo`, width: 32, height: 32, style: {
+                            ...sidebarBusinessLogoStyles.logoImageWithText,
+                            maxHeight: 32,
+                        } }), jsx("span", { style: sidebarBusinessLogoStyles.businessText, children: businessName })] }));
+        }
+        // Logo only
+        if (logoUrl) {
+            return (jsx("img", { src: logoUrl, alt: `${businessName} logo`, width: width, height: height, style: {
+                    ...sidebarBusinessLogoStyles.logoImage,
+                    maxHeight: height,
+                } }));
+        }
+        // Fallback: Icon + text
+        return (jsxs("div", { style: sidebarBusinessLogoStyles.fallbackIconContainer, children: [jsx("div", { style: sidebarBusinessLogoStyles.fallbackIcon, children: jsx(Building2, { style: sidebarBusinessLogoStyles.fallbackIconSvg }) }), jsx("span", { style: sidebarBusinessLogoStyles.businessText, children: businessName })] }));
+    };
+    // Build final className using centralized CVA
+    const finalClassName = cn(sidebarBusinessLogoVariants({ clickable: isClickable }), className);
+    // 🎯 Render as button if clickable
+    if (isClickable) {
+        return (jsx("button", { ...props, ref: elementRef, onClick: onClick, "aria-label": `${businessName} home`, className: finalClassName, style: combinedStyles, children: renderLogoContent() }));
+    }
+    // 🎯 Render as div if not clickable
+    return (jsx("div", { ref: elementRef, className: finalClassName, style: combinedStyles, ...props, children: renderLogoContent() }));
 });
 SidebarBusinessLogo.displayName = "SidebarBusinessLogo";
 
@@ -11446,4 +11588,4 @@ const getNavigationStats = (navigationConfig) => {
     };
 };
 
-export { Button, Checkbox, CheckboxGroup, ColumnSortControls, DataTable, Input, Pagination, PaginationEllipsis, PaginationItem, PaginationNext, PaginationPrevious, PaginationResults, RadioGroup, RadioItem, Select, SelectContent, SelectField, SelectGroup, SelectItem, SelectTrigger, SelectValue, SidebarBusinessLogo, SidebarMenu, SidebarMenuItem, SidebarMenuSection, SidebarMenuSectionRootComponent as SidebarMenuSectionRoot, SidebarProfile, SidebarToggle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, buttonBaseClasses as buttonVariants, checkboxVariants, cn, createDefaultRowActions, createNavigationItem, createNavigationSection, fieldVariants, getExpandedSectionsForPath, getFormFieldAria, getFormFieldIds, getHelperContent, getHelperVariant, getNavigationStats, getSidebarIconSize, getSidebarItemAriaLabel, getSidebarSectionAriaLabel, hasValidationState, helperVariants, inputVariants, isSidebarItemActive, labelVariants, optionalVariants, paginationItemVariants, paginationNavVariants, paginationResultsVariants, paginationVariants, radioVariants, requiredVariants, selectTriggerVariants, sidebarBadgeVariants, sidebarBusinessLogoVariants$1 as sidebarBusinessLogoVariants, sidebarMenuItemVariants, sidebarMenuSectionContentVariants, sidebarMenuSectionRootVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionVariants, sidebarProfileVariants, sidebarToggleVariants, sidebarVariants, tableBodyVariants, tableCellVariants, tableHeadVariants, tableHeaderVariants, tableRowVariants, tableVariants, useDataTable, useNavigationState };
+export { Button, Checkbox, CheckboxGroup, ColumnSortControls, DataTable, Input, Pagination, PaginationEllipsis, PaginationItem, PaginationNext, PaginationPrevious, PaginationResults, RadioGroup, RadioItem, Select, SelectContent, SelectField, SelectGroup, SelectItem, SelectTrigger, SelectValue, SidebarBusinessLogo, SidebarMenu, SidebarMenuItem, SidebarMenuSection, SidebarMenuSectionRootComponent as SidebarMenuSectionRoot, SidebarProfile, SidebarToggle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, buttonBaseClasses as buttonVariants, checkboxVariants, cn, createDefaultRowActions, createNavigationItem, createNavigationSection, fieldVariants, getExpandedSectionsForPath, getFormFieldAria, getFormFieldIds, getHelperContent, getHelperVariant, getNavigationStats, getSidebarIconSize, getSidebarItemAriaLabel, getSidebarSectionAriaLabel, hasValidationState, helperVariants, inputVariants, isSidebarItemActive, labelVariants, optionalVariants, paginationItemVariants, paginationNavVariants, paginationResultsVariants, paginationVariants, radioVariants, requiredVariants, selectTriggerVariants, sidebarBadgeVariants, sidebarBusinessLogoVariants, sidebarMenuItemVariants, sidebarMenuSectionContentVariants, sidebarMenuSectionRootVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionVariants, sidebarProfileVariants, sidebarToggleVariants, sidebarVariants, tableBodyVariants, tableCellVariants, tableHeadVariants, tableHeaderVariants, tableRowVariants, tableVariants, useDataTable, useNavigationState };

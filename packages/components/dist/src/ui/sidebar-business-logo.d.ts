@@ -1,27 +1,16 @@
 import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
-declare const sidebarBusinessLogoVariants: (props?: import("class-variance-authority/types").ClassProp | undefined) => string;
-export interface SidebarBusinessLogoProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof sidebarBusinessLogoVariants> {
-    /**
-     * Business/company name for alt text and fallback
-     */
+import { sidebarBusinessLogoVariants } from "./sidebar";
+export interface SidebarBusinessLogoProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof sidebarBusinessLogoVariants> {
     businessName?: string;
-    /**
-     * Logo image URL - if not provided, shows placeholder
-     */
     logoUrl?: string;
-    /**
-     * Logo image width
-     */
     width?: number;
-    /**
-     * Logo image height
-     */
     height?: number;
-    /**
-     * Click handler for logo interaction (optional)
-     */
     onClick?: () => void;
+    showTextWithLogo?: boolean;
+    textOnly?: boolean;
+    containerClassName?: string;
 }
-declare const SidebarBusinessLogo: React.ForwardRefExoticComponent<SidebarBusinessLogoProps & React.RefAttributes<HTMLButtonElement | HTMLDivElement>>;
-export { SidebarBusinessLogo, sidebarBusinessLogoVariants };
+declare const SidebarBusinessLogo: React.ForwardRefExoticComponent<SidebarBusinessLogoProps & React.RefAttributes<HTMLElement>>;
+export { SidebarBusinessLogo };
+export default SidebarBusinessLogo;
