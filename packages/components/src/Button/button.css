@@ -261,9 +261,9 @@
 
 /* Icon-only buttons */
 [data-icon-only="true"] {
-  width: auto !important;
-  height: auto !important;
+  min-width: auto !important;
   aspect-ratio: 1 !important;
+  padding: var(--space-8) !important; /* Default fallback */
 }
 
 /* Icon-only button sizes using data attributes */

@@ -351,9 +351,33 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       createHoverCSS();
     }, []);
 
-    // 🎯 Updated: Pass disabled state to getButtonStyles
+    // Detect if this is an icon-only button
+    const isIconOnly = !children && (leftIcon || rightIcon);
+
+    // Get the base button styles
+    const baseButtonStyles = getButtonStyles(
+      variant || "primary",
+      size || "md",
+      isDisabled
+    );
+
+    // Icon-only padding overrides per your Figma specs
+    const iconOnlyPadding = {
+      sm: "8px",
+      md: "12px",
+      lg: "16px",
+      xl: "20px",
+    };
+
+    // 🎯 Updated: Override padding for icon-only buttons
     const combinedStyles = {
-      ...getButtonStyles(variant || "primary", size || "md", isDisabled),
+      ...baseButtonStyles,
+      ...(isIconOnly && {
+        paddingLeft: iconOnlyPadding[size || "md"],
+        paddingRight: iconOnlyPadding[size || "md"],
+        aspectRatio: "1",
+        minWidth: "auto",
+      }),
       ...style, // User styles take precedence
     };
 
@@ -367,6 +391,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         style={combinedStyles}
         data-variant={variant}
         data-size={size}
+        data-icon-only={isIconOnly ? "true" : undefined}
         ref={ref}
         disabled={isDisabled}
         {...props}
@@ -377,13 +402,23 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </span>
         )}
         {!loading && leftIcon && (
-          <span className="mr-2 inline-flex items-center justify-center">
+          <span
+            className={cn(
+              "inline-flex items-center justify-center",
+              !isIconOnly && "mr-2"
+            )}
+          >
             {leftIcon}
           </span>
         )}
         {children}
         {!loading && rightIcon && (
-          <span className="ml-2 inline-flex items-center justify-center">
+          <span
+            className={cn(
+              "inline-flex items-center justify-center",
+              !isIconOnly && "ml-2"
+            )}
+          >
             {rightIcon}
           </span>
         )}

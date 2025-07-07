@@ -598,6 +598,139 @@ export const WithIcons: Story = {
   },
 };
 
+// Icon-only button showcase
+export const IconOnly: Story = {
+  render: () => (
+    <div className="space-y-8 max-w-4xl">
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Icon-Only Buttons
+          </h3>
+          <p className="text-sm text-gray-600">
+            Compact icon-only buttons with optimized padding for table actions
+            and toolbars.
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          {/* All Sizes */}
+          <div className="space-y-4">
+            <h4 className="font-medium text-gray-700">
+              All Sizes (Same Icon, Different Padding)
+            </h4>
+            <div className="flex items-center gap-4">
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<PlusIcon />}
+                data-icon-only="true"
+                data-size="sm"
+                aria-label="Add small"
+              />
+              <Button
+                variant="primary"
+                size="md"
+                leftIcon={<PlusIcon />}
+                data-icon-only="true"
+                data-size="md"
+                aria-label="Add medium"
+              />
+              <Button
+                variant="primary"
+                size="lg"
+                leftIcon={<PlusIcon />}
+                data-icon-only="true"
+                data-size="lg"
+                aria-label="Add large"
+              />
+              <Button
+                variant="primary"
+                size="xl"
+                leftIcon={<PlusIcon />}
+                data-icon-only="true"
+                data-size="xl"
+                aria-label="Add extra large"
+              />
+            </div>
+            <p className="text-xs text-gray-500">
+              Padding: 8px, 12px, 16px, 20px
+            </p>
+          </div>
+
+          {/* Ghost Variant for Table Actions */}
+          <div className="space-y-4">
+            <h4 className="font-medium text-gray-700">
+              Table Action Buttons (Ghost Variant)
+            </h4>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                leftIcon={
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                  >
+                    <path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Z" />
+                  </svg>
+                }
+                data-icon-only="true"
+                data-size="sm"
+                aria-label="Edit"
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                leftIcon={
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                  >
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                    <path
+                      fillRule="evenodd"
+                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                    />
+                  </svg>
+                }
+                data-icon-only="true"
+                data-size="sm"
+                className="text-destructive hover:text-destructive"
+                aria-label="Delete"
+              />
+            </div>
+            <p className="text-xs text-gray-500">
+              Perfect for table action columns
+            </p>
+          </div>
+        </div>
+
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-700">
+            <strong>Technical Note:</strong> Icon-only buttons use{" "}
+            <code>data-icon-only="true"</code> and{" "}
+            <code>data-size="[size]"</code> attributes to apply optimized
+            padding values from your Figma specifications.
+          </p>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Icon-only buttons optimized for compact interfaces like table actions.",
+      },
+    },
+  },
+};
+
 // Individual variant stories for isolated testing
 export const Primary: Story = {
   args: {

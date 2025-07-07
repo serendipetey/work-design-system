@@ -2945,7 +2945,9 @@ const Button = React__namespace.forwardRef(({ className, variant, size, asChild 
         ...getButtonStyles(variant || "primary", size || "md", isDisabled),
         ...style, // User styles take precedence
     };
-    return (jsxRuntime.jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsxRuntime.jsx("span", { className: "mr-2", children: jsxRuntime.jsx(Spinner$1, {}) })), !loading && leftIcon && (jsxRuntime.jsx("span", { className: "mr-2 inline-flex items-center justify-center", children: leftIcon })), children, !loading && rightIcon && (jsxRuntime.jsx("span", { className: "ml-2 inline-flex items-center justify-center", children: rightIcon }))] }));
+    // Detect if this is an icon-only button
+    const isIconOnly = !children && (leftIcon || rightIcon);
+    return (jsxRuntime.jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, "data-icon-only": isIconOnly ? "true" : undefined, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsxRuntime.jsx("span", { className: "mr-2", children: jsxRuntime.jsx(Spinner$1, {}) })), !loading && leftIcon && (jsxRuntime.jsx("span", { className: "mr-2 inline-flex items-center justify-center", children: leftIcon })), children, !loading && rightIcon && (jsxRuntime.jsx("span", { className: "ml-2 inline-flex items-center justify-center", children: rightIcon }))] }));
 });
 Button.displayName = "Button";
 
@@ -8971,15 +8973,12 @@ const tableRowVariants = cva([
 ].join(" "), {
     variants: {
         variant: {
-            default: [
-                "hover:bg-[var(--color-accent, #f1f5f9)]",
-                "data-[state=selected]:bg-[var(--color-primary-50, #eff6ff)]",
-            ].join(" "),
+            default: ["hover:bg-gray-100", "data-[state=selected]:bg-blue-50"].join(" "),
             striped: [
-                "even:bg-[var(--color-surface-subtle, #f9fafb)]",
-                "hover:bg-[var(--color-accent, #f1f5f9)]",
-                "even:hover:bg-[var(--color-gray-200, #e5e7eb)]",
-                "data-[state=selected]:bg-[var(--color-primary-50, #eff6ff)]",
+                "even:bg-gray-50",
+                "hover:bg-gray-100",
+                "even:hover:bg-gray-200",
+                "data-[state=selected]:bg-blue-50",
             ].join(" "),
         },
     },
@@ -8997,8 +8996,10 @@ const tableHeadVariants = cva([
         sortable: {
             true: [
                 "cursor-pointer select-none",
-                "hover:text-[var(--color-primary-600, #2563eb)]",
-                "transition-colors duration-150",
+                "hover:text-blue-600",
+                "hover:bg-gray-100",
+                "transition-all duration-150",
+                "active:bg-gray-200",
             ].join(" "),
             false: "",
         },
@@ -9032,7 +9033,7 @@ const Table = React__namespace.forwardRef(({ className, variant = "default", siz
         ...(size && tableStyles.sizes[size]),
         ...style, // Allow style overrides
     };
-    return (jsxRuntime.jsx("div", { className: "relative w-full overflow-auto", children: jsxRuntime.jsx("table", { ref: ref, className: cn(tableVariants({ variant, size }), className), style: combinedStyles, ...props }) }));
+    return (jsxRuntime.jsx("div", { className: "w-full overflow-x-auto", children: jsxRuntime.jsx("table", { ref: ref, className: cn(tableVariants({ variant, size }), className), style: combinedStyles, ...props }) }));
 });
 Table.displayName = "Table";
 const TableHeader = React__namespace.forwardRef(({ className, style, ...props }, ref) => {
