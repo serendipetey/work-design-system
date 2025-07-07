@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Button } from "./button";
 import { Input } from "./input";
+import { cva, type VariantProps } from "class-variance-authority";
 import {
   Table,
   TableHeader,
@@ -13,6 +14,93 @@ import {
 import { Pagination } from "./pagination";
 import { ColumnSortControls } from "./column-sort-controls";
 import { cn } from "@/lib/utils";
+
+// 🎯 Design Tokens + Robust Fallbacks Architecture for DataTable
+const dataTableStyles = {
+  base: {
+    // Typography
+    fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
+
+    // Layout & Spacing
+    display: "flex" as const,
+    flexDirection: "column" as const,
+    gap: "var(--spacing-4, 16px)",
+
+    // Background & Borders
+    backgroundColor: "var(--color-surface, #ffffff)",
+    borderRadius: "var(--border-radius-lg, 8px)",
+
+    // Colors
+    color: "var(--color-text-body, #374151)",
+  },
+  variants: {
+    default: {
+      backgroundColor: "var(--color-surface, #ffffff)",
+    },
+    elevated: {
+      backgroundColor: "var(--color-surface, #ffffff)",
+      boxShadow: "var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05))",
+    },
+  },
+  container: {
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "var(--color-border, #d1d5db)",
+    borderRadius: "var(--border-radius-lg, 8px)",
+    overflow: "hidden",
+  },
+  emptyState: {
+    color: "var(--color-text-muted, #6b7280)",
+    textAlign: "center" as const,
+  },
+  loadingState: {
+    color: "var(--color-text-muted, #6b7280)",
+    textAlign: "center" as const,
+  },
+};
+
+// 🎯 DataTable CVA variants with design tokens
+const dataTableVariants = cva(
+  [
+    "w-full space-y-4",
+    "font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)]",
+  ].join(" "),
+  {
+    variants: {
+      variant: {
+        default: "bg-[var(--color-surface,#ffffff)]",
+        elevated: [
+          "bg-[var(--color-surface,#ffffff)]",
+          "shadow-[var(--shadow-sm,0_1px_2px_0_rgba(0,0,0,0.05))]",
+        ].join(" "),
+      },
+      size: {
+        sm: "text-sm space-y-3",
+        md: "text-sm space-y-4",
+        lg: "text-base space-y-5",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  }
+);
+
+const dataTableContainerVariants = cva(
+  [
+    "border border-[var(--color-border,#d1d5db)]",
+    "rounded-[var(--border-radius-lg,8px)]",
+    "overflow-hidden",
+  ].join(" ")
+);
+
+const dataTableEmptyStateVariants = cva(
+  [
+    "flex items-center justify-center h-64",
+    "text-[var(--color-text-muted,#6b7280)]",
+  ].join(" ")
+);
 
 // Default icons - replace with your icon system
 const SearchIcon = () => (
@@ -85,7 +173,8 @@ export interface DataTableToolbarAction {
   className?: string;
 }
 
-export interface DataTableProps<TData = any> {
+export interface DataTableProps<TData = any>
+  extends VariantProps<typeof dataTableVariants> {
   // Data
   data: TData[];
   columns: DataTableColumn<TData>[];
@@ -94,6 +183,14 @@ export interface DataTableProps<TData = any> {
   title?: string;
   description?: string;
   className?: string;
+
+  // Design system props
+  variant?: "default" | "elevated";
+  size?: "sm" | "md" | "lg";
+
+  // Styling overrides
+  containerClassName?: string;
+  style?: React.CSSProperties;
 
   // Search
   searchable?: boolean;
@@ -239,7 +336,11 @@ export const DataTable = <TData,>({
   title,
   description,
   className,
-  searchable = true,
+  variant = "default",
+  size = "md",
+  containerClassName,
+  style,
+  searchable = false,
   searchPlaceholder = "Search",
   onSearch,
   defaultSort,
@@ -291,7 +392,15 @@ export const DataTable = <TData,>({
   const hasSortableColumns = columns.some((col) => col.sortable);
 
   return (
-    <div className={cn("w-full space-y-6", className)} {...props}>
+    <div
+      className={cn(dataTableVariants({ variant, size }), className)}
+      style={{
+        ...dataTableStyles.base,
+        ...(variant && dataTableStyles.variants[variant]),
+        ...style,
+      }}
+      {...props}
+    >
       {/* Header */}
       {(title || description) && (
         <div className="space-y-2">
@@ -358,16 +467,23 @@ export const DataTable = <TData,>({
       )}
 
       {/* Table */}
-      <div className="border border-[var(--color-border)] rounded-lg overflow-hidden">
+      <div
+        className={cn(dataTableContainerVariants(), containerClassName)}
+        style={dataTableStyles.container}
+      >
         {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-[var(--color-charcoal-500)]">Loading...</div>
+          <div
+            className={dataTableEmptyStateVariants()}
+            style={dataTableStyles.loadingState}
+          >
+            Loading...
           </div>
         ) : paginatedData.length === 0 ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-[var(--color-charcoal-500)]">
-              {emptyMessage}
-            </div>
+          <div
+            className={dataTableEmptyStateVariants()}
+            style={dataTableStyles.emptyState}
+          >
+            {emptyMessage}
           </div>
         ) : (
           <Table variant={striped ? "striped" : "default"}>
@@ -415,14 +531,21 @@ export const DataTable = <TData,>({
                             key={actionIndex}
                             variant={action.variant || "ghost"}
                             size="sm"
+                            leftIcon={action.icon}
+                            data-icon-only="true"
+                            data-size="sm"
                             onClick={() => action.onClick(row, index)}
-                            className={action.className}
+                            className={cn(
+                              action.variant === "destructive" &&
+                                "text-[var(--color-red-600,#dc2626)] hover:text-[var(--color-red-700,#b91c1c)]",
+                              action.className
+                            )}
                             disabled={
                               action.disabled ? action.disabled(row) : false
                             }
                             aria-label={`${action.label} row ${index + 1}`}
                           >
-                            {action.icon || action.label}
+                            {!action.icon && action.label}
                           </Button>
                         ))}
                       </div>
