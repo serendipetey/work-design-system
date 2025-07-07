@@ -92,8 +92,9 @@ export const sidebarMenuSectionTriggerVariants = cva(
   [
     "flex w-full items-center justify-between px-4 py-3",
     "text-sm font-medium transition-colors duration-150",
-    "rounded-md", // Added rounded corners for consistency
+    "rounded-md",
     "hover:bg-[var(--color-navy-100,#f1f5f9)] hover:text-[var(--color-navy-600,#1e40af)]",
+    "data-[state=open]:bg-[var(--color-navy-200,#e0e7ff)] data-[state=open]:text-[var(--color-navy-700,#07203c)]", // ← ADD THIS LINE
     "focus-visible:outline-none",
     "focus-visible:bg-[var(--button-unified-focus-bg,var(--color-focus-500,#ff9900))] focus-visible:text-[var(--button-unified-focus-text,var(--color-navy-500,#0e3a6c))]",
     "focus-visible:border focus-visible:border-transparent focus-visible:border-b-[3px] focus-visible:border-b-[var(--button-unified-focus-border,var(--color-navy-500,#0e3a6c))]",
