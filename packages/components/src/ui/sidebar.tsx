@@ -45,17 +45,24 @@ export const sidebarMenuItemVariants = cva(
     "rounded-md", // Added rounded corners for consistency
     "hover:bg-[var(--color-navy-200,#e0e7ff)] hover:text-[var(--color-navy-600,#1e40af)]",
     "focus-visible:outline-none",
-    "focus-visible:bg-[var(--color-focus-500,#3b82f6)] focus-visible:text-[var(--color-navy-500,#1e40af)]",
     "disabled:opacity-50 disabled:pointer-events-none",
-    "focus:ring-2 focus:ring-[var(--color-focus-500,#3b82f6)] focus:ring-offset-2",
-    "aria-[current=page]:bg-[var(--color-navy-600,#1e40af)] aria-[current=page]:text-[var(--color-white,#ffffff)]",
-    "aria-[current=page]:font-semibold",
   ],
   {
     variants: {
       active: {
-        true: "bg-[var(--color-navy-600,#1e40af)] text-[var(--color-white,#ffffff)] font-semibold rounded-md",
-        false: "text-[var(--color-text-body,#374151)]",
+        true: [
+          "bg-[var(--color-navy-600,#1e40af)] text-[var(--color-white,#ffffff)] font-semibold",
+          "!focus-visible:bg-[var(--color-navy-600,#1e40af)] !focus-visible:text-[var(--color-white,#ffffff)]",
+          "focus-visible:border-b-[3px] focus-visible:border-b-orange-500",
+          "focus-visible:rounded-b-none",
+        ],
+        false: [
+          "text-[var(--color-text-body,#374151)]",
+          "focus-visible:bg-[var(--button-unified-focus-bg,var(--color-focus-500,#ff9900))]",
+          "focus-visible:text-[var(--button-unified-focus-text,var(--color-navy-500,#0e3a6c))]",
+          "focus-visible:border-b-[3px] focus-visible:border-b-blue-600",
+          "focus-visible:rounded-b-none",
+        ],
       },
       size: {
         sm: "px-3 py-2 text-xs rounded-md",
@@ -86,8 +93,10 @@ export const sidebarMenuSectionTriggerVariants = cva(
     "text-sm font-medium transition-colors duration-150",
     "rounded-md", // Added rounded corners for consistency
     "hover:bg-[var(--color-navy-100,#f1f5f9)] hover:text-[var(--color-navy-600,#1e40af)]",
-    "focus-visible:outline-none focus-visible:ring-2",
-    "focus-visible:ring-[var(--color-focus-500,#3b82f6)] focus-visible:ring-offset-2",
+    "focus-visible:outline-none",
+    "focus-visible:bg-[var(--button-unified-focus-bg,var(--color-focus-500,#ff9900))] focus-visible:text-[var(--button-unified-focus-text,var(--color-navy-500,#0e3a6c))]",
+    "focus-visible:border focus-visible:border-transparent focus-visible:border-b-[3px] focus-visible:border-b-[var(--button-unified-focus-border,var(--color-navy-500,#0e3a6c))]",
+    "focus-visible:rounded-b-none",
     "text-[var(--color-text-heading,#111827)] group",
     "[&[data-state=open]>svg]:rotate-180",
   ],
