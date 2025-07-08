@@ -11,21 +11,21 @@
  * ✅ Single place to update form styling
  * ✅ Maintains all existing design tokens
  */
-export declare const helperVariants: (props?: ({
-    variant?: "success" | "warning" | "default" | "error" | "muted" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export declare const labelVariants: (props?: ({
-    variant?: "disabled" | "default" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export declare const fieldVariants: (props?: ({
-    variant?: "default" | "compact" | "spacious" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export declare const requiredVariants: (props?: ({
-    variant?: "default" | "subtle" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export declare const optionalVariants: (props?: ({
-    variant?: "default" | "subtle" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+export declare const helperVariants: (props?: {
+    variant?: "default" | "success" | "warning" | "error" | "muted";
+} & import("class-variance-authority/types").ClassProp) => string;
+export declare const labelVariants: (props?: {
+    variant?: "default" | "disabled";
+} & import("class-variance-authority/types").ClassProp) => string;
+export declare const fieldVariants: (props?: {
+    variant?: "default" | "compact" | "spacious";
+} & import("class-variance-authority/types").ClassProp) => string;
+export declare const requiredVariants: (props?: {
+    variant?: "default" | "subtle";
+} & import("class-variance-authority/types").ClassProp) => string;
+export declare const optionalVariants: (props?: {
+    variant?: "default" | "subtle";
+} & import("class-variance-authority/types").ClassProp) => string;
 /**
  * 🎯 SHARED FORM LOGIC UTILITIES
  *
@@ -44,7 +44,6 @@ export declare const getFormFieldIds: (baseId: string) => {
  */
 export declare const hasValidationState: (error?: string | boolean, success?: string | boolean, warning?: string | boolean) => boolean;
 export declare const getFormFieldAria: (inputId: string, error?: string | boolean, success?: string | boolean, warning?: string | boolean, hintText?: string) => {
-    "aria-invalid": "true" | undefined;
-    "aria-describedby": string | undefined;
+    "aria-invalid": "true";
+    "aria-describedby": string;
 };
-//# sourceMappingURL=form.d.ts.map

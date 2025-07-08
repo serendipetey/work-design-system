@@ -2,14 +2,14 @@ import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { type VariantProps } from "class-variance-authority";
-declare const checkboxVariants: (props?: ({
-    variant?: "success" | "warning" | "default" | "error" | null | undefined;
-    size?: "sm" | "md" | "lg" | "xl" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-declare const radioVariants: (props?: ({
-    variant?: "success" | "warning" | "default" | "error" | null | undefined;
-    size?: "sm" | "md" | "lg" | "xl" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const checkboxVariants: (props?: {
+    variant?: "default" | "success" | "warning" | "error";
+    size?: "sm" | "md" | "lg" | "xl";
+} & import("class-variance-authority/types").ClassProp) => string;
+declare const radioVariants: (props?: {
+    variant?: "default" | "success" | "warning" | "error";
+    size?: "sm" | "md" | "lg" | "xl";
+} & import("class-variance-authority/types").ClassProp) => string;
 export interface CheckboxProps extends Omit<React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>, "checked">, VariantProps<typeof checkboxVariants> {
     variant?: "default" | "error" | "success" | "warning";
     size?: "sm" | "md" | "lg" | "xl";
@@ -62,4 +62,3 @@ declare const RadioGroup: React.ForwardRefExoticComponent<RadioGroupProps & Reac
 declare const RadioItem: React.ForwardRefExoticComponent<RadioItemProps & React.RefAttributes<HTMLButtonElement>>;
 declare const CheckboxGroup: React.ForwardRefExoticComponent<CheckboxGroupProps & React.RefAttributes<HTMLDivElement>>;
 export { Checkbox, RadioGroup, RadioItem, CheckboxGroup, checkboxVariants, radioVariants, };
-//# sourceMappingURL=checkbox.d.ts.map

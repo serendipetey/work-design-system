@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "build": "pnpm run build:types && pnpm run build:js",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist --outDir dist",
+    "build:types": "tsc src/index.ts --emitDeclarationOnly --declaration --declarationDir dist --rootDir src --moduleResolution bundler --jsx react-jsx --esModuleInterop --skipLibCheck",
     "build:js": "cross-env NODE_ENV=production rollup -c",
     "build:dev": "pnpm run build:types && rollup -c",
     "dev": "pnpm run build:types && rollup -c -w",

@@ -1,10 +1,10 @@
 import React from "react";
 import { type VariantProps } from "class-variance-authority";
 import { helperVariants, labelVariants } from "./form";
-declare const inputVariants: (props?: ({
-    variant?: "success" | "warning" | "default" | "error" | null | undefined;
-    size?: "sm" | "md" | "lg" | "xl" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const inputVariants: (props?: {
+    variant?: "default" | "success" | "warning" | "error";
+    size?: "sm" | "md" | "lg" | "xl";
+} & import("class-variance-authority/types").ClassProp) => string;
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">, VariantProps<typeof inputVariants> {
     size?: "sm" | "md" | "lg" | "xl";
     label?: string;
@@ -28,4 +28,3 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 declare const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>>;
 export { Input, inputVariants, helperVariants, labelVariants };
 export default Input;
-//# sourceMappingURL=input.d.ts.map

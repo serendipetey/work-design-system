@@ -21,4 +21,3 @@ declare const SidebarMenuSectionRootComponent: React.ForwardRefExoticComponent<S
 declare const SidebarMenuSection: React.ForwardRefExoticComponent<SidebarMenuSectionProps & React.RefAttributes<HTMLDivElement>>;
 export { SidebarMenuSectionRootComponent as SidebarMenuSectionRoot };
 export { SidebarMenuSection, sidebarMenuSectionVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionContentVariants, };
-//# sourceMappingURL=sidebar-menu-section.d.ts.map

@@ -18,14 +18,14 @@ export interface NavigationConfig {
     sections: NavigationSection[];
 }
 export declare const useNavigationState: (navigationConfig: NavigationConfig, currentPath: string) => {
-    activeItemId: string | null;
+    activeItemId: string;
     expandedSections: string[];
     toggleSection: (sectionId: string) => void;
     isSectionExpanded: (sectionId: string) => boolean;
     getSectionById: (sectionId: string) => NavigationSection | undefined;
     getItemById: (itemId: string) => NavigationItem | undefined;
     getAllItems: () => NavigationItem[];
-    setActiveItemId: import("react").Dispatch<import("react").SetStateAction<string | null>>;
+    setActiveItemId: import("react").Dispatch<import("react").SetStateAction<string>>;
     setExpandedSections: import("react").Dispatch<import("react").SetStateAction<string[]>>;
 };
 export declare const createNavigationItem: (id: string, label: string, href: string, options?: {
@@ -41,4 +41,3 @@ export declare const getNavigationStats: (navigationConfig: NavigationConfig) =>
     sectionCount: number;
     totalItems: number;
 };
-//# sourceMappingURL=sidebar-navigation-utils.d.ts.map

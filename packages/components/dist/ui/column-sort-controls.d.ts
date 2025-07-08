@@ -16,4 +16,3 @@ export interface ColumnSortControlsProps {
     helperClassName?: string;
 }
 export declare const ColumnSortControls: React.FC<ColumnSortControlsProps>;
-//# sourceMappingURL=column-sort-controls.d.ts.map

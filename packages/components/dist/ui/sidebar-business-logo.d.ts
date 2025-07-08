@@ -14,4 +14,3 @@ export interface SidebarBusinessLogoProps extends React.ButtonHTMLAttributes<HTM
 declare const SidebarBusinessLogo: React.ForwardRefExoticComponent<SidebarBusinessLogoProps & React.RefAttributes<HTMLElement>>;
 export { SidebarBusinessLogo };
 export default SidebarBusinessLogo;
-//# sourceMappingURL=sidebar-business-logo.d.ts.map

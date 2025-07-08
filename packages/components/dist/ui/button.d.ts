@@ -1,9 +1,9 @@
 import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
-declare const buttonBaseClasses: (props?: ({
-    variant?: "primary" | "outline" | "cta" | "success" | "warning" | "destructive" | "ghost" | null | undefined;
-    size?: "sm" | "md" | "lg" | "xl" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const buttonBaseClasses: (props?: {
+    variant?: "primary" | "outline" | "cta" | "success" | "warning" | "destructive" | "ghost";
+    size?: "sm" | "md" | "lg" | "xl";
+} & import("class-variance-authority/types").ClassProp) => string;
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonBaseClasses> {
     asChild?: boolean;
     loading?: boolean;
@@ -12,4 +12,3 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
 export { Button, buttonBaseClasses as buttonVariants };
-//# sourceMappingURL=button.d.ts.map

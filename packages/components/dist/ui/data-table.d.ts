@@ -1,9 +1,9 @@
 import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
-declare const dataTableVariants: (props?: ({
-    variant?: "default" | "elevated" | null | undefined;
-    size?: "sm" | "md" | "lg" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const dataTableVariants: (props?: {
+    variant?: "default" | "elevated";
+    size?: "sm" | "md" | "lg";
+} & import("class-variance-authority/types").ClassProp) => string;
 export interface DataTableColumn<TData = any> {
     key: string;
     header: string;
@@ -70,7 +70,7 @@ declare function useDataTable<TData>(data: TData[], options?: {
     paginatedData: TData[];
     totalItems: number;
     searchQuery: string;
-    sortField: string | null;
+    sortField: string;
     sortDirection: "desc" | "asc";
     currentPage: number;
     handleSearch: (query: string) => void;
@@ -81,4 +81,3 @@ declare function useDataTable<TData>(data: TData[], options?: {
 export declare const DataTable: <TData>({ data, columns, title, description, className, variant, size, containerClassName, style, searchable, searchPlaceholder, onSearch, defaultSort, onSort, pagination, rowActions, toolbarActions, footerActions, loading, emptyMessage, striped, hoverable, getRowKey, ...props }: DataTableProps<TData>) => import("react/jsx-runtime").JSX.Element;
 export declare const createDefaultRowActions: <TData>(onEdit?: (row: TData) => void, onDelete?: (row: TData) => void) => DataTableAction<TData>[];
 export { useDataTable };
-//# sourceMappingURL=data-table.d.ts.map

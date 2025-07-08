@@ -16,4 +16,3 @@ export { SidebarBusinessLogo } from "./ui/sidebar-business-logo";
 export { useNavigationState, createNavigationItem, createNavigationSection, getNavigationStats, type NavigationConfig, type NavigationItem, type NavigationSection, } from "./ui/sidebar-navigation-utils";
 export * from "./lib/utils";
 export type { BaseComponentProps, VariantProps } from "./types";
-//# sourceMappingURL=index.d.ts.map

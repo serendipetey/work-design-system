@@ -13,4 +13,3 @@ export interface SidebarMenuItemProps extends React.ButtonHTMLAttributes<HTMLBut
 }
 declare const SidebarMenuItem: React.ForwardRefExoticComponent<SidebarMenuItemProps & React.RefAttributes<HTMLButtonElement>>;
 export { SidebarMenuItem, sidebarMenuItemVariants };
-//# sourceMappingURL=sidebar-menu-item.d.ts.map
