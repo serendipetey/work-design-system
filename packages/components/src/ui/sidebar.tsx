@@ -23,6 +23,7 @@ export const sidebarVariants = cva(
     "flex flex-col h-full bg-[var(--color-surface,#ffffff)]",
     "border-r border-[var(--color-border,#e5e7eb)]",
     "font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)]",
+    "rounded-lg shadow-sm",
   ],
   {
     variants: {
@@ -121,15 +122,18 @@ export const sidebarMenuSectionContentVariants = cva(
   }
 );
 
-// 🎯 Sidebar Profile Variants
+// Sidebar Profile Variants
 export const sidebarProfileVariants = cva(
-  [
-    "flex flex-col p-4 border-b border-[var(--color-border,#e5e7eb)]",
-    "bg-[var(--color-surface-subtle,#f8fafc)]",
-  ],
+  ["flex flex-col p-4", "bg-[var(--color-surface-subtle,#f8fafc)]"],
   {
-    variants: {},
-    defaultVariants: {},
+    variants: {
+      position: {
+        top: "border-b border-[var(--color-border,#e5e7eb)]",
+        middle: "border-b border-[var(--color-border,#e5e7eb)]",
+        bottom: "border-t border-[var(--color-border,#e5e7eb)]",
+      },
+    },
+    defaultVariants: { position: "middle" },
   }
 );
 

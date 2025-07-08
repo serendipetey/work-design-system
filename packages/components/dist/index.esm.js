@@ -10598,6 +10598,7 @@ const sidebarVariants = cva([
     "flex flex-col h-full bg-[var(--color-surface,#ffffff)]",
     "border-r border-[var(--color-border,#e5e7eb)]",
     "font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)]",
+    "rounded-lg shadow-sm",
 ], {
     variants: {
         size: {
@@ -10679,13 +10680,16 @@ const sidebarMenuSectionContentVariants = cva([
     variants: {},
     defaultVariants: {},
 });
-// 🎯 Sidebar Profile Variants
-const sidebarProfileVariants = cva([
-    "flex flex-col p-4 border-b border-[var(--color-border,#e5e7eb)]",
-    "bg-[var(--color-surface-subtle,#f8fafc)]",
-], {
-    variants: {},
-    defaultVariants: {},
+// Sidebar Profile Variants
+const sidebarProfileVariants = cva(["flex flex-col p-4", "bg-[var(--color-surface-subtle,#f8fafc)]"], {
+    variants: {
+        position: {
+            top: "border-b border-[var(--color-border,#e5e7eb)]",
+            middle: "border-b border-[var(--color-border,#e5e7eb)]",
+            bottom: "border-t border-[var(--color-border,#e5e7eb)]",
+        },
+    },
+    defaultVariants: { position: "middle" },
 });
 // 🎯 Sidebar Business Logo Variants
 const sidebarBusinessLogoVariants = cva([
@@ -11310,8 +11314,8 @@ const SidebarMenuSection = React__default.forwardRef(({ title, icon: Icon, child
 SidebarMenuSection.displayName = "SidebarMenuSection";
 
 // 🎯 Sidebar Profile Component
-const SidebarProfile = React__default.forwardRef(({ className, user, onSwitchEntity, ...props }, ref) => {
-    return (jsxs("div", { ref: ref, className: cn(sidebarProfileVariants(), className), ...props, children: [jsxs("div", { className: "flex items-start gap-3 mb-3", children: [jsx("div", { className: "flex-shrink-0 mt-1", children: jsx("div", { className: "w-8 h-8 rounded-full bg-[var(--color-primary,#1e40af)] flex items-center justify-center", children: jsx(User, { className: "w-4 h-4 text-[var(--color-white,#ffffff)]" }) }) }), jsxs("div", { className: "flex-1 min-w-0", children: [jsx("h3", { className: "text-sm font-semibold text-[var(--color-text-heading,#111827)] truncate", children: user.entity.name }), jsx("p", { className: "text-sm text-[var(--color-text-body,#374151)] truncate", children: user.contact.name }), jsx("p", { className: "text-xs text-[var(--color-text-muted,#6b7280)] truncate", children: user.contact.role })] })] }), onSwitchEntity && (jsx(Button, { variant: "ghost", size: "sm", onClick: onSwitchEntity, leftIcon: jsx(ArrowUpDown, { className: "w-4 h-4" }), className: "justify-start text-[var(--color-text-link,#2563eb)] hover:text-[var(--color-text-link-hover,#1d4ed8)]", children: "Switch Entity" }))] }));
+const SidebarProfile = React__default.forwardRef(({ className, user, onSwitchEntity, position = "middle", ...props }, ref) => {
+    return (jsxs("div", { ref: ref, className: cn(sidebarProfileVariants({ position }), className), ...props, children: [jsxs("div", { className: "flex items-start gap-3 mb-3", children: [jsx("div", { className: "flex-shrink-0 mt-1", children: jsx("div", { className: "w-8 h-8 rounded-full bg-[var(--color-primary,#1e40af)] flex items-center justify-center", children: jsx(User, { className: "w-4 h-4 text-[var(--color-white,#ffffff)]" }) }) }), jsxs("div", { className: "flex-1 min-w-0", children: [jsx("h3", { className: "text-sm font-semibold text-[var(--color-text-heading,#111827)] truncate", children: user.entity.name }), jsx("p", { className: "text-sm text-[var(--color-text-body,#374151)] truncate", children: user.contact.name }), jsx("p", { className: "text-xs text-[var(--color-text-muted,#6b7280)] truncate", children: user.contact.role })] })] }), onSwitchEntity && (jsx(Button, { variant: "ghost", size: "sm", onClick: onSwitchEntity, leftIcon: jsx(ArrowUpDown, { className: "w-4 h-4" }), className: "justify-start text-[var(--color-text-link,#2563eb)] hover:text-[var(--color-text-link-hover,#1d4ed8)]", children: "Switch Entity" }))] }));
 });
 SidebarProfile.displayName = "SidebarProfile";
 

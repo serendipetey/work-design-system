@@ -24,15 +24,16 @@ export interface SidebarProfileProps
   extends React.HTMLAttributes<HTMLDivElement> {
   user: SidebarProfileData;
   onSwitchEntity?: () => void;
+  position?: "top" | "middle" | "bottom";
 }
 
 // 🎯 Sidebar Profile Component
 const SidebarProfile = React.forwardRef<HTMLDivElement, SidebarProfileProps>(
-  ({ className, user, onSwitchEntity, ...props }, ref) => {
+  ({ className, user, onSwitchEntity, position = "middle", ...props }, ref) => {
     return (
       <div
         ref={ref}
-        className={cn(sidebarProfileVariants(), className)}
+        className={cn(sidebarProfileVariants({ position }), className)}
         {...props}
       >
         {/* User Info Section */}

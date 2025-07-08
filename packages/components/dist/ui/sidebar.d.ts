@@ -20,7 +20,9 @@ export declare const sidebarMenuSectionRootVariants: (props?: ({} & import("clas
 export declare const sidebarMenuSectionVariants: (props?: ({} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const sidebarMenuSectionTriggerVariants: (props?: ({} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const sidebarMenuSectionContentVariants: (props?: ({} & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export declare const sidebarProfileVariants: (props?: ({} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+export declare const sidebarProfileVariants: (props?: ({
+    position?: "bottom" | "top" | "middle" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const sidebarBusinessLogoVariants: (props?: ({
     clickable?: boolean | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
