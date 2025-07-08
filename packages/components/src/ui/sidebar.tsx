@@ -222,13 +222,13 @@ export const sidebarBadgeVariants = cva(
   [
     "inline-flex items-center justify-center min-w-[1.25rem] h-5",
     "text-xs font-medium rounded-full",
-    "bg-[var(--color-navy-500,#1e40af)] text-[var(--color-white,#ffffff)]",
+    "bg-[var(--color-cta,#a30134)] text-[var(--color-white,#ffffff)]", // ← CTA RED
   ],
   {
     variants: {
       variant: {
         default:
-          "bg-[var(--color-navy-500,#1e40af)] text-[var(--color-white,#ffffff)]",
+          "bg-[var(--color-cta,#a30134)] text-[var(--color-white,#ffffff)]", // ← CTA RED
         primary:
           "bg-[var(--color-primary-500,#3b82f6)] text-[var(--color-white,#ffffff)]",
         success:
