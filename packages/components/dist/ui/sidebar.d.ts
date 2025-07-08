@@ -13,7 +13,7 @@
  */
 export declare const sidebarVariants: (props?: ({
     size?: "sm" | "md" | "lg" | "xl" | null | undefined;
-    variant?: "layout" | "standalone" | "borderless" | null | undefined;
+    variant?: "standalone" | "layout" | "borderless" | null | undefined;
     container?: boolean | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const sidebarContainerVariants: (props?: ({
@@ -29,7 +29,7 @@ export declare const sidebarMenuSectionVariants: (props?: ({} & import("class-va
 export declare const sidebarMenuSectionTriggerVariants: (props?: ({} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const sidebarMenuSectionContentVariants: (props?: ({} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const sidebarProfileVariants: (props?: ({
-    position?: "bottom" | "top" | "middle" | null | undefined;
+    position?: "top" | "middle" | "bottom" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const sidebarBusinessLogoVariants: (props?: ({
     clickable?: boolean | null | undefined;
@@ -38,7 +38,7 @@ export declare const sidebarToggleVariants: (props?: ({
     size?: "sm" | "md" | "lg" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const sidebarBadgeVariants: (props?: ({
-    variant?: "primary" | "success" | "warning" | "default" | null | undefined;
+    variant?: "default" | "primary" | "success" | "warning" | null | undefined;
     size?: "sm" | "md" | "lg" | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export declare const getSidebarIconSize: (size?: "sm" | "md" | "lg") => string;
