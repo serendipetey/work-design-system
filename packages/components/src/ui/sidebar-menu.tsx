@@ -1,28 +1,32 @@
 // packages/components/src/ui/sidebar-menu.tsx
-// 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
-// This component uses centralized sidebar utilities for consistent styling
-// across all sidebar components with reliable fallback values.
+// 🎯 ENHANCED SIDEBAR MENU: Supports multiple usage patterns
 
 import React from "react";
 import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { sidebarVariants } from "./sidebar";
+import { sidebarVariants, sidebarContainerVariants } from "./sidebar";
 
-// 🎯 TypeScript Interface
+// 🎯 Enhanced TypeScript Interface
 export interface SidebarMenuProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof sidebarVariants> {
   children: React.ReactNode;
   collapsed?: boolean;
   onToggleCollapse?: (open: boolean) => void;
+
+  // 🎯 NEW: Usage pattern control
+  asContainer?: boolean; // Whether to render as a complete container
 }
 
-// 🎯 Main Sidebar Menu Container Component
+// 🎯 Enhanced Sidebar Menu Component
 const SidebarMenu = React.forwardRef<HTMLDivElement, SidebarMenuProps>(
   (
     {
       className,
       size = "md",
+      variant = "standalone",
+      container = false,
+      asContainer = false,
       collapsed = false,
       onToggleCollapse,
       children,
@@ -31,26 +35,51 @@ const SidebarMenu = React.forwardRef<HTMLDivElement, SidebarMenuProps>(
     },
     ref
   ) => {
-    // 🎯 Combine styles: Base + Variant + Custom
-    const combinedStyles = {
-      // Apply any additional inline styles if needed
-      ...style,
-    };
+    // 🎯 Smart variant selection based on usage
+    const finalVariant = asContainer ? "borderless" : variant;
+    const finalContainer = asContainer ? true : container;
 
     // Build final className using centralized utilities
     const finalClassName = cn(
-      sidebarVariants({ size }),
-      // Handle collapsed state if implemented
+      sidebarVariants({
+        size,
+        variant: finalVariant,
+        container: finalContainer,
+      }),
       collapsed && "w-16", // Collapsed width override
       className
     );
 
+    // 🎯 Container Pattern: Wrap in styled container if needed
+    if (asContainer) {
+      return (
+        <div
+          className={cn(
+            sidebarContainerVariants({ styled: true, position: "standalone" }),
+            "w-64" // Container controls width
+          )}
+        >
+          <div
+            {...props}
+            ref={ref}
+            className={finalClassName}
+            style={style}
+            role="navigation"
+            aria-label="Main navigation"
+          >
+            {children}
+          </div>
+        </div>
+      );
+    }
+
+    // 🎯 Direct Pattern: Render as complete component
     return (
       <div
         {...props}
         ref={ref}
         className={finalClassName}
-        style={combinedStyles}
+        style={style}
         role="navigation"
         aria-label="Main navigation"
       >
@@ -62,15 +91,16 @@ const SidebarMenu = React.forwardRef<HTMLDivElement, SidebarMenuProps>(
 
 SidebarMenu.displayName = "SidebarMenu";
 
-// 🎯 Sidebar Toggle Component (Mobile)
+// 🎯 Enhanced Sidebar Toggle Component
 export interface SidebarToggleProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof sidebarVariants> {
   open: boolean;
   onToggle: (open: boolean) => void;
 }
 
 const SidebarToggle = React.forwardRef<HTMLButtonElement, SidebarToggleProps>(
-  ({ className, open, onToggle, ...props }, ref) => {
+  ({ className, open, onToggle, size = "md", ...props }, ref) => {
     const handleClick = () => {
       onToggle(!open);
     };
@@ -86,6 +116,8 @@ const SidebarToggle = React.forwardRef<HTMLButtonElement, SidebarToggleProps>(
           "hover:bg-[var(--color-surface-subtle,#f8fafc)] hover:text-[var(--color-text-heading,#111827)]",
           "focus:outline-none focus:ring-2 focus:ring-[var(--color-focus-500,#3b82f6)] focus:ring-offset-2",
           "transition-colors duration-150",
+          size === "sm" && "p-1.5",
+          size === "lg" && "p-2.5",
           className
         )}
         aria-label={open ? "Close navigation menu" : "Open navigation menu"}
@@ -121,4 +153,4 @@ const SidebarToggle = React.forwardRef<HTMLButtonElement, SidebarToggleProps>(
 
 SidebarToggle.displayName = "SidebarToggle";
 
-export { SidebarMenu, SidebarToggle, sidebarVariants };
+export { SidebarMenu, SidebarToggle };
