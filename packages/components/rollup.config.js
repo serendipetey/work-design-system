@@ -13,12 +13,12 @@ module.exports = {
     {
       file: "dist/index.js",
       format: "cjs",
-      sourcemap: isProduction, // Only in production
+      sourcemap: isProduction,
     },
     {
       file: "dist/index.esm.js",
       format: "esm",
-      sourcemap: isProduction, // Only in production
+      sourcemap: isProduction,
     },
   ],
   plugins: [
@@ -30,9 +30,10 @@ module.exports = {
     typescript({
       tsconfig: "./tsconfig.json",
       declaration: true,
-      declarationDir: "dist",
+      declarationDir: "./dist",
+      rootDir: "./src",
       sourceMap: isProduction,
-      declarationMap: isProduction, // ← ADD THIS LINE TOO
+      declarationMap: isProduction,
       exclude: ["**/*.test.*", "**/*.stories.*", "scripts/**/*"],
     }),
     postcss({
