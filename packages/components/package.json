@@ -1,6 +1,6 @@
 {
   "name": "@serendipetey/components",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "React component library built with design system tokens",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -15,9 +15,11 @@
     "src/**/*"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production rollup -c",
-    "build:dev": "rollup -c",
-    "dev": "rollup -c -w",
+    "build": "pnpm run build:types && pnpm run build:js",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist --outDir dist",
+    "build:js": "cross-env NODE_ENV=production rollup -c",
+    "build:dev": "pnpm run build:types && rollup -c",
+    "dev": "pnpm run build:types && rollup -c -w",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -30,18 +32,7 @@
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "clean": "rimraf dist",
     "clean:bloat": "bash scripts/cleanup-build-bloat.sh",
-    "clean:all": "pnpm run clean:bloat && pnpm run clean",
-    "validate:tokens": "tsx scripts/validate-tokens.ts",
-    "validate:button": "tsx scripts/validate-tokens.ts",
-    "validate:input": "tsx scripts/validate-input-tokens.ts",
-    "validate:phase-2-2": "tsx scripts/run-phase-2-2-validation.ts",
-    "validate:phase-3-1": "pnpm run validate:input && pnpm run test src/ui/__tests__/input.test.tsx",
-    "validate:components": "pnpm run validate:button && pnpm run validate:input",
-    "validate:all": "pnpm run type-check && pnpm run lint && pnpm run test && pnpm run validate:components",
-    "ci:test": "pnpm run validate:all && pnpm run build-storybook",
-    "prepare": "echo 'Skipping build during development'",
-    "phase:3-1-validate": "echo '🔍 Phase 3.1: Input Component Validation' && pnpm run validate:input",
-    "phase:3-complete": "echo '✅ Phase 3: Form Components Complete' && pnpm run validate:components && pnpm run test"
+    "clean:all": "pnpm run clean:bloat && pnpm run clean"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",

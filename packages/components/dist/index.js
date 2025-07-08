@@ -10384,6 +10384,14 @@ const ColumnSortControls = ({ columns, currentColumn, currentDirection = "asc", 
     };
     // Get current column value for select
     const selectValue = currentColumn || "none";
+    // // 🎯 Determine validation variant for consistent styling
+    // const validationVariant = error
+    //   ? "error"
+    //   : success
+    //   ? "success"
+    //   : warning
+    //   ? "warning"
+    //   : "default";
     return (jsxRuntime.jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [hintText && (jsxRuntime.jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mb-2"), children: hintText })), jsxRuntime.jsxs("div", { className: cn("flex items-center gap-2", className), id: sortControlsId, children: [jsxRuntime.jsxs(SelectField, { value: selectValue, onValueChange: handleColumnChange, size: "md", disabled: disabled, hideLabel: true, placeholder: "Sort by column", className: "min-w-[160px]", ...formFieldAria, children: [jsxRuntime.jsx(SelectItem, { value: "none", children: "No sorting" }), sortableColumns.map((column) => (jsxRuntime.jsx(SelectItem, { value: column.key, children: column.header }, column.key)))] }), jsxRuntime.jsx(Button, { variant: "ghost", size: "sm", leftIcon: jsxRuntime.jsx(DirectionIcon, { direction: currentDirection }), onClick: handleDirectionToggle, disabled: disabled || !currentColumn, "data-icon-only": "true", "data-size": "sm", "aria-label": `Sort ${currentDirection === "asc" ? "ascending" : "descending"}` })] }), helperContent && (jsxRuntime.jsx("p", { className: cn(helperVariants({ variant: helperVariant }), "mt-2", helperClassName), children: helperContent }))] }));
 };
 

@@ -35,5 +35,12 @@
     }
   },
   "include": ["src/**/*", "lib/**/*", "scripts/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.*", "**/*.stories.*"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.*",
+    "**/*.stories.*",
+    "**/examples/**/*",
+    "src/ui/examples/**/*"
+  ]
 }

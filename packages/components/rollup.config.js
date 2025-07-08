@@ -29,11 +29,7 @@ module.exports = {
     commonjs(),
     typescript({
       tsconfig: "./tsconfig.json",
-      declaration: true,
-      declarationDir: "./dist",
-      rootDir: "./src",
-      sourceMap: isProduction,
-      declarationMap: isProduction,
+      declaration: false, // Don't generate declarations with Rollup
       exclude: ["**/*.test.*", "**/*.stories.*", "scripts/**/*"],
     }),
     postcss({

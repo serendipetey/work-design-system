@@ -96,14 +96,14 @@ export const ColumnSortControls: React.FC<ColumnSortControlsProps> = ({
   // Get current column value for select
   const selectValue = currentColumn || "none";
 
-  // 🎯 Determine validation variant for consistent styling
-  const validationVariant = error
-    ? "error"
-    : success
-    ? "success"
-    : warning
-    ? "warning"
-    : "default";
+  // // 🎯 Determine validation variant for consistent styling
+  // const validationVariant = error
+  //   ? "error"
+  //   : success
+  //   ? "success"
+  //   : warning
+  //   ? "warning"
+  //   : "default";
 
   return (
     <div className={cn(fieldVariants(), containerClassName)}>
