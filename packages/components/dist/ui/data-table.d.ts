@@ -1,9 +1,9 @@
 import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
-declare const dataTableVariants: (props?: {
-    variant?: "default" | "elevated";
-    size?: "sm" | "md" | "lg";
-} & import("class-variance-authority/types").ClassProp) => string;
+declare const dataTableVariants: (props?: ({
+    variant?: "default" | "elevated" | null | undefined;
+    size?: "sm" | "md" | "lg" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export interface DataTableColumn<TData = any> {
     key: string;
     header: string;
@@ -70,7 +70,7 @@ declare function useDataTable<TData>(data: TData[], options?: {
     paginatedData: TData[];
     totalItems: number;
     searchQuery: string;
-    sortField: string;
+    sortField: string | null;
     sortDirection: "desc" | "asc";
     currentPage: number;
     handleSearch: (query: string) => void;

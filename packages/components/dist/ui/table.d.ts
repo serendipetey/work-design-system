@@ -1,20 +1,20 @@
 import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
-declare const tableVariants: (props?: {
-    variant?: "default" | "striped" | "minimal";
-    size?: "sm" | "md" | "lg";
-} & import("class-variance-authority/types").ClassProp) => string;
-declare const tableHeaderVariants: (props?: import("class-variance-authority/types").ClassProp) => string;
-declare const tableBodyVariants: (props?: import("class-variance-authority/types").ClassProp) => string;
-declare const tableRowVariants: (props?: {
-    variant?: "default" | "striped";
-} & import("class-variance-authority/types").ClassProp) => string;
-declare const tableHeadVariants: (props?: {
-    sortable?: boolean;
-} & import("class-variance-authority/types").ClassProp) => string;
-declare const tableCellVariants: (props?: {
-    size?: "sm" | "md" | "lg";
-} & import("class-variance-authority/types").ClassProp) => string;
+declare const tableVariants: (props?: ({
+    variant?: "default" | "striped" | "minimal" | null | undefined;
+    size?: "sm" | "md" | "lg" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const tableHeaderVariants: (props?: import("class-variance-authority/types").ClassProp | undefined) => string;
+declare const tableBodyVariants: (props?: import("class-variance-authority/types").ClassProp | undefined) => string;
+declare const tableRowVariants: (props?: ({
+    variant?: "default" | "striped" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const tableHeadVariants: (props?: ({
+    sortable?: boolean | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+declare const tableCellVariants: (props?: ({
+    size?: "sm" | "md" | "lg" | null | undefined;
+} & import("class-variance-authority/types").ClassProp) | undefined) => string;
 export interface TableProps extends React.HTMLAttributes<HTMLTableElement>, VariantProps<typeof tableVariants> {
 }
 export interface TableHeaderProps extends React.HTMLAttributes<HTMLTableSectionElement>, VariantProps<typeof tableHeaderVariants> {

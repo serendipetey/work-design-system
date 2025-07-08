@@ -2,28 +2,23 @@
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "outDir": "./dist",
-    "declaration": true,
-    "declarationMap": true,
-    "declarationDir": "./dist",
-    "composite": true,
-
-    /* Bundler mode */
+    "module": "ES2015",
     "moduleResolution": "bundler",
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "./dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "noEmit": false,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,
-    "jsx": "react-jsx",
-
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
-    /* Path mapping */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
@@ -34,7 +29,7 @@
       "@/types/*": ["./src/types/*"]
     }
   },
-  "include": ["src/**/*", "lib/**/*", "scripts/**/*"],
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist",
