@@ -10580,25 +10580,25 @@ const createDefaultRowActions = (onEdit, onDelete) => {
 
 // packages/components/src/ui/sidebar.tsx
 // 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
-// Single source of truth for ALL sidebar component styling.
-// Used by SidebarMenu, SidebarMenuItem, SidebarMenuSection, etc.
+// Single source of truth for ALL sidebar component styling with FLEXIBLE usage patterns
 /**
- * 🎯 CENTRALIZED SIDEBAR UTILITIES
+ * 🎯 ENHANCED SIDEBAR DESIGN SYSTEM
  *
- * Single source of truth for ALL sidebar component styling.
- * Benefits:
- * ✅ No artificial dependencies between components
- * ✅ Consistent styling across all sidebar elements
- * ✅ Better performance (CVA vs inline styles)
- * ✅ Single place to update sidebar styling
- * ✅ Maintains all existing design tokens
+ * Supports multiple usage patterns:
+ * 1. Complete standalone sidebar (for consuming apps)
+ * 2. Layout components (for Storybook/custom layouts)
+ * 3. Flexible styling variants (bordered/borderless)
+ *
+ * ✅ Solves rounded corner + border conflicts
+ * ✅ Provides consistent styling across all usage patterns
+ * ✅ Maintains backward compatibility
+ * ✅ Enables both manual assembly and component-based approaches
  */
-// 🎯 Main Sidebar Container Variants
+// 🎯 Main Sidebar Container Variants - ENHANCED WITH FLEXIBILITY
 const sidebarVariants = cva([
     "flex flex-col h-full bg-[var(--color-surface,#ffffff)]",
-    "border-r border-[var(--color-border,#e5e7eb)]",
     "font-[var(--font-family-sans,'Poppins',system-ui,sans-serif)]",
-    "rounded-lg shadow-sm",
+    // Base layout (borders and corners controlled by variants)
 ], {
     variants: {
         size: {
@@ -10607,14 +10607,59 @@ const sidebarVariants = cva([
             lg: "w-80",
             xl: "w-96",
         },
+        // 🎯 NEW: Style variant for different usage patterns
+        variant: {
+            // Complete styled component (consuming apps)
+            standalone: [
+                "rounded-lg shadow-sm border border-[var(--color-border,#e5e7eb)]",
+                "overflow-hidden", // Ensures clean corners
+            ],
+            // Layout component (Storybook/manual assembly)
+            layout: [
+                "border-r border-[var(--color-border,#e5e7eb)]",
+                // No rounded corners - handled by parent container
+            ],
+            // Borderless (for custom containers)
+            borderless: [
+            // No borders - fully custom styling
+            ],
+        },
+        // 🎯 NEW: Container variant for complete solutions
+        container: {
+            true: [
+                "rounded-lg shadow-sm border border-[var(--color-border,#e5e7eb)]",
+                "overflow-hidden",
+            ],
+            false: "",
+        },
     },
-    defaultVariants: { size: "md" },
+    defaultVariants: {
+        size: "md",
+        variant: "standalone", // Default to complete component
+        container: false,
+    },
 });
-// 🎯 Sidebar Menu Item Variants
+// 🎯 Sidebar Container Wrapper Variants (for complex layouts)
+const sidebarContainerVariants = cva(["h-full overflow-hidden", "bg-[var(--color-surface,#ffffff)]"], {
+    variants: {
+        styled: {
+            true: [
+                "rounded-lg shadow-sm border border-[var(--color-border,#e5e7eb)]",
+            ],
+            false: "",
+        },
+        position: {
+            standalone: "relative",
+            embedded: "flex-shrink-0",
+        },
+    },
+    defaultVariants: { styled: true, position: "standalone" },
+});
+// 🎯 Sidebar Menu Item Variants - ENHANCED
 const sidebarMenuItemVariants = cva([
     "flex items-center gap-3 px-4 py-3 w-full text-left",
     "text-sm font-medium transition-colors duration-150",
-    "rounded-md", // Added rounded corners for consistency
+    "rounded-md",
     "focus-visible:outline-none",
     "disabled:opacity-50 disabled:pointer-events-none",
 ], {
@@ -10622,14 +10667,14 @@ const sidebarMenuItemVariants = cva([
         active: {
             true: [
                 "bg-[var(--color-navy-600,#1e40af)] text-[var(--color-white,#ffffff)] font-semibold",
-                "hover:bg-[var(--color-navy-600,#1e40af)] hover:text-[var(--color-white,#ffffff)]", // Keep same color on hover
-                "!focus-visible:bg-[var(--color-navy-600,#1e40af)] !focus-visible:text-[var(--color-white,#ffffff)]",
+                "hover:bg-[var(--color-navy-600,#1e40af)] hover:text-[var(--color-white,#ffffff)]",
+                "focus-visible:bg-[var(--color-navy-600,#1e40af)] focus-visible:text-[var(--color-white,#ffffff)]",
                 "focus-visible:border-b-[3px] focus-visible:border-b-orange-500",
                 "focus-visible:rounded-b-none",
             ],
             false: [
                 "text-[var(--color-text-body,#374151)]",
-                "hover:bg-[var(--color-navy-200,#e0e7ff)] hover:text-[var(--color-navy-600,#1e40af)]", // Light blue hover for inactive
+                "hover:bg-[var(--color-navy-200,#e0e7ff)] hover:text-[var(--color-navy-600,#1e40af)]",
                 "focus-visible:bg-[var(--button-unified-focus-bg,var(--color-focus-500,#ff9900))]",
                 "focus-visible:text-[var(--button-unified-focus-text,var(--color-navy-500,#0e3a6c))]",
                 "focus-visible:border-b-[3px] focus-visible:border-b-blue-600",
@@ -10644,23 +10689,21 @@ const sidebarMenuItemVariants = cva([
     },
     defaultVariants: { active: false, size: "md" },
 });
-// 🎯 Sidebar Menu Section Root Variants (Accordion Root)
+// 🎯 Keep existing variants for backward compatibility
 const sidebarMenuSectionRootVariants = cva("w-full", {
     variants: {},
     defaultVariants: {},
 });
-// 🎯 Sidebar Menu Section Variants (Accordion Item)
 const sidebarMenuSectionVariants = cva("border-0 bg-transparent", {
     variants: {},
     defaultVariants: {},
 });
-// 🎯 Sidebar Menu Section Trigger Variants (Accordion Trigger)
 const sidebarMenuSectionTriggerVariants = cva([
     "flex w-full items-center justify-between px-4 py-3",
     "text-sm font-medium transition-colors duration-150",
     "rounded-md",
     "hover:bg-[var(--color-navy-100,#f1f5f9)] hover:text-[var(--color-navy-600,#1e40af)]",
-    "data-[state=open]:bg-[var(--color-navy-200,#e0e7ff)] data-[state=open]:text-[var(--color-navy-700,#07203c)]", // ← ADD THIS LINE
+    "data-[state=open]:bg-[var(--color-navy-200,#e0e7ff)] data-[state=open]:text-[var(--color-navy-700,#07203c)]",
     "focus-visible:outline-none",
     "focus-visible:bg-[var(--button-unified-focus-bg,var(--color-focus-500,#ff9900))] focus-visible:text-[var(--button-unified-focus-text,var(--color-navy-500,#0e3a6c))]",
     "focus-visible:border focus-visible:border-transparent focus-visible:border-b-[3px] focus-visible:border-b-[var(--button-unified-focus-border,var(--color-navy-500,#0e3a6c))]",
@@ -10671,16 +10714,14 @@ const sidebarMenuSectionTriggerVariants = cva([
     variants: {},
     defaultVariants: {},
 });
-// 🎯 Sidebar Menu Section Content Variants (Accordion Content)
 const sidebarMenuSectionContentVariants = cva([
     "overflow-hidden transition-all duration-200",
     "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
-    "bg-[var(--color-navy-100,#f1f5f9)]", // Subtle navy background for expanded sections
+    "bg-[var(--color-navy-100,#f1f5f9)]",
 ], {
     variants: {},
     defaultVariants: {},
 });
-// Sidebar Profile Variants
 const sidebarProfileVariants = cva(["flex flex-col p-4", "bg-[var(--color-surface-subtle,#f8fafc)]"], {
     variants: {
         position: {
@@ -10691,7 +10732,6 @@ const sidebarProfileVariants = cva(["flex flex-col p-4", "bg-[var(--color-surfac
     },
     defaultVariants: { position: "middle" },
 });
-// 🎯 Sidebar Business Logo Variants
 const sidebarBusinessLogoVariants = cva([
     "flex items-center gap-3 p-4 border-b border-[var(--color-border,#e5e7eb)]",
     "bg-[var(--color-surface,#ffffff)]",
@@ -10704,7 +10744,6 @@ const sidebarBusinessLogoVariants = cva([
     },
     defaultVariants: { clickable: false },
 });
-// 🎯 Sidebar Toggle Variants (Mobile)
 const sidebarToggleVariants = cva([
     "inline-flex items-center justify-center p-2 rounded-md",
     "text-[var(--color-text-body,#374151)]",
@@ -10714,112 +10753,97 @@ const sidebarToggleVariants = cva([
 ], {
     variants: {
         size: {
-            sm: "p-1",
+            sm: "p-1.5",
             md: "p-2",
-            lg: "p-3",
+            lg: "p-2.5",
         },
     },
     defaultVariants: { size: "md" },
 });
-// 🎯 Badge Variants (for notifications)
 const sidebarBadgeVariants = cva([
-    "flex-shrink-0 ml-auto px-1.5 py-0.5 text-xs font-medium rounded-full",
-    "bg-[var(--color-red-500,#ef4444)] text-[var(--color-white,#ffffff)]",
+    "inline-flex items-center justify-center min-w-[1.25rem] h-5",
+    "text-xs font-medium rounded-full",
+    "bg-[var(--color-cta,#a30134)] text-[var(--color-white,#ffffff)]", // ← CTA RED
 ], {
     variants: {
-        size: {
-            sm: "text-xs px-1 py-0.5",
-            md: "text-xs px-1.5 py-0.5",
-            lg: "text-sm px-2 py-1",
-        },
         variant: {
-            default: "bg-[var(--color-red-500,#ef4444)] text-[var(--color-white,#ffffff)]",
-            primary: "bg-[var(--color-primary-500,#1e40af)] text-[var(--color-white,#ffffff)]",
-            warning: "bg-[var(--color-warning-500,#f59e0b)] text-[var(--color-white,#ffffff)]",
+            default: "bg-[var(--color-cta,#a30134)] text-[var(--color-white,#ffffff)]", // ← CTA RED
+            primary: "bg-[var(--color-primary-500,#3b82f6)] text-[var(--color-white,#ffffff)]",
             success: "bg-[var(--color-success-500,#10b981)] text-[var(--color-white,#ffffff)]",
+            warning: "bg-[var(--color-warning-500,#f59e0b)] text-[var(--color-white,#ffffff)]",
+        },
+        size: {
+            sm: "text-xs min-w-[1rem] h-4 px-1",
+            md: "text-xs min-w-[1.25rem] h-5 px-1.5",
+            lg: "text-sm min-w-[1.5rem] h-6 px-2",
         },
     },
-    defaultVariants: { size: "md", variant: "default" },
+    defaultVariants: { variant: "default", size: "md" },
 });
-/**
- * 🎯 SHARED SIDEBAR LOGIC UTILITIES
- */
-// Icon size utility based on component size
+// 🎯 UTILITY FUNCTIONS (enhanced)
 const getSidebarIconSize = (size = "md") => {
-    const sizeMap = {
-        sm: "w-3 h-3",
+    const sizes = {
+        sm: "w-4 h-4",
         md: "w-4 h-4",
         lg: "w-5 h-5",
     };
-    return sizeMap[size];
+    return sizes[size];
 };
-// Generate accessible label for menu items
 const getSidebarItemAriaLabel = (label, badge, active) => {
-    let ariaLabel = typeof label === "string" ? label : "";
-    if (badge) {
-        ariaLabel += `, ${badge} items pending`;
-    }
-    if (active) {
-        ariaLabel += ", current page";
-    }
+    let ariaLabel = label;
+    if (badge)
+        ariaLabel += ` (${badge} items)`;
+    if (active)
+        ariaLabel += " - currently selected";
     return ariaLabel;
 };
-// Generate accessible label for menu sections
 const getSidebarSectionAriaLabel = (title, expanded, badge) => {
-    let label = `${title} section`;
-    if (badge) {
-        label += `, ${badge} items`;
-    }
-    label += expanded ? ", expanded" : ", collapsed";
-    return label;
+    let ariaLabel = `${title} section, ${expanded ? "expanded" : "collapsed"}`;
+    if (badge)
+        ariaLabel += ` (${badge} items)`;
+    return ariaLabel;
 };
-/**
- * 🎯 SIDEBAR NAVIGATION UTILITIES
- */
-// Check if a menu item should be active based on current path
 const isSidebarItemActive = (itemHref, currentPath) => {
-    if (!itemHref || !currentPath)
-        return false;
-    // Exact match for root paths
-    if (itemHref === "/" && currentPath === "/")
-        return true;
-    if (itemHref === "/" && currentPath !== "/")
-        return false;
-    // Prefix match for sub-paths
-    return currentPath.startsWith(itemHref);
+    return currentPath === itemHref || currentPath.startsWith(itemHref + "/");
 };
-// Find which sections should be expanded based on current active item
 const getExpandedSectionsForPath = (navigationConfig, currentPath) => {
     const expandedSections = [];
-    navigationConfig.sections?.forEach((section) => {
-        const hasActiveItem = section.items?.some((item) => isSidebarItemActive(item.href, currentPath));
-        if (hasActiveItem) {
-            expandedSections.push(section.id);
-        }
-    });
+    if (navigationConfig?.sections) {
+        navigationConfig.sections.forEach((section) => {
+            if (section.items?.some((item) => isSidebarItemActive(item.href, currentPath))) {
+                expandedSections.push(section.id);
+            }
+        });
+    }
     return expandedSections;
 };
 
-// 🎯 Main Sidebar Menu Container Component
-const SidebarMenu = React__default.forwardRef(({ className, size = "md", collapsed = false, onToggleCollapse, children, style, ...props }, ref) => {
-    // 🎯 Combine styles: Base + Variant + Custom
-    const combinedStyles = {
-        // Apply any additional inline styles if needed
-        ...style,
-    };
+// 🎯 Enhanced Sidebar Menu Component
+const SidebarMenu = React__default.forwardRef(({ className, size = "md", variant = "standalone", container = false, asContainer = false, collapsed = false, onToggleCollapse, children, style, ...props }, ref) => {
+    // 🎯 Smart variant selection based on usage
+    const finalVariant = asContainer ? "borderless" : variant;
+    const finalContainer = asContainer ? true : container;
     // Build final className using centralized utilities
-    const finalClassName = cn(sidebarVariants({ size }), 
-    // Handle collapsed state if implemented
-    collapsed && "w-16", // Collapsed width override
+    const finalClassName = cn(sidebarVariants({
+        size,
+        variant: finalVariant,
+        container: finalContainer,
+    }), collapsed && "w-16", // Collapsed width override
     className);
-    return (jsx("div", { ...props, ref: ref, className: finalClassName, style: combinedStyles, role: "navigation", "aria-label": "Main navigation", children: children }));
+    // 🎯 Container Pattern: Wrap in styled container if needed
+    if (asContainer) {
+        return (jsx("div", { className: cn(sidebarContainerVariants({ styled: true, position: "standalone" }), "w-64" // Container controls width
+            ), children: jsx("div", { ...props, ref: ref, className: finalClassName, style: style, role: "navigation", "aria-label": "Main navigation", children: children }) }));
+    }
+    // 🎯 Direct Pattern: Render as complete component
+    return (jsx("div", { ...props, ref: ref, className: finalClassName, style: style, role: "navigation", "aria-label": "Main navigation", children: children }));
 });
 SidebarMenu.displayName = "SidebarMenu";
-const SidebarToggle = React__default.forwardRef(({ className, open, onToggle, ...props }, ref) => {
+const SidebarToggle = React__default.forwardRef(({ className, open, onToggle, size = "md", ...props }, ref) => {
     const handleClick = () => {
         onToggle(!open);
     };
-    return (jsx("button", { ...props, ref: ref, onClick: handleClick, className: cn("inline-flex items-center justify-center p-2 rounded-md", "text-[var(--color-text-body,#374151)]", "hover:bg-[var(--color-surface-subtle,#f8fafc)] hover:text-[var(--color-text-heading,#111827)]", "focus:outline-none focus:ring-2 focus:ring-[var(--color-focus-500,#3b82f6)] focus:ring-offset-2", "transition-colors duration-150", className), "aria-label": open ? "Close navigation menu" : "Open navigation menu", "aria-expanded": open, children: jsx("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", "aria-hidden": "true", children: open ? (jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" })) : (jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 6h16M4 12h16M4 18h16" })) }) }));
+    return (jsx("button", { ...props, ref: ref, onClick: handleClick, className: cn("inline-flex items-center justify-center p-2 rounded-md", "text-[var(--color-text-body,#374151)]", "hover:bg-[var(--color-surface-subtle,#f8fafc)] hover:text-[var(--color-text-heading,#111827)]", "focus:outline-none focus:ring-2 focus:ring-[var(--color-focus-500,#3b82f6)] focus:ring-offset-2", "transition-colors duration-150", size === "sm" && "p-1.5", size === "lg" && "p-2.5", className), "aria-label": open ? "Close navigation menu" : "Open navigation menu", "aria-expanded": open, children: jsx("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", "aria-hidden": "true", children: open ? (jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" })) : (jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 6h16M4 12h16M4 18h16" })) }) }));
 });
 SidebarToggle.displayName = "SidebarToggle";
 

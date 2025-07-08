@@ -5,11 +5,12 @@ export interface SidebarMenuProps extends React.HTMLAttributes<HTMLDivElement>, 
     children: React.ReactNode;
     collapsed?: boolean;
     onToggleCollapse?: (open: boolean) => void;
+    asContainer?: boolean;
 }
 declare const SidebarMenu: React.ForwardRefExoticComponent<SidebarMenuProps & React.RefAttributes<HTMLDivElement>>;
-export interface SidebarToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface SidebarToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof sidebarVariants> {
     open: boolean;
     onToggle: (open: boolean) => void;
 }
 declare const SidebarToggle: React.ForwardRefExoticComponent<SidebarToggleProps & React.RefAttributes<HTMLButtonElement>>;
-export { SidebarMenu, SidebarToggle, sidebarVariants };
+export { SidebarMenu, SidebarToggle };
