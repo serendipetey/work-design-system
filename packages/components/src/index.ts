@@ -1,10 +1,12 @@
-// packages/components/src/index.ts - Updated exports
+// packages/components/src/index.ts
+// 🎯 ENHANCED: Updated exports for new sidebar architecture
 
-// 🎯 Enhanced Sidebar System Exports
+// 🎯 Core Sidebar Architecture
 export {
-  // Enhanced variants with new patterns
   sidebarVariants,
-  sidebarContainerVariants, // NEW: Container wrapper variants
+  sidebarWidthVariants, // NEW: Separate width utilities
+  createSidebarContainer, // NEW: Helper for layout containers
+  sidebarContainerVariants,
   sidebarMenuItemVariants,
   sidebarMenuSectionRootVariants,
   sidebarMenuSectionVariants,
@@ -14,8 +16,6 @@ export {
   sidebarBusinessLogoVariants,
   sidebarToggleVariants,
   sidebarBadgeVariants,
-
-  // Enhanced utility functions
   getSidebarIconSize,
   getSidebarItemAriaLabel,
   getSidebarSectionAriaLabel,
@@ -23,7 +23,7 @@ export {
   getExpandedSectionsForPath,
 } from "./ui/sidebar";
 
-// Enhanced components with new usage patterns
+// 🎯 Enhanced Sidebar Components
 export { SidebarMenu, SidebarToggle } from "./ui/sidebar-menu";
 export { SidebarMenuItem } from "./ui/sidebar-menu-item";
 export {
@@ -33,7 +33,17 @@ export {
 export { SidebarProfile, type SidebarProfileData } from "./ui/sidebar-profile";
 export { SidebarBusinessLogo } from "./ui/sidebar-business-logo";
 
-// Navigation utilities
+// 🎯 NEW: Pre-built Layout Solutions
+export {
+  SidebarLayout,
+  DashboardLayout,
+  SimpleSidebarLayout,
+  type SidebarLayoutProps,
+  type DashboardLayoutProps,
+  type SimpleSidebarLayoutProps,
+} from "./ui/sidebar-layout";
+
+// 🎯 Navigation Utilities
 export {
   useNavigationState,
   createNavigationItem,
@@ -44,7 +54,7 @@ export {
   type NavigationSection,
 } from "./ui/sidebar-navigation-utils";
 
-// 🎯 Keep existing exports for backward compatibility
+// 🎯 Existing Components (unchanged)
 export * from "./ui/button";
 export * from "./ui/input";
 export * from "./ui/select";
@@ -54,5 +64,7 @@ export * from "./ui/table";
 export * from "./ui/data-table";
 export * from "./ui/column-sort-controls";
 export * from "./ui/form";
+
+// 🎯 Utilities
 export * from "./lib/utils";
 export type { BaseComponentProps, VariantProps } from "./types";
