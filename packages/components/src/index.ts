@@ -1,12 +1,11 @@
 // packages/components/src/index.ts
-// 🎯 ENHANCED: Updated exports for new sidebar architecture
+// 🎯 UPDATED: Exports for simplified smart sidebar architecture
 
-// 🎯 Core Sidebar Architecture
+// 🎯 Core Sidebar Architecture (Updated for smart detection)
 export {
   sidebarVariants,
-  sidebarWidthVariants, // NEW: Separate width utilities
-  createSidebarContainer, // NEW: Helper for layout containers
-  sidebarContainerVariants,
+  createSidebarClasses, // NEW: Smart class builder
+  useLayoutDetection, // NEW: Layout detection hook
   sidebarMenuItemVariants,
   sidebarMenuSectionRootVariants,
   sidebarMenuSectionVariants,
@@ -23,7 +22,7 @@ export {
   getExpandedSectionsForPath,
 } from "./ui/sidebar";
 
-// 🎯 Enhanced Sidebar Components
+// 🎯 Smart Sidebar Components
 export { SidebarMenu, SidebarToggle } from "./ui/sidebar-menu";
 export { SidebarMenuItem } from "./ui/sidebar-menu-item";
 export {
@@ -32,16 +31,6 @@ export {
 } from "./ui/sidebar-menu-section";
 export { SidebarProfile, type SidebarProfileData } from "./ui/sidebar-profile";
 export { SidebarBusinessLogo } from "./ui/sidebar-business-logo";
-
-// 🎯 NEW: Pre-built Layout Solutions
-export {
-  SidebarLayout,
-  DashboardLayout,
-  SimpleSidebarLayout,
-  type SidebarLayoutProps,
-  type DashboardLayoutProps,
-  type SimpleSidebarLayoutProps,
-} from "./ui/sidebar-layout";
 
 // 🎯 Navigation Utilities
 export {

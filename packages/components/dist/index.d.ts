@@ -1,4 +1,5 @@
-export { sidebarVariants, sidebarContainerVariants, // NEW: Container wrapper variants
+export { sidebarVariants, createSidebarClasses, // NEW: Smart class builder
+useLayoutDetection, // NEW: Layout detection hook
 sidebarMenuItemVariants, sidebarMenuSectionRootVariants, sidebarMenuSectionVariants, sidebarMenuSectionTriggerVariants, sidebarMenuSectionContentVariants, sidebarProfileVariants, sidebarBusinessLogoVariants, sidebarToggleVariants, sidebarBadgeVariants, getSidebarIconSize, getSidebarItemAriaLabel, getSidebarSectionAriaLabel, isSidebarItemActive, getExpandedSectionsForPath, } from "./ui/sidebar";
 export { SidebarMenu, SidebarToggle } from "./ui/sidebar-menu";
 export { SidebarMenuItem } from "./ui/sidebar-menu-item";

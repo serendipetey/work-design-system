@@ -1,119 +1,78 @@
 // packages/components/src/ui/sidebar-menu.tsx
-// 🎯 ENHANCED INDUSTRY-STANDARD SIDEBAR MENU COMPONENT
-// Layout-first design that eliminates width constraint conflicts
+// 🎯 SMART SIDEBAR MENU COMPONENT
+// Simple API with intelligent layout adaptation
 
 import React from "react";
-import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { sidebarVariants, sidebarContainerVariants } from "./sidebar";
+import { createSidebarClasses, useLayoutDetection } from "./sidebar";
 
-// 🎯 ENHANCED: Layout-First Interface
-export interface SidebarMenuProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof sidebarVariants> {
+// 🎯 Clean Interface - Keep it Simple
+export interface SidebarMenuProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 
-  // 🎯 NEW: Layout mode for better integration
-  mode?: "standalone" | "layout";
-
-  // 🎯 DEPRECATED: size prop (now controlled by container)
-  // @deprecated Use container width classes instead: "w-64", "w-72", etc.
+  // Primary API - simple and intuitive
   size?: "sm" | "md" | "lg" | "xl";
 
-  // Optional: Collapse state
+  // Advanced usage (optional) - only two variants to match our implementation
+  variant?: "standalone" | "layout";
+
+  // Collapse state
   collapsed?: boolean;
   onToggleCollapse?: (collapsed: boolean) => void;
-
-  // 🎯 NEW: Container integration helper
-  asContainer?: boolean;
 }
 
-// 🎯 ENHANCED: Industry-Standard Sidebar Menu Component
+// 🎯 Smart Sidebar Menu Component
 const SidebarMenu = React.forwardRef<HTMLDivElement, SidebarMenuProps>(
   (
     {
       className,
+      size = "md",
       variant,
-      mode = "layout",
-      size, // Deprecated but maintained for backward compatibility
       collapsed = false,
       onToggleCollapse,
-      asContainer = false,
       children,
       style,
       ...props
     },
     ref
   ) => {
-    // 🎯 Smart variant selection based on mode
-    const effectiveVariant = React.useMemo(() => {
-      if (mode === "standalone") return "standalone";
-      return variant || "layout";
-    }, [mode, variant]);
+    // 🎯 Smart layout detection using a state-based approach
+    const [containerElement, setContainerElement] =
+      React.useState<HTMLDivElement | null>(null);
+    const isInContainer = useLayoutDetection({ current: containerElement });
 
-    // 🎯 Handle deprecated size prop with warning in development
-    React.useEffect(() => {
-      if (size && process.env.NODE_ENV === "development") {
-        console.warn(
-          `SidebarMenu: The 'size' prop is deprecated. Use container width classes instead:
-          
-  // ❌ Old way
-  <SidebarMenu size="md">
-  
-  // ✅ New way  
-  <div className="w-64">
-    <SidebarMenu variant="layout">
-  
-  See migration guide: https://docs.your-domain.com/sidebar-migration`
-        );
-      }
-    }, [size]);
+    // Ref callback that updates our state and forwards the ref
+    const refCallback = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        // Update our state for layout detection
+        setContainerElement(node);
 
-    // 🎯 Build className with layout-first approach
+        // Forward to the external ref
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [ref]
+    );
+
+    // 🎯 Build classes with smart detection
     const finalClassName = cn(
-      sidebarVariants({ variant: effectiveVariant }),
+      createSidebarClasses({
+        size,
+        variant,
+        isInContainer,
+        className,
+      }),
       collapsed && "w-16", // Override width when collapsed
       className
     );
 
-    // 🎯 Container Pattern: Wrap in styled container if needed (legacy support)
-    if (asContainer) {
-      const containerWidth =
-        size === "sm"
-          ? "w-60"
-          : size === "lg"
-          ? "w-72"
-          : size === "xl"
-          ? "w-80"
-          : "w-64"; // Default to md
-
-      return (
-        <div
-          className={cn(
-            sidebarContainerVariants({ styled: true, position: "standalone" }),
-            containerWidth,
-            "flex-shrink-0"
-          )}
-        >
-          <div
-            {...props}
-            ref={ref}
-            className={finalClassName}
-            style={style}
-            role="navigation"
-            aria-label="Main navigation"
-          >
-            {children}
-          </div>
-        </div>
-      );
-    }
-
-    // 🎯 PRIMARY: Layout-First Pattern (Recommended)
     return (
       <div
         {...props}
-        ref={ref}
+        ref={refCallback}
         className={finalClassName}
         style={style}
         role="navigation"
@@ -127,12 +86,12 @@ const SidebarMenu = React.forwardRef<HTMLDivElement, SidebarMenuProps>(
 
 SidebarMenu.displayName = "SidebarMenu";
 
-// 🎯 Enhanced Sidebar Toggle Component (unchanged interface)
+// 🎯 Sidebar Toggle Component (unchanged but simplified)
 export interface SidebarToggleProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof sidebarVariants> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   open: boolean;
   onToggle: (open: boolean) => void;
+  size?: "sm" | "md" | "lg";
 }
 
 const SidebarToggle = React.forwardRef<HTMLButtonElement, SidebarToggleProps>(

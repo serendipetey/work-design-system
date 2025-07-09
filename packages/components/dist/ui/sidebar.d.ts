@@ -1,25 +1,31 @@
 /**
- * 🎯 ENHANCED SIDEBAR DESIGN SYSTEM
+ * 🎯 SMART SIDEBAR DESIGN SYSTEM
  *
- * Supports multiple usage patterns:
- * 1. Complete standalone sidebar (for consuming apps)
- * 2. Layout components (for Storybook/custom layouts)
- * 3. Flexible styling variants (bordered/borderless)
+ * Key Features:
+ * - Simple API: <SidebarMenu size="md"> just works
+ * - Auto-detection: Adapts to container constraints automatically
+ * - Layout compatibility: Works with flex layouts without conflicts
+ * - Backward compatible: All existing usage patterns continue to work
  *
- * ✅ Solves rounded corner + border conflicts
- * ✅ Provides consistent styling across all usage patterns
- * ✅ Maintains backward compatibility
- * ✅ Enables both manual assembly and component-based approaches
+ * How it works:
+ * 1. Standalone usage: Full styling + width (rounded corners, shadow, borders)
+ * 2. Container usage: Auto-detects width constraints, adapts styling
+ * 3. No API complexity: Same component, smart behavior
  */
 export declare const sidebarVariants: (props?: ({
     size?: "sm" | "md" | "lg" | "xl" | null | undefined;
-    variant?: "standalone" | "layout" | "borderless" | null | undefined;
-    container?: boolean | null | undefined;
+    variant?: "standalone" | "layout" | null | undefined;
+    _internal_layout_detected?: boolean | null | undefined;
 } & import("class-variance-authority/types").ClassProp) | undefined) => string;
-export declare const sidebarContainerVariants: (props?: ({
-    styled?: boolean | null | undefined;
-    position?: "standalone" | "embedded" | null | undefined;
-} & import("class-variance-authority/types").ClassProp) | undefined) => string;
+export declare function createSidebarClasses({ size, variant, className, isInContainer, }: {
+    size?: "sm" | "md" | "lg" | "xl";
+    variant?: "standalone" | "layout";
+    className?: string;
+    isInContainer?: boolean;
+}): string;
+export declare function useLayoutDetection(ref: {
+    current: HTMLElement | null;
+}): boolean;
 export declare const sidebarMenuItemVariants: (props?: ({
     active?: boolean | null | undefined;
     size?: "sm" | "md" | "lg" | null | undefined;
