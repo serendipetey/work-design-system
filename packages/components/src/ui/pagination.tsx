@@ -188,12 +188,11 @@ Pagination.displayName = "Pagination";
 
 const PaginationItem = React.forwardRef<HTMLButtonElement, PaginationItemProps>(
   ({ className, isActive, page, size, ...props }, ref) => {
-    const buttonVariant = isActive ? "primary" : "ghost";
-
     return (
       <Button
         ref={ref}
-        variant={buttonVariant}
+        variant={isActive ? "primary" : "outline"}
+        appearance={isActive ? "solid" : "ghost"}
         size={size}
         className={cn(paginationItemVariants({ size }), className)}
         aria-label={`Go to page ${page}`}
@@ -213,7 +212,8 @@ const PaginationPrevious = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <Button
     ref={ref}
-    variant="ghost"
+    variant="outline"
+    appearance="ghost"
     size="md"
     className={cn(paginationNavVariants(), className)}
     aria-label="Go to previous page"
@@ -243,7 +243,8 @@ const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationNavProps>(
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      variant="ghost"
+      variant="outline"
+      appearance="ghost"
       size="md"
       className={cn(paginationNavVariants(), className)}
       aria-label="Go to next page"
