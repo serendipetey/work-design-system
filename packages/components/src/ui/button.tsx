@@ -162,12 +162,32 @@ const getButtonStyles = (
 
   const colors = getVariantColors(variant, disabled);
 
+  // Helper function to get proper text color for ghost variants
+  const getGhostTextColor = (variant: string, disabled: boolean) => {
+    if (disabled) {
+      // Use existing disabled colors for ghost variants
+      return colors.text;
+    }
+
+    // Map each variant to its semantic color for ghost appearance
+    const ghostColors: Record<string, string> = {
+      primary: "var(--color-navy-500, #0e3a6c)",
+      outline: "var(--color-navy-500, #0e3a6c)", // Already works correctly
+      cta: "var(--color-red-500, #a30134)",
+      success: "var(--color-success-500, #007d85)",
+      warning: "var(--color-warning-500, #b75b00)",
+      destructive: "var(--color-destructive-500, #d92b2b)",
+    };
+
+    return ghostColors[variant] || ghostColors.primary;
+  };
+
   // Apply appearance modifications
   const variantStyles =
     appearance === "ghost"
       ? {
           backgroundColor: disabled ? "transparent" : "transparent",
-          color: colors.text,
+          color: getGhostTextColor(variant, disabled),
           borderColor: disabled ? "transparent" : "transparent",
         }
       : {
