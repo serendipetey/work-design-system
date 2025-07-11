@@ -357,6 +357,8 @@ export interface ButtonProps
   loading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  // Explicitly add appearance prop
+  appearance?: "solid" | "ghost";
   // Convenience prop for ghost variants
   ghost?: boolean;
 }
