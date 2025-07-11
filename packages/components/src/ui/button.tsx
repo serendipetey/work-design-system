@@ -254,6 +254,7 @@ const createHoverCSS = () => {
       border-color: var(--button-destructive-border-hover, var(--color-destructive-600, #c42323)) !important;
     }
     
+    /* 🎯 FIXED: Ghost appearance hover states - using data-appearance="ghost" */
     .design-system-button[data-appearance="ghost"]:hover:not(:disabled) {
       background-color: var(--color-navy-100, #f0f3f7) !important;
       border-color: transparent !important;
@@ -268,60 +269,38 @@ const createHoverCSS = () => {
     }
     
     .design-system-button[data-appearance="ghost"][data-variant="warning"]:hover:not(:disabled) {
-      background-color: var(--color-warning-100, #fdf7f0) !important;
+      background-color: var(--color-warning-100, #fff7ed) !important;
     }
     
     .design-system-button[data-appearance="ghost"][data-variant="cta"]:hover:not(:disabled) {
-      background-color: var(--color-red-100, #f5e6eb) !important;
+      background-color: var(--color-red-100, #fef2f2) !important;
     }
     
-    /* 🎯 DISABLED STATE - Ensure cursor stays not-allowed */
-    .design-system-button:disabled {
-      cursor: not-allowed !important;
-      pointer-events: auto !important; /* Allow cursor change on hover */
+    .design-system-button[data-appearance="ghost"][data-variant="primary"]:hover:not(:disabled) {
+      background-color: var(--color-navy-100, #f0f3f7) !important;
     }
     
-    /* 🎯 UNIFIED FOCUS STYLES - Only for keyboard navigation */
+    .design-system-button[data-appearance="ghost"][data-variant="outline"]:hover:not(:disabled) {
+      background-color: var(--color-navy-100, #f0f3f7) !important;
+    }
+
+    /* 🎯 FOCUS STATES - All buttons get unified focus styling */
     .design-system-button:focus-visible {
-      /* Remove default outline */
       outline: none !important;
-      
-      /* Orange background with navy text - unified across all variants */
-      background-color: var(--button-unified-focus-bg, var(--color-focus-500, #ff9900)) !important;
-      color: var(--button-unified-focus-text, var(--color-navy-500, #0e3a6c)) !important;
-      
-      /* Clear all borders first, then apply thick navy bottom border */
-      border: 1px solid transparent !important;
-      border-bottom: var(--button-unified-focus-border-width, 3px) solid var(--button-unified-focus-border, var(--color-navy-500, #0e3a6c)) !important;
-      
-      /* Flat bottom edge */
-      border-bottom-left-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
+      background-color: var(--button-unified-focus-bg, #ff9900) !important;
+      color: var(--button-unified-focus-text, #0e3a6c) !important;
+      border-color: var(--button-unified-focus-border, #0e3a6c) !important;
+      border-bottom-width: var(--button-unified-focus-border-width, 3px) !important;
     }
     
-    /* 🎯 FOCUS + HOVER COMBINATION - Preserve focus accessibility with lighter orange */
-    .design-system-button:focus-visible:hover:not(:disabled) {
-      /* Remove default outline */
-      outline: none !important;
-      
-      /* Lighter orange background with navy text - focus/400 */
-      background-color: var(--button-unified-focus-hover-bg, var(--color-focus-400, #ffab33)) !important;
-      color: var(--button-unified-focus-text, var(--color-navy-500, #0e3a6c)) !important;
-      
-      /* Clear all borders first, then apply thick navy bottom border */
-      border: 1px solid transparent !important;
-      border-bottom: var(--button-unified-focus-border-width, 3px) solid var(--button-unified-focus-border, var(--color-navy-500, #0e3a6c)) !important;
-      
-      /* Flat bottom edge */
-      border-bottom-left-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
-    }
-    
-    /* 🎯 ACTIVE/PRESS STATES - Animation only, no color changes */
-    .design-system-button:active:not(:disabled) {
-      transform: translateY(1px) !important;
+    /* Focus takes precedence over all other states */
+    .design-system-button:focus-visible:hover {
+      background-color: var(--button-unified-focus-bg, #ff9900) !important;
+      color: var(--button-unified-focus-text, #0e3a6c) !important;
+      border-color: var(--button-unified-focus-border, #0e3a6c) !important;
     }
   `;
+
   document.head.appendChild(style);
 };
 
