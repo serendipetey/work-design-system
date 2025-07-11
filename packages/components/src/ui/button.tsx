@@ -4,7 +4,6 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// 🎯 Updated: CVA with proper disabled cursor handling
 const buttonBaseClasses = cva(
   "inline-flex items-center justify-center whitespace-nowrap transition-all duration-150 focus-visible:outline-none disabled:pointer-events-none",
   {
@@ -16,6 +15,9 @@ const buttonBaseClasses = cva(
         success: "",
         warning: "",
         destructive: "",
+      },
+      appearance: {
+        solid: "",
         ghost: "",
       },
       size: {
@@ -27,6 +29,7 @@ const buttonBaseClasses = cva(
     },
     defaultVariants: {
       variant: "primary",
+      appearance: "solid",
       size: "md",
     },
   }
@@ -35,6 +38,7 @@ const buttonBaseClasses = cva(
 // 🎯 Updated: getButtonStyles with theme-specific disabled states
 const getButtonStyles = (
   variant: string,
+  appearance: string,
   size: string,
   disabled: boolean = false
 ) => {
@@ -76,122 +80,106 @@ const getButtonStyles = (
     },
   };
 
-  // 🎯 Updated: Variant styles with theme-specific disabled states
-  const variantStyles: Record<string, any> = {
-    primary: disabled
-      ? {
-          backgroundColor:
-            "var(--button-primary-bg-disabled, var(--color-navy-200, #d1d9e6))",
-          color:
-            "var(--button-primary-text-disabled, var(--color-navy-400, #7a8699))",
-          borderColor:
-            "var(--button-primary-border-disabled, var(--color-navy-200, #d1d9e6))",
-        }
-      : {
-          backgroundColor:
-            "var(--button-primary-bg, var(--color-navy-500, #0e3a6c))",
-          color: "var(--button-primary-text, var(--color-white, #ffffff))",
-          borderColor: "var(--button-primary-border, transparent)",
-        },
-
-    outline: disabled
-      ? {
-          backgroundColor:
-            "var(--button-outline-bg-disabled, var(--color-navy-50, #f8f9fb))",
-          color:
-            "var(--button-outline-text-disabled, var(--color-navy-300, #a8b3c5))",
-          borderColor:
-            "var(--button-outline-border-disabled, var(--color-navy-200, #d1d9e6))",
-        }
-      : {
-          backgroundColor: "var(--button-outline-bg, transparent)",
-          color: "var(--button-outline-text, var(--color-navy-500, #0e3a6c))",
-          borderColor:
-            "var(--button-outline-border, var(--color-navy-500, #0e3a6c))",
-        },
-
-    cta: disabled
-      ? {
-          backgroundColor:
-            "var(--button-cta-bg-disabled, var(--color-red-200, #fecaca))",
-          color:
-            "var(--button-cta-text-disabled, var(--color-red-400, #f87171))",
-          borderColor:
-            "var(--button-cta-border-disabled, var(--color-red-200, #fecaca))",
-        }
-      : {
-          backgroundColor:
-            "var(--button-cta-bg, var(--color-red-500, #dc2626))",
-          color: "var(--button-cta-text, var(--color-white, #ffffff))",
-          borderColor: "var(--button-cta-border, transparent)",
-        },
-
-    success: disabled
-      ? {
-          backgroundColor:
-            "var(--button-success-bg-disabled, var(--color-success-200, #a7f3d0))",
-          color:
-            "var(--button-success-text-disabled, var(--color-success-400, #4ade80))",
-          borderColor:
-            "var(--button-success-border-disabled, var(--color-success-200, #a7f3d0))",
-        }
-      : {
-          backgroundColor:
-            "var(--button-success-bg, var(--color-success-500, #059669))",
-          color: "var(--button-success-text, var(--color-white, #ffffff))",
-          borderColor: "var(--button-success-border, transparent)",
-        },
-
-    warning: disabled
-      ? {
-          backgroundColor:
-            "var(--button-warning-bg-disabled, var(--color-warning-200, #fed7aa))",
-          color:
-            "var(--button-warning-text-disabled, var(--color-warning-400, #fb923c))",
-          borderColor:
-            "var(--button-warning-border-disabled, var(--color-warning-200, #fed7aa))",
-        }
-      : {
-          backgroundColor:
-            "var(--button-warning-bg, var(--color-warning-500, #d97706))",
-          color: "var(--button-warning-text, var(--color-white, #ffffff))",
-          borderColor: "var(--button-warning-border, transparent)",
-        },
-
-    destructive: disabled
-      ? {
-          backgroundColor:
-            "var(--button-destructive-bg-disabled, var(--color-destructive-200, #fecaca))",
-          color:
-            "var(--button-destructive-text-disabled, var(--color-destructive-400, #f87171))",
-          borderColor:
-            "var(--button-destructive-border-disabled, var(--color-destructive-200, #fecaca))",
-        }
-      : {
-          backgroundColor:
-            "var(--button-destructive-bg, var(--color-destructive-500, #dc2626))",
-          color: "var(--button-destructive-text, var(--color-white, #ffffff))",
-          borderColor: "var(--button-destructive-border, transparent)",
-        },
-
-    ghost: disabled
-      ? {
-          backgroundColor: "var(--button-ghost-bg-disabled, transparent)",
-          color:
-            "var(--button-ghost-text-disabled, var(--color-navy-300, #a8b3c5))",
-          borderColor: "var(--button-ghost-border-disabled, transparent)",
-        }
-      : {
-          backgroundColor: "var(--button-ghost-bg, transparent)",
-          color: "var(--button-ghost-text, var(--color-navy-500, #0e3a6c))",
-          borderColor: "var(--button-ghost-border, transparent)",
-        },
+  // 🎯 NEW CODE:
+  const getVariantColors = (variant: string, disabled: boolean) => {
+    const variants: Record<string, any> = {
+      primary: disabled
+        ? {
+            bg: "var(--button-primary-bg-disabled, var(--color-navy-200, #e3e9ef))",
+            text: "var(--button-primary-text-disabled, var(--color-navy-400, #164b8f))",
+            border:
+              "var(--button-primary-border-disabled, var(--color-navy-200, #e3e9ef))",
+          }
+        : {
+            bg: "var(--button-primary-bg, var(--color-navy-500, #0e3a6c))",
+            text: "var(--button-primary-text, var(--color-white, #ffffff))",
+            border: "var(--button-primary-border, transparent)",
+          },
+      outline: disabled
+        ? {
+            bg: "var(--button-outline-bg-disabled, transparent)",
+            text: "var(--button-outline-text-disabled, var(--color-navy-300, #a8b3c5))",
+            border:
+              "var(--button-outline-border-disabled, var(--color-navy-200, #e3e9ef))",
+          }
+        : {
+            bg: "var(--button-outline-bg, transparent)",
+            text: "var(--button-outline-text, var(--color-navy-500, #0e3a6c))",
+            border:
+              "var(--button-outline-border, var(--color-navy-500, #0e3a6c))",
+          },
+      cta: disabled
+        ? {
+            bg: "var(--button-cta-bg-disabled, var(--color-red-200, #ebccd7))",
+            text: "var(--button-cta-text-disabled, var(--color-red-400, #b76687))",
+            border:
+              "var(--button-cta-border-disabled, var(--color-red-200, #ebccd7))",
+          }
+        : {
+            bg: "var(--button-cta-bg, var(--color-red-500, #a30134))",
+            text: "var(--button-cta-text, var(--color-white, #ffffff))",
+            border: "var(--button-cta-border, transparent)",
+          },
+      success: disabled
+        ? {
+            bg: "var(--button-success-bg-disabled, var(--color-success-200, #e6f2f3))",
+            text: "var(--button-success-text-disabled, var(--color-success-400, #99ced1))",
+            border:
+              "var(--button-success-border-disabled, var(--color-success-200, #e6f2f3))",
+          }
+        : {
+            bg: "var(--button-success-bg, var(--color-success-500, #007d85))",
+            text: "var(--button-success-text, var(--color-white, #ffffff))",
+            border: "var(--button-success-border, transparent)",
+          },
+      warning: disabled
+        ? {
+            bg: "var(--button-warning-bg-disabled, var(--color-warning-200, #f8efe6))",
+            text: "var(--button-warning-text-disabled, var(--color-warning-400, #e6c999))",
+            border:
+              "var(--button-warning-border-disabled, var(--color-warning-200, #f8efe6))",
+          }
+        : {
+            bg: "var(--button-warning-bg, var(--color-warning-500, #b75b00))",
+            text: "var(--button-warning-text, var(--color-white, #ffffff))",
+            border: "var(--button-warning-border, transparent)",
+          },
+      destructive: disabled
+        ? {
+            bg: "var(--button-destructive-bg-disabled, var(--color-destructive-200, #f7d5d5))",
+            text: "var(--button-destructive-text-disabled, var(--color-destructive-400, #e78181))",
+            border:
+              "var(--button-destructive-border-disabled, var(--color-destructive-200, #f7d5d5))",
+          }
+        : {
+            bg: "var(--button-destructive-bg, var(--color-destructive-500, #d92b2b))",
+            text: "var(--button-destructive-text, var(--color-white, #ffffff))",
+            border: "var(--button-destructive-border, transparent)",
+          },
+    };
+    return variants[variant] || variants.primary;
   };
+
+  const colors = getVariantColors(variant, disabled);
+
+  // Apply appearance modifications
+  const variantStyles =
+    appearance === "ghost"
+      ? {
+          backgroundColor: disabled ? "transparent" : "transparent",
+          color: colors.text,
+          borderColor: disabled ? "transparent" : "transparent",
+        }
+      : {
+          backgroundColor: colors.bg,
+          color: colors.text,
+          borderColor: colors.border,
+        };
 
   return {
     ...baseStyles,
     ...sizeStyles[size],
-    ...variantStyles[variant],
+    ...variantStyles,
   };
 };
 
@@ -238,8 +226,24 @@ const createHoverCSS = () => {
       border-color: var(--button-destructive-border-hover, var(--color-destructive-600, #c42323)) !important;
     }
     
-    .design-system-button[data-variant="ghost"]:hover:not(:disabled) {
-      background-color: var(--button-ghost-bg-hover, var(--color-navy-100, #f0f3f7)) !important;
+    .design-system-button[data-appearance="ghost"]:hover:not(:disabled) {
+      background-color: var(--color-navy-100, #f0f3f7) !important;
+    }
+    
+    .design-system-button[data-appearance="ghost"][data-variant="destructive"]:hover:not(:disabled) {
+      background-color: var(--color-destructive-100, #fbeaea) !important;
+    }
+    
+    .design-system-button[data-appearance="ghost"][data-variant="success"]:hover:not(:disabled) {
+      background-color: var(--color-success-100, #f0f8f9) !important;
+    }
+    
+    .design-system-button[data-appearance="ghost"][data-variant="warning"]:hover:not(:disabled) {
+      background-color: var(--color-warning-100, #fdf7f0) !important;
+    }
+    
+    .design-system-button[data-appearance="ghost"][data-variant="cta"]:hover:not(:disabled) {
+      background-color: var(--color-red-100, #f5e6eb) !important;
     }
     
     /* 🎯 DISABLED STATE - Ensure cursor stays not-allowed */
@@ -324,6 +328,8 @@ export interface ButtonProps
   loading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  // Convenience prop for ghost variants
+  ghost?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -331,6 +337,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {
       className,
       variant,
+      appearance,
       size,
       asChild = false,
       loading = false,
@@ -339,12 +346,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       disabled,
       style,
+      ghost,
       ...props
     },
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
     const isDisabled = disabled || loading;
+    const resolvedAppearance = ghost ? "ghost" : appearance || "solid";
 
     // Inject hover and focus CSS on first render
     React.useEffect(() => {
@@ -357,6 +366,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     // Get the base button styles
     const baseButtonStyles = getButtonStyles(
       variant || "primary",
+      resolvedAppearance,
       size || "md",
       isDisabled
     );
@@ -384,12 +394,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          buttonBaseClasses({ variant, size }),
+          buttonBaseClasses({ variant, appearance: resolvedAppearance, size }),
           "design-system-button",
           className
         )}
         style={combinedStyles}
         data-variant={variant}
+        data-appearance={resolvedAppearance}
         data-size={size}
         data-icon-only={isIconOnly ? "true" : undefined}
         ref={ref}
