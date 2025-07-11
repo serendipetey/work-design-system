@@ -4260,7 +4260,7 @@ const Button = React.forwardRef(({ className, variant, size, asChild = false, lo
         }),
         ...style, // User styles take precedence
     };
-    return (jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, "data-icon-only": isIconOnly ? "true" : undefined, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsx("span", { className: "mr-2", children: jsx(Spinner$1, {}) })), !loading && leftIcon && (jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "mr-2"), children: leftIcon })), children, !loading && rightIcon && (jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "ml-2"), children: rightIcon }))] }));
+    return (jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, "data-icon-only": isIconOnly ? "true" : undefined, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsx("span", { className: cn(!isIconOnly && "mr-2"), children: jsx(Spinner$1, {}) })), !loading && leftIcon && (jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "mr-2"), children: leftIcon })), children, !loading && rightIcon && (jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "ml-2"), children: rightIcon }))] }));
 });
 Button.displayName = "Button";
 

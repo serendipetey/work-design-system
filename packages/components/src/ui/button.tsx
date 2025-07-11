@@ -397,7 +397,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading && (
-          <span className="mr-2">
+          <span className={cn(!isIconOnly && "mr-2")}>
             <Spinner />
           </span>
         )}
