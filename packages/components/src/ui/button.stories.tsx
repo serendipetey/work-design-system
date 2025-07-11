@@ -257,6 +257,181 @@ export const DisabledStates: Story = {
   },
 };
 
+// Ghost Variants Showcase
+export const GhostVariants: Story = {
+  render: () => (
+    <div className="space-y-8 max-w-6xl">
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold text-gray-900">
+            👻 Ghost Variants
+          </h3>
+          <p className="text-sm text-gray-600 max-w-4xl">
+            Ghost appearance applied to all button variants. Each maintains its
+            semantic color while having a transparent background.
+          </p>
+        </div>
+
+        {/* Three-column layout matching the existing pattern */}
+        <div className="grid grid-cols-3 gap-8">
+          {/* Enabled Column */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
+              Enabled
+            </h4>
+            <div className="space-y-3">
+              <Button variant="primary" appearance="ghost" className="w-full">
+                Primary Ghost
+              </Button>
+              <Button variant="outline" appearance="ghost" className="w-full">
+                Outline Ghost
+              </Button>
+              <Button variant="cta" appearance="ghost" className="w-full">
+                CTA Ghost
+              </Button>
+              <Button variant="success" appearance="ghost" className="w-full">
+                Success Ghost
+              </Button>
+              <Button variant="warning" appearance="ghost" className="w-full">
+                Warning Ghost
+              </Button>
+              <Button
+                variant="destructive"
+                appearance="ghost"
+                className="w-full"
+              >
+                Destructive Ghost
+              </Button>
+            </div>
+          </div>
+
+          {/* Disabled Column */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
+              Disabled
+            </h4>
+            <div className="space-y-3">
+              <Button
+                variant="primary"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Primary Ghost
+              </Button>
+              <Button
+                variant="outline"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Outline Ghost
+              </Button>
+              <Button
+                variant="cta"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                CTA Ghost
+              </Button>
+              <Button
+                variant="success"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Success Ghost
+              </Button>
+              <Button
+                variant="warning"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Warning Ghost
+              </Button>
+              <Button
+                variant="destructive"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Destructive Ghost
+              </Button>
+            </div>
+          </div>
+
+          {/* Loading Column */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
+              Loading
+            </h4>
+            <div className="space-y-3">
+              <Button
+                variant="primary"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Primary Ghost
+              </Button>
+              <Button
+                variant="outline"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Outline Ghost
+              </Button>
+              <Button
+                variant="cta"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                CTA Ghost
+              </Button>
+              <Button
+                variant="success"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Success Ghost
+              </Button>
+              <Button
+                variant="warning"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Warning Ghost
+              </Button>
+              <Button
+                variant="destructive"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Destructive Ghost
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Ghost appearance modifier applied to all button variants, maintaining semantic colors with transparent backgrounds.",
+      },
+    },
+  },
+};
+
 // All variants showcase
 export const AllVariants: Story = {
   render: () => (
@@ -741,181 +916,6 @@ export const Destructive: Story = {
   args: {
     variant: "destructive",
     children: "Destructive Button",
-  },
-};
-
-// Ghost Variants Showcase
-export const GhostVariants: Story = {
-  render: () => (
-    <div className="space-y-8 max-w-6xl">
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-gray-900">
-            👻 Ghost Variants
-          </h3>
-          <p className="text-sm text-gray-600 max-w-4xl">
-            Ghost appearance applied to all button variants. Each maintains its
-            semantic color while having a transparent background.
-          </p>
-        </div>
-
-        {/* Three-column layout matching the existing pattern */}
-        <div className="grid grid-cols-3 gap-8">
-          {/* Enabled Column */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
-              Enabled
-            </h4>
-            <div className="space-y-3">
-              <Button variant="primary" appearance="ghost" className="w-full">
-                Primary Ghost
-              </Button>
-              <Button variant="outline" appearance="ghost" className="w-full">
-                Outline Ghost
-              </Button>
-              <Button variant="cta" appearance="ghost" className="w-full">
-                CTA Ghost
-              </Button>
-              <Button variant="success" appearance="ghost" className="w-full">
-                Success Ghost
-              </Button>
-              <Button variant="warning" appearance="ghost" className="w-full">
-                Warning Ghost
-              </Button>
-              <Button
-                variant="destructive"
-                appearance="ghost"
-                className="w-full"
-              >
-                Destructive Ghost
-              </Button>
-            </div>
-          </div>
-
-          {/* Disabled Column */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
-              Disabled
-            </h4>
-            <div className="space-y-3">
-              <Button
-                variant="primary"
-                appearance="ghost"
-                disabled
-                className="w-full"
-              >
-                Primary Ghost
-              </Button>
-              <Button
-                variant="outline"
-                appearance="ghost"
-                disabled
-                className="w-full"
-              >
-                Outline Ghost
-              </Button>
-              <Button
-                variant="cta"
-                appearance="ghost"
-                disabled
-                className="w-full"
-              >
-                CTA Ghost
-              </Button>
-              <Button
-                variant="success"
-                appearance="ghost"
-                disabled
-                className="w-full"
-              >
-                Success Ghost
-              </Button>
-              <Button
-                variant="warning"
-                appearance="ghost"
-                disabled
-                className="w-full"
-              >
-                Warning Ghost
-              </Button>
-              <Button
-                variant="destructive"
-                appearance="ghost"
-                disabled
-                className="w-full"
-              >
-                Destructive Ghost
-              </Button>
-            </div>
-          </div>
-
-          {/* Loading Column */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
-              Loading
-            </h4>
-            <div className="space-y-3">
-              <Button
-                variant="primary"
-                appearance="ghost"
-                loading
-                className="w-full"
-              >
-                Primary Ghost
-              </Button>
-              <Button
-                variant="outline"
-                appearance="ghost"
-                loading
-                className="w-full"
-              >
-                Outline Ghost
-              </Button>
-              <Button
-                variant="cta"
-                appearance="ghost"
-                loading
-                className="w-full"
-              >
-                CTA Ghost
-              </Button>
-              <Button
-                variant="success"
-                appearance="ghost"
-                loading
-                className="w-full"
-              >
-                Success Ghost
-              </Button>
-              <Button
-                variant="warning"
-                appearance="ghost"
-                loading
-                className="w-full"
-              >
-                Warning Ghost
-              </Button>
-              <Button
-                variant="destructive"
-                appearance="ghost"
-                loading
-                className="w-full"
-              >
-                Destructive Ghost
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Ghost appearance modifier applied to all button variants, maintaining semantic colors with transparent backgrounds.",
-      },
-    },
   },
 };
 
