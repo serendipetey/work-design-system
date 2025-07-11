@@ -16,7 +16,8 @@ export interface DataTableAction<TData = any> {
     label: string;
     icon?: React.ReactNode;
     onClick: (row: TData, index: number) => void;
-    variant?: "ghost" | "outline" | "primary" | "destructive";
+    variant?: "primary" | "outline" | "cta" | "success" | "warning" | "destructive";
+    appearance?: "solid" | "ghost";
     className?: string;
     disabled?: (row: TData) => boolean;
 }
@@ -24,7 +25,8 @@ export interface DataTableToolbarAction {
     label: string;
     icon?: React.ReactNode;
     onClick: () => void;
-    variant?: "primary" | "outline" | "ghost";
+    variant?: "primary" | "outline" | "cta" | "success" | "warning" | "destructive";
+    appearance?: "solid" | "ghost";
     className?: string;
 }
 export interface DataTableProps<TData = any> extends VariantProps<typeof dataTableVariants> {
