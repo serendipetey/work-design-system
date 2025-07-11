@@ -53,7 +53,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Design system button component with theme-specific disabled states, unified focus styling, and comprehensive variant support.",
+          "Design system button component with semantic variants and appearance modifiers. Features theme-specific disabled states, unified focus styling, and ghost appearance that maintains variant colors with transparent backgrounds.",
       },
     },
   },
@@ -68,9 +68,13 @@ const meta = {
         "success",
         "warning",
         "destructive",
-        "ghost",
       ],
       description: "Button variant using design system tokens",
+    },
+    appearance: {
+      control: { type: "select" },
+      options: ["solid", "ghost"],
+      description: "Button appearance style",
     },
     size: {
       control: { type: "select" },
@@ -147,9 +151,6 @@ export const DisabledStates: Story = {
               <Button variant="destructive" className="w-full">
                 Destructive Button
               </Button>
-              <Button variant="ghost" className="w-full">
-                Ghost Button
-              </Button>
             </div>
           </div>
 
@@ -175,9 +176,6 @@ export const DisabledStates: Story = {
               <Button variant="destructive" disabled className="w-full">
                 Destructive Button
               </Button>
-              <Button variant="ghost" disabled className="w-full">
-                Ghost Button
-              </Button>
             </div>
           </div>
 
@@ -202,9 +200,6 @@ export const DisabledStates: Story = {
               </Button>
               <Button variant="destructive" loading className="w-full">
                 Destructive Button
-              </Button>
-              <Button variant="ghost" loading className="w-full">
-                Ghost Button
               </Button>
             </div>
           </div>
@@ -247,7 +242,6 @@ export const DisabledStates: Story = {
             <Button variant="primary">Primary</Button>
             <Button variant="outline">Outline</Button>
             <Button variant="success">Success</Button>
-            <Button variant="ghost">Ghost</Button>
           </div>
         </div>
       </div>
@@ -296,9 +290,6 @@ export const AllVariants: Story = {
           </Button>
           <Button variant="destructive" className="w-full">
             Destructive
-          </Button>
-          <Button variant="ghost" className="w-full md:col-span-2">
-            Ghost
           </Button>
         </div>
 
@@ -494,7 +485,6 @@ export const InteractiveStates: Story = {
             <Button variant="primary">Primary</Button>
             <Button variant="outline">Outline</Button>
             <Button variant="success">Success</Button>
-            <Button variant="ghost">Ghost</Button>
           </div>
         </div>
       </div>
@@ -557,7 +547,8 @@ export const WithIcons: Story = {
                 Continue
               </Button>
               <Button
-                variant="ghost"
+                variant="outline"
+                appearance="ghost"
                 rightIcon={<ArrowRightIcon />}
                 className="w-full"
               >
@@ -665,7 +656,8 @@ export const IconOnly: Story = {
             </h4>
             <div className="flex items-center gap-2">
               <Button
-                variant="ghost"
+                variant="primary"
+                appearance="ghost"
                 size="sm"
                 leftIcon={
                   <svg
@@ -680,28 +672,6 @@ export const IconOnly: Story = {
                 data-icon-only="true"
                 data-size="sm"
                 aria-label="Edit"
-              />
-              <Button
-                variant="ghost"
-                size="sm"
-                leftIcon={
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                  >
-                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                    <path
-                      fillRule="evenodd"
-                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
-                    />
-                  </svg>
-                }
-                data-icon-only="true"
-                data-size="sm"
-                className="text-destructive hover:text-destructive"
-                aria-label="Delete"
               />
             </div>
             <p className="text-xs text-gray-500">
@@ -774,10 +744,178 @@ export const Destructive: Story = {
   },
 };
 
-export const Ghost: Story = {
-  args: {
-    variant: "ghost",
-    children: "Ghost Button",
+// Ghost Variants Showcase
+export const GhostVariants: Story = {
+  render: () => (
+    <div className="space-y-8 max-w-6xl">
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold text-gray-900">
+            👻 Ghost Variants
+          </h3>
+          <p className="text-sm text-gray-600 max-w-4xl">
+            Ghost appearance applied to all button variants. Each maintains its
+            semantic color while having a transparent background.
+          </p>
+        </div>
+
+        {/* Three-column layout matching the existing pattern */}
+        <div className="grid grid-cols-3 gap-8">
+          {/* Enabled Column */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
+              Enabled
+            </h4>
+            <div className="space-y-3">
+              <Button variant="primary" appearance="ghost" className="w-full">
+                Primary Ghost
+              </Button>
+              <Button variant="outline" appearance="ghost" className="w-full">
+                Outline Ghost
+              </Button>
+              <Button variant="cta" appearance="ghost" className="w-full">
+                CTA Ghost
+              </Button>
+              <Button variant="success" appearance="ghost" className="w-full">
+                Success Ghost
+              </Button>
+              <Button variant="warning" appearance="ghost" className="w-full">
+                Warning Ghost
+              </Button>
+              <Button
+                variant="destructive"
+                appearance="ghost"
+                className="w-full"
+              >
+                Destructive Ghost
+              </Button>
+            </div>
+          </div>
+
+          {/* Disabled Column */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
+              Disabled
+            </h4>
+            <div className="space-y-3">
+              <Button
+                variant="primary"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Primary Ghost
+              </Button>
+              <Button
+                variant="outline"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Outline Ghost
+              </Button>
+              <Button
+                variant="cta"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                CTA Ghost
+              </Button>
+              <Button
+                variant="success"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Success Ghost
+              </Button>
+              <Button
+                variant="warning"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Warning Ghost
+              </Button>
+              <Button
+                variant="destructive"
+                appearance="ghost"
+                disabled
+                className="w-full"
+              >
+                Destructive Ghost
+              </Button>
+            </div>
+          </div>
+
+          {/* Loading Column */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-700 text-center pb-2 border-b">
+              Loading
+            </h4>
+            <div className="space-y-3">
+              <Button
+                variant="primary"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Primary Ghost
+              </Button>
+              <Button
+                variant="outline"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Outline Ghost
+              </Button>
+              <Button
+                variant="cta"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                CTA Ghost
+              </Button>
+              <Button
+                variant="success"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Success Ghost
+              </Button>
+              <Button
+                variant="warning"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Warning Ghost
+              </Button>
+              <Button
+                variant="destructive"
+                appearance="ghost"
+                loading
+                className="w-full"
+              >
+                Destructive Ghost
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Ghost appearance modifier applied to all button variants, maintaining semantic colors with transparent backgrounds.",
+      },
+    },
   },
 };
 
