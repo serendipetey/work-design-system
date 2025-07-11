@@ -165,8 +165,16 @@ const getButtonStyles = (
   // Helper function to get proper text color for ghost variants
   const getGhostTextColor = (variant: string, disabled: boolean) => {
     if (disabled) {
-      // Use existing disabled colors for ghost variants
-      return colors.text;
+      // Use lighter disabled colors for ghost variants
+      const ghostDisabledColors: Record<string, string> = {
+        primary: "var(--color-navy-300, #a8b3c5)",
+        outline: "var(--color-navy-300, #a8b3c5)",
+        cta: "var(--color-red-300, #d8a8c1)",
+        success: "var(--color-success-300, #b3d9db)",
+        warning: "var(--color-warning-300, #f0d6b3)",
+        destructive: "var(--color-destructive-300, #f1b3b3)",
+      };
+      return ghostDisabledColors[variant] || ghostDisabledColors.primary;
     }
 
     // Map each variant to its semantic color for ghost appearance
@@ -248,6 +256,7 @@ const createHoverCSS = () => {
     
     .design-system-button[data-appearance="ghost"]:hover:not(:disabled) {
       background-color: var(--color-navy-100, #f0f3f7) !important;
+      border-color: transparent !important;
     }
     
     .design-system-button[data-appearance="ghost"][data-variant="destructive"]:hover:not(:disabled) {
