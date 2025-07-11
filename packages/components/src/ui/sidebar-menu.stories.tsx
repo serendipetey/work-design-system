@@ -2,7 +2,7 @@
 // 🎯 COMPLETE WORKING STORYBOOK: Simple Examples First
 // Shows both simple usage and smart layout detection
 
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import {
   FileText,

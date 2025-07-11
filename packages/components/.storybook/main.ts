@@ -3,14 +3,13 @@ import path from "path";
 
 const config: StorybookConfig = {
   stories: ["../src/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
-  addons: ["@storybook/addon-essentials", "@storybook/addon-interactions"],
+  addons: ["@storybook/addon-docs"],
+
   framework: {
     name: "@storybook/react-vite",
     options: {},
   },
-  docs: {
-    autodocs: "tag",
-  },
+
   async viteFinal(config) {
     config.resolve = config.resolve || {};
     config.resolve.alias = {
@@ -19,7 +18,7 @@ const config: StorybookConfig = {
     };
 
     return config;
-  },
+  }
 };
 
 export default config;

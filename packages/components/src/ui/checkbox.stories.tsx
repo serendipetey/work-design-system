@@ -1,5 +1,5 @@
 // packages/components/src/ui/checkbox.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkbox, CheckboxGroup } from "./checkbox";
 
 const meta: Meta<typeof Checkbox> = {

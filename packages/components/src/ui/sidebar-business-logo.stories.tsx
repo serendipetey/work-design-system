@@ -1,6 +1,6 @@
 // packages/components/src/ui/sidebar-business-logo.stories.tsx
 // 🎯 Comprehensive stories for the refactored SidebarBusinessLogo component
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { SidebarBusinessLogo } from "./sidebar-business-logo";
 

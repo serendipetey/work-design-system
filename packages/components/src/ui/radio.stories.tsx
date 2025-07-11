@@ -1,5 +1,5 @@
 // packages/components/src/ui/radio.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RadioGroup, RadioItem } from "./checkbox";
 
 const meta: Meta<typeof RadioGroup> = {

@@ -1,6 +1,6 @@
 // File: packages/components/src/ui/pagination.stories.tsx
 import { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Pagination,
   PaginationItem,

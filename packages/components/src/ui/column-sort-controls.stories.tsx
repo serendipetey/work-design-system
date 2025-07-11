@@ -2,7 +2,7 @@
 // 🎯 UPDATED: Now includes validation state examples
 
 import { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ColumnSortControls } from "./column-sort-controls";
 import type { DataTableColumn } from "./data-table";
 

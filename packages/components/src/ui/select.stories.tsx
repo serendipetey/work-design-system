@@ -1,5 +1,5 @@
 // packages/components/src/ui/select.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SelectField, SelectItem, SelectGroup } from "./select";
 
 const meta: Meta<typeof SelectField> = {

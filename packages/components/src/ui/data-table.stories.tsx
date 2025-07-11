@@ -1,7 +1,7 @@
 // packages/components/src/ui/data-table.stories.tsx
 // 🎯 OPTIMAL ARCHITECTURE: Design Tokens with Robust Fallbacks
 
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   DataTable,
   type DataTableColumn,
