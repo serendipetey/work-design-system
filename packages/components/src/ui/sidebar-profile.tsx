@@ -62,7 +62,8 @@ const SidebarProfile = React.forwardRef<HTMLDivElement, SidebarProfileProps>(
         {/* Switch Entity Button (optional) */}
         {onSwitchEntity && (
           <Button
-            variant="ghost"
+            variant="outline"
+            appearance="ghost"
             size="sm"
             onClick={onSwitchEntity}
             leftIcon={<ArrowUpDown className="w-4 h-4" />}

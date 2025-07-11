@@ -140,7 +140,8 @@ export const ColumnSortControls: React.FC<ColumnSortControlsProps> = ({
 
         {/* Direction Toggle Button */}
         <Button
-          variant="ghost"
+          variant="outline"
+          appearance="ghost"
           size="sm"
           leftIcon={<DirectionIcon direction={currentDirection} />}
           onClick={handleDirectionToggle}

@@ -3985,7 +3985,6 @@ const SidebarMenuSection = React__default.forwardRef(({ title, icon: Icon, child
 });
 SidebarMenuSection.displayName = "SidebarMenuSection";
 
-// 🎯 Updated: CVA with proper disabled cursor handling
 const buttonBaseClasses = cva("inline-flex items-center justify-center whitespace-nowrap transition-all duration-150 focus-visible:outline-none disabled:pointer-events-none", {
     variants: {
         variant: {
@@ -3995,6 +3994,9 @@ const buttonBaseClasses = cva("inline-flex items-center justify-center whitespac
             success: "",
             warning: "",
             destructive: "",
+        },
+        appearance: {
+            solid: "",
             ghost: "",
         },
         size: {
@@ -4006,11 +4008,12 @@ const buttonBaseClasses = cva("inline-flex items-center justify-center whitespac
     },
     defaultVariants: {
         variant: "primary",
+        appearance: "solid",
         size: "md",
     },
 });
 // 🎯 Updated: getButtonStyles with theme-specific disabled states
-const getButtonStyles = (variant, size, disabled = false) => {
+const getButtonStyles = (variant, appearance, size, disabled = false) => {
     const baseStyles = {
         fontFamily: "var(--font-family-sans, 'Poppins', system-ui, sans-serif)",
         fontWeight: "var(--button-font-weight, 500)",
@@ -4047,90 +4050,120 @@ const getButtonStyles = (variant, size, disabled = false) => {
             fontSize: "var(--button-font-size-xl, 18px)",
         },
     };
-    // 🎯 Updated: Variant styles with theme-specific disabled states
-    const variantStyles = {
-        primary: disabled
-            ? {
-                backgroundColor: "var(--button-primary-bg-disabled, var(--color-navy-200, #d1d9e6))",
-                color: "var(--button-primary-text-disabled, var(--color-navy-400, #7a8699))",
-                borderColor: "var(--button-primary-border-disabled, var(--color-navy-200, #d1d9e6))",
-            }
-            : {
-                backgroundColor: "var(--button-primary-bg, var(--color-navy-500, #0e3a6c))",
-                color: "var(--button-primary-text, var(--color-white, #ffffff))",
-                borderColor: "var(--button-primary-border, transparent)",
-            },
-        outline: disabled
-            ? {
-                backgroundColor: "var(--button-outline-bg-disabled, var(--color-navy-50, #f8f9fb))",
-                color: "var(--button-outline-text-disabled, var(--color-navy-300, #a8b3c5))",
-                borderColor: "var(--button-outline-border-disabled, var(--color-navy-200, #d1d9e6))",
-            }
-            : {
-                backgroundColor: "var(--button-outline-bg, transparent)",
-                color: "var(--button-outline-text, var(--color-navy-500, #0e3a6c))",
-                borderColor: "var(--button-outline-border, var(--color-navy-500, #0e3a6c))",
-            },
-        cta: disabled
-            ? {
-                backgroundColor: "var(--button-cta-bg-disabled, var(--color-red-200, #fecaca))",
-                color: "var(--button-cta-text-disabled, var(--color-red-400, #f87171))",
-                borderColor: "var(--button-cta-border-disabled, var(--color-red-200, #fecaca))",
-            }
-            : {
-                backgroundColor: "var(--button-cta-bg, var(--color-red-500, #dc2626))",
-                color: "var(--button-cta-text, var(--color-white, #ffffff))",
-                borderColor: "var(--button-cta-border, transparent)",
-            },
-        success: disabled
-            ? {
-                backgroundColor: "var(--button-success-bg-disabled, var(--color-success-200, #a7f3d0))",
-                color: "var(--button-success-text-disabled, var(--color-success-400, #4ade80))",
-                borderColor: "var(--button-success-border-disabled, var(--color-success-200, #a7f3d0))",
-            }
-            : {
-                backgroundColor: "var(--button-success-bg, var(--color-success-500, #059669))",
-                color: "var(--button-success-text, var(--color-white, #ffffff))",
-                borderColor: "var(--button-success-border, transparent)",
-            },
-        warning: disabled
-            ? {
-                backgroundColor: "var(--button-warning-bg-disabled, var(--color-warning-200, #fed7aa))",
-                color: "var(--button-warning-text-disabled, var(--color-warning-400, #fb923c))",
-                borderColor: "var(--button-warning-border-disabled, var(--color-warning-200, #fed7aa))",
-            }
-            : {
-                backgroundColor: "var(--button-warning-bg, var(--color-warning-500, #d97706))",
-                color: "var(--button-warning-text, var(--color-white, #ffffff))",
-                borderColor: "var(--button-warning-border, transparent)",
-            },
-        destructive: disabled
-            ? {
-                backgroundColor: "var(--button-destructive-bg-disabled, var(--color-destructive-200, #fecaca))",
-                color: "var(--button-destructive-text-disabled, var(--color-destructive-400, #f87171))",
-                borderColor: "var(--button-destructive-border-disabled, var(--color-destructive-200, #fecaca))",
-            }
-            : {
-                backgroundColor: "var(--button-destructive-bg, var(--color-destructive-500, #dc2626))",
-                color: "var(--button-destructive-text, var(--color-white, #ffffff))",
-                borderColor: "var(--button-destructive-border, transparent)",
-            },
-        ghost: disabled
-            ? {
-                backgroundColor: "var(--button-ghost-bg-disabled, transparent)",
-                color: "var(--button-ghost-text-disabled, var(--color-navy-300, #a8b3c5))",
-                borderColor: "var(--button-ghost-border-disabled, transparent)",
-            }
-            : {
-                backgroundColor: "var(--button-ghost-bg, transparent)",
-                color: "var(--button-ghost-text, var(--color-navy-500, #0e3a6c))",
-                borderColor: "var(--button-ghost-border, transparent)",
-            },
+    // 🎯 NEW CODE:
+    const getVariantColors = (variant, disabled) => {
+        const variants = {
+            primary: disabled
+                ? {
+                    bg: "var(--button-primary-bg-disabled, var(--color-navy-200, #e3e9ef))",
+                    text: "var(--button-primary-text-disabled, var(--color-navy-400, #164b8f))",
+                    border: "var(--button-primary-border-disabled, var(--color-navy-200, #e3e9ef))",
+                }
+                : {
+                    bg: "var(--button-primary-bg, var(--color-navy-500, #0e3a6c))",
+                    text: "var(--button-primary-text, var(--color-white, #ffffff))",
+                    border: "var(--button-primary-border, transparent)",
+                },
+            outline: disabled
+                ? {
+                    bg: "var(--button-outline-bg-disabled, transparent)",
+                    text: "var(--button-outline-text-disabled, var(--color-navy-300, #a8b3c5))",
+                    border: "var(--button-outline-border-disabled, var(--color-navy-200, #e3e9ef))",
+                }
+                : {
+                    bg: "var(--button-outline-bg, transparent)",
+                    text: "var(--button-outline-text, var(--color-navy-500, #0e3a6c))",
+                    border: "var(--button-outline-border, var(--color-navy-500, #0e3a6c))",
+                },
+            cta: disabled
+                ? {
+                    bg: "var(--button-cta-bg-disabled, var(--color-red-200, #ebccd7))",
+                    text: "var(--button-cta-text-disabled, var(--color-red-400, #b76687))",
+                    border: "var(--button-cta-border-disabled, var(--color-red-200, #ebccd7))",
+                }
+                : {
+                    bg: "var(--button-cta-bg, var(--color-red-500, #a30134))",
+                    text: "var(--button-cta-text, var(--color-white, #ffffff))",
+                    border: "var(--button-cta-border, transparent)",
+                },
+            success: disabled
+                ? {
+                    bg: "var(--button-success-bg-disabled, var(--color-success-200, #e6f2f3))",
+                    text: "var(--button-success-text-disabled, var(--color-success-400, #99ced1))",
+                    border: "var(--button-success-border-disabled, var(--color-success-200, #e6f2f3))",
+                }
+                : {
+                    bg: "var(--button-success-bg, var(--color-success-500, #007d85))",
+                    text: "var(--button-success-text, var(--color-white, #ffffff))",
+                    border: "var(--button-success-border, transparent)",
+                },
+            warning: disabled
+                ? {
+                    bg: "var(--button-warning-bg-disabled, var(--color-warning-200, #f8efe6))",
+                    text: "var(--button-warning-text-disabled, var(--color-warning-400, #e6c999))",
+                    border: "var(--button-warning-border-disabled, var(--color-warning-200, #f8efe6))",
+                }
+                : {
+                    bg: "var(--button-warning-bg, var(--color-warning-500, #b75b00))",
+                    text: "var(--button-warning-text, var(--color-white, #ffffff))",
+                    border: "var(--button-warning-border, transparent)",
+                },
+            destructive: disabled
+                ? {
+                    bg: "var(--button-destructive-bg-disabled, var(--color-destructive-200, #f7d5d5))",
+                    text: "var(--button-destructive-text-disabled, var(--color-destructive-400, #e78181))",
+                    border: "var(--button-destructive-border-disabled, var(--color-destructive-200, #f7d5d5))",
+                }
+                : {
+                    bg: "var(--button-destructive-bg, var(--color-destructive-500, #d92b2b))",
+                    text: "var(--button-destructive-text, var(--color-white, #ffffff))",
+                    border: "var(--button-destructive-border, transparent)",
+                },
+        };
+        return variants[variant] || variants.primary;
     };
+    const colors = getVariantColors(variant, disabled);
+    // Helper function to get proper text color for ghost variants
+    const getGhostTextColor = (variant, disabled) => {
+        if (disabled) {
+            // Use lighter disabled colors for ghost variants
+            const ghostDisabledColors = {
+                primary: "var(--color-navy-300, #a8b3c5)",
+                outline: "var(--color-navy-300, #a8b3c5)",
+                cta: "var(--color-red-300, #d8a8c1)",
+                success: "var(--color-success-300, #b3d9db)",
+                warning: "var(--color-warning-300, #f0d6b3)",
+                destructive: "var(--color-destructive-300, #f1b3b3)",
+            };
+            return ghostDisabledColors[variant] || ghostDisabledColors.primary;
+        }
+        // Map each variant to its semantic color for ghost appearance
+        const ghostColors = {
+            primary: "var(--color-navy-500, #0e3a6c)",
+            outline: "var(--color-navy-500, #0e3a6c)", // Already works correctly
+            cta: "var(--color-red-500, #a30134)",
+            success: "var(--color-success-500, #007d85)",
+            warning: "var(--color-warning-500, #b75b00)",
+            destructive: "var(--color-destructive-500, #d92b2b)",
+        };
+        return ghostColors[variant] || ghostColors.primary;
+    };
+    // Apply appearance modifications
+    const variantStyles = appearance === "ghost"
+        ? {
+            backgroundColor: disabled ? "transparent" : "transparent",
+            color: getGhostTextColor(variant, disabled),
+            borderColor: disabled ? "transparent" : "transparent",
+        }
+        : {
+            backgroundColor: colors.bg,
+            color: colors.text,
+            borderColor: colors.border,
+        };
     return {
         ...baseStyles,
         ...sizeStyles[size],
-        ...variantStyles[variant],
+        ...variantStyles,
     };
 };
 // 🎯 Enhanced Hover and Focus CSS Injection (updated to exclude disabled states)
@@ -4176,64 +4209,60 @@ const createHoverCSS = () => {
       border-color: var(--button-destructive-border-hover, var(--color-destructive-600, #c42323)) !important;
     }
     
-    .design-system-button[data-variant="ghost"]:hover:not(:disabled) {
-      background-color: var(--button-ghost-bg-hover, var(--color-navy-100, #f0f3f7)) !important;
+    /* 🎯 FIXED: Ghost appearance hover states - using data-appearance="ghost" */
+    .design-system-button[data-appearance="ghost"]:hover:not(:disabled) {
+      background-color: var(--color-navy-100, #f0f3f7) !important;
+      border-color: transparent !important;
     }
     
-    /* 🎯 DISABLED STATE - Ensure cursor stays not-allowed */
-    .design-system-button:disabled {
-      cursor: not-allowed !important;
-      pointer-events: auto !important; /* Allow cursor change on hover */
+    .design-system-button[data-appearance="ghost"][data-variant="destructive"]:hover:not(:disabled) {
+      background-color: var(--color-destructive-100, #fbeaea) !important;
     }
     
-    /* 🎯 UNIFIED FOCUS STYLES - Only for keyboard navigation */
+    .design-system-button[data-appearance="ghost"][data-variant="success"]:hover:not(:disabled) {
+      background-color: var(--color-success-100, #f0f8f9) !important;
+    }
+    
+    .design-system-button[data-appearance="ghost"][data-variant="warning"]:hover:not(:disabled) {
+      background-color: var(--color-warning-100, #fff7ed) !important;
+    }
+    
+    .design-system-button[data-appearance="ghost"][data-variant="cta"]:hover:not(:disabled) {
+      background-color: var(--color-red-100, #fef2f2) !important;
+    }
+    
+    .design-system-button[data-appearance="ghost"][data-variant="primary"]:hover:not(:disabled) {
+      background-color: var(--color-navy-100, #f0f3f7) !important;
+    }
+    
+    .design-system-button[data-appearance="ghost"][data-variant="outline"]:hover:not(:disabled) {
+      background-color: var(--color-navy-100, #f0f3f7) !important;
+    }
+
+    /* 🎯 FOCUS STATES - All buttons get unified focus styling */
     .design-system-button:focus-visible {
-      /* Remove default outline */
       outline: none !important;
-      
-      /* Orange background with navy text - unified across all variants */
-      background-color: var(--button-unified-focus-bg, var(--color-focus-500, #ff9900)) !important;
-      color: var(--button-unified-focus-text, var(--color-navy-500, #0e3a6c)) !important;
-      
-      /* Clear all borders first, then apply thick navy bottom border */
-      border: 1px solid transparent !important;
-      border-bottom: var(--button-unified-focus-border-width, 3px) solid var(--button-unified-focus-border, var(--color-navy-500, #0e3a6c)) !important;
-      
-      /* Flat bottom edge */
-      border-bottom-left-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
+      background-color: var(--button-unified-focus-bg, #ff9900) !important;
+      color: var(--button-unified-focus-text, #0e3a6c) !important;
+      border-color: var(--button-unified-focus-border, #0e3a6c) !important;
+      border-bottom-width: var(--button-unified-focus-border-width, 3px) !important;
     }
     
-    /* 🎯 FOCUS + HOVER COMBINATION - Preserve focus accessibility with lighter orange */
-    .design-system-button:focus-visible:hover:not(:disabled) {
-      /* Remove default outline */
-      outline: none !important;
-      
-      /* Lighter orange background with navy text - focus/400 */
-      background-color: var(--button-unified-focus-hover-bg, var(--color-focus-400, #ffab33)) !important;
-      color: var(--button-unified-focus-text, var(--color-navy-500, #0e3a6c)) !important;
-      
-      /* Clear all borders first, then apply thick navy bottom border */
-      border: 1px solid transparent !important;
-      border-bottom: var(--button-unified-focus-border-width, 3px) solid var(--button-unified-focus-border, var(--color-navy-500, #0e3a6c)) !important;
-      
-      /* Flat bottom edge */
-      border-bottom-left-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
-    }
-    
-    /* 🎯 ACTIVE/PRESS STATES - Animation only, no color changes */
-    .design-system-button:active:not(:disabled) {
-      transform: translateY(1px) !important;
+    /* Focus takes precedence over all other states */
+    .design-system-button:focus-visible:hover {
+      background-color: var(--button-unified-focus-bg, #ff9900) !important;
+      color: var(--button-unified-focus-text, #0e3a6c) !important;
+      border-color: var(--button-unified-focus-border, #0e3a6c) !important;
     }
   `;
     document.head.appendChild(style);
 };
 // Spinner component for loading state
 const Spinner$1 = () => (jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", className: "animate-spin", children: [jsx("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", className: "opacity-25" }), jsx("path", { fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z", className: "opacity-75" })] }));
-const Button = React.forwardRef(({ className, variant, size, asChild = false, loading = false, leftIcon, rightIcon, children, disabled, style, ...props }, ref) => {
+const Button = React.forwardRef(({ className, variant, appearance, size, asChild = false, loading = false, leftIcon, rightIcon, children, disabled, style, ghost, ...props }, ref) => {
     const Comp = asChild ? Slot$1 : "button";
     const isDisabled = disabled || loading;
+    const resolvedAppearance = ghost ? "ghost" : appearance || "solid";
     // Inject hover and focus CSS on first render
     React.useEffect(() => {
         createHoverCSS();
@@ -4241,7 +4270,7 @@ const Button = React.forwardRef(({ className, variant, size, asChild = false, lo
     // Detect if this is an icon-only button
     const isIconOnly = !children && (leftIcon || rightIcon);
     // Get the base button styles
-    const baseButtonStyles = getButtonStyles(variant || "primary", size || "md", isDisabled);
+    const baseButtonStyles = getButtonStyles(variant || "primary", resolvedAppearance, size || "md", isDisabled);
     // Icon-only padding overrides per your Figma specs
     const iconOnlyPadding = {
         sm: "8px",
@@ -4260,13 +4289,13 @@ const Button = React.forwardRef(({ className, variant, size, asChild = false, lo
         }),
         ...style, // User styles take precedence
     };
-    return (jsxs(Comp, { className: cn(buttonBaseClasses({ variant, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-size": size, "data-icon-only": isIconOnly ? "true" : undefined, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsx("span", { className: cn(!isIconOnly && "mr-2"), children: jsx(Spinner$1, {}) })), !loading && leftIcon && (jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "mr-2"), children: leftIcon })), children, !loading && rightIcon && (jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "ml-2"), children: rightIcon }))] }));
+    return (jsxs(Comp, { className: cn(buttonBaseClasses({ variant, appearance: resolvedAppearance, size }), "design-system-button", className), style: combinedStyles, "data-variant": variant, "data-appearance": resolvedAppearance, "data-size": size, "data-icon-only": isIconOnly ? "true" : undefined, ref: ref, disabled: isDisabled, ...props, children: [loading && (jsx("span", { className: cn(!isIconOnly && "mr-2"), children: jsx(Spinner$1, {}) })), !loading && leftIcon && (jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "mr-2"), children: leftIcon })), children, !loading && rightIcon && (jsx("span", { className: cn("inline-flex items-center justify-center", !isIconOnly && "ml-2"), children: rightIcon }))] }));
 });
 Button.displayName = "Button";
 
 // 🎯 Sidebar Profile Component
 const SidebarProfile = React__default.forwardRef(({ className, user, onSwitchEntity, position = "middle", ...props }, ref) => {
-    return (jsxs("div", { ref: ref, className: cn(sidebarProfileVariants({ position }), className), ...props, children: [jsxs("div", { className: "flex items-start gap-3 mb-3", children: [jsx("div", { className: "flex-shrink-0 mt-1", children: jsx("div", { className: "w-8 h-8 rounded-full bg-[var(--color-primary,#1e40af)] flex items-center justify-center", children: jsx(User, { className: "w-4 h-4 text-[var(--color-white,#ffffff)]" }) }) }), jsxs("div", { className: "flex-1 min-w-0", children: [jsx("h3", { className: "text-sm font-semibold text-[var(--color-text-heading,#111827)] truncate", children: user.entity.name }), jsx("p", { className: "text-sm text-[var(--color-text-body,#374151)] truncate", children: user.contact.name }), jsx("p", { className: "text-xs text-[var(--color-text-muted,#6b7280)] truncate", children: user.contact.role })] })] }), onSwitchEntity && (jsx(Button, { variant: "ghost", size: "sm", onClick: onSwitchEntity, leftIcon: jsx(ArrowUpDown, { className: "w-4 h-4" }), className: "justify-start text-[var(--color-text-link,#2563eb)] hover:text-[var(--color-text-link-hover,#1d4ed8)]", children: "Switch Entity" }))] }));
+    return (jsxs("div", { ref: ref, className: cn(sidebarProfileVariants({ position }), className), ...props, children: [jsxs("div", { className: "flex items-start gap-3 mb-3", children: [jsx("div", { className: "flex-shrink-0 mt-1", children: jsx("div", { className: "w-8 h-8 rounded-full bg-[var(--color-primary,#1e40af)] flex items-center justify-center", children: jsx(User, { className: "w-4 h-4 text-[var(--color-white,#ffffff)]" }) }) }), jsxs("div", { className: "flex-1 min-w-0", children: [jsx("h3", { className: "text-sm font-semibold text-[var(--color-text-heading,#111827)] truncate", children: user.entity.name }), jsx("p", { className: "text-sm text-[var(--color-text-body,#374151)] truncate", children: user.contact.name }), jsx("p", { className: "text-xs text-[var(--color-text-muted,#6b7280)] truncate", children: user.contact.role })] })] }), onSwitchEntity && (jsx(Button, { variant: "outline", appearance: "ghost", size: "sm", onClick: onSwitchEntity, leftIcon: jsx(ArrowUpDown, { className: "w-4 h-4" }), className: "justify-start text-[var(--color-text-link,#2563eb)] hover:text-[var(--color-text-link-hover,#1d4ed8)]", children: "Switch Entity" }))] }));
 });
 SidebarProfile.displayName = "SidebarProfile";
 
@@ -11242,13 +11271,12 @@ const Pagination = React.forwardRef(({ className, totalItems, currentPage, items
 });
 Pagination.displayName = "Pagination";
 const PaginationItem = React.forwardRef(({ className, isActive, page, size, ...props }, ref) => {
-    const buttonVariant = isActive ? "primary" : "ghost";
-    return (jsx(Button, { ref: ref, variant: buttonVariant, size: size, className: cn(paginationItemVariants({ size }), className), "aria-label": `Go to page ${page}`, "aria-current": isActive ? "page" : undefined, ...props, children: page }));
+    return (jsx(Button, { ref: ref, variant: isActive ? "primary" : "outline", appearance: isActive ? "solid" : "ghost", size: size, className: cn(paginationItemVariants({ size }), className), "aria-label": `Go to page ${page}`, "aria-current": isActive ? "page" : undefined, ...props, children: page }));
 });
 PaginationItem.displayName = "PaginationItem";
-const PaginationPrevious = React.forwardRef(({ className, ...props }, ref) => (jsxs(Button, { ref: ref, variant: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to previous page", ...props, children: [jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "mr-1", children: jsx("path", { d: "M10 12L6 8L10 4", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) }), "Previous"] })));
+const PaginationPrevious = React.forwardRef(({ className, ...props }, ref) => (jsxs(Button, { ref: ref, variant: "outline", appearance: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to previous page", ...props, children: [jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "mr-1", children: jsx("path", { d: "M10 12L6 8L10 4", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) }), "Previous"] })));
 PaginationPrevious.displayName = "PaginationPrevious";
-const PaginationNext = React.forwardRef(({ className, ...props }, ref) => (jsxs(Button, { ref: ref, variant: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to next page", ...props, children: ["Next", jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "ml-1", children: jsx("path", { d: "M6 4L10 8L6 12", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) })] })));
+const PaginationNext = React.forwardRef(({ className, ...props }, ref) => (jsxs(Button, { ref: ref, variant: "outline", appearance: "ghost", size: "md", className: cn(paginationNavVariants(), className), "aria-label": "Go to next page", ...props, children: ["Next", jsx("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", className: "ml-1", children: jsx("path", { d: "M6 4L10 8L6 12", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }) })] })));
 PaginationNext.displayName = "PaginationNext";
 const PaginationEllipsis = React.forwardRef(({ className, ...props }, ref) => (jsx("span", { ref: ref, "aria-hidden": true, className: cn("flex h-8 w-8 items-center justify-center text-[var(--color-charcoal-500)]", className), ...props, children: "\u2026" })));
 PaginationEllipsis.displayName = "PaginationEllipsis";
@@ -11455,7 +11483,7 @@ const ColumnSortControls = ({ columns, currentColumn, currentDirection = "asc", 
     //   : warning
     //   ? "warning"
     //   : "default";
-    return (jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mb-2"), children: hintText })), jsxs("div", { className: cn("flex items-center gap-2", className), id: sortControlsId, children: [jsxs(SelectField, { value: selectValue, onValueChange: handleColumnChange, size: "md", disabled: disabled, hideLabel: true, placeholder: "Sort by column", className: "min-w-[160px]", ...formFieldAria, children: [jsx(SelectItem, { value: "none", children: "No sorting" }), sortableColumns.map((column) => (jsx(SelectItem, { value: column.key, children: column.header }, column.key)))] }), jsx(Button, { variant: "ghost", size: "sm", leftIcon: jsx(DirectionIcon, { direction: currentDirection }), onClick: handleDirectionToggle, disabled: disabled || !currentColumn, "data-icon-only": "true", "data-size": "sm", "aria-label": `Sort ${currentDirection === "asc" ? "ascending" : "descending"}` })] }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant }), "mt-2", helperClassName), children: helperContent }))] }));
+    return (jsxs("div", { className: cn(fieldVariants(), containerClassName), children: [hintText && (jsx("p", { className: cn(helperVariants({ variant: "muted" }), "mb-2"), children: hintText })), jsxs("div", { className: cn("flex items-center gap-2", className), id: sortControlsId, children: [jsxs(SelectField, { value: selectValue, onValueChange: handleColumnChange, size: "md", disabled: disabled, hideLabel: true, placeholder: "Sort by column", className: "min-w-[160px]", ...formFieldAria, children: [jsx(SelectItem, { value: "none", children: "No sorting" }), sortableColumns.map((column) => (jsx(SelectItem, { value: column.key, children: column.header }, column.key)))] }), jsx(Button, { variant: "outline", appearance: "ghost", size: "sm", leftIcon: jsx(DirectionIcon, { direction: currentDirection }), onClick: handleDirectionToggle, disabled: disabled || !currentColumn, "data-icon-only": "true", "data-size": "sm", "aria-label": `Sort ${currentDirection === "asc" ? "ascending" : "descending"}` })] }), helperContent && (jsx("p", { className: cn(helperVariants({ variant: helperVariant }), "mt-2", helperClassName), children: helperContent }))] }));
 };
 
 // 🎯 Design Tokens + Robust Fallbacks Architecture for DataTable
@@ -11631,12 +11659,12 @@ const DataTable = ({ data, columns, title, description, className, variant = "de
             ...dataTableStyles.base,
             ...(variant && dataTableStyles.variants[variant]),
             ...style,
-        }, ...props, children: [(title || description) && (jsxs("div", { className: "space-y-2", children: [title && (jsx("h1", { className: "text-2xl font-bold text-[var(--color-navy-500)]", children: title })), description && (jsx("p", { className: "text-[var(--color-charcoal-500)] max-w-3xl", children: description }))] })), (searchable || hasSortableColumns || toolbarActions.length > 0) && (jsxs("div", { className: "flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center", children: [jsxs("div", { className: "flex flex-col sm:flex-row gap-4 items-start sm:items-center", children: [searchable && (jsx("div", { className: "w-full sm:w-auto sm:min-w-[300px]", children: jsx(Input, { placeholder: searchPlaceholder, value: searchQuery, onChange: (e) => handleSearch(e.target.value), leftIcon: jsx(SearchIcon, {}), className: "w-full" }) })), hasSortableColumns && (jsx(ColumnSortControls, { columns: columns, currentColumn: sortField, currentDirection: sortDirection, onColumnChange: handleSortColumnChange, onDirectionChange: handleSortDirectionChange }))] }), toolbarActions.length > 0 && (jsx("div", { className: "flex gap-3", children: toolbarActions.map((action, index) => (jsx(Button, { variant: action.variant || "outline", onClick: action.onClick, leftIcon: action.icon, className: action.className, children: action.label }, index))) }))] })), jsx("div", { className: cn(dataTableContainerVariants(), containerClassName), style: dataTableStyles.container, children: loading ? (jsx("div", { className: dataTableEmptyStateVariants(), style: dataTableStyles.loadingState, children: "Loading..." })) : paginatedData.length === 0 ? (jsx("div", { className: dataTableEmptyStateVariants(), style: dataTableStyles.emptyState, children: emptyMessage })) : (jsxs(Table, { variant: striped ? "striped" : "default", children: [jsx(TableHeader, { children: jsxs(TableRow, { children: [columns.map((column) => (jsx(TableHead, { className: cn(column.className), style: column.width ? { width: column.width } : undefined, children: column.header }, column.key))), hasActions && (jsx(TableHead, { className: "text-center", children: "Action" }))] }) }), jsx(TableBody, { children: paginatedData.map((row, index) => (jsxs(TableRow, { variant: striped ? "striped" : "default", children: [columns.map((column) => (jsx(TableCell, { className: cn(column.className), children: column.render
+        }, ...props, children: [(title || description) && (jsxs("div", { className: "space-y-2", children: [title && (jsx("h1", { className: "text-2xl font-bold text-[var(--color-navy-500)]", children: title })), description && (jsx("p", { className: "text-[var(--color-charcoal-500)] max-w-3xl", children: description }))] })), (searchable || hasSortableColumns || toolbarActions.length > 0) && (jsxs("div", { className: "flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center", children: [jsxs("div", { className: "flex flex-col sm:flex-row gap-4 items-start sm:items-center", children: [searchable && (jsx("div", { className: "w-full sm:w-auto sm:min-w-[300px]", children: jsx(Input, { placeholder: searchPlaceholder, value: searchQuery, onChange: (e) => handleSearch(e.target.value), leftIcon: jsx(SearchIcon, {}), className: "w-full" }) })), hasSortableColumns && (jsx(ColumnSortControls, { columns: columns, currentColumn: sortField, currentDirection: sortDirection, onColumnChange: handleSortColumnChange, onDirectionChange: handleSortDirectionChange }))] }), toolbarActions.length > 0 && (jsx("div", { className: "flex gap-3", children: toolbarActions.map((action, index) => (jsx(Button, { variant: action.variant || "outline", appearance: action.appearance || "solid", onClick: action.onClick, leftIcon: action.icon, className: action.className, children: action.label }, index))) }))] })), jsx("div", { className: cn(dataTableContainerVariants(), containerClassName), style: dataTableStyles.container, children: loading ? (jsx("div", { className: dataTableEmptyStateVariants(), style: dataTableStyles.loadingState, children: "Loading..." })) : paginatedData.length === 0 ? (jsx("div", { className: dataTableEmptyStateVariants(), style: dataTableStyles.emptyState, children: emptyMessage })) : (jsxs(Table, { variant: striped ? "striped" : "default", children: [jsx(TableHeader, { children: jsxs(TableRow, { children: [columns.map((column) => (jsx(TableHead, { className: cn(column.className), style: column.width ? { width: column.width } : undefined, children: column.header }, column.key))), hasActions && (jsx(TableHead, { className: "text-center", children: "Action" }))] }) }), jsx(TableBody, { children: paginatedData.map((row, index) => (jsxs(TableRow, { variant: striped ? "striped" : "default", children: [columns.map((column) => (jsx(TableCell, { className: cn(column.className), children: column.render
                                             ? column.render(row[column.key], row, index)
-                                            : String(row[column.key] || "") }, column.key))), hasActions && (jsx(TableCell, { children: jsx("div", { className: "flex justify-center gap-2", children: rowActions.map((action, actionIndex) => (jsx(Button, { variant: action.variant || "ghost", size: "sm", leftIcon: action.icon, "data-icon-only": "true", "data-size": "sm", onClick: () => action.onClick(row, index), className: cn(action.variant === "destructive" &&
+                                            : String(row[column.key] || "") }, column.key))), hasActions && (jsx(TableCell, { children: jsx("div", { className: "flex justify-center gap-2", children: rowActions.map((action, actionIndex) => (jsx(Button, { variant: action.variant || "primary", appearance: action.appearance || "ghost", size: "sm", leftIcon: action.icon, "data-icon-only": "true", onClick: () => action.onClick(row, index), className: cn(action.variant === "destructive" &&
                                                     "text-[var(--color-red-600,#dc2626)] hover:text-[var(--color-red-700,#b91c1c)]", action.className), disabled: action.disabled ? action.disabled(row) : false, "aria-label": `${action.label} row ${index + 1}`, children: !action.icon && action.label }, actionIndex))) }) }))] }, getRowKey
                                 ? getRowKey(row, index)
-                                : `row-${currentPage}-${index}`))) })] })) }), showPagination && (jsx(Pagination, { totalItems: totalItems, currentPage: currentPage, itemsPerPage: pagination.pageSize || 10, onPageChange: handlePageChange, showResults: pagination.showResults, maxVisiblePages: pagination.maxVisiblePages })), footerActions.length > 0 && (jsx("div", { className: "flex justify-end gap-3", children: footerActions.map((action, index) => (jsx(Button, { variant: action.variant || "primary", onClick: action.onClick, leftIcon: action.icon, className: action.className, children: action.label }, index))) }))] }));
+                                : `row-${currentPage}-${index}`))) })] })) }), showPagination && (jsx(Pagination, { totalItems: totalItems, currentPage: currentPage, itemsPerPage: pagination.pageSize || 10, onPageChange: handlePageChange, showResults: pagination.showResults, maxVisiblePages: pagination.maxVisiblePages })), footerActions.length > 0 && (jsx("div", { className: "flex justify-end gap-3", children: footerActions.map((action, index) => (jsx(Button, { variant: action.variant || "primary", appearance: action.appearance || "solid", onClick: action.onClick, leftIcon: action.icon, className: action.className, children: action.label }, index))) }))] }));
 };
 // Export default row actions for common use cases
 const createDefaultRowActions = (onEdit, onDelete) => {
@@ -11646,7 +11674,8 @@ const createDefaultRowActions = (onEdit, onDelete) => {
             label: "Edit",
             icon: jsx(EditIcon, {}),
             onClick: onEdit,
-            variant: "ghost",
+            variant: "primary",
+            appearance: "ghost",
         });
     }
     if (onDelete) {
@@ -11654,7 +11683,8 @@ const createDefaultRowActions = (onEdit, onDelete) => {
             label: "Delete",
             icon: jsx(DeleteIcon, {}),
             onClick: onDelete,
-            variant: "ghost",
+            variant: "destructive",
+            appearance: "ghost",
             className: "text-destructive hover:text-destructive",
         });
     }
