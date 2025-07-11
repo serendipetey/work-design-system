@@ -160,7 +160,14 @@ export interface DataTableAction<TData = any> {
   label: string;
   icon?: React.ReactNode;
   onClick: (row: TData, index: number) => void;
-  variant?: "ghost" | "outline" | "primary" | "destructive";
+  variant?:
+    | "primary"
+    | "outline"
+    | "cta"
+    | "success"
+    | "warning"
+    | "destructive";
+  appearance?: "solid" | "ghost";
   className?: string;
   disabled?: (row: TData) => boolean;
 }
@@ -169,7 +176,14 @@ export interface DataTableToolbarAction {
   label: string;
   icon?: React.ReactNode;
   onClick: () => void;
-  variant?: "primary" | "outline" | "ghost";
+  variant?:
+    | "primary"
+    | "outline"
+    | "cta"
+    | "success"
+    | "warning"
+    | "destructive";
+  appearance?: "solid" | "ghost";
   className?: string;
 }
 
@@ -454,6 +468,7 @@ export const DataTable = <TData,>({
                 <Button
                   key={index}
                   variant={action.variant || "outline"}
+                  appearance={action.appearance || "solid"}
                   onClick={action.onClick}
                   leftIcon={action.icon}
                   className={action.className}
@@ -529,11 +544,11 @@ export const DataTable = <TData,>({
                         {rowActions.map((action, actionIndex) => (
                           <Button
                             key={actionIndex}
-                            variant={action.variant || "ghost"}
+                            variant={action.variant || "primary"}
+                            appearance={action.appearance || "ghost"}
                             size="sm"
                             leftIcon={action.icon}
                             data-icon-only="true"
-                            data-size="sm"
                             onClick={() => action.onClick(row, index)}
                             className={cn(
                               action.variant === "destructive" &&
@@ -577,6 +592,7 @@ export const DataTable = <TData,>({
             <Button
               key={index}
               variant={action.variant || "primary"}
+              appearance={action.appearance || "solid"}
               onClick={action.onClick}
               leftIcon={action.icon}
               className={action.className}
@@ -602,7 +618,8 @@ export const createDefaultRowActions = <TData,>(
       label: "Edit",
       icon: <EditIcon />,
       onClick: onEdit,
-      variant: "ghost",
+      variant: "primary",
+      appearance: "ghost",
     });
   }
 
@@ -611,7 +628,8 @@ export const createDefaultRowActions = <TData,>(
       label: "Delete",
       icon: <DeleteIcon />,
       onClick: onDelete,
-      variant: "ghost",
+      variant: "destructive",
+      appearance: "ghost",
       className: "text-destructive hover:text-destructive",
     });
   }
